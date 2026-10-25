@@ -3,7 +3,7 @@ title: "L0 — Match (overview)"
 level: 0
 cell: "L0-match"
 module_id: "L0.00"
-version: "1.1"
+version: "1.2"
 status: "ratified"
 last_updated: "2026-10-25"
 supersedes: null
@@ -15,6 +15,9 @@ conforms_to: "00-foundations (v1.1)"
 <!--
   MAINTAINER NOTE: this is the "front door" of L0. If you change the cell list
   or the dependency rules, update this file AND modules/_index.md. They must agree.
+
+  ADR-003 is accepted. All 11 cells of L0 are now `ratified`. The specification
+  is complete. Code can be written.
 -->
 
 # L0 — Match (overview)
@@ -60,7 +63,7 @@ L0 **does** require:
 - A referee
 - The `MatchEngine` trait and a text implementation
 - A minimal save format
-- **A way to reach Ground Truth without exposing it** — that is the `GroundTruth` API defined in `L0.10`
+- **A way to reach Ground Truth without exposing it** — the `GroundTruth` API defined in `L0.10`
 
 ---
 
@@ -92,15 +95,15 @@ If any of those seven fails, L0 is not done.
 | L0.01 | [`01-rng.md`](01-rng.md) | Deterministic RNG streams | ✅ ratified |
 | L0.02 | [`02-event-bus.md`](02-event-bus.md) | Deterministic event dispatch | ✅ ratified |
 | L0.03 | [`03-entities-minimal.md`](03-entities-minimal.md) | Minimal entities: Player, Squad, Pitch, Referee | ✅ ratified |
-| L0.04 | [`04-match-engine.md`](04-match-engine.md) | The `MatchEngine` trait and text implementation | 🟡 draft (ADR-003) |
+| L0.04 | [`04-match-engine.md`](04-match-engine.md) | The `MatchEngine` trait and text implementation | ✅ ratified |
 | L0.05 | [`05-match-events.md`](05-match-events.md) | `MatchEvent`, append-only, the observation layer | ✅ ratified |
 | L0.06 | [`06-match-output.md`](06-match-output.md) | Result, ratings, statistics bundle, narrative | ✅ ratified |
 | L0.07 | [`07-save-minimal.md`](07-save-minimal.md) | Save/load a single match | ✅ ratified |
-| L0.08 | [`08-random-events.md`](08-random-events.md) | Discrete in-match events (injuries, cards, brawls) | 🟡 draft (ADR-003) |
+| L0.08 | [`08-random-events.md`](08-random-events.md) | Discrete in-match events (injuries, cards, brawls) | ✅ ratified |
 | L0.09 | [`09-context-modifiers.md`](09-context-modifiers.md) | How external state enters the engine | ✅ ratified |
-| L0.10 | [`10-ground-truth.md`](10-ground-truth.md) | Public API of `fmr-hidden` (Plane A access) | 🟡 draft (ADR-003) |
+| L0.10 | [`10-ground-truth.md`](10-ground-truth.md) | Public API of `fmr-hidden` (Plane A access) | ✅ ratified |
 
-**11 cells in total.** Three are `draft` because they depend on ADR-003 (Plane A enforcement), which is still `proposed`. The other eight are `ratified`.
+**11 cells in total.** All `ratified`. ADR-003 (Plane A enforcement, option B) is accepted. The specification is complete; the code can be written.
 
 ---
 
@@ -120,7 +123,7 @@ Within L0:
 
 **No cell in L0 depends on L1, L2, or L3.** Ever.
 
-The cells `04-match-engine`, `08-random-events`, and `10-ground-truth` are specified but not yet implemented: they depend on **ADR-003** (Plane A enforcement), which is still `proposed`. Once ADR-003 is accepted, all three move from `draft` to `ratified` and can be implemented.
+The three cells that touch Plane A (`04-match-engine`, `08-random-events`, `10-ground-truth`) do so only through the `GroundTruth` API defined in `10-ground-truth`. The type system enforces this: `GroundTruth` has no public fields, is not `Serialize`, and its `Debug` does not leak.
 
 ---
 
@@ -154,8 +157,13 @@ Golden test: `same_seed → same MatchResult` bit-for-bit, across 1,000 randomly
 
 ## 7. Definition of Done (L0 as a whole)
 
-- [ ] All 11 cells specified and ratified
-- [ ] ADR-003 accepted (Plane A enforcement)
+**Specification (complete):**
+
+- [x] All 11 cells specified and ratified
+- [x] ADR-003 accepted (Plane A enforcement, option B)
+
+**Implementation (pending):**
+
 - [ ] Two squads can play a match from a seed
 - [ ] The match produces `MatchEvent`s, ratings, statistics, narrative
 - [ ] The match is saveable and reloadable, same seed → same result
@@ -165,6 +173,8 @@ Golden test: `same_seed → same MatchResult` bit-for-bit, across 1,000 randomly
 - [ ] `GroundTruth` is not `Serialize`, has no public fields, and has a custom `Debug` that does not leak
 - [ ] Performance: 90 min simulated in < 1 s on mid-range hardware
 - [ ] Golden test: 1,000 matches, same seed → same hash
+
+The specification half of the DoD is done. The implementation half begins with the first line of code.
 
 ---
 
@@ -178,13 +188,16 @@ Golden test: `same_seed → same MatchResult` bit-for-bit, across 1,000 randomly
 | Random events feel "cheap" | High | Every event has a cause trace; distribution tested |
 | `fmr-hidden` leaks a latent getter | Critical | `10-ground-truth` API is the only surface; review + grep in CI |
 | Performance insufficient | Medium | Profiling, tick budget, benchmarks in CI |
+| Implementation drifts from spec | Medium | Every PR against L0.04, L0.08, L0.10 is checked against the cell spec; a drift is a bug in the code, not in the spec |
 
 ---
 
 ## 9. References
 
 - [`../00-foundations.md`](../00-foundations.md) — doctrine
-- [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — blocking
+- [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — accepted
+- [`../../docs/adr/004-panic-strategy-ffi.md`](../../docs/adr/004-panic-strategy-ffi.md) — accepted
 - `../../archive/Prompt_Master_v7.md` §12 — match engine original *(planned — the archive/ directory does not exist yet)*
 - [`../../STRUCTURE.md`](../../STRUCTURE.md) — level rules
 - [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — terms used across L0
+- [`../../CHANGELOG-SIM.md`](../../CHANGELOG-SIM.md) — `SIM_VERSION` bump procedure (relevant when L0.04 starts producing code)
