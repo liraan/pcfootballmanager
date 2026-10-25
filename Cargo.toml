@@ -1,0 +1,49 @@
+# Cargo.toml — PCFM workspace root
+#
+# This is a *virtual* workspace: it has no package of its own. It only
+# declares members, shared package metadata, shared dependencies, and
+# shared lints.
+#
+# See STRUCTURE.md §3 for the crate layout and docs/adr/001-language-rust.md
+# for the choice of Rust.
+
+[workspace]
+resolver = "2"
+members = [
+    "crates/pcfm-core",
+]
+default-members = ["crates/pcfm-core"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+authors = ["PC Football Manager Team"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/liraan/pcfootballmanager"
+homepage = "https://github.com/liraan/pcfootballmanager"
+documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules"
+
+[workspace.dependencies]
+# No external dependencies yet. When the first one is needed, it goes here,
+# with a comment explaining why. See docs/adr/ for the justification rule.
+#
+# Example (do not uncomment until needed):
+# thiserror = "2"
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+missing_docs = "warn"
+unused_must_use = "deny"
+
+[workspace.lints.clippy]
+all = "warn"
+correctness = "deny"
+suspicious = "warn"
+perf = "warn"
+pedantic = "warn"
+nursery = "warn"
+
+# Profiles are added at the end of Step 0, when the first binary exists.
+# See STRUCTURE.md §2 and docs/adr/004-panic-strategy-ffi.md for the
+# panic strategy that the release profile must implement.
