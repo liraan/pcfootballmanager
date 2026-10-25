@@ -1,6 +1,6 @@
 ---
 title: "Modules Index"
-version: "2.0"
+version: "2.1"
 status: "active"
 last_updated: "2026-10-25"
 ---
@@ -20,10 +20,22 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 **Reading order:**
 
-1. [`00-foundations.md`](00-foundations.md) — the doctrine
+1. [`00-foundations.md`](00-foundations.md) — the doctrine *(v1.1)*
 2. The level that matches your task (L0 → L3)
 3. [`../STRUCTURE.md`](../STRUCTURE.md) — the rules of the repo
 4. [`../docs/adr/`](../docs/adr/) — the decisions
+
+---
+
+## Current state (as of 2026-10-25)
+
+- ✅ **Doctrine**: ratified (v1.1, with §9 concentric structure)
+- ✅ **L0 — Match**: fully specified (10 cells; 2 draft, blocked by ADR-003)
+- 🚧 **L1 — Season**: planned, not started (12 cells)
+- 🚧 **L2 — Career**: planned, not started (9 cells)
+- 🚧 **L3 — Meta**: planned, not started (8 cells)
+
+Cells marked *(planned)* below do not have a file yet. Their links are intentionally not clickable.
 
 ---
 
@@ -31,7 +43,7 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 | File | Status |
 |---|---|
-| [`00-foundations.md`](00-foundations.md) | ✅ ratified |
+| [`00-foundations.md`](00-foundations.md) | ✅ ratified (v1.1) |
 
 ---
 
@@ -46,7 +58,7 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 | L0.04 | [`L0-match/04-match-engine.md`](L0-match/04-match-engine.md) | 🟡 draft (ADR-003) | 00, L0.01, L0.02, L0.03 |
 | L0.05 | [`L0-match/05-match-events.md`](L0-match/05-match-events.md) | ✅ ratified | 00, L0.01, L0.03 |
 | L0.06 | [`L0-match/06-match-output.md`](L0-match/06-match-output.md) | ✅ ratified | 00, L0.05 |
-| L0.07 | [`L0-match/07-save-minimal.md`](L0-match/07-save-minimal.md) | ✅ ratified | 00, L0.03, L0.05, L0.06 |
+| L0.07 | [`L0-match/07-save-minimal.md`](L0-match/07-save-minimal.md) | ✅ ratified | 00, L0.01, L0.03, L0.05, L0.06 |
 | L0.08 | [`L0-match/08-random-events.md`](L0-match/08-random-events.md) | 🟡 draft (ADR-003) | 00, L0.01, L0.03, L0.04, L0.05 |
 | L0.09 | [`L0-match/09-context-modifiers.md`](L0-match/09-context-modifiers.md) | ✅ ratified | 00, L0.03 |
 
@@ -56,20 +68,22 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 ## L1 — Season (context)
 
-| ID | File | Status | Depends on |
+*(planned — none of these files exist yet)*
+
+| ID | Cell | Status | Depends on |
 |---|---|---|---|
-| L1.00 | [`L1-season/00-overview.md`](L1-season/00-overview.md) | 🚧 stub | L0 |
-| L1.01 | [`L1-season/01-competitions.md`](L1-season/01-competitions.md) | 🚧 stub | L0, L1.00 |
-| L1.02 | [`L1-season/02-calendar.md`](L1-season/02-calendar.md) | 🚧 stub | L0, L1.00, L1.01 |
-| L1.03 | [`L1-season/03-standings.md`](L1-season/03-standings.md) | 🚧 stub | L0, L1.00, L1.01, L1.02 |
-| L1.04 | [`L1-world/00-overview.md`](L1-world/00-overview.md) | 🚧 stub | L0 |
-| L1.05 | [`L1-world/01-nation.md`](L1-world/01-nation.md) | 🚧 stub | L0, L1.04 |
-| L1.06 | [`L1-world/02-city.md`](L1-world/02-city.md) | 🚧 stub | L0, L1.04 |
-| L1.07 | [`L1-world/03-stadium.md`](L1-world/03-stadium.md) | 🚧 stub | L0, L1.04 |
-| L1.08 | [`L1-roster/00-overview.md`](L1-roster/00-overview.md) | 🚧 stub | L0 |
-| L1.09 | [`L1-roster/01-player-attributes.md`](L1-roster/01-player-attributes.md) | 🚧 stub | L0, L1.08 |
-| L1.10 | [`L1-roster/02-staff.md`](L1-roster/02-staff.md) | 🚧 stub | L0, L1.08, L1.09 |
-| L1.11 | [`L1-roster/03-contracts.md`](L1-roster/03-contracts.md) | 🚧 stub | L0, L1.08, L1.09 |
+| L1.00 | L1-season/00-overview.md | 🚧 planned | L0 |
+| L1.01 | L1-season/01-competitions.md | 🚧 planned | L0, L1.00 |
+| L1.02 | L1-season/02-calendar.md | 🚧 planned | L0, L1.00, L1.01 |
+| L1.03 | L1-season/03-standings.md | 🚧 planned | L0, L1.00, L1.01, L1.02 |
+| L1.04 | L1-world/00-overview.md | 🚧 planned | L0 |
+| L1.05 | L1-world/01-nation.md | 🚧 planned | L0, L1.04 |
+| L1.06 | L1-world/02-city.md | 🚧 planned | L0, L1.04 |
+| L1.07 | L1-world/03-stadium.md | 🚧 planned | L0, L1.04 |
+| L1.08 | L1-roster/00-overview.md | 🚧 planned | L0 |
+| L1.09 | L1-roster/01-player-attributes.md | 🚧 planned | L0, L1.08 |
+| L1.10 | L1-roster/02-staff.md | 🚧 planned | L0, L1.08, L1.09 |
+| L1.11 | L1-roster/03-contracts.md | 🚧 planned | L0, L1.08, L1.09 |
 
 **L1 is done when:** a league season is playable, standings are visible, the world exists (nations, cities, stadiums), rosters are complete.
 
@@ -77,17 +91,19 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 ## L2 — Career (living world)
 
+*(planned — none of these directories exist yet)*
+
 | ID | Cell | Status |
 |---|---|---|
-| L2.01 | [`L2-tactics/`](L2-tactics/) | 🚧 stub |
-| L2.02 | [`L2-market/`](L2-market/) | 🚧 stub |
-| L2.03 | [`L2-finance/`](L2-finance/) | 🚧 stub |
-| L2.04 | [`L2-youth/`](L2-youth/) | 🚧 stub |
-| L2.05 | [`L2-scouting/`](L2-scouting/) | 🚧 stub |
-| L2.06 | [`L2-psyche/`](L2-psyche/) | 🚧 stub |
-| L2.07 | [`L2-crowd/`](L2-crowd/) | 🚧 stub |
-| L2.08 | [`L2-media/`](L2-media/) | 🚧 stub |
-| L2.09 | [`L2-ai/`](L2-ai/) | 🚧 stub |
+| L2.01 | L2-tactics/ | 🚧 planned |
+| L2.02 | L2-market/ | 🚧 planned |
+| L2.03 | L2-finance/ | 🚧 planned |
+| L2.04 | L2-youth/ | 🚧 planned |
+| L2.05 | L2-scouting/ | 🚧 planned |
+| L2.06 | L2-psyche/ | 🚧 planned |
+| L2.07 | L2-crowd/ | 🚧 planned |
+| L2.08 | L2-media/ | 🚧 planned |
+| L2.09 | L2-ai/ | 🚧 planned |
 
 **L2 is done when:** a full career is playable — transfers, budgets, youth intake, tactics, psychology, fans, media, AI.
 
@@ -95,16 +111,18 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 ## L3 — Meta (moddable)
 
+*(planned — none of these directories exist yet)*
+
 | ID | Cell | Status |
 |---|---|---|
-| L3.01 | [`L3-registry/`](L3-registry/) | 🚧 stub |
-| L3.02 | [`L3-packs/`](L3-packs/) | 🚧 stub |
-| L3.03 | [`L3-generator/`](L3-generator/) | 🚧 stub |
-| L3.04 | [`L3-editor/`](L3-editor/) | 🚧 stub |
-| L3.05 | [`L3-assets/`](L3-assets/) | 🚧 stub |
-| L3.06 | [`L3-ui/`](L3-ui/) | 🚧 stub |
-| L3.07 | [`L3-statistics/`](L3-statistics/) | 🚧 stub |
-| L3.08 | [`L3-quality/`](L3-quality/) | 🚧 stub |
+| L3.01 | L3-registry/ | 🚧 planned |
+| L3.02 | L3-packs/ | 🚧 planned |
+| L3.03 | L3-generator/ | 🚧 planned |
+| L3.04 | L3-editor/ | 🚧 planned |
+| L3.05 | L3-assets/ | 🚧 planned |
+| L3.06 | L3-ui/ | 🚧 planned |
+| L3.07 | L3-statistics/ | 🚧 planned |
+| L3.08 | L3-quality/ | 🚧 planned |
 
 **L3 is done when:** the game is moddable — packs install, registry extends, generator produces worlds, editor edits, UI themes, statistics expose, quality gates run.
 
@@ -132,6 +150,8 @@ If a cell lacks any of these, it is a bug. Open an issue.
 
 Every cell declares `conforms_to: 00-foundations (vX.Y)`. When `00-foundations` is revised, every cell's `conforms_to` is checked. A cell that has not been re-checked is marked `status: review` until it is.
 
+The current doctrine version is **v1.1**. All ratified L0 cells conform to v1.1.
+
 ---
 
 ## Level dependency graph
@@ -156,16 +176,26 @@ A cell at level N may read the **output** of any cell at level `< N`. It may not
 |---|---|
 | ✅ ratified | Accepted, stable, downstream cells may depend on it |
 | 🟡 draft | Being written or blocked by an open ADR |
-| 🚧 stub | Placeholder, not yet written |
+| 🚧 planned | Cell does not exist yet; the row is a placeholder |
 | ⛔ superseded | Replaced by a newer cell, kept for history |
 
 ---
 
 ## Open ADRs affecting this index
 
-| ADR | Title | Effect |
+| ADR | Title | Status | Effect |
+|---|---|---|---|
+| [003](../docs/adr/003-plane-a-enforcement.md) | Plane A enforcement | 🟡 proposed | Blocks L0.04, L0.08 |
+| [005](../docs/adr/005-qt-binding.md) | Qt binding | 🟡 proposed | Blocks L3-ui |
+| [006](../docs/adr/006-license.md) | License | 🟡 proposed | Blocks `LICENSE.md` and `Cargo.toml` examples |
+| [007](../docs/adr/007-canonical-language.md) | Canonical language | 🟡 proposed | Blocks translations |
+
+---
+
+## Accepted ADRs (for reference)
+
+| ADR | Title | Status |
 |---|---|---|
-| [003](../docs/adr/003-plane-a-enforcement.md) | Plane A enforcement | Blocks L0.04, L0.08 |
-| [005](../docs/adr/005-qt-binding.md) | Qt binding | Blocks L3-ui |
-| [006](../docs/adr/006-license.md) | License | Blocks `LICENSE.md` and `Cargo.toml` examples |
-| [007](../docs/adr/007-canonical-language.md) | Canonical language | Blocks translations |
+| [001](../docs/adr/001-language-rust.md) | Language: Rust | ✅ accepted |
+| [002](../docs/adr/002-project-name-and-scope.md) | Project name and scope | ✅ accepted |
+| [004](../docs/adr/004-panic-strategy-ffi.md) | Panic strategy at FFI | ✅ accepted |
