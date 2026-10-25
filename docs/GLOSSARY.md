@@ -1,6 +1,6 @@
 # Glossary
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** active
 **Last updated:** 2026-10-25
 
@@ -38,15 +38,15 @@ The specification is organised in four concentric levels (L0 → L1 → L2 → L
 
 ### Level
 
-One of the four concentric layers: L0 (Match), L1 (Season), L2 (Career), L3 (Meta). A level N cell may read the output of a level `< N` cell, never its internals, and never depend on a level `> N` cell.
+One of the four concentric layers: L0 (Match), L1 (Season), L2 (Career), L3 (Meta). A level N module may read the output of a level `< N` module, never its internals, and never depend on a level `> N` module.
 
-### Cell
+### Module
 
-A directory under `modules/`, containing a `00-overview.md` and one or more sub-cells. A cell is identified by a `cell` field and a `module_id` in its frontmatter (e.g. `L0-match`, `L0.04`). A **sub-cell** is a file inside a cell.
+A directory under `modules/`, containing a `00-overview.md` and one or more sub-modules. A module is identified by a `cell` field (historical name) and a `module_id` in its frontmatter (e.g. `L0-match`, `L0.04`). A **sub-module** is a file inside a module.
 
 ### `00-overview.md`
 
-The "border" of a cell. It declares the cell's contracts, dependencies, Definition of Done, and risks. Every cell has one.
+The "border" of a module. It declares the module's contracts, dependencies, Definition of Done, and risks. Every module has one.
 
 ---
 
@@ -155,6 +155,10 @@ The crate that contains Plane A. Its public API is `resolve_*` and `drain_observ
 
 Configuration files for tunable parameters (e.g. `balance/match_engine.toml`, `balance/ratings.toml`, `balance/random_events.toml`). No balance value is hardcoded. *(planned — the `balance/` directory does not exist yet)*
 
+### Plugin
+
+A Rust crate with a `sheet.toml` that extends the engine at runtime. Defined in ADR-012. The plugin system is proposed, not yet implemented. A plugin is different from a module: a module is a document of the specification, a plugin is a piece of code. See [`docs/adr/012-plugins.md`](adr/012-plugins.md).
+
 ---
 
 ## 5. Process
@@ -173,27 +177,27 @@ A change to `modules/00-foundations.md`. Requires a doctrine ADR. Cannot be done
 
 ### Definition of Done (DoD)
 
-The checklist that a cell or feature must satisfy before being considered complete. Every cell has one in its §5.
+The checklist that a module or feature must satisfy before being considered complete. Every module has one in its §5.
 
 ### Frontmatter
 
-The YAML block at the top of every cell, between `---` markers. Declares `title`, `version`, `status`, `level`, `cell`, `module_id`, `conforms_to`, `depends_on`, `referenced_by`. See [`STRUCTURE.md`](../STRUCTURE.md) §4.
+The YAML block at the top of every module, between `---` markers. Declares `title`, `version`, `status`, `level`, `cell`, `module_id`, `conforms_to`, `depends_on`, `referenced_by`. See [`STRUCTURE.md`](../STRUCTURE.md) §4.
 
 ### Status
 
-The state of a cell or ADR: `draft` (being written), `review` (ready for comments), `ratified` (stable), `superseded` (replaced). For ADRs: `proposed`, `accepted`, `rejected`, `superseded`.
+The state of a module or ADR: `draft` (being written), `review` (ready for comments), `ratified` (stable), `superseded` (replaced). For ADRs: `proposed`, `accepted`, `rejected`, `superseded`.
 
 ### Planned
 
-A cell or file that does not exist yet. Marked `*(planned)*` in prose, or `🚧 planned` in `_index.md`. A planned item is not a promise of a date, only a declaration of intent.
+A module or file that does not exist yet. Marked `*(planned)*` in prose, or `🚧 planned` in `_index.md`. A planned item is not a promise of a date, only a declaration of intent.
 
 ### `conforms_to`
 
-The doctrine version a cell obeys, e.g. `00-foundations (v1.1)`. When the doctrine is revised, every cell's `conforms_to` is checked.
+The doctrine version a module obeys, e.g. `00-foundations (v1.1)`. When the doctrine is revised, every module's `conforms_to` is checked.
 
 ### `depends_on` / `referenced_by`
 
-Frontmatter fields that declare the dependency graph. `depends_on` lists cells this cell reads from; `referenced_by` lists cells that read from this cell. A change to a cell's dependency requires updating both sides.
+Frontmatter fields that declare the dependency graph. `depends_on` lists modules this module reads from; `referenced_by` lists modules that read from this module. A change to a module's dependency requires updating both sides.
 
 ---
 
@@ -279,7 +283,9 @@ These terms appeared in previous versions of the specification and are no longer
 |---|---|---|
 | **CA/PA** | Banned (see §6) | `IndexSnapshot` / `ProjectionProfile` |
 | **`LatentAttributes` (public)** | Banned (see ADR-003, option B) | `GroundTruth::resolve_*` |
-| **25-module structure** | Replaced by the concentric model (L0-L3) | Level + cell |
+| **25-module structure** | Replaced by the concentric model (L0-L3) | Level + module |
+| **Cell** (deprecated) | Now called "module"; the `cell` field in the frontmatter is a historical name | Module |
+| **Sub-cell** (deprecated) | Now called "sub-module" | Sub-module |
 | **`01-architecture.md` … `04-data-model.md`** | Removed; content is being migrated | Distributed across L0, L1, L3 (see [`docs/MIGRATION-01-04.md`](MIGRATION-01-04.md)) |
 | **`Prompt Master`** | The original source doctrine, archived | [`modules/00-foundations.md`](../modules/00-foundations.md) |
 | **`modules/L1-season/00-overview.md` (link)** | The file does not exist yet | Marked `*(planned)*` in [`modules/_index.md`](../modules/_index.md) |
@@ -293,7 +299,7 @@ These terms appeared in previous versions of the specification and are no longer
     where the term is defined in full. If a term is missing, add it here AND
     in its source, in that order (source first, then glossary).
   - Keep entries short. A glossary entry is one or two sentences plus a link.
-    If a term needs more, it deserves its own cell.
+    If a term needs more, it deserves its own module.
   - Keep the sections stable: Core, Data model, Determinism, Architecture,
     Process, Banned, External, Abbreviations, Historical. If a term does not
     fit, that is a signal that the term is either too narrow (put it in the
