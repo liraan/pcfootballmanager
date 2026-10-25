@@ -3,11 +3,11 @@ title: "L0.07 — Save (minimal)"
 level: 0
 cell: "L0-match"
 module_id: "L0.07"
-version: "1.0"
+version: "1.1"
 status: "ratified"
 last_updated: "2026-10-25"
 supersedes: null
-depends_on: ["00-foundations", "L0.01", "L0.03", "L0.05", "L0.06"]
+depends_on: ["00-foundations", "L0.01", "L0.03", "L0.05", "L0.06", "L0.10"]
 referenced_by: ["L1-season"]
 conforms_to: "00-foundations (v1.1)"
 ---
@@ -20,7 +20,7 @@ conforms_to: "00-foundations (v1.1)"
   IMPORTANT: the save does NOT contain latents. GroundTruth is reconstructed
   from the seed + the command log. This is enforced by ADR-003 (option B):
   there is no public way to serialise GroundTruth, so it cannot end up in the
-  save by accident.
+  save by accident. The reconstruction contract is defined in L0.10.
 -->
 
 # L0.07 — Save (minimal)
@@ -33,10 +33,10 @@ At L0, the save contains **only one match**. No season, no world, no club.
 
 ## 1. Context and dependencies
 
-- Depends on `L0.01` (RNG registry), `L0.03` (entities), `L0.05` (events), `L0.06` (output)
+- Depends on `L0.01` (RNG registry), `L0.03` (entities), `L0.05` (events), `L0.06` (output), **`L0.10` (`GroundTruth` API)**
 - Uses `postcard` for compact binary serialisation (see `L3-quality` *(planned)*)
 - The save is **versioned**: `schema_version` and `sim_version`
-- The save **does not contain latents**. `GroundTruth` is reconstructed from the seed and the command log (see §2.6).
+- The save **does not contain latents**. `GroundTruth` is reconstructed from the seed and the command log (see §2.6 and `L0.10` §2.1).
 
 ## 2. Specification
 
@@ -64,12 +64,15 @@ pub struct MatchSave {
 
 **Note on `Match`:** the `Match` struct is the L0 projection defined in `L0.03`. It contains no latent values. Its `Player` structs have `id`, `name`, `role`, `preferred_foot`, `height_cm`, `physical`, `psychological` — all Plane B/C. Saving it does not leak anything.
 
+**Note on `GroundTruth`:** it is **not** in the save. It is reconstructed from `(world_seed, match_id)` via `GroundTruth::new` (API in `L0.10` §2.1). This is why `world_seed` and `match_id` are in the save header, even though they are also implicit in `match_`.
+
 ### 2.2 Serialisation
 
 - **`postcard`** for the binary format (compact, fast, deterministic)
 - **No floating-point in `command_log`** (use fixed-point or strings)
 - **`BTreeMap`** everywhere (no `HashMap` in the save)
 - **No timestamps from `SystemTime`** (only `GameInstant`)
+- **No `GroundTruth`** (not `Serialize`; the type system enforces this)
 
 ### 2.3 Migration
 
@@ -80,7 +83,7 @@ pub fn migrate_save_if_needed(save: &mut MatchSave) -> Result<()>;
 - If `schema_version < CURRENT`, apply migrations in order
 - If `sim_version != CURRENT`, the save is **readable but not replayable**. The match result is shown as-is, but the user is warned that replay will differ.
 - Migration scripts live in `crates/fmr-data/migrations/match/` *(planned — the `crates/` directory does not exist yet)*
-- The migration procedure (and the `SIM_VERSION` bump rules) is documented in `docs/MIGRATION-01-04.md` *(planned)*
+- The migration procedure (and the `SIM_VERSION` bump rules) is documented in `docs/MIGRATION-01-04.md` *(planned)* and in [`CHANGELOG-SIM.md`](../../CHANGELOG-SIM.md)
 
 ### 2.4 Verification
 
@@ -100,14 +103,16 @@ pub fn migrate_save_if_needed(save: &mut MatchSave) -> Result<()>;
 The save does not contain `GroundTruth`. When a match is reloaded:
 
 1. The `world_seed` and `match_id` are read from the save.
-2. The `RngRegistry` is recreated with the same seed.
-3. The `GroundTruth` is recreated by `fmr-gen` *(planned)* from `(world_seed, match_id)`.
+2. The `RngRegistry` is recreated with the same seed (see `L0.01` §2.2).
+3. The `GroundTruth` is recreated via `GroundTruth::new(world_seed, match_id)` — the API is in [`10-ground-truth.md`](10-ground-truth.md) §2.1.
 4. The `command_log` is replayed from the start of the match.
 5. The events are re-emitted, and the chain hash is verified against the saved hash.
 
 This is why the save is small and why it cannot leak latents: the latents never leave `fmr-hidden`. The reconstruction is the mechanism that makes the save work without storing Plane A.
 
 **Consequence:** if `sim_version` differs, the reconstruction may produce different events (the simulation changed). The save is still readable, but the chain won't verify against a new replay. The user sees a warning.
+
+**Contract:** `GroundTruth::new(world_seed, match_id)` must be **deterministic** — two calls with the same arguments produce the same initial state. This is tested in `L0.10` §5 and is a precondition of this cell's DoD.
 
 ### 2.7 Command log at L0
 
@@ -126,6 +131,7 @@ At L0, there are no interactive commands (a friendly match runs to completion). 
 - **Save of a completed match**: replayable
 - **`command_log` contains an unknown command**: rejected, save quarantined
 - **`config_versions` missing**: load fails with a clear error (the match cannot be reconstructed without knowing which config it ran with)
+- **`GroundTruth::new` produces a different state than at the original save**: this is a determinism regression. The chain verification fails. The save is quarantined. A `SIM_VERSION` bump is required.
 
 ## 5. Definition of Done
 
@@ -134,6 +140,7 @@ At L0, there are no interactive commands (a friendly match runs to completion). 
 - [ ] Chain verification on load
 - [ ] `sim_version` mismatch handled (readable, replay disabled, warning)
 - [ ] `GroundTruth` is reconstructed, not saved
+- [ ] `GroundTruth::new(world_seed, match_id)` is deterministic (contract inherited from `L0.10` §5)
 - [ ] `command_log` at L0 is empty and the field exists
 - [ ] Test: save → load → replay → same result
 - [ ] Test: corrupted chain → quarantine
@@ -150,6 +157,7 @@ At L0, there are no interactive commands (a friendly match runs to completion). 
 | `sim_version` drift | Medium | Warning + `SIM_VERSION` bump procedure |
 | Save size explosion | Medium | L0 save is one match; L1+ has compaction |
 | Latent leaks into save | Critical | `GroundTruth` is not `Serialize`; test greps the binary for latent strings |
+| `GroundTruth::new` is not deterministic | Critical | Contract in `L0.10` §5; test in `L0.10` DoD; chain verification catches regressions |
 | `command_log` empty causes confusion at L0 | Low | Documented in §2.7; the field is there for L1 |
 
 ## 7. References
@@ -160,6 +168,9 @@ At L0, there are no interactive commands (a friendly match runs to completion). 
 - [`03-entities-minimal.md`](03-entities-minimal.md) — entities saved
 - [`05-match-events.md`](05-match-events.md) — event chain
 - [`06-match-output.md`](06-match-output.md) — result saved
+- [`10-ground-truth.md`](10-ground-truth.md) — `GroundTruth` API and the determinism contract
 - [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — no latent in the save
-- `../../docs/MIGRATION-01-04.md` — migration procedure *(planned)*
+- [`../../docs/MIGRATION-01-04.md`](../../docs/MIGRATION-01-04.md) — migration procedure *(planned)*
+- [`../../CHANGELOG-SIM.md`](../../CHANGELOG-SIM.md) — `SIM_VERSION` bump procedure
 - `../L1-season/03-standings.md` — L1 save extends this *(planned — the L1-season directory does not exist yet)*
+- [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — terms used in this cell
