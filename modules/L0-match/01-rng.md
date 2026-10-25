@@ -11,6 +11,12 @@ referenced_by: ["L0.02", "L0.04", "L0.08", "L1-season", "L2-market", "L2-psyche"
 conforms_to: "00-foundations (v1.0)"
 ---
 
+<!--
+  MAINTAINER NOTE: this is the single most dangerous cell in the entire project.
+  A bug here corrupts determinism everywhere. Treat changes to seed derivation
+  as SIM_VERSION-breaking changes. See §2.6.
+-->
+
 # L0.01 — RNG
 
 ## 0. Purpose
