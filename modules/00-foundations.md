@@ -233,3 +233,26 @@ The specification is organised as **concentric levels**, not a flat list of modu
   If a new module is added, it MUST declare its level in the frontmatter. If it
   doesn't fit an existing level, that's a design discussion, not a new level.
 -->
+
+L0 — MATCH (core) Two teams play one match. Deterministic, savable.
+L1 — SEASON A league, a calendar, a world.
+L2 — CAREER Market, finance, youth, scouting, psyche, crowd, media, AI.
+L3 — META Registry, packs, generator, editor, assets, UI, statistics, quality.
+
+
+**What "the game runs" means at each level:**
+
+- **L0:** you can play a friendly match, save it, reload it, get the same result.
+- **L1:** you can play a league season. Standings, calendar, results.
+- **L2:** you can play a career. Transfers, budgets, youth intake, tactics, psychology, fans.
+- **L3:** the game is moddable. Registry, packs, generator, editor, UI themes.
+
+**Rules:**
+
+- A level N cell may **read** the output of a level `< N` cell.
+- A level N cell may **not** read the internals of a level `< N` cell.
+- A level N cell may **not** depend on a level `> N` cell.
+- The `00-foundations` doctrine applies at all levels.
+- The Three Planes apply at all levels.
+
+**The full index is in [`modules/_index.md`](_index.md).**
