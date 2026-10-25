@@ -109,7 +109,7 @@ Within L0:
 - `04-match-engine` depends on `00`, `L0.01`, `L0.02`, `L0.03`
 - `05-match-events` depends on `00`, `L0.01`, `L0.03`
 - `06-match-output` depends on `00`, `L0.05`
-- `07-save-minimal` depends on `00`, `L0.03`, `L0.05`, `L0.06`
+- `07-save-minimal` depends on `00`, `L0.01`, `L0.03`, `L0.05`, `L0.06`
 - `08-random-events` depends on `00`, `L0.01`, `L0.03`, `L0.04`, `L0.05`
 - `09-context-modifiers` depends on `00`, `L0.03`
 
@@ -172,5 +172,5 @@ Golden test: `same_seed → same MatchResult` bit-for-bit, across 1,000 randomly
 
 - [`../00-foundations.md`](../00-foundations.md) — doctrine
 - [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — blocking
-- [`../../archive/Prompt_Master_v7.md`](../../archive/Prompt_Master_v7.md) §12 — match engine original
+- `../../archive/Prompt_Master_v7.md` §12 — match engine original *(planned — the archive/ directory does not exist yet)*
 - [`../../STRUCTURE.md`](../../STRUCTURE.md) — level rules
