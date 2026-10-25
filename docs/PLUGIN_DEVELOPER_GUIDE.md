@@ -20,7 +20,7 @@ PCFM has two extension mechanisms, and they are deliberately different.
 | What they write | `registry/*.yaml`, `theme/*.toml`, assets (SVG, PNG, audio) | Rust crates in `crates/` |
 | What they can change | Content: roles, formations, kits, logos, competitions, players | Architecture: a new engine, a new event type, a new `resolve_*` |
 | What they cannot change | Code, the core simulation, the plane separation | The doctrine, the plane separation, the invariants |
-| Review | Automated validation (`fmr-pack validate`, planned) | PR review against the doctrine and the ADRs |
+| Review | Automated validation (`pcfm-pack validate`, planned) | PR review against the doctrine and the ADRs |
 | Distribution | Pack (`mods/`) | Crate (workspace member) or external crate that depends on a `pcfm-*` crate |
 
 The line between the two is **`STRUCTURE.md` §9**: a pack can extend the registry, the assets, the configuration, and the sandboxed scripts. A pack **cannot** add a new module, a new event type, or a new `resolve_*`. Those require a **crate** and a **PR**.
