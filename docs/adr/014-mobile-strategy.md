@@ -1,4 +1,3 @@
-cd ~/pcfootballmanager && cat > docs/adr/014-mobile-strategy.md <<'ADR014_EOF'
 # ADR-014 — Mobile Strategy: Native UI, No Plugins, Data Packs Only
 
 - **Status:** accepted
@@ -166,5 +165,3 @@ The golden tests must run on **both x86_64 and ARM64**. A simulation that is det
 - ADR-013 — Worlds: LOD, Manifest, and Local Determinism (LOD on mobile, see §"Scope")
 - `modules/00-foundations.md` §4 — Determinism (golden tests)
 - `STRUCTURE.md` §3 — Crate naming
-ADR014_EOF
-echo "✅ ADR-014 creato" && wc -l docs/adr/014-mobile-strategy.md

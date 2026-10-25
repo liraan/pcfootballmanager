@@ -7,6 +7,8 @@
 - **Blocks:** none
 - **Depends on:** ADR-012 (the world is made of plugins)
 
+> **Scope note (2026-10-25):** the LOD is defined only where plugins are active (desktop). On mobile, the LOD is the **core LOD** (fixed); data packs do not modify it. See [ADR-014](014-mobile-strategy.md).
+
 ## Context
 
 ADR-012 defines the bricks (plugins). This ADR defines how the bricks compose into **worlds**, what a world is, how it is saved, and what determinism means when the world is plural.

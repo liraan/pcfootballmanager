@@ -7,6 +7,8 @@
 - **Blocks:** ADR-013 (the world cannot exist without the bricks)
 - **Referenced by:** ADR-013
 
+> **Scope (2026-10-25):** this ADR applies to the **desktop target**. On mobile (iOS, Android), the plugin system does not exist; only data packs are supported. See [ADR-014](014-mobile-strategy.md).
+
 ## Context
 
 PCFM is designed to grow by **adding plugins**, not by rewriting the engine. This ADR defines what a plugin is, what it must declare, how it is validated, and how conflicts between plugins are handled. It is the contract of the bricks. ADR-013 describes how the bricks compose into worlds.
