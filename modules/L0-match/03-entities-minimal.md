@@ -3,12 +3,12 @@ title: "L0.03 — Minimal Entities"
 level: 0
 cell: "L0-match"
 module_id: "L0.03"
-version: "1.0"
+version: "1.1"
 status: "ratified"
 last_updated: "2026-10-25"
 supersedes: null
 depends_on: ["00-foundations", "L0.01"]
-referenced_by: ["L0.04", "L0.05", "L0.07", "L0.08", "L0.09", "L1-roster"]
+referenced_by: ["L0.04", "L0.05", "L0.07", "L0.08", "L0.09", "L0.10", "L1-roster"]
 conforms_to: "00-foundations (v1.1)"
 ---
 
@@ -21,8 +21,8 @@ conforms_to: "00-foundations (v1.1)"
 
   IMPORTANT: with ADR-003 (option B), latents are NOT a field of Player. They
   live in fmr-hidden, indexed by player_id. The public Player struct has only
-  observed/minimal state. The match engine calls resolve_* on GroundTruth, not
-  field access on Player.
+  observed/minimal state. The match engine calls resolve_* on GroundTruth
+  (defined in L0.10), not field access on Player.
 -->
 
 # L0.03 — Minimal Entities
@@ -36,9 +36,9 @@ The rule: **if the match engine does not need it, it is not here.**
 ## 1. Context and dependencies
 
 - Depends on `00-foundations` and `L0.01` (for ID generation)
-- Used by `L0.04`, `L0.05`, `L0.07`, `L0.08`, `L0.09`
+- Used by `L0.04`, `L0.05`, `L0.07`, `L0.08`, `L0.09`, `L0.10`
 - The **full** `Player` entity lives in `L1-roster/01-player-attributes.md` *(planned — the L1-roster directory does not exist yet)*. L0 has a **projection** of it.
-- The latent attributes of a player live in `fmr-hidden`, indexed by `player_id`. They are **not** part of the public `Player` struct. See [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md).
+- The latent attributes of a player live in `fmr-hidden`, indexed by `player_id`. They are **not** part of the public `Player` struct. The public API to access Plane A is defined in [`10-ground-truth.md`](10-ground-truth.md) and in [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md).
 
 ## 2. Specification
 
@@ -60,7 +60,7 @@ pub struct Player {
 
 **Notes:**
 
-- There is **no** `latent` field. Latent attributes live in `fmr-hidden` and are accessed by the match engine only via `GroundTruth::resolve_*`. The engine never sees a latent number. This is the whole point of ADR-003 (option B).
+- There is **no** `latent` field. Latent attributes live in `fmr-hidden` and are accessed by the match engine only via `GroundTruth::resolve_*` (see `L0.10`). The engine never sees a latent number. This is the whole point of ADR-003 (option B).
 - `physical` and `psychological` are minimal: only what the match engine needs.
 - The `Player` struct is `Serialize`/`Deserialize`, but it contains no Plane A data, so serialising it never leaks latents.
 
@@ -158,25 +158,11 @@ pub type RefereeId = EntityId<RefereeTag>;
 
 ### 3.2 Where are the latents?
 
-They are in `fmr-hidden`. The crate exposes:
+They are in `fmr-hidden`. The crate's public API is defined in **[`10-ground-truth.md`](10-ground-truth.md)**, not here. This cell only defines the entities that live **outside** `fmr-hidden`.
 
-```rust
-// fmr-hidden, public API
-pub struct GroundTruth { /* private */ }
+The contract, in one sentence: the engine holds `&mut GroundTruth` (defined in `L0.10`) and calls `resolve_*` on it. It never reads a latent value. This is enforced by the absence of any public accessor on `GroundTruth`, and documented in full in `L0.10` and in [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md).
 
-impl GroundTruth {
-    pub fn resolve_duel(&mut self, ctx: DuelContext) -> DuelOutcome;
-    pub fn resolve_shot(&mut self, ctx: ShotContext) -> ShotOutcome;
-    pub fn resolve_pass(&mut self, ctx: PassContext) -> PassOutcome;
-    pub fn resolve_pressure(&mut self, ctx: PressureContext) -> PressureOutcome;
-    pub fn resolve_injury_risk(&mut self, ctx: InjuryContext) -> InjuryOutcome;
-    pub fn resolve_save(&mut self, ctx: SaveContext) -> SaveOutcome;
-    pub fn resolve_set_piece(&mut self, ctx: SetPieceContext) -> SetPieceOutcome;
-    pub fn drain_observations(&mut self) -> Vec<ObservationEvent>;
-}
-```
-
-The match engine holds `&mut GroundTruth` in its context (see [`04-match-engine.md`](04-match-engine.md)) and calls `resolve_*`. It never reads a latent value. This is enforced by the absence of any public accessor on `GroundTruth`.
+**Why the separation:** the entities in this cell (`Player`, `Squad`, `Pitch`, `Referee`, `Match`) are Plane B/C data. They can be serialised, logged, saved, displayed. `GroundTruth` is Plane A. It cannot be serialised, logged, saved, or displayed. Keeping them in separate cells keeps the boundary visible.
 
 ## 4. Edge cases
 
@@ -193,7 +179,7 @@ The match engine holds `&mut GroundTruth` in its context (see [`04-match-engine.
 - [ ] Validation on construction (`try_new`, not `new`)
 - [ ] No entity from L1/L2 leaks into L0
 - [ ] No field of `Player` exposes latent data (type system check)
-- [ ] `fmr-hidden` public API is exactly the `resolve_*` functions above
+- [ ] The `GroundTruth` API is defined in `L0.10`, not duplicated here
 - [ ] Test: construct a match from two squads, run it, get a result
 - [ ] Test: no `Player` field can be used to derive a latent value
 - [ ] Test: `fmr-hidden` does not export `LatentAttributes` as a public type
@@ -203,10 +189,11 @@ The match engine holds `&mut GroundTruth` in its context (see [`04-match-engine.
 | Risk | Severity | Mitigation |
 |---|---|---|
 | L0 entities grow into L1 entities | High | Hard rule: if the match engine doesn't need it, it's not here. Reviewed at PR |
-| Latent leakage via `Debug` | Critical | `Player` has no latent fields (ADR-003); `GroundTruth` has a custom `Debug` that prints only `GroundTruth { .. }` |
-| `fmr-hidden` accidentally exposes a latent getter | Critical | Review + type system; the crate is tiny and reviewed line by line |
+| Latent leakage via `Debug` | Critical | `Player` has no latent fields (ADR-003); `GroundTruth` has a custom `Debug` that prints only `GroundTruth { .. }` (see `L0.10`) |
+| `fmr-hidden` accidentally exposes a latent getter | Critical | Review + type system; the `L0.10` API is the only surface |
 | Clamping hides bugs | Medium | Log a warning when clamping occurs |
 | `Squad` with 0 bench | Low | Allowed (friendly match) |
+| Duplication between `L0.03` and `L0.10` | Medium | `L0.03` defines the entities; `L0.10` defines the API. They link, they do not duplicate |
 
 ## 7. References
 
@@ -214,4 +201,6 @@ The match engine holds `&mut GroundTruth` in its context (see [`04-match-engine.
 - [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — `resolve_*` API, no latent fields
 - [`00-overview.md`](00-overview.md) — L0 cell map
 - [`04-match-engine.md`](04-match-engine.md) — consumer
+- [`10-ground-truth.md`](10-ground-truth.md) — the `GroundTruth` API (Plane A access)
 - `../L1-roster/01-player-attributes.md` — full Player *(planned — the L1-roster directory does not exist yet)*
+- [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — terms used in this cell
