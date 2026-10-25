@@ -8,46 +8,53 @@ For registry deprecations and migrations, see [`CHANGELOG-REGISTRY.md`](CHANGELO
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project does not use semantic versioning for the docs; the version of each module is in its own frontmatter.
 
+> **Terminology note (2026-10-25):** the terms are **module** (a directory of the specification, e.g. `L0-match`), **sub-module** (a file inside a module, e.g. `04-match-engine.md`), **plugin** (a Rust crate with a `sheet.toml`, defined in ADR-012). The term **cell** is deprecated. In entries **before** this date, 'cell' means 'module', and 'module' (in the plugin sense) means 'plugin'. In entries **from** this date onwards, the new terminology is used.
+
+---
+
+
 ---
 
 ## [Unreleased]
 
+
+
 ### Planned
 
-- Write L1 cells (season, world, roster): 12 files.
-- Write L2 cells (tactics, market, finance, youth, scouting, psyche, crowd, media, ai): 9 cells.
-- Write L3 cells (registry, packs, generator, editor, assets, ui, statistics, quality): 8 cells.
+- Write L1 modules (season, world, roster): 12 modules.
+- Write L2 modules (tactics, market, finance, youth, scouting, psyche, crowd, media, ai): 9 modules.
+- Write L3 modules (registry, packs, generator, editor, assets, ui, statistics, quality): 8 modules.
 - Recover and archive the three Prompt Master versions (v5, v6, v7) into `archive/prompts/`.
 - Ratify ADR-005 (Qt binding), ADR-006 (license), ADR-007 (canonical language).
-- Ratify ADR-012 (modules) and ADR-013 (worlds) when the framework implements them.
+- Ratify ADR-012 (plugins) and ADR-013 (worlds) when the framework implements them.
 
 ---
 
-## [2026-10-25] — ADR-012 (modules) and ADR-013 (worlds), proposed
+## [2026-10-25] — ADR-012 (plugins) and ADR-013 (worlds), proposed
 
 ### Added
 
-- **`docs/adr/012-plugins.md`** — proposed. The brick contract: module sheet mandatory and validated, behaviour open / metadata closed, conflicts critical (blocked) vs minor (warned), narrative is the modder's responsibility, cause traces have two levels (diegetic + meta), debug UI module view.
-- **`docs/adr/013-worlds.md`** — proposed. Worlds: LOD = sum of active module weights, LOD chosen at save creation and fixed, manifest is part of the save and validated, **local determinism** (same save + same match + same module configuration = same result), community plural and aware, meta level visible to the PCFM player, debug UI world view, low LOD is a valid game, low LOD is blind by design, framework understandable without the debug UI.
+- **`docs/adr/012-plugins.md`** — proposed. The brick contract: plugin sheet mandatory and validated, behaviour open / metadata closed, conflicts critical (blocked) vs minor (warned), narrative is the modder's responsibility, cause traces have two levels (diegetic + meta), debug UI plugin view.
+- **`docs/adr/013-worlds.md`** — proposed. Worlds: LOD = sum of active plugin weights, LOD chosen at save creation and fixed, manifest is part of the save and validated, **local determinism** (same save + same match + same plugin configuration = same result), community plural and aware, meta level visible to the PCFM player, debug UI world view, low LOD is a valid game, low LOD is blind by design, framework understandable without the debug UI.
 - **`docs/adr/012-013-reading-guide.md`** — a reading guide for the two ADRs: why they are two, what each covers, the points of contact, what changes in the doctrine.
 
 ### Changed
 
-- **`modules/00-foundations.md`**: version 1.3 → **1.4**. **Pillar 1** ("Traceable determinism. Same seed + same inputs = same result. Never compromised.") is marked **under review** (ADR-013, proposed). The pillar text is unchanged; a note says "under review, see ADR-013 (proposed)". §4 (Determinism) gains a **status note**: the scope of the section is under review (global vs local); the rules (named streams, no `HashMap`, golden tests, `SIM_VERSION`) are not under review. The banned-things list (§5) gains a parenthetical on "No compromising determinism for convenience. *(Scope under review, see §4.)*". §8 (References) gains links to ADR-012, ADR-013, and the module developer guide.
-- **`modules/_index.md`**: version 2.5 → **2.7**. The "Modules and worlds" section is rewritten as **prose + link to the ADR status table** (no duplicate table). The "Doctrine" section, "Current state", and "Doctrine compliance" are updated to say the doctrine is **v1.4** and the cells conform to **v1.1** (the last invariant-changing version). "Open ADRs" is still listed here (single source of truth for the project map). ADR status table updated with 012 and 013 (both `proposed`).
-- **`STRUCTURE.md`**: version 1.5 → **1.6**. §4 (Cell Frontmatter) gains an explicit note that `conforms_to` means **"verified against"**, not "compatible with". §5 (Current ADR status) updated with 012 and 013, and a **note on pillar 1** (ADR-013, if ratified, will supersede it). §3 (Current state) shows the code (6 crates, 103 tests). §9 (What Packs Can and Cannot Extend) gains a note on the module system (once ratified).
+- **`modules/00-foundations.md`**: version 1.3 → **1.4**. **Pillar 1** ("Traceable determinism. Same seed + same inputs = same result. Never compromised.") is marked **under review** (ADR-013, proposed). The pillar text is unchanged; a note says "under review, see ADR-013 (proposed)". §4 (Determinism) gains a **status note**: the scope of the section is under review (global vs local); the rules (named streams, no `HashMap`, golden tests, `SIM_VERSION`) are not under review. The banned-things list (§5) gains a parenthetical on "No compromising determinism for convenience. *(Scope under review, see §4.)*". §8 (References) gains links to ADR-012, ADR-013, and the plugin developer guide.
+- **`modules/_index.md`**: version 2.5 → **2.7**. The "Plugins and worlds" section is rewritten as **prose + link to the ADR status table** (no duplicate table). The "Doctrine" section, "Current state", and "Doctrine compliance" are updated to say the doctrine is **v1.4** and the modules conform to **v1.1** (the last invariant-changing version). "Open ADRs" is still listed here (single source of truth for the project map). ADR status table updated with 012 and 013 (both `proposed`).
+- **`STRUCTURE.md`**: version 1.5 → **1.6**. §4 (Module Frontmatter) gains an explicit note that `conforms_to` means **"verified against"**, not "compatible with". §5 (Current ADR status) updated with 012 and 013, and a **note on pillar 1** (ADR-013, if ratified, will supersede it). §3 (Current state) shows the code (6 crates, 103 tests). §9 (What Packs Can and Cannot Extend) gains a note on the plugin system (once ratified).
 - **`CONTRIBUTING.md`**: version 1.1 → **1.2**. The ADR status table is **removed** (it was a duplicate of `STRUCTURE.md` §5); the file now links to `STRUCTURE.md` §5 as the single source of truth. "Current state" is corrected ("10 ADRs exist: 5 accepted, 5 proposed" — the previous version said "8 ADRs, 3 proposed", which was stale). Two notes on ADR-012/013 and pillar 1 are kept (they are specific to the current state and useful before opening a PR).
 - **`README.md`**: version 1.1 → **1.2**. The `code` badge is updated to `code-103_tests_green`. The "Project Status" section reflects that L0 is **implemented** (6 crates, 103 tests). The "Deterministic" bullet is annotated with "*(Currently global; under review for local, see ADR-013.)*". The "Determinism" section gains a **"Under review (ADR-013, proposed)"** note. The "Documentation Map" gains a row for `PLUGIN_DEVELOPER_GUIDE.md`. The "Repository Structure" shows the 6 crates. The FAQ is updated: "**five** remain unresolved" (005, 006, 007, 012, 013), plus a new FAQ entry "What is ADR-012 / ADR-013 about?". The roadmap is updated to "L0 ratified + implemented".
 
 ### Why
 
-The two ADRs are **proposed**, not accepted, because the framework does not yet implement the module system. The doctrine (`00-foundations`) cannot declare "local determinism" before the code does. The Honesty Rule (`STRUCTURE.md` §11) requires that the docs say the truth: the determinism is global today, and the move to local determinism is **under review**.
+The two ADRs are **proposed**, not accepted, because the framework does not yet implement the plugin system. The doctrine (`00-foundations`) cannot declare "local determinism" before the code does. The Honesty Rule (`STRUCTURE.md` §11) requires that the docs say the truth: the determinism is global today, and the move to local determinism is **under review**.
 
-When the framework implements the module system (steps 11+), ADR-012 and ADR-013 will be ratified, and `00-foundations.md` will be rewritten in the same commit. Until then, the docs say "under review".
+When the framework implements the plugin system (steps 11+), ADR-012 and ADR-013 will be ratified, and `00-foundations.md` will be rewritten in the same commit. Until then, the docs say "under review".
 
 ### Related ADRs
 
-- ADR-012 — Modules: The Brick Contract
+- ADR-012 — Plugins: The Brick Contract
 - ADR-013 — Worlds: LOD, Manifest, and Local Determinism
 
 ---
