@@ -104,3 +104,132 @@ The single most important architectural rule. Violating it introduces systemic b
 
 ### Flow Diagram
 
+┌─────────────────┐ events ┌─────────────────┐
+│ PLANE A │ ─────────────> │ PLANE B │
+│ (Ground Truth) │ │ (Observation) │
+│ - Latents │ │ - MatchEvents │
+│ - States │ │ - Stats │
+└─────────────────┘ └────────┬────────┘
+│
+│ analysis
+▼
+┌─────────────────┐
+│ PLANE C │
+│ (Estimation) │
+│ - Index IR │
+│ - Projections │
+│ - Reports │
+└─────────────────┘
+│
+│ visible
+▼
+┌─────────────────┐
+│ UI/UX │
+└─────────────────┘
+
+
+### Forbidden feedback loops
+
+- ❌ Plane C → Plane A (estimates do not change reality)
+- ❌ Plane A → UI directly (no truth leakage)
+- ❌ Ratings using Plane A (circularity)
+- ❌ Statistical models reading latents (they must use observed only)
+
+**Enforcement:** the technical mechanism is decided in **ADR-003** (currently `proposed`). Until that ADR is accepted, no code that touches `fmr-hidden` or `fmr-match` may be written.
+
+---
+
+## 4. Determinism
+
+Same seed → same world, same season, same match. Always.
+
+Operational rules:
+
+- **Generational IDs**, never hashes or pointers
+- **Named RNG streams**: `ChaCha20Rng` derived from `(world_seed, stream_name)`, so adding a new consumer never shifts existing results
+- **No `HashMap`/`HashSet` in simulation paths**: `BTreeMap`, `BTreeSet`, or explicitly sorted `Vec`
+- **Portable transcendentals**: `libm` pinned, or fixed-point for the critical path
+- **Deterministic parallelism**: `rayon` with fixed partitioning and ordered reduction
+- **Golden tests**: 10 seasons from a known seed → state hash comparison
+- **`SIM_VERSION`**: bumped whenever simulation behaviour changes, with the five-step procedure in Module 01
+
+Full details: [`L0-match/01-rng.md`](L0-match/01-rng.md).
+
+---
+
+## 5. Banned Things
+
+These are not preferences. They are prohibitions.
+
+- **No CA/PA.** No `current_ability`, `potential_ability`, or equivalent scalar. Ever.
+- **No truth leakage.** No module outside `fmr-match` and the generator reads Plane A.
+- **No ratings from latents.** Ratings come from events.
+- **No Plane C → Plane A feedback.**
+- **No hardcoded rules, names, colours, or balance values.** Everything lives in files.
+- **No invented real data** (squads, prices, regulations) presented as certain.
+- **No bundling, redistributing, or scraping commercial data.**
+- **No unlicensed assets.**
+- **No compromising determinism for convenience.**
+- **No deleting entities from the registry.** Deprecate, never delete.
+- **No save-breaking changes without a migration script.**
+- **No circular dependencies between modules.**
+- **No statistics overwrites.** Append-only.
+- **No hidden confidence intervals.** If an estimate is uncertain, the UI says so.
+
+---
+
+## 6. Product Goal and Target
+
+**Single-player first.** Hotseat and asynchronous multiplayer are separate modules (future).
+
+**Depth of FM24 + soul of PC Calcio:**
+- Dense, readable interface
+- Textual radio commentary
+- Powerful editor
+- Extra-managerial management
+- Weekly sports show
+- Real sackings
+- Complete statistics, never overwritten
+- Psyche as a game system, not decoration
+- No CA/PA: everything observable, derived, windowed
+
+**Target:**
+- Platforms: Windows, Linux, macOS
+- Minimum resolution: 1280×720
+- Performance: 60 fps UI, full season < 60 s on mid-range hardware
+- Storage: < 5 GB base install
+
+---
+
+## 7. Non-Goals
+
+To keep scope honest, these are **not** in v1.0:
+
+- 3D match engine (future crate, behind the same `MatchEngine` trait)
+- Online multiplayer (separate module)
+- Mobile ports
+- Real licensed datasets (adapters only, user-supplied)
+- Full 6-axis psychology (3 axes in v1.0, the other 3 in a pack)
+- Full 25-module completeness (v1.0 ships modules 00–13 stable)
+
+---
+
+## 8. References
+
+- **Historical:** [`archive/Prompt_Master_v7.md`](../archive/Prompt_Master_v7.md) — the full source doctrine
+- **Architecture:** [`L0-match/04-match-engine.md`](L0-match/04-match-engine.md) — determinism enforcement
+- **Data model:** [`L0-match/03-entities-minimal.md`](L0-match/03-entities-minimal.md) — no CA/PA
+- **Decisions:** [`docs/adr/`](../docs/adr/) — every open question, every resolved one
+- **Index of all modules:** [`_index.md`](_index.md)
+
+---
+
+## 9. Concentric Structure (Nest Model)
+
+The specification is organised as **concentric levels**, not a flat list of modules. Each level expands the previous one without replacing it. Dependencies flow **inward**: a level N may depend on levels `< N`, never on `> N`, never laterally.
+
+<!--
+  MAINTAINER NOTE: this section is the formal answer to "how is the repo organised?".
+  If a new module is added, it MUST declare its level in the frontmatter. If it
+  doesn't fit an existing level, that's a design discussion, not a new level.
+-->
