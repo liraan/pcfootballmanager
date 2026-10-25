@@ -1,6 +1,6 @@
 ---
 title: "Modules Index"
-version: "2.5"
+version: "2.6"
 status: "active"
 last_updated: "2026-10-25"
 ---
@@ -20,7 +20,7 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 **Reading order:**
 
-1. [`00-foundations.md`](00-foundations.md) — the doctrine *(v1.2)*
+1. [`00-foundations.md`](00-foundations.md) — the doctrine *(v1.2, pillar 1 under review)*
 2. The level that matches your task (L0 → L3)
 3. [`../STRUCTURE.md`](../STRUCTURE.md) — the rules of the repo
 4. [`../docs/adr/`](../docs/adr/) — the decisions
@@ -29,12 +29,13 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 ## Current state (as of 2026-10-25)
 
-- ✅ **Doctrine**: ratified (v1.2, with §9 concentric structure and the provider non-goal)
+- ✅ **Doctrine**: ratified (v1.2). **Pillar 1 is under review** (ADR-013, proposed).
 - ✅ **L0 — Match**: fully specified, **all 11 cells ratified** (ADR-003 accepted)
 - 🚧 **L1 — Season**: planned, not started (12 cells)
 - 🚧 **L2 — Career**: planned, not started (9 cells)
 - 🚧 **L3 — Meta**: planned, not started (8 cells)
 - 🔌 **Provider integrations** (Wyscout, StatsBomb, Opta): **external tools, not core cells** (ADR-008)
+- 🧱 **Modules and worlds**: ADR-012 and ADR-013 are **proposed**. The framework does not yet implement the module system. The determinism is **global** today; the move to **local** determinism is under review.
 
 Cells marked *(planned)* below do not have a file yet. Their links are intentionally not clickable.
 
@@ -44,9 +45,9 @@ Cells marked *(planned)* below do not have a file yet. Their links are intention
 
 | File | Status |
 |---|---|
-| [`00-foundations.md`](00-foundations.md) | ✅ ratified (v1.2) |
+| [`00-foundations.md`](00-foundations.md) | ✅ ratified (v1.2) — pillar 1 under review (ADR-013) |
 
-**Note on `conforms_to`:** all cells declare `conforms_to: "00-foundations (v1.1)"`. v1.2 is a clarification that adds one sentence to §7 (Non-goals) and does not change any invariant. Cells do not need to be re-checked. The next invariant-changing doctrine revision will bump all cells.
+**Note on `conforms_to`:** all cells declare `conforms_to: "00-foundations (v1.1)"`. v1.2 is a clarification that adds one sentence to §7 (Non-goals) and does not change any invariant. The pillar 1 revision, when ratified, will bump all cells to `v1.3` or higher, and each cell will be re-checked.
 
 ---
 
@@ -67,6 +68,8 @@ Cells marked *(planned)* below do not have a file yet. Their links are intention
 | L0.10 | [`L0-match/10-ground-truth.md`](L0-match/10-ground-truth.md) | ✅ ratified | 00, L0.01, L0.03 |
 
 **L0 is done when:** a friendly match is playable, savable, reloadable, deterministic, and every event has a cause trace. The **specification** is complete; the **code** can now be written (ADR-003 accepted).
+
+**Implementation status (code):** `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-debug`. 103 tests passing. See `STRUCTURE.md` §3.
 
 ---
 
@@ -142,6 +145,19 @@ The core does not talk to providers. A tool (team, community, or third party) ta
 
 ---
 
+## Modules and worlds (proposed)
+
+| ADR | Title | Status | Effect |
+|---|---|---|---|
+| [012](../docs/adr/012-modules.md) | Modules: The Brick Contract | 🟡 proposed | Defines the module sheet, conflicts, narrative, cause traces (two levels), debug UI module view |
+| [013](../docs/adr/013-worlds.md) | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | Defines LOD = sum of modules, LOD fixed per save, manifest in save, **local determinism**, community plural and aware |
+
+**When ratified, these ADRs will supersede pillar 1 of `00-foundations` §2** ("Traceable determinism. Same seed + same inputs = same result. Never compromised.") and replace it with "Local determinism: same save + same match + same module configuration = same result."
+
+Read the two ADRs together, in order: [`012-013-reading-guide.md`](../docs/adr/012-013-reading-guide.md).
+
+---
+
 ## How to read a cell
 
 Every cell has:
@@ -164,7 +180,7 @@ If a cell lacks any of these, it is a bug. Open an issue.
 
 Every cell declares `conforms_to: 00-foundations (vX.Y)`. When `00-foundations` is revised, every cell's `conforms_to` is checked. A cell that has not been re-checked is marked `status: review` until it is.
 
-The current doctrine version is **v1.2**. Cells conform to **v1.1** (the last invariant-changing version). v1.2 adds one sentence to §7 and does not change any invariant, so cells do not need to be re-checked.
+The current doctrine version is **v1.2**. Cells conform to **v1.1** (the last invariant-changing version). v1.2 adds one sentence to §7 and does not change any invariant, so cells do not need to be re-checked. **Pillar 1 is under review** (ADR-013, proposed). When the pillar is rewritten, all cells will be re-checked and the version will bump.
 
 ---
 
@@ -189,7 +205,7 @@ A cell at level N may read the **output** of any cell at level `< N`. It may not
 | Symbol | Meaning |
 |---|---|
 | ✅ ratified | Accepted, stable, downstream cells may depend on it |
-| 🟡 draft | Being written or blocked by an open ADR |
+| 🟡 draft / proposed | Being written or blocked by an open ADR |
 | 🚧 planned | Cell does not exist yet; the row is a placeholder |
 | 🔌 external | Not a core cell; a tool or pack outside the repository |
 | ⛔ superseded | Replaced by a newer cell, kept for history |
@@ -237,8 +253,10 @@ These are components that are referenced across cells but are not crates. They a
 | [003](../docs/adr/003-plane-a-enforcement.md) | Plane A enforcement | ✅ accepted | Unblocked L0.04, L0.08, L0.10 |
 | [004](../docs/adr/004-panic-strategy-ffi.md) | Panic strategy at FFI | ✅ accepted | — |
 | [005](../docs/adr/005-qt-binding.md) | Qt binding | 🟡 proposed | Blocks L3-ui |
-| [006](../docs/adr/006-license.md) | License | 🟡 proposed | Blocks `LICENSE.md` and `Cargo.toml` examples |
-| [007](../docs/adr/007-canonical-language.md) | Canonical language | 🟡 proposed | Blocks translations |
+| [006](../docs/adr/006-license.md) | License | 🟡 proposed | Blocks `LICENSE.md` (currently marked `proposed`) and `Cargo.toml` examples |
+| [007](../docs/adr/007-canonical-language.md) | Canonical language | 🟡 proposed | Blocks translations, language policy in `STRUCTURE.md` §6 |
 | [008](../docs/adr/008-provider-integration-external.md) | Provider integration is external | ✅ accepted | Reclassified `L2-ingest` as external tool |
+| [012](../docs/adr/012-modules.md) | Modules: The Brick Contract | 🟡 proposed | Defines the module sheet, conflicts, narrative, cause traces, debug UI module view |
+| [013](../docs/adr/013-worlds.md) | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | Defines LOD, manifest, local determinism; supersedes pillar 1 |
 
-Open ADRs: **005, 006, 007** (3).
+Open ADRs: **005, 006, 007, 012, 013** (5).
