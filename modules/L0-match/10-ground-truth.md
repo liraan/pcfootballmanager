@@ -3,28 +3,25 @@ title: "L0.10 — Ground Truth"
 level: 0
 cell: "L0-match"
 module_id: "L0.10"
-version: "1.0"
-status: "draft"
+version: "1.1"
+status: "ratified"
 last_updated: "2026-10-25"
 supersedes: null
 depends_on: ["00-foundations", "L0.01", "L0.03"]
-referenced_by: ["L0.04", "L0.08", "L3-generator"]
+referenced_by: ["L0.04", "L0.07", "L0.08", "L3-generator"]
 conforms_to: "00-foundations (v1.1)"
 ---
 
 <!--
-  MAINTAINER NOTE: this cell exists because the `fmr-hidden` API was scattered
-  across L0.03 §3.2, L0.04 §1, L0.05 §2.3 and ADR-003. A reader who wanted to
-  understand "what can fmr-hidden do?" had to read four files. This cell
-  centralises the API and the contract. It does NOT introduce new behaviour;
-  it documents behaviour that already exists in the other cells.
+  MAINTAINER NOTE: ADR-003 is accepted (option B). This cell is now `ratified`.
+  It exists because the `fmr-hidden` API was scattered across L0.03 §3.2,
+  L0.04 §1, L0.05 §2.3 and ADR-003. A reader who wanted to understand "what
+  can fmr-hidden do?" had to read four files. This cell centralises the API
+  and the contract. It does NOT introduce new behaviour; it documents
+  behaviour that already exists in the other cells.
 
-  Status is `draft` because the API depends on ADR-003 (option B), which is
-  still `proposed`. Once ADR-003 is accepted, change `status: draft` to
-  `status: ratified`.
-
-  IMPORTANT: this cell does NOT define Plane A. It defines the *access* to
-  Plane A. The definition of what is in Plane A is in 00-foundations §3.
+  This cell does NOT define Plane A. It defines the *access* to Plane A.
+  The definition of what is in Plane A is in 00-foundations §3.
   The definition of the Player entity is in L0.03. This cell is the bridge.
 -->
 
@@ -36,12 +33,12 @@ Define the **public API of `fmr-hidden`**, the crate that contains Plane A (Grou
 
 This cell does not define the entities (those are in `L0.03`). It does not define the match engine (that is `L0.04`). It defines the **only door** through which Plane A can be reached.
 
-**Status: `draft`.** The API depends on ADR-003 (option B), which is still `proposed`. The specification below is complete; the code waits.
+**Status: `ratified`.** ADR-003 (option B) is accepted. The API is the implementation contract.
 
 ## 1. Context and dependencies
 
 - Depends on `00-foundations` (the doctrine, §3 and §5), `L0.01` (RNG, because `GroundTruth` is seeded from it), `L0.03` (entities, because `GroundTruth` is indexed by `PlayerId`)
-- Read by `L0.04` (match engine) and `L0.08` (random events)
+- Read by `L0.04` (match engine), `L0.07` (save reconstruction), and `L0.08` (random events)
 - Written by `L3-generator` *(planned)*, which creates `GroundTruth` from a world seed
 - Implemented in the crate `fmr-hidden`
 - **Never** serialised. The save (`L0.07`) reconstructs `GroundTruth` from `(world_seed, match_id)` + the command log. See `L0.07` §2.6.
@@ -85,7 +82,7 @@ Each `resolve_*` takes a context struct and returns an outcome struct. The conte
 pub struct DuelContext {
     pub attacker: PlayerId,
     pub defender: PlayerId,
-    pub duel_type: DuelType,            // Aerial, Ground, WithGoalkeeper
+    pub duel_type: DuelType,            // Aerial, Ground, WithGoalkeeper, Brawl
     pub pitch_position: (f32, f32),     // observed, from L0.04
     pub modifiers: ContextModifiers,    // observed, from L0.09
 }
@@ -95,6 +92,7 @@ pub struct DuelOutcome {
     pub ball_retained: bool,
     pub foul_committed: Option<PlayerId>,
     pub injury_risk_modifier: f32,      // observed scalar, not a latent
+    pub temperament_modifier: f32,      // observed scalar, not a latent
     pub cause: CauseTrace,              // observed explanation
 }
 ```
@@ -153,7 +151,7 @@ The full schema of each context/outcome is defined in `fmr-hidden`'s source, not
 
 ## 5. Definition of Done
 
-- [ ] ADR-003 accepted (option B)
+- [x] ADR-003 accepted (option B)
 - [ ] `GroundTruth` has no public fields
 - [ ] `GroundTruth` is not `Serialize`
 - [ ] `GroundTruth` has a custom `Debug` that prints `GroundTruth { .. }`
@@ -180,7 +178,7 @@ The full schema of each context/outcome is defined in `fmr-hidden`'s source, not
 ## 7. References
 
 - [`../00-foundations.md`](../00-foundations.md) §3 (Three Planes), §5 (Banned things)
-- [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — the decision this cell implements
+- [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — the decision this cell implements (accepted)
 - [`../../docs/adr/004-panic-strategy-ffi.md`](../../docs/adr/004-panic-strategy-ffi.md) — `catch_unwind` at the call site
 - [`00-overview.md`](00-overview.md) — L0 cell map
 - [`01-rng.md`](01-rng.md) — the seed that `GroundTruth` is derived from
@@ -189,3 +187,4 @@ The full schema of each context/outcome is defined in `fmr-hidden`'s source, not
 - [`05-match-events.md`](05-match-events.md) — the `MatchEvent` that `drain_observations` feeds
 - [`07-save-minimal.md`](07-save-minimal.md) §2.6 — why `GroundTruth` is reconstructed, not saved
 - [`08-random-events.md`](08-random-events.md) — the other consumer
+- [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — terms used in this cell
