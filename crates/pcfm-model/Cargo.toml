@@ -1,0 +1,21 @@
+[package]
+name = "pcfm-model"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Minimal entities for PCFM (L0.03): Player, Squad, Pitch, Referee, Match"
+documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules/L0-match"
+
+[dependencies]
+pcfm-core.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[lints]
+workspace = true

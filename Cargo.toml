@@ -4,8 +4,9 @@
 resolver = "2"
 members = [
     "crates/pcfm-core",
+    "crates/pcfm-model",
 ]
-default-members = ["crates/pcfm-core"]
+default-members = ["crates/pcfm-core", "crates/pcfm-model"]
 
 [workspace.package]
 version = "0.1.0"
@@ -18,15 +19,14 @@ homepage = "https://github.com/liraan/pcfootballmanager"
 documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules"
 
 [workspace.dependencies]
-# The RNG crate: ChaCha20Rng, reproducible across platforms.
+# Internal
+pcfm-core = { path = "crates/pcfm-core", version = "0.1.0" }
+# RNG
 rand_chacha = "0.9"
-# The traits used by ChaCha20Rng: SeedableRng, RngCore.
 rand_core = "0.9"
-# Cryptographic hash used for seed derivation. Deterministic, no random seed.
 blake3 = "1"
-# Error derive macro. Small, stable, no_std compatible.
+# Errors and serialisation
 thiserror = "2"
-# Serialization. Used by IDs and, later, by MatchEvent and save files.
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
