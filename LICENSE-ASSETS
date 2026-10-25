@@ -1,0 +1,99 @@
+Assets and documentation license
+================================
+
+This project's assets and documentation are licensed under the
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+license (CC-BY-NC-SA-4.0).
+
+Full legal text:
+  https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+
+Human-readable summary:
+  https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+SPDX identifier:
+  CC-BY-NC-SA-4.0
+
+
+What this license covers
+------------------------
+
+This license applies to:
+
+  - All assets in `mods/`, `data/`, `assets/`, `locales/`
+  - All prose documentation in `docs/` and `modules/`
+  - All diagrams, screenshots, and images in the repository
+    that are not code snippets
+
+It does NOT apply to:
+
+  - Source code in `crates/` (see LICENSE-MIT and LICENSE-APACHE)
+  - Executables (see LICENSE-MIT and LICENSE-APACHE)
+  - Code snippets embedded in documentation
+    (those are dual-licensed MIT OR Apache-2.0)
+
+
+What you can do
+---------------
+
+You are free to:
+
+  - Share — copy and redistribute the material in any medium or format
+  - Adapt — remix, transform, and build upon the material
+
+The licensor cannot revoke these freedoms as long as you follow the
+license terms.
+
+
+What you must do
+----------------
+
+Under the following terms:
+
+  - Attribution — You must give appropriate credit, provide a link to
+    the license, and indicate if changes were made. You may do so in
+    any reasonable manner, but not in any way that suggests the
+    licensor endorses you or your use.
+
+  - NonCommercial — You may not use the material for commercial
+    purposes. Commercial use includes, but is not limited to, selling
+    the material, using it in a paid product, or using it to generate
+    advertising revenue.
+
+  - ShareAlike — If you remix, transform, or build upon the material,
+    you must distribute your contributions under the same license as
+    the original.
+
+  - No additional restrictions — You may not apply legal terms or
+    technological measures that legally restrict others from doing
+    anything the license permits.
+
+
+Trademark
+---------
+
+This license does not grant trademark rights. The name "PC Football
+Manager" and the project logo are trademarks of the project team. See
+LICENSE.md for details.
+
+
+Attribution format
+------------------
+
+When you reuse material under this license, please include:
+
+  "Based on PC Football Manager (https://github.com/liraan/pcfootballmanager),
+   licensed under CC-BY-NC-SA-4.0."
+
+If you modified the material, add "modified by <your name>".
+
+
+Full legal text
+---------------
+
+The binding legal text is the one published by Creative Commons:
+
+  https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+
+This file is a summary and a pointer, not a replacement. In case of
+disagreement between this file and the legal text, the legal text wins.
