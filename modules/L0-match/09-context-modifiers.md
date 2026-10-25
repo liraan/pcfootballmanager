@@ -3,7 +3,7 @@ title: "L0.09 — Context Modifiers"
 level: 0
 cell: "L0-match"
 module_id: "L0.09"
-version: "1.0"
+version: "1.1"
 status: "ratified"
 last_updated: "2026-10-25"
 supersedes: null
@@ -174,3 +174,4 @@ The struct is `Serialize`/`Deserialize` (it is saved with the match; it contains
 - [`08-random-events.md`](08-random-events.md) — consumer
 - `../L2-psyche/00-overview.md` — producer *(planned — the L2-psyche directory does not exist yet)*
 - `../L2-crowd/00-overview.md` — producer *(planned — the L2-crowd directory does not exist yet)*
+- [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — terms used in this cell
