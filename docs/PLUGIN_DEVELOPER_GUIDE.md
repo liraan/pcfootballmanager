@@ -1,11 +1,11 @@
-# Module Developer Guide
+# Plugin Developer Guide
 
 **Version:** 1.0
 **Status:** active
 **Last updated:** 2026-10-25
 **Audience:** developers who write Rust code that extends PCFM
 
-This guide is for **module developers**: people who write Rust code that extends PCFM. It is **not** for **modders**, who write packs (registry files, themes, assets) without writing Rust. See `STRUCTURE.md` §9 for the difference.
+This guide is for **plugin developers**: people who write Rust code that extends PCFM. It is **not** for **modders**, who write packs (registry files, themes, assets) without writing Rust. See `STRUCTURE.md` §9 for the difference.
 
 If you are a modder, you do not need this guide. Read `L3-registry` and `L3-packs` (planned) instead.
 
@@ -15,7 +15,7 @@ If you are a modder, you do not need this guide. Read `L3-registry` and `L3-pack
 
 PCFM has two extension mechanisms, and they are deliberately different.
 
-| | **Modder** | **Module developer** |
+| | **Modder** | **Plugin developer** |
 |---|---|---|
 | What they write | `registry/*.yaml`, `theme/*.toml`, assets (SVG, PNG, audio) | Rust crates in `crates/` |
 | What they can change | Content: roles, formations, kits, logos, competitions, players | Architecture: a new engine, a new event type, a new `resolve_*` |
@@ -23,7 +23,7 @@ PCFM has two extension mechanisms, and they are deliberately different.
 | Review | Automated validation (`fmr-pack validate`, planned) | PR review against the doctrine and the ADRs |
 | Distribution | Pack (`mods/`) | Crate (workspace member) or external crate that depends on a `pcfm-*` crate |
 
-The line between the two is **`STRUCTURE.md` §9**: a pack can extend the registry, the assets, the configuration, and the sandboxed scripts. A pack **cannot** add a new cell, a new event type, or a new `resolve_*`. Those require a **crate** and a **PR**.
+The line between the two is **`STRUCTURE.md` §9**: a pack can extend the registry, the assets, the configuration, and the sandboxed scripts. A pack **cannot** add a new module, a new event type, or a new `resolve_*`. Those require a **crate** and a **PR**.
 
 This guide is for the second kind.
 
@@ -59,7 +59,7 @@ The dependency graph is **inward-only**: a crate at level N depends on crates at
    license.workspace = true
    repository.workspace = true
    description = "One-line description of what this crate does"
-   documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules/L0-match/<cell>.md"
+   documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules/L0-match/<module>.md"
 
    [dependencies]
    # Only what you need. No dependency without an ADR (see §6).
@@ -156,7 +156,7 @@ The pattern is tested by `pcfm-match`'s test `simulation_is_shared_and_renderer_
 2. **Add the variant** to `EventType` in `pcfm-stats::event`.
 3. **Update `pcfm-match`** to emit the event where it happens.
 4. **Update `docs/GLOSSARY.md`** if the term is new.
-5. **Update the cell `modules/L0-match/05-match-events.md`** with the new variant.
+5. **Update the module `modules/L0-match/05-match-events.md`** with the new variant.
 6. **Open a PR** with **one ADR and one crate change**, in two commits.
 
 The ADR is the gate. Without it, the PR is not reviewed.
@@ -185,8 +185,8 @@ The ADR is the gate. Without it, the PR is not reviewed.
 3. **Add `resolve_xxx`** to `GroundTruth` in `pcfm-hidden::lib`.
 4. **Add the corresponding `ObservationEvent` variant** in `pcfm-hidden::observation`. This is what `drain_observations` returns.
 5. **Add the corresponding `EventType`** in `pcfm-stats::event` (see §4). An action that produces an observation must have an event type.
-6. **Update the cell `modules/L0-match/10-ground-truth.md`** with the new method.
-7. **Open a PR** with **one ADR and the cells**, then **one PR** with the code.
+6. **Update the module `modules/L0-match/10-ground-truth.md`** with the new method.
+7. **Open a PR** with **one ADR and the modules**, then **one PR** with the code.
 
 ---
 
@@ -252,7 +252,7 @@ Every crate has an `error.rs` with a `thiserror`-derived enum. The enum is `#[no
 
 ### Documentation
 
-- **`//!` for the module**, with a link to the cell in `modules/`.
+- **`//!` for the module**, with a link to the module in `modules/`.
 - **`///` for every public item**, with a `# Errors` section if it returns `Result`, a `# Panics` section if it can panic (and it should not, except for compile-time constants), and an `# Example` section if the usage is not obvious.
 - **`# Safety`** only if the function is `unsafe` (it should not be; see §7.1).
 - **Links to the ADR** when the code implements a decision. E.g. "See `docs/adr/003-plane-a-enforcement.md`".
@@ -279,7 +279,7 @@ If you find yourself wanting to read a latent value outside `pcfm-hidden`, you a
 
 - [ ] The crate is in `crates/pcfm-<name>/`.
 - [ ] `Cargo.toml` uses `*.workspace = true` for every workspace dependency.
-- [ ] `src/lib.rs` has a `//!` module doc with a link to the cell.
+- [ ] `src/lib.rs` has a `//!` module doc with a link to the module.
 - [ ] Every public item has a `///` doc.
 - [ ] No `unwrap`/`expect`/`panic!` in simulation paths.
 - [ ] No `HashMap`/`HashSet` in simulation paths.
@@ -291,7 +291,7 @@ If you find yourself wanting to read a latent value outside `pcfm-hidden`, you a
 - [ ] If the change adds an `EventType`, there is an ADR in `docs/adr/`.
 - [ ] If the change adds a `resolve_*`, there is an ADR in `docs/adr/`.
 - [ ] If the change touches a plane, the plane separation is respected.
-- [ ] The cell in `modules/` is updated (if the change is a spec change).
+- [ ] The module in `modules/` is updated (if the change is a spec change).
 - [ ] `CHANGELOG.md` has an entry (if the change is user-visible).
 
 ---
@@ -304,11 +304,11 @@ See §3. Short version: create `crates/pcfm-match-3d/`, depend on `pcfm-match`, 
 
 ### Example 2: adding a new `EventType`
 
-See §4. Short version: write an ADR, add the variant to `EventType`, update the engine to emit it, update the cell and the glossary.
+See §4. Short version: write an ADR, add the variant to `EventType`, update the engine to emit it, update the module and the glossary.
 
 ### Example 3: adding a new `resolve_*`
 
-See §5. Short version: write an ADR, add the context/outcome types, add the method, add the `ObservationEvent`, add the `EventType`, update the cell.
+See §5. Short version: write an ADR, add the context/outcome types, add the method, add the `ObservationEvent`, add the `EventType`, update the module.
 
 ### Example 4: adding a new crate that does not touch any plane
 
@@ -327,7 +327,7 @@ See §5. Short version: write an ADR, add the context/outcome types, add the met
 - [`STRUCTURE.md`](../STRUCTURE.md) — repository structure and rules
 - [`modules/00-foundations.md`](../modules/00-foundations.md) — the doctrine (Three Planes, determinism, bans)
 - [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md) — the capability API
-- [`modules/L0-match/04-match-engine.md`](../modules/L0-match/04-match-engine.md) — the match engine cell
+- [`modules/L0-match/04-match-engine.md`](../modules/L0-match/04-match-engine.md) — the match engine module
 - [`modules/L0-match/10-ground-truth.md`](../modules/L0-match/10-ground-truth.md) — the `GroundTruth` API
 - [`docs/GLOSSARY.md`](GLOSSARY.md) — terms used in this guide
 
@@ -340,7 +340,7 @@ See §5. Short version: write an ADR, add the context/outcome types, add the met
     (e.g. the shared simulation in step 7), add a section here.
   - When a new crate is added to the workspace, add it to the table in §2.
   - When a dependency is added, add it to the table in §6.
-  - When an ADR is accepted that affects module developers, link it from §11.
+  - When an ADR is accepted that affects plugin developers, link it from §11.
   - This file is linked from:
       - CONTRIBUTING.md (reading order)
       - README.md (documentation map)
