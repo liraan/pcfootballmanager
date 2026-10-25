@@ -1,14 +1,14 @@
 # Contributing
 
-Thanks for wanting to help. This project is documentation-first, and **good documentation is the contribution** right now. Code comes later.
+Thanks for wanting to help. This project is documentation-first, and **good documentation is the contribution** right now. Code exists (L0 implemented), but documentation and review are just as important.
 
 ---
 
 ## Current state (as of 2026-10-25)
 
-- **Documentation only.** No code exists yet, but the L0 specification is complete and ratified. Code can begin.
-- **L0 is fully specified** (11 cells, all `ratified`). L1–L3 are planned.
-- **8 ADRs** exist: 4 accepted (001, 002, 003, 004), 3 proposed (005, 006, 007), 1 template (000).
+- **L0 is implemented.** 6 crates (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-debug`), 103 tests passing.
+- **8 ADRs exist:** 5 accepted (001, 002, 003, 004, 008), 3 proposed (005, 006, 007), 1 template (000).
+- **2 ADRs are proposed:** 012 (modules) and 013 (worlds). They define the module system and the world system, and may revise pillar 1 of `00-foundations` (determinism, from global to local). They are **not** ratified: the framework does not implement the module system yet.
 - **`LICENSE.md`** exists but is marked `proposed` pending ADR-006 ratification. The license terms are described in the file and in ADR-006.
 
 If you're new, read the files in the order below before opening a PR.
@@ -18,11 +18,12 @@ If you're new, read the files in the order below before opening a PR.
 ## Read in this order
 
 1. [`README.md`](README.md) — what the project is
-2. [`modules/00-foundations.md`](modules/00-foundations.md) — the doctrine. **Non-negotiable.**
+2. [`modules/00-foundations.md`](modules/00-foundations.md) — the doctrine. **Non-negotiable.** *(Pillar 1 is under review, see ADR-013.)*
 3. [`STRUCTURE.md`](STRUCTURE.md) — how the repo works
 4. [`modules/_index.md`](modules/_index.md) — what exists, what's missing
 5. [`docs/GLOSSARY.md`](docs/GLOSSARY.md) — the terms used across the spec
-6. [`docs/adr/`](docs/adr/) — the decisions, including open ones
+6. [`docs/MODULE_DEVELOPER_GUIDE.md`](docs/MODULE_DEVELOPER_GUIDE.md) — how to write a module (and why the simulation/rendering split matters)
+7. [`docs/adr/`](docs/adr/) — the decisions, including open ones
 
 ---
 
@@ -35,6 +36,8 @@ If you're new, read the files in the order below before opening a PR.
 | **Write a missing cell** | Follow §"Add a cell" below | People who want a big task |
 | **Propose a decision** | Write an ADR in `docs/adr/` | Architects |
 | **Review an ADR** | Comment on the PR, argue with the trade-offs | Everyone |
+| **Write code** | See `docs/MODULE_DEVELOPER_GUIDE.md` | Rust developers |
+| **Write a module** | ADR-012 (proposed) defines the contract | Rust developers, once ratified |
 | **Translate** | Contact the maintainers — translations go in `locales/` | Bilingual contributors |
 | **Report a contradiction** | Open an issue with the `inconsistency` label | Careful readers |
 
@@ -44,7 +47,7 @@ If you're new, read the files in the order below before opening a PR.
 
 ### One change per PR
 
-- One cell. One ADR. One fix. No bundling.
+- One cell. One ADR. One crate. One fix. No bundling.
 - If a change touches two cells, two PRs.
 - If a change requires an ADR, the ADR goes in a separate PR *before* the cell change.
 
@@ -147,14 +150,19 @@ If an ADR is `proposed` and touches an area, **no code is written in that area u
 | 005 | Qt binding | 🟡 proposed | `L3-ui`, `pcfm-bridge` |
 | 006 | License | 🟡 proposed | `LICENSE.md` (currently marked `proposed`), `Cargo.toml` examples |
 | 007 | Canonical language | 🟡 proposed | translations, language policy in `STRUCTURE.md` §6 |
+| 008 | Provider integration is external | ✅ accepted | — (reclassified `L2-ingest` as external tool) |
+| 012 | Modules: The Brick Contract | 🟡 proposed | The module system (step 11+). Ratified when the framework implements it. |
+| 013 | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | The world system (step 11+). Supersedes pillar 1 of `00-foundations`. Ratified when the framework implements it. |
 
-**Open ADRs:** 005, 006, 007. **Accepted:** 001, 002, 003, 004.
+**Open ADRs:** 005, 006, 007, 012, 013. **Accepted:** 001, 002, 003, 004, 008.
+
+**ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`012-013-reading-guide.md`](docs/adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
 
 ---
 
-## Code (now that L0 is ratified)
+## Code
 
-The L0 specification is complete. Code can begin, starting from the `pcfm-*` crates listed in `STRUCTURE.md` §3.
+The L0 specification is complete and ratified, and L0 is implemented (6 crates, 103 tests). Code contributions are welcome, but they must follow `docs/MODULE_DEVELOPER_GUIDE.md`.
 
 When you write code:
 
@@ -167,6 +175,7 @@ When you write code:
 - Public API documented
 - `catch_unwind` at every FFI entry point (ADR-004)
 - No public field on `GroundTruth`, no `Serialize`, custom `Debug` (ADR-003)
+- The simulation/rendering split is respected: `simulate_match` is the only simulation, renderers are thin wrappers (see `docs/MODULE_DEVELOPER_GUIDE.md` §3)
 
 ---
 
@@ -175,10 +184,10 @@ When you write code:
 Imperative mood, one line ≤ 72 chars, then a body if needed.
 
 ```
-Add L1-season overview cell
+Add ADR-012 on module contract
 
-First cell of L1. Defines the boundaries: what a season is, what it
-depends on from L0, what it provides to L2. No code, only spec.
+The module sheet is mandatory and validated. Behaviour is open,
+metadata is closed. Critical conflicts block, minor conflicts warn.
 ```
 
 Not: `fixed stuff`, `update`, `wip`.
@@ -200,6 +209,7 @@ Not: `fixed stuff`, `update`, `wip`.
 - [ ] Language is English (or a translation in `locales/`)
 - [ ] No `License: Proprietary` string anywhere
 - [ ] No `TBD` left in a field that should have a value
+- [ ] If it is code, `docs/MODULE_DEVELOPER_GUIDE.md` is respected (plane separation, simulation/rendering split, no dependency without an ADR)
 
 ---
 
