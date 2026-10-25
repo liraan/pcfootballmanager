@@ -1,4 +1,4 @@
-# ADR-014 — v1.0 Scope
+# ADR-015 — v1.0 Scope
 
 - **Status:** proposed
 - **Date:** 2026-10-25
