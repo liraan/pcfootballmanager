@@ -6,14 +6,15 @@ module_id: "L0.00"
 version: "1.0"
 status: "ratified"
 last_updated: "2026-10-25"
+supersedes: null
 depends_on: ["00-foundations"]
 referenced_by: ["L1-season", "L1-roster", "L1-world", "L2-tactics", "L2-psyche"]
-conforms_to: "00-foundations (v1.0)"
+conforms_to: "00-foundations (v1.1)"
 ---
 
 <!--
   MAINTAINER NOTE: this is the "front door" of L0. If you change the cell list
-  or the dependency rules, update this file AND _index.md. They must agree.
+  or the dependency rules, update this file AND modules/_index.md. They must agree.
 -->
 
 # L0 — Match (overview)
@@ -23,6 +24,12 @@ This is the **core** of the whole project. Everything else expands it. If L0 doe
 L0 answers one question: **can two teams play a football match, deterministically, and produce a result that a human can read, understand, and trust?**
 
 It does **not** answer: who owns the club, who is the manager, what is the league table, how much a player is worth, what the fans think. Those are L1 and L2.
+
+---
+
+## 0. Purpose
+
+Define, specify, and constrain the minimal match simulation. Everything in L0 exists because the match engine needs it. Nothing in L0 exists "just in case".
 
 ---
 
@@ -79,17 +86,17 @@ If any of those seven fails, L0 is not done.
 
 ## 3. Cells of L0
 
-| ID | Cell | Purpose |
-|---|---|---|
-| L0.01 | [`01-rng.md`](01-rng.md) | Deterministic RNG streams |
-| L0.02 | [`02-event-bus.md`](02-event-bus.md) | Deterministic event dispatch |
-| L0.03 | [`03-entities-minimal.md`](03-entities-minimal.md) | Minimal entities: Player, Squad, Pitch, Referee |
-| L0.04 | [`04-match-engine.md`](04-match-engine.md) | The `MatchEngine` trait and text implementation |
-| L0.05 | [`05-match-events.md`](05-match-events.md) | `MatchEvent`, append-only, the observation layer |
-| L0.06 | [`06-match-output.md`](06-match-output.md) | Result, ratings, statistics bundle, narrative |
-| L0.07 | [`07-save-minimal.md`](07-save-minimal.md) | Save/load a single match |
-| L0.08 | [`08-random-events.md`](08-random-events.md) | Discrete in-match events (injuries, cards, brawls) |
-| L0.09 | [`09-context-modifiers.md`](09-context-modifiers.md) | How external state enters the engine |
+| ID | Cell | Purpose | Status |
+|---|---|---|---|
+| L0.01 | [`01-rng.md`](01-rng.md) | Deterministic RNG streams | ✅ ratified |
+| L0.02 | [`02-event-bus.md`](02-event-bus.md) | Deterministic event dispatch | ✅ ratified |
+| L0.03 | [`03-entities-minimal.md`](03-entities-minimal.md) | Minimal entities: Player, Squad, Pitch, Referee | ✅ ratified |
+| L0.04 | [`04-match-engine.md`](04-match-engine.md) | The `MatchEngine` trait and text implementation | 🟡 draft (ADR-003) |
+| L0.05 | [`05-match-events.md`](05-match-events.md) | `MatchEvent`, append-only, the observation layer | ✅ ratified |
+| L0.06 | [`06-match-output.md`](06-match-output.md) | Result, ratings, statistics bundle, narrative | ✅ ratified |
+| L0.07 | [`07-save-minimal.md`](07-save-minimal.md) | Save/load a single match | ✅ ratified |
+| L0.08 | [`08-random-events.md`](08-random-events.md) | Discrete in-match events (injuries, cards, brawls) | 🟡 draft (ADR-003) |
+| L0.09 | [`09-context-modifiers.md`](09-context-modifiers.md) | How external state enters the engine | ✅ ratified |
 
 ---
 
@@ -98,13 +105,13 @@ If any of those seven fails, L0 is not done.
 Within L0:
 
 - `01-rng` and `02-event-bus` depend only on `00-foundations`
-- `03-entities-minimal` depends on `00`, `01`
-- `04-match-engine` depends on `00`, `01`, `02`, `03`
-- `05-match-events` depends on `00`, `01`, `03`
-- `06-match-output` depends on `00`, `05`
-- `07-save-minimal` depends on `00`, `03`, `05`, `06`
-- `08-random-events` depends on `00`, `01`, `03`, `04`, `05`
-- `09-context-modifiers` depends on `00`, `03`
+- `03-entities-minimal` depends on `00`, `L0.01`
+- `04-match-engine` depends on `00`, `L0.01`, `L0.02`, `L0.03`
+- `05-match-events` depends on `00`, `L0.01`, `L0.03`
+- `06-match-output` depends on `00`, `L0.05`
+- `07-save-minimal` depends on `00`, `L0.03`, `L0.05`, `L0.06`
+- `08-random-events` depends on `00`, `L0.01`, `L0.03`, `L0.04`, `L0.05`
+- `09-context-modifiers` depends on `00`, `L0.03`
 
 **No cell in L0 depends on L1, L2, or L3.** Ever.
 
@@ -163,6 +170,7 @@ Golden test: `same_seed → same MatchResult` bit-for-bit, across 1,000 randomly
 
 ## 9. References
 
-- [`00-foundations.md`](../00-foundations.md) — doctrine
-- [`docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — blocking
-- [`archive/Prompt_Master_v7.md`](../../archive/Prompt_Master_v7.md) §12 — match engine original
+- [`../00-foundations.md`](../00-foundations.md) — doctrine
+- [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — blocking
+- [`../../archive/Prompt_Master_v7.md`](../../archive/Prompt_Master_v7.md) §12 — match engine original
+- [`../../STRUCTURE.md`](../../STRUCTURE.md) — level rules
