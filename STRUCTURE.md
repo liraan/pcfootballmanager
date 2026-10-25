@@ -1,6 +1,6 @@
 # Repository Structure
 
-**Version:** 1.6
+**Version:** 1.7
 **Status:** active
 **Last updated:** 2026-10-25
 
@@ -25,6 +25,7 @@ Doctrine  →  Modules (L0–L3)  →  ADRs  →  Code
 | **Doctrine** | `modules/00-foundations.md` | Why the project exists, the Three Planes, the banned things, the concentric model | Rarely. Only through a doctrine ADR. |
 | **Modules** | `modules/L0-*/`, `L1-*/`, `L2-*/`, `L3-*/` | How one subsystem works, at one level | Often. Each has its own revision history. |
 | **ADRs** | `docs/adr/NNN-*.md` | Why one architectural decision was made | Never edited after acceptance. Superseded by a new ADR. |
+| **Plugins** | `crates/` + `sheet.toml` | A piece of code that extends the engine | Continuously, once the plugin system exists |
 | **Code** | `crates/` | The implementation | Continuously, once it exists. |
 
 **Rule:** a module may *reference* the doctrine but may not *restate* it. If a module contradicts the doctrine, the module is wrong, not the doctrine.
@@ -75,15 +76,27 @@ The specification is not a flat list of 25 modules. It is organised in **four co
 
 **Rules:**
 
-- A level N cell may **read** the output of a level `< N` cell.
-- A level N cell may **not** read the internals of a level `< N` cell.
-- A level N cell may **not** depend on a level `> N` cell.
+- A level N module may **read** the output of a level `< N` module.
+- A level N module may **not** read the internals of a level `< N` module.
+- A level N module may **not** depend on a level `> N` module.
 - The `00-foundations` doctrine applies at all levels.
 - The Three Planes apply at all levels.
 
 ---
 
 ## 3. Directory Layout
+
+### Terminology
+
+Before the layout, the terminology. Three words, three things:
+
+| Term | What it is | Example |
+|---|---|---|
+| **Module** | A directory of the specification, at one level. Contains sub-modules. | `modules/L0-match/`, `modules/L2-psyche/` |
+| **Sub-module** | A file inside a module. | `modules/L0-match/04-match-engine.md` |
+| **Plugin** | A Rust crate with a `sheet.toml`, that extends the engine at runtime. | `crates/pcfm-match-3d/` (future) |
+
+**A module is a document. A plugin is code.** The two are different things, and the terms are not interchangeable. The historical term **cell** is **deprecated**: it meant what is now called "module", and its use is discouraged in new text. The field `cell` in the frontmatter is a historical name: its value is the module directory name.
 
 ### Current state (as of 2026-10-25)
 
@@ -158,8 +171,8 @@ pc-football-manager/
 │   ├── L1-season/             # *(planned)*
 │   ├── L1-world/              # *(planned)*
 │   ├── L1-roster/             # *(planned)*
-│   ├── L2-*/                  # *(planned)* 9 cells
-│   └── L3-*/                  # *(planned)* 8 cells
+│   ├── L2-*/                  # *(planned)* 9 modules
+│   └── L3-*/                  # *(planned)* 8 modules
 ├── archive/                   # historical Prompt Masters, when recovered
 ├── docs/
 │   ├── adr/
@@ -178,13 +191,13 @@ pc-football-manager/
 
 **Crate naming:** the crates in `crates/` use the `pcfm-` prefix (e.g. `pcfm-core`, `pcfm-hidden`, `pcfm-match`, `pcfm-stats`, `pcfm-model`, `pcfm-packs`, `pcfm-assets`, `pcfm-debug`, `pcfm-pack`). The historical prefix `fmr-` (from the original "FMR project" name) is deprecated and must not be used in new files. Rust module paths follow the same convention with an underscore: `pcfm_core::rng`, `pcfm_match::simulate`, etc.
 
-**Cells vs sub-cells:** A **cell** is a directory (`L0-match`, `L2-psyche`). A **sub-cell** is a file inside a cell (`04-match-engine.md`). A sub-sub-cell is a section (`##`) inside a file. There is no third level of directories. If a sub-cell needs its own children, it becomes a new cell at the same level, not a deeper directory.
+**Modules vs sub-modules:** A **module** is a directory (`L0-match`, `L2-psyche`). A **sub-module** is a file inside a module (`04-match-engine.md`). A sub-sub-module is a section (`##`) inside a file. There is no third level of directories. If a sub-module needs its own children, it becomes a new module at the same level, not a deeper directory.
 
-The field `module_id` in the frontmatter is the stable identifier (`L0.04`). The field `cell` is the directory name (`L0-match`). In prose, prefer "sub-cell L0.04" over "module L0.04" when talking about a file, and "cell L0-match" when talking about a directory.
+The field `module_id` in the frontmatter is the stable identifier of the sub-module (`L0.04`). The field `cell` is the name of the module directory (`L0-match`); the field name is historical, its meaning is "module directory". In prose, prefer "sub-module L0.04" when talking about a file, and "module L0-match" when talking about a directory. A **plugin** is a different thing: a Rust crate with a `sheet.toml`, defined in ADR-012.
 
 ### `/archive` — the history
 
-Every superseded document goes here. Nothing is deleted. `Prompt_Master_v5.md`, `_v6.md`, `_v7.md` will live in `archive/prompts/` once recovered. When `00-foundations.md` is revised, the previous version is archived in `archive/doctrine/`. The four legacy Italian modules (`01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md`) will be moved to `archive/legacy/` after migration (see `docs/MIGRATION-01-04.md`).
+Every superseded document goes here. Nothing is deleted. `Prompt_Master_v5.md`, `_v6.md`, `_v7.md` will live in `archive/prompts/` once recovered. When `00-foundations.md` is revised, the previous version is archived in `archive/doctrine/`. The four legacy Italian files (`01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md`) will be moved to `archive/legacy/` after migration (see `docs/MIGRATION-01-04.md`).
 
 **Rule:** the archive is read-only. Do not edit archived files. They exist for traceability, not for maintenance.
 
@@ -206,9 +219,9 @@ When the project ships, this folder holds the dashboards that compare internal m
 
 ---
 
-## 4. Cell Frontmatter
+## 4. Module Frontmatter
 
-Every cell (and every sub-cell) starts with:
+Every module (and every sub-module) starts with:
 
 ```yaml
 ---
@@ -242,19 +255,19 @@ conforms_to: "00-foundations (v1.1)"
 |---|---|
 | `title` | Human-readable title, includes the module ID |
 | `level` | 0, 1, 2, or 3 (see §2) |
-| `cell` | The directory name (`L0-match`, `L2-psyche`, ...) |
-| `module_id` | `L{level}.{NN}` for sub-cells |
+| `cell` | The module directory name (`L0-match`, `L2-psyche`, ...). Historical field name; the meaning is "module directory". |
+| `module_id` | `L{level}.{NN}` for sub-modules |
 | `version` | Semver-ish: bump minor for clarifications, major for invariant changes |
 | `status` | `draft` (being written) / `review` (ready for comments) / `ratified` (stable) / `superseded` (replaced) |
 | `last_updated` | ISO date |
 | `supersedes` | The ID of the version this replaces, or `null` |
-| `depends_on` | Module IDs this cell reads from |
-| `referenced_by` | Module IDs that read from this cell |
-| `conforms_to` | The doctrine version this cell obeys. **Means "verified against", not "compatible with".** |
+| `depends_on` | Module IDs this module reads from |
+| `referenced_by` | Module IDs that read from this module |
+| `conforms_to` | The doctrine version this module obeys. **Means "verified against", not "compatible with".** |
 
 **Version policy:** bump the minor version for clarifications, the major version for changes that affect downstream modules. A major bump requires an ADR if it changes an invariant.
 
-**`conforms_to` policy:** the field records the doctrine version the cell was **verified against**. It is not bumped automatically when the doctrine changes for clarifications. It is bumped only when the cell is re-verified (which happens when an invariant changes). See `modules/_index.md` §"Doctrine compliance" for the rationale.
+**`conforms_to` policy:** the field records the doctrine version the module was **verified against**. It is not bumped automatically when the doctrine changes for clarifications. It is bumped only when the module is re-verified (which happens when an invariant changes). See `modules/_index.md` §"Doctrine compliance" for the rationale.
 
 ---
 
@@ -321,14 +334,14 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 | 006 | License | 🟡 proposed | `LICENSE.md`, every `Cargo.toml` example |
 | 007 | Canonical language | 🟡 proposed | translations, language policy |
 | 008 | Provider integration is external | ✅ accepted | — (reclassified `L2-ingest` as external tool) |
-| 012 | Modules: The Brick Contract | 🟡 proposed | The module system (step 11+). Ratified when the framework implements it. |
+| 012 | Plugins: The Brick Contract | 🟡 proposed | The plugin system (step 11+). Ratified when the framework implements it. |
 | 013 | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | The world system (step 11+). Supersedes pillar 1 of `00-foundations` (currently under review). Ratified when the framework implements it. |
 
 **Open ADRs:** 005, 006, 007, 012, 013. **Accepted:** 001, 002, 003, 004, 008.
 
 **ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`012-013-reading-guide.md`](adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
 
-**Note on pillar 1.** ADR-013, if ratified, will supersede pillar 1 of `00-foundations` §2 ("Traceable determinism. Same seed + same inputs = same result. Never compromised.") and replace it with a **local** determinism (same save + same match + same module configuration = same result). The pillar is currently marked **under review** in the doctrine. Until ratification, the doctrine is unchanged: the determinism is **global**.
+**Note on pillar 1.** ADR-013, if ratified, will supersede pillar 1 of `00-foundations` §2 ("Traceable determinism. Same seed + same inputs = same result. Never compromised.") and replace it with a **local** determinism (same save + same match + same plugin configuration = same result). The pillar is currently marked **under review** in the doctrine. Until ratification, the doctrine is unchanged: the determinism is **global**.
 
 ---
 
@@ -349,25 +362,25 @@ Rationale:
 
 ---
 
-## 7. How to Add a New Cell
+## 7. How to Add a New Module
 
-1. Pick the level (L0, L1, L2, L3) the new cell belongs to.
-2. Check that the cell does not violate the dependency rules in §2.
+1. Pick the level (L0, L1, L2, L3) the new module belongs to.
+2. Check that the module does not violate the dependency rules in §2.
 3. Create the directory `modules/L{N}-{kebab-name}/`.
-4. Add `00-overview.md` with the frontmatter (see §4). The overview is the "border" of the cell: it declares contracts, dependencies, DoD, risks.
-5. Add the sub-cells as files inside the directory.
+4. Add `00-overview.md` with the frontmatter (see §4). The overview is the "border" of the module: it declares contracts, dependencies, DoD, risks.
+5. Add the sub-modules as files inside the directory.
 6. Add a row to `modules/_index.md`.
-7. Open a PR with **one cell only**.
-8. After merge, update `referenced_by` in the cells that now reference it.
+7. Open a PR with **one module only**.
+8. After merge, update `referenced_by` in the modules that now reference it.
 
-## 8. How to Revise an Existing Cell
+## 8. How to Revise an Existing Module
 
 1. Bump `version` in the frontmatter. Minor for clarifications, major for invariant changes.
 2. If major, write an ADR first (or link to an existing one).
 3. Archive the previous version in `archive/` if the change is structural.
 4. Update `last_updated`.
-5. Open a PR with **one cell only**.
-6. If the revision changes a dependency, update `referenced_by` in downstream cells.
+5. Open a PR with **one module only**.
+6. If the revision changes a dependency, update `referenced_by` in downstream modules.
 
 ## 9. What Packs Can and Cannot Extend
 
@@ -375,16 +388,16 @@ The distinction is between **content** and **structure**.
 
 | Packs **can** extend | Packs **cannot** extend |
 |---|---|
-| The **registry** (roles, formations, instructions, attributes, metrics, index models) — see `L3-registry` *(planned)* | The **cells** of the specification (L0–L3) |
+| The **registry** (roles, formations, instructions, attributes, metrics, index models) — see `L3-registry` *(planned)* | The **modules** of the specification (L0–L3) |
 | **Assets** (logos, kits, stadium images, audio) — see `L3-assets` *(planned)* | The **levels** of the concentric structure (L0, L1, L2, L3) |
 | **Data** (squads, players, competitions, nations) — as provided or generated data | The **doctrine** (`00-foundations.md`) |
-| **Configuration** (`balance/*.toml`, `theme/*.toml`) | The **frontmatter schema** of a cell |
+| **Configuration** (`balance/*.toml`, `theme/*.toml`) | The **frontmatter schema** of a module |
 | **Scripts** in the sandboxed DSL (see `L3-packs` *(planned)*) | The **dependency rules** between levels |
 
-**Rule:** a pack that needs a new cell is a pack that is trying to be a different game. A new cell is an **architectural decision**, not a content extension. It requires:
+**Rule:** a pack that needs a new module is a pack that is trying to be a different game. A new module is an **architectural decision**, not a content extension. It requires:
 
-1. An ADR that justifies the new cell (why does it exist? why is it not a sub-cell of an existing cell? why is it not a pack-provided registry entry?).
-2. A PR to the core repository that adds the cell, with frontmatter, DoD, and `_index.md` update.
+1. An ADR that justifies the new module (why does it exist? why is it not a sub-module of an existing module? why is it not a pack-provided registry entry?).
+2. A PR to the core repository that adds the module, with frontmatter, DoD, and `_index.md` update.
 3. A review by a maintainer.
 
 This is not a restriction on moddability. It is a boundary between "modding the content" (welcome) and "modding the architecture" (welcome, but through a PR, not through a pack). The two are different activities, with different review needs.
@@ -399,7 +412,7 @@ This is not a restriction on moddability. It is a boundary between "modding the 
 
 The last two examples are not "forbidden to modders". They are "not doable through a pack alone". The modder writes the PR, the core team reviews it, and if accepted, the new event type or axis becomes part of the core.
 
-**Note on ADR-012 and ADR-013:** once ratified, the module system will allow a further form of extension, the **module**, which is a Rust crate that implements `MatchModule` and ships with a `sheet.toml`. See ADR-012 for the contract. The boundary above (content vs structure) is **unchanged**: a module is not a pack, and it requires a PR. A pack is a bundle of content, a module is a piece of code. Both are welcome, but they are different things.
+**Note on ADR-012 and ADR-013:** once ratified, the **plugin system** will allow a further form of extension, the **plugin**, which is a Rust crate that implements `MatchPlugin` and ships with a `sheet.toml`. See ADR-012 for the contract. The boundary above (content vs structure) is **unchanged**: a plugin is not a pack, and it requires a PR. A pack is a bundle of content, a plugin is a piece of code. Both are welcome, but they are different things.
 
 ## 10. What Does NOT Go in This Repo
 
@@ -415,7 +428,7 @@ The last two examples are not "forbidden to modders". They are "not doable throu
 
 This project was drafted with AI assistance and is honest about it. That honesty applies to the documentation too:
 
-- If a cell is a stub, say `status: draft`.
+- If a module is a stub, say `status: draft`.
 - If a decision is open, say "open" and link to the ADR.
 - If a date slipped, update the date and say so in `CHANGELOG.md`.
 - If you don't know something, write "unknown" rather than inventing a plausible number.
