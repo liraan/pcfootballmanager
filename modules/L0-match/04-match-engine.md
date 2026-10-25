@@ -135,7 +135,7 @@ Additional sub-models (collective positioning, coordinated pressing, offside tra
 
 ### 2.8 Configuration
 
-All tuneable parameters live in `balance/match_engine.toml`:
+All tuneable parameters live in `balance/match_engine.toml` *(planned — the `balance/` directory does not exist yet)*:
 
 ```toml
 [tick]
@@ -193,7 +193,7 @@ The engine produces `MatchEvent`s (see `L0.05`) and consumes `ContextModifiers` 
 | Ratings leak latents | Critical | Type system: ratings only accept `&[MatchEvent]`; test of violation |
 | Determinism drift | Critical | Golden test + `SIM_VERSION` bump procedure |
 | Performance insufficient | Medium | Tick budget, profiling, benchmark in CI |
-| Match "always wins the strong team" | High | Calibration in `L3-quality` (stub) |
+| Match "always wins the strong team" | High | Calibration in `L3-quality` *(planned)* |
 | `fmr-hidden` API too coarse | Medium | `resolve_*` methods are the contract; adding a new resolution type is additive, not breaking |
 | `fmr-hidden` API too fine | Medium | Fewer, larger `resolve_*` methods are preferred; granularity is a design choice, documented per method |
 
@@ -209,4 +209,4 @@ The engine produces `MatchEvent`s (see `L0.05`) and consumes `ContextModifiers` 
 - [`09-context-modifiers.md`](09-context-modifiers.md) — external state
 - [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — `resolve_*` API
 - [`../../docs/adr/004-panic-strategy-ffi.md`](../../docs/adr/004-panic-strategy-ffi.md) — `catch_unwind`
-- [`../../archive/Prompt_Master_v7.md`](../../archive/Prompt_Master_v7.md) §12 — original match engine
+- `../../archive/Prompt_Master_v7.md` §12 — original match engine *(planned — the archive/ directory does not exist yet)*
