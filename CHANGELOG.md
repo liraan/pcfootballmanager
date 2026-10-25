@@ -11,13 +11,7 @@ This project does not use semantic versioning for the docs; the version of each 
 > **Terminology note (2026-10-25):** the terms are **module** (a directory of the specification, e.g. `L0-match`), **sub-module** (a file inside a module, e.g. `04-match-engine.md`), **plugin** (a Rust crate with a `sheet.toml`, defined in ADR-012). The term **cell** is deprecated. In entries **before** this date, 'cell' means 'module', and 'module' (in the plugin sense) means 'plugin'. In entries **from** this date onwards, the new terminology is used.
 
 ---
-
-
----
-
 ## [Unreleased]
-
-
 
 ### Planned
 
@@ -29,7 +23,6 @@ This project does not use semantic versioning for the docs; the version of each 
 - Ratify ADR-012 (plugins) and ADR-013 (worlds) when the framework implements them.
 
 ---
-
 ## [2026-10-25] — ADR-012 (plugins) and ADR-013 (worlds), proposed
 
 ### Added
@@ -58,7 +51,6 @@ When the framework implements the plugin system (steps 11+), ADR-012 and ADR-013
 - ADR-013 — Worlds: LOD, Manifest, and Local Determinism
 
 ---
-
 ## [2026-10-25] — Rename crate prefix `fmr-` → `pcfm-`
 
 ### Changed
@@ -78,7 +70,6 @@ The project is called **PC Football Manager** (PCFM). The prefix `pcfm-` matches
 - The `LICENSE.md` file — unchanged (it refers to "PC Football Manager" by name, not by crate prefix).
 
 ---
-
 ## [2026-10-25] — ADR-008: provider integration is external, not core
 
 ### Added
@@ -112,7 +103,6 @@ This is consistent with ADR-002 (offline-first), `00-foundations` §5 (no bundle
 - ADR-008 — this decision
 
 ---
-
 ## [2026-10-25] — ADR-003 ratified: Plane A enforcement (option B)
 
 ### Changed
@@ -139,7 +129,6 @@ Before this entry, three L0 cells were `draft` (L0.04, L0.08, L0.10) and blocked
 The Doctrine was unchanged at that point. `00-foundations` remained at v1.1.
 
 ---
-
 ## [2026-10-25] — Structure v1.1: glossary, L0.10, L0 cells v1.1
 
 ### Added
@@ -163,7 +152,6 @@ The Doctrine was unchanged at that point. `00-foundations` remained at v1.1.
 The `pcfm-hidden` API now has a single home (`L0.10`). Before, a reader who wanted to understand "what can `pcfm-hidden` do?" had to read four files. After, they read one. The other L0 cells link to it.
 
 ---
-
 ## [2026-10-25] — Structure v1.1: concentric model, L0 complete, ADRs
 
 ### Added
@@ -198,7 +186,6 @@ The `pcfm-hidden` API now has a single home (`L0.10`). Before, a reader who want
 - **Inconsistent `conforms_to` field** — all ratified L0 cells now declare `conforms_to: "00-foundations (v1.1)"`.
 
 ---
-
 ## [2026-10-24] — Initial documentation drop
 
 ### Added
@@ -216,7 +203,6 @@ The `pcfm-hidden` API now has a single home (`L0.10`). Before, a reader who want
 - `01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md` were written in Italian. They were never committed to git.
 
 ---
-
 <!--
   NOTES FOR FUTURE EDITORS:
 
