@@ -255,7 +255,7 @@ These are components that are referenced across cells but are not crates. They a
 | [006](../docs/adr/006-license.md) | License | 🟡 proposed | Blocks `LICENSE.md` (currently marked `proposed`) and `Cargo.toml` examples |
 | [007](../docs/adr/007-canonical-language.md) | Canonical language | 🟡 proposed | Blocks translations, language policy in `STRUCTURE.md` §6 |
 | [008](../docs/adr/008-provider-integration-external.md) | Provider integration is external | ✅ accepted | Reclassified `L2-ingest` as external tool |
-| [012](../docs/adr/012-modules.md) | Modules: The Brick Contract | 🟡 proposed | Defines the module sheet, conflicts, narrative, cause traces, debug UI module view |
+| [012](../docs/adr/012-plugins.md) | Modules: The Brick Contract | 🟡 proposed | Defines the module sheet, conflicts, narrative, cause traces, debug UI module view |
 | [013](../docs/adr/013-worlds.md) | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | Defines LOD, manifest, local determinism; supersedes pillar 1 |
 
 Open ADRs: **005, 006, 007, 012, 013** (5).

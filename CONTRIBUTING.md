@@ -22,7 +22,7 @@ If you're new, read the files in the order below before opening a PR.
 3. [`STRUCTURE.md`](STRUCTURE.md) — how the repo works
 4. [`modules/_index.md`](modules/_index.md) — what exists, what's missing
 5. [`docs/GLOSSARY.md`](docs/GLOSSARY.md) — the terms used across the spec
-6. [`docs/MODULE_DEVELOPER_GUIDE.md`](docs/MODULE_DEVELOPER_GUIDE.md) — how to write a module (and why the simulation/rendering split matters)
+6. [`docs/PLUGIN_DEVELOPER_GUIDE.md`](docs/PLUGIN_DEVELOPER_GUIDE.md) — how to write a module (and why the simulation/rendering split matters)
 7. [`docs/adr/`](docs/adr/) — the decisions, including open ones
 
 ---
@@ -36,7 +36,7 @@ If you're new, read the files in the order below before opening a PR.
 | **Write a missing cell** | Follow §"Add a cell" below | People who want a big task |
 | **Propose a decision** | Write an ADR in `docs/adr/` | Architects |
 | **Review an ADR** | Comment on the PR, argue with the trade-offs | Everyone |
-| **Write code** | See `docs/MODULE_DEVELOPER_GUIDE.md` | Rust developers |
+| **Write code** | See `docs/PLUGIN_DEVELOPER_GUIDE.md` | Rust developers |
 | **Write a module** | ADR-012 (proposed) defines the contract | Rust developers, once ratified |
 | **Translate** | Contact the maintainers — translations go in `locales/` | Bilingual contributors |
 | **Report a contradiction** | Open an issue with the `inconsistency` label | Careful readers |
@@ -150,7 +150,7 @@ Two notes that are specific to the current state:
 
 ## Code
 
-The L0 specification is complete and ratified, and L0 is implemented (6 crates, 103 tests). Code contributions are welcome, but they must follow `docs/MODULE_DEVELOPER_GUIDE.md`.
+The L0 specification is complete and ratified, and L0 is implemented (6 crates, 103 tests). Code contributions are welcome, but they must follow `docs/PLUGIN_DEVELOPER_GUIDE.md`.
 
 When you write code:
 
@@ -163,7 +163,7 @@ When you write code:
 - Public API documented
 - `catch_unwind` at every FFI entry point (ADR-004)
 - No public field on `GroundTruth`, no `Serialize`, custom `Debug` (ADR-003)
-- The simulation/rendering split is respected: `simulate_match` is the only simulation, renderers are thin wrappers (see `docs/MODULE_DEVELOPER_GUIDE.md` §3)
+- The simulation/rendering split is respected: `simulate_match` is the only simulation, renderers are thin wrappers (see `docs/PLUGIN_DEVELOPER_GUIDE.md` §3)
 
 ---
 
@@ -197,7 +197,7 @@ Not: `fixed stuff`, `update`, `wip`.
 - [ ] Language is English (or a translation in `locales/`)
 - [ ] No `License: Proprietary` string anywhere
 - [ ] No `TBD` left in a field that should have a value
-- [ ] If it is code, `docs/MODULE_DEVELOPER_GUIDE.md` is respected (plane separation, simulation/rendering split, no dependency without an ADR)
+- [ ] If it is code, `docs/PLUGIN_DEVELOPER_GUIDE.md` is respected (plane separation, simulation/rendering split, no dependency without an ADR)
 
 ---
 

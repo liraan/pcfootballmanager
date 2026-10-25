@@ -100,4 +100,4 @@ These are the next decisions. They will be the object of future ADRs or cells.
 - ADR-013 — Worlds: LOD, Manifest, and Local Determinism
 - `modules/00-foundations.md` — the doctrine (pillar 1 to be revised)
 - `STRUCTURE.md` §9 — What Packs Can and Cannot Extend
-- `docs/MODULE_DEVELOPER_GUIDE.md` — how to write a module
+- `docs/PLUGIN_DEVELOPER_GUIDE.md` — how to write a module

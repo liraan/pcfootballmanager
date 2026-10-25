@@ -160,4 +160,4 @@ The cause traces (diegetic level) are sufficient to understand **what happened**
 - `modules/00-foundations.md` §4 — Determinism (local, not global)
 - ADR-012 — Modules: The Brick Contract
 - `STRUCTURE.md` §2 — Concentric levels
-- `docs/MODULE_DEVELOPER_GUIDE.md` — how to write a module
+- `docs/PLUGIN_DEVELOPER_GUIDE.md` — how to write a module

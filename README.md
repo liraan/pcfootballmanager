@@ -78,7 +78,7 @@ The specification is **concentric**, not flat. Read in this order:
 | **3. Index** | [`modules/_index.md`](modules/_index.md) | What exists at each level? What is its status? |
 | **4. Decisions** | [`docs/adr/`](docs/adr/) | Which architectural choices have been made, and why? |
 | **5. Glossary** | [`docs/GLOSSARY.md`](docs/GLOSSARY.md) | What does each term mean? Where is it defined? |
-| **6. Developer guide** | [`docs/MODULE_DEVELOPER_GUIDE.md`](docs/MODULE_DEVELOPER_GUIDE.md) | How do I write a module? Why does the simulation/rendering split matter? |
+| **6. Developer guide** | [`docs/PLUGIN_DEVELOPER_GUIDE.md`](docs/PLUGIN_DEVELOPER_GUIDE.md) | How do I write a module? Why does the simulation/rendering split matter? |
 | **7. Process** | [`CONTRIBUTING.md`](CONTRIBUTING.md) | How do I propose a change? What's the review process? |
 
 ### Levels
@@ -233,7 +233,7 @@ pc-football-manager/
 │   ├── calibration/           # *(planned)* model calibration dashboards
 │   ├── GLOSSARY.md
 │   ├── MIGRATION-01-04.md
-│   └── MODULE_DEVELOPER_GUIDE.md
+│   └── PLUGIN_DEVELOPER_GUIDE.md
 ├── crates/                    # code (6 crates, 103 tests)
 │   ├── pcfm-core/
 │   ├── pcfm-model/
@@ -274,7 +274,7 @@ See **[`CONTRIBUTING.md`](CONTRIBUTING.md)** for the full process. Quick summary
 - Changing an invariant requires a new ADR.
 - If you spot an error, say so plainly — including in AI-drafted text.
 
-The **L0 specification is complete and ratified, and L0 is implemented**. Code contributions are welcome, and must follow [`docs/MODULE_DEVELOPER_GUIDE.md`](docs/MODULE_DEVELOPER_GUIDE.md).
+The **L0 specification is complete and ratified, and L0 is implemented**. Code contributions are welcome, and must follow [`docs/PLUGIN_DEVELOPER_GUIDE.md`](docs/PLUGIN_DEVELOPER_GUIDE.md).
 
 ---
 

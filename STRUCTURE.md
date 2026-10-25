@@ -99,7 +99,7 @@ modules/
 docs/
 ├── GLOSSARY.md
 ├── MIGRATION-01-04.md
-├── MODULE_DEVELOPER_GUIDE.md
+├── PLUGIN_DEVELOPER_GUIDE.md
 ├── adr/              (11 files, 000 → 013)
 ├── legal/            (.gitkeep)
 └── calibration/      (.gitkeep)
@@ -167,7 +167,7 @@ pc-football-manager/
 │   ├── calibration/
 │   ├── GLOSSARY.md
 │   ├── MIGRATION-01-04.md
-│   └── MODULE_DEVELOPER_GUIDE.md
+│   └── PLUGIN_DEVELOPER_GUIDE.md
 ├── registry/                  # empty until code exists
 ├── crates/                    # code (see current state)
 ├── mods/                      # empty until user packs exist

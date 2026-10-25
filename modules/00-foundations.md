@@ -252,9 +252,9 @@ To keep scope honest, these are **not** in the core, and most are not in v1.0:
 - **Decisions:** [`../docs/adr/`](../docs/adr/) — every open question, every resolved one
 - **Structure:** [`../STRUCTURE.md`](../STRUCTURE.md) — the rules of the repo
 - **Glossary:** [`../docs/GLOSSARY.md`](../docs/GLOSSARY.md) — the terms used across the spec
-- **Module developer guide:** [`../docs/MODULE_DEVELOPER_GUIDE.md`](../docs/MODULE_DEVELOPER_GUIDE.md) — how to write a module
+- **Module developer guide:** [`../docs/PLUGIN_DEVELOPER_GUIDE.md`](../docs/PLUGIN_DEVELOPER_GUIDE.md) — how to write a module
 - **Crate naming:** crates use the `pcfm-` prefix (`pcfm-core`, `pcfm-hidden`, `pcfm-match`, ...). The historical `fmr-` prefix is deprecated. See `STRUCTURE.md` §3.
-- **Modules and worlds (under review):** [`../docs/adr/012-modules.md`](../docs/adr/012-modules.md) and [`../docs/adr/013-worlds.md`](../docs/adr/013-worlds.md) *(proposed)* — the module contract and the world system, which may revise pillar 1.
+- **Modules and worlds (under review):** [`../docs/adr/012-plugins.md`](../docs/adr/012-plugins.md) and [`../docs/adr/013-worlds.md`](../docs/adr/013-worlds.md) *(proposed)* — the module contract and the world system, which may revise pillar 1.
 
 ---
 
