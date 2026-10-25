@@ -1,21 +1,29 @@
 # Migration — Legacy Modules 01-04
 
-**Status:** pending
+**Status:** pending (content not recovered)
 **Date:** 2026-10-25
-**Affects:** `01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md` (all removed from the current repository)
-**Blocked by:** ADR-007 (canonical language), ADR-003 (Plane A enforcement)
+**Affects:** `01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md` (all removed from the current repository, **not recoverable from git history**)
+**Blocked by:** ADR-007 (canonical language), the L3 cells not being written yet
 
 <!--
   MAINTAINER NOTE: this document is a MIGRATION PLAN, not a migration itself.
-  The four legacy modules (01-04) were removed when the concentric structure
-  (L0-L3) replaced the flat 25-module numbering. Their content needs to be
-  recovered from git history (or from the author's local copy) and re-integrated
-  into the new structure.
 
-  This file exists so the content is not lost. Do not delete it until the
-  migration is complete (status: done).
+  IMPORTANT: the four legacy modules were never committed to git. The `git log
+  --all --full-history` command confirms they do not exist in any commit. They
+  were created locally, never pushed, and then overwritten when the concentric
+  structure replaced the flat 25-module numbering.
 
-  When complete, mark `status: done` and move this file to `archive/`.
+  Their content is partially recoverable from the initial conversation of the
+  project (the files were pasted into the chat as attachments), but it has not
+  been recreated in the repository. This is a known technical debt.
+
+  Do NOT recreate them speculatively. Recreate them when the migration
+  actually happens (i.e. when L3-registry, L3-packs, L1-roster are written).
+  Until then, the concentric structure already covers their content in
+  fragments (see §2 "Target mapping").
+
+  When the migration is complete, mark `status: done` and move this file to
+  `archive/`.
 -->
 
 ## 1. Context
@@ -29,13 +37,17 @@ Four modules were written in the flat structure, in Italian:
 - `03-pack-system.md`
 - `04-data-model.md`
 
-When the concentric structure replaced the flat one, these four files were **removed from the repository** (see `CHANGELOG.md`, entry `[2026-10-25]` → "Removed"). Their content is recoverable from:
+When the concentric structure replaced the flat one, these four files were **removed from the repository** (see `CHANGELOG.md`, entry `[2026-10-25]` → "Removed").
 
-1. **Git history** — `git log --all --full-history -- modules/01-architecture.md` (and the same for the other three).
-2. **The author's local copy** — if it exists.
-3. **The archived prompt masters** — `Prompt_Master_v5.md`, `v6.md`, `v7.md` contain overlapping material. *(planned — the `archive/` directory does not exist yet)*
+**Critical note:** these files were **never committed to git**. The command:
 
-Until recovered, the repository does not contain the architectural detail (workspace layout, dependency rules, registry schema, pack validation, canonical data model) that those four modules provided. **This is a temporary gap.** It is not a decision that the content is unnecessary.
+```bash
+git log --all --full-history -- modules/01-architecture.md
+```
+
+returns nothing. They were created locally, never pushed, then overwritten. The git history does not contain them.
+
+The content is **partially recoverable** from the initial conversation of the project (the four files were pasted as attachments). It has not been recreated in the repository. This is a known technical debt, tracked here.
 
 ## 2. Target mapping
 
@@ -43,52 +55,51 @@ The content of each legacy module is re-integrated into the concentric structure
 
 ### `01-architecture.md` → distributed across L0, L3
 
-| Legacy section | Target |
-|---|---|
-| Workspace structure, Cargo layout, `rust-toolchain.toml` | `L0-match/00-overview.md` (partially done) + a new **`L3-quality/00-overview.md`** *(planned)* |
-| Determinism rules (RNG, BTreeMap, fixed-point) | Already extracted into `L0-match/01-rng.md` (done) and `00-foundations.md` §4 (done) |
-| Dependency rules between crates | `L0-match/00-overview.md` §4 (partially done) + a new **`L3-quality/02-dependency-rules.md`** *(planned)* |
-| Panic strategy at FFI | Extracted into `docs/adr/004-panic-strategy-ffi.md` (done) |
-| Qt binding | Extracted into `docs/adr/005-qt-binding.md` (done) |
-| Testing strategy, Miri, ASan, golden tests | `00-foundations.md` §4 + a new **`L3-quality/01-testing.md`** *(planned)* |
-| `SIM_VERSION` bump procedure | `CHANGELOG-SIM.md` (done) |
+| Legacy section | Target | Status |
+|---|---|---|
+| Workspace structure, Cargo layout, `rust-toolchain.toml` | `STRUCTURE.md` §3 + a new **`L3-quality/00-overview.md`** *(planned)* | partial |
+| Determinism rules (RNG, BTreeMap, fixed-point) | `L0-match/01-rng.md` + `00-foundations.md` §4 | ✅ done |
+| Dependency rules between crates | `L0-match/00-overview.md` §4 + a new **`L3-quality/02-dependency-rules.md`** *(planned)* | partial |
+| Panic strategy at FFI | `docs/adr/004-panic-strategy-ffi.md` | ✅ done |
+| Qt binding | `docs/adr/005-qt-binding.md` | ✅ done (proposed) |
+| Testing strategy, Miri, ASan, golden tests | `00-foundations.md` §4 + a new **`L3-quality/01-testing.md`** *(planned)* | partial |
+| `SIM_VERSION` bump procedure | `CHANGELOG-SIM.md` | ✅ done |
 
 ### `02-registry.md` → L3
 
-| Legacy section | Target |
-|---|---|
-| Whole module (roles, formations, instructions, attributes, deprecations) | A new **`L3-registry/`** cell *(planned)*, with sub-cells `00-overview`, `01-schema`, `02-deprecation`, `03-migrations` |
-| Role schema, formation schema | `L3-registry/01-schema.md` *(planned)* |
-| Deprecation policy, `replaced_by` | `L3-registry/02-deprecation.md` *(planned)* + `CHANGELOG-REGISTRY.md` (done) |
-| Migration scripts, version compatibility | `L3-registry/03-migrations.md` *(planned)* |
+| Legacy section | Target | Status |
+|---|---|---|
+| Whole module (roles, formations, instructions, attributes, deprecations) | A new **`L3-registry/`** cell *(planned)*, with sub-cells `00-overview`, `01-schema`, `02-deprecation`, `03-migrations` | not started |
+| Role schema, formation schema | `L3-registry/01-schema.md` *(planned)* | not started |
+| Deprecation policy, `replaced_by` | `L3-registry/02-deprecation.md` *(planned)* + `CHANGELOG-REGISTRY.md` | partial |
+| Migration scripts, version compatibility | `L3-registry/03-migrations.md` *(planned)* | not started |
 
 ### `03-pack-system.md` → L3
 
-| Legacy section | Target |
-|---|---|
-| Whole module (manifest, validation, quarantine, sandbox, rollback) | A new **`L3-packs/`** cell *(planned)*, with sub-cells `00-overview`, `01-manifest`, `02-validation`, `03-sandbox`, `04-rollback` |
-| Manifest schema | `L3-packs/01-manifest.md` *(planned)* |
-| Validation rules, quarantine | `L3-packs/02-validation.md` *(planned)* |
-| Sandbox, capability model, safe DSL | `L3-packs/03-sandbox.md` *(planned)* |
-| Backup, rollback, migration | `L3-packs/04-rollback.md` *(planned)* |
+| Legacy section | Target | Status |
+|---|---|---|
+| Whole module (manifest, validation, quarantine, sandbox, rollback) | A new **`L3-packs/`** cell *(planned)*, with sub-cells `00-overview`, `01-manifest`, `02-validation`, `03-sandbox`, `04-rollback` | not started |
+| Manifest schema | `L3-packs/01-manifest.md` *(planned)* | not started |
+| Validation rules, quarantine | `L3-packs/02-validation.md` *(planned)* | not started |
+| Sandbox, capability model, safe DSL | `L3-packs/03-sandbox.md` *(planned)* | not started |
+| Backup, rollback, migration | `L3-packs/04-rollback.md` *(planned)* | not started |
 
 ### `04-data-model.md` → distributed across L0, L1, L2
-
-The data model was the single largest legacy module. Its content is **already partially distributed**, and the rest is mapped as follows.
 
 | Legacy section | Target | Status |
 |---|---|---|
 | Minimal entities (`Player`, `Squad`, `Pitch`, `Referee`, `Match`) | `L0-match/03-entities-minimal.md` | ✅ done |
 | `MatchEvent`, `EventChain`, `CauseTrace` | `L0-match/05-match-events.md` | ✅ done |
-| `Nation`, `Competition`, `Stage`, `TiebreakerRule` | A new **`L1-season/01-competitions.md`** and **`L1-world/01-nation.md`** *(planned)* | pending |
-| `City`, `Stadium` | A new **`L1-world/02-city.md`** and **`L1-world/03-stadium.md`** *(planned)* | pending |
-| Full `Player` (attributes, physical, psychological, career) | A new **`L1-roster/01-player-attributes.md`** *(planned)* | pending |
-| `Staff`, `Contract` | A new **`L1-roster/02-staff.md`** and **`L1-roster/03-contracts.md`** *(planned)* | pending |
-| `IndexSnapshot`, `ProjectionProfile` | A new **`L3-statistics/00-overview.md`** *(planned)*, with the caveat that the definitions must be free of CA/PA (ADR-003 and `00-foundations` §3, §5) | pending |
-| `ScoutReport`, `DeclaredBias` | A new **`L2-scouting/00-overview.md`** *(planned)* | pending |
-| `PsychologicalProfile` | A new **`L2-psyche/01-axes.md`** *(planned)* | pending |
-| `DataProvenance`, `SourceType`, `ConfidenceLevel` | A new **`L3-registry/01-schema.md`** *(planned)*, as part of the registry schema | pending |
-| Invariants (squad, economic, temporal, three-planes) | A new **`L3-quality/03-invariants.md`** *(planned)* | pending |
+| `GroundTruth` API | `L0-match/10-ground-truth.md` | ✅ done |
+| `Nation`, `Competition`, `Stage`, `TiebreakerRule` | A new **`L1-season/01-competitions.md`** and **`L1-world/01-nation.md`** *(planned)* | not started |
+| `City`, `Stadium` | A new **`L1-world/02-city.md`** and **`L1-world/03-stadium.md`** *(planned)* | not started |
+| Full `Player` (attributes, physical, psychological, career) | A new **`L1-roster/01-player-attributes.md`** *(planned)* | not started |
+| `Staff`, `Contract` | A new **`L1-roster/02-staff.md`** and **`L1-roster/03-contracts.md`** *(planned)* | not started |
+| `IndexSnapshot`, `ProjectionProfile` | A new **`L3-statistics/00-overview.md`** *(planned)*, free of CA/PA (ADR-003, `00-foundations` §3, §5) | not started |
+| `ScoutReport`, `DeclaredBias` | A new **`L2-scouting/00-overview.md`** *(planned)* | not started |
+| `PsychologicalProfile` | A new **`L2-psyche/01-axes.md`** *(planned)* | not started |
+| `DataProvenance`, `SourceType`, `ConfidenceLevel` | A new **`L3-registry/01-schema.md`** *(planned)* | not started |
+| Invariants (squad, economic, temporal, three-planes) | A new **`L3-quality/03-invariants.md`** *(planned)* | not started |
 | Serialisation, `SaveGame`, migration | `L0-match/07-save-minimal.md` (minimal) + a new **`L3-quality/04-saves.md`** *(planned, full save system)* | partial |
 
 ## 3. What must be removed from the legacy content
@@ -103,24 +114,21 @@ The four legacy modules were written before ADR-003 (Plane A enforcement) and be
 6. **Any reference to the flat 25-module numbering.** Replace with the concentric cell ID (`L0.01`, `L1.03`, ...).
 7. **Any reference to `Proprietary` as a license.** Replace with `MIT OR Apache-2.0` for code, `CC-BY-NC-SA-4.0` for assets (ADR-006).
 
-## 4. Procedure
+## 4. Procedure (when the migration actually happens)
 
 The migration is done **one legacy module at a time**, in the order below. Each step is a separate PR.
 
-### Step 1 — Recover
+**The migration is not urgent.** The concentric structure already covers the content in fragments (see §2). The migration should happen **when the corresponding L1/L3 cell is written**, not before. Recreating the legacy files now, only to migrate them immediately, is wasted work.
 
-For each legacy module, run:
+### Step 1 — Recover (if possible)
 
-```bash
-git log --all --full-history -- modules/01-architecture.md
-git show <commit>:modules/01-architecture.md > /tmp/01-architecture.legacy.md
-```
+If the four files still exist on the author's local disk (Desktop, Downloads, a pre-concentric copy of the repository), copy them into `archive/legacy/` via the GitHub web interface, one file at a time. This preserves them for traceability.
 
-(and the same for the other three). The recovered file is **not** committed. It is a reference for the next step.
+If they no longer exist, the content is recoverable from the initial project conversation (they were pasted as attachments). This is a manual copy-paste, done once, at the time of the migration.
 
 ### Step 2 — Map
 
-For each section of the recovered file, decide which target cell it goes to, using the table in §2. If a section does not fit any target, open an issue. Do not invent a new cell without a discussion.
+For each section of the legacy file, decide which target cell it goes to, using the table in §2. If a section does not fit any target, open an issue. Do not invent a new cell without a discussion.
 
 ### Step 3 — Rewrite
 
@@ -145,36 +153,26 @@ For each target cell:
 - [ ] `modules/_index.md` updated.
 - [ ] `CHANGELOG.md` entry added.
 
-### Step 5 — Archive
-
-Once the four modules are fully migrated:
-
-1. Create `archive/` *(planned)*.
-2. Move the recovered legacy files into `archive/legacy/`.
-3. Update `archive/README.md` *(planned)* to list them.
-4. Mark this file `status: done`.
-5. Move this file to `archive/MIGRATION-01-04.md`.
-
 ## 5. Current status
 
-| Legacy module | Recovered | Mapped | Rewritten | Archived |
+| Legacy module | Recoverable from disk | Recoverable from chat | Migrated | Archived |
 |---|---|---|---|---|
-| `01-architecture.md` | ❌ | 🟡 partial (see §2) | 🟡 partial | ❌ |
-| `02-registry.md` | ❌ | ❌ | ❌ | ❌ |
-| `03-pack-system.md` | ❌ | ❌ | ❌ | ❌ |
-| `04-data-model.md` | ❌ | 🟡 partial (see §2) | 🟡 partial | ❌ |
+| `01-architecture.md` | unknown | yes | 🟡 partial | ❌ |
+| `02-registry.md` | unknown | yes | ❌ not started | ❌ |
+| `03-pack-system.md` | unknown | yes | ❌ not started | ❌ |
+| `04-data-model.md` | unknown | yes | 🟡 partial | ❌ |
 
-Legend: ❌ not started · 🟡 in progress · ✅ done
+Legend: ❌ not started · 🟡 in progress · ✅ done · "unknown" = not checked
 
 ## 6. Risks
 
 | Risk | Severity | Mitigation |
 |---|---|---|
-| Content lost because it was never committed | Critical | Recover from git history or from the author's local copy before the history is rewritten |
+| Content lost because it was never committed | **Realized** | Content is recoverable from the initial chat, but not from git. This is a known debt. |
+| Migration never finishes | High | Tracked here, one PR per legacy module, triggered by L1/L3 cells being written |
 | Migration introduces a CA/PA reference by copy-paste | Critical | Review checklist in §4 Step 4; CI grep for `current_ability`, `potential_ability` |
 | Migration introduces a latent field by copy-paste | Critical | Review checklist in §4 Step 4; ADR-003 option B is the guard |
-| Migration never finishes | High | Tracked here, one PR per legacy module, deadline TBD |
-| Target cell does not exist | Medium | Create it as a stub first, mark `status: draft`, fill it in the same PR |
+| The debt is forgotten | Medium | This file is linked from `CHANGELOG.md` and `STRUCTURE.md`; the `archive/legacy/` directory has a `.gitkeep` |
 
 ## 7. References
 
@@ -185,4 +183,4 @@ Legend: ❌ not started · 🟡 in progress · ✅ done
 - [`adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md) — no public latents
 - [`adr/006-license.md`](adr/006-license.md) — MIT/Apache-2.0 + CC-BY-NC-SA-4.0
 - [`adr/007-canonical-language.md`](adr/007-canonical-language.md) — English canonical
-- `../archive/` — where the legacy files will be moved *(planned)*
+- [`../archive/legacy/`](../archive/legacy/) — where the legacy files will be moved *(planned — the directory exists, empty)*
