@@ -59,7 +59,7 @@ The catalogue of **discrete, in-match events** that are not part of the normal t
 
 ### 2.2 Event definition
 
-Each event is a `RandomEventDef` in `balance/random_events.toml`:
+Each event is a `RandomEventDef` in `balance/random_events.toml` *(planned — the `balance/` directory does not exist yet)*:
 
 ```toml
 [[event]]
@@ -144,14 +144,14 @@ The catalogue is calibrated so that:
 - **Penalties**: ~0.3 per match
 - **On-field brawls**: ~0.02 per match (rare)
 
-These targets are in `balance/random_events.toml` and tested by `L3-quality` (stub). Until `L3-quality` exists, they are tested by the CI job that runs the L0.04 golden tests with distribution assertions.
+These targets are in `balance/random_events.toml` *(planned)* and tested by `L3-quality` *(planned)*. Until `L3-quality` exists, they are tested by the CI job that runs the L0.04 golden tests with distribution assertions.
 
 ### 2.6 What is **not** here
 
-- **Pre-match events** (player had a fight with his wife) → `L2-psyche/05-life-events.md`
-- **Training events** (injury in training) → `L2-psyche/05-life-events.md` (training events are psyche-adjacent at L0; a dedicated training module comes with L2)
-- **Season events** (transfer request) → `L2-market`
-- **Crowd events outside the stadium** → `L2-crowd`
+- **Pre-match events** (player had a fight with his wife) → `L2-psyche/05-life-events.md` *(planned)*
+- **Training events** (injury in training) → `L2-psyche/05-life-events.md` *(planned)* (training events are psyche-adjacent at L0; a dedicated training module comes with L2)
+- **Season events** (transfer request) → `L2-market` *(planned)*
+- **Crowd events outside the stadium** → `L2-crowd` *(planned)*
 
 This cell is **only** what happens *during* the match, *in* the match context.
 
@@ -205,4 +205,4 @@ This cell is **only** what happens *during* the match, *in* the match context.
 - [`05-match-events.md`](05-match-events.md) — event type
 - [`09-context-modifiers.md`](09-context-modifiers.md) — external state
 - [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — no latent access
-- [`../../archive/Prompt_Master_v7.md`](../../archive/Prompt_Master_v7.md) §Psiche — original event families
+- `../../archive/Prompt_Master_v7.md` §Psiche — original event families *(planned — the archive/ directory does not exist yet)*
