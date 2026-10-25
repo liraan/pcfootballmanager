@@ -1,6 +1,6 @@
 ---
 title: "Modules Index"
-version: "2.7"
+version: "2.8"
 status: "active"
 last_updated: "2026-10-25"
 ---
@@ -22,7 +22,7 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 1. [`00-foundations.md`](00-foundations.md) — the doctrine *(v1.4, pillar 1 under review)*
 2. The level that matches your task (L0 → L3)
-3. [`../STRUCTURE.md`](../STRUCTURE.md) — the rules of the repo
+3. [`../STRUCTURE.md`](../STRUCTURE.md) — the rules of the repo (see §3 for the terminology: **module** = specification directory, **plugin** = Rust crate with a `sheet.toml`, **cell** is deprecated)
 4. [`../docs/adr/`](../docs/adr/) — the decisions
 
 ---
@@ -30,14 +30,14 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 ## Current state (as of 2026-10-25)
 
 - ✅ **Doctrine**: ratified (v1.4). **Pillar 1 is under review** (ADR-013, proposed).
-- ✅ **L0 — Match**: fully specified, **all 11 cells ratified** (ADR-003 accepted)
-- 🚧 **L1 — Season**: planned, not started (12 cells)
-- 🚧 **L2 — Career**: planned, not started (9 cells)
-- 🚧 **L3 — Meta**: planned, not started (8 cells)
-- 🔌 **Provider integrations** (Wyscout, StatsBomb, Opta): **external tools, not core cells** (ADR-008)
-- 🧱 **Modules and worlds**: ADR-012 and ADR-013 are **proposed**. The framework does not yet implement the module system. The determinism is **global** today; the move to **local** determinism is under review.
+- ✅ **L0 — Match**: fully specified, **all 11 modules ratified** (ADR-003 accepted)
+- 🚧 **L1 — Season**: planned, not started (12 modules)
+- 🚧 **L2 — Career**: planned, not started (9 modules)
+- 🚧 **L3 — Meta**: planned, not started (8 modules)
+- 🔌 **Provider integrations** (Wyscout, StatsBomb, Opta): **external tools, not core modules** (ADR-008)
+- 🧩 **Plugins and worlds**: ADR-012 and ADR-013 are **proposed**. The framework does not yet implement the plugin system. The determinism is **global** today; the move to **local** determinism is under review.
 
-Cells marked *(planned)* below do not have a file yet. Their links are intentionally not clickable.
+Modules marked *(planned)* below do not have a file yet. Their links are intentionally not clickable.
 
 ---
 
@@ -47,7 +47,7 @@ Cells marked *(planned)* below do not have a file yet. Their links are intention
 |---|---|
 | [`00-foundations.md`](00-foundations.md) | ✅ ratified (v1.4) — pillar 1 under review (ADR-013) |
 
-**Note on `conforms_to`:** the doctrine is **v1.4**. All cells declare `conforms_to: "00-foundations (v1.1)"` because **v1.1 is the last version that changed an invariant**. v1.2 added one sentence to §7 (Non-goals). v1.3 added a cross-reference to the module developer guide. v1.4 added the "pillar 1 under review" note and the §4 status note. None of these changes an invariant, so the cells do not need to be re-checked. When the pillar is rewritten (ADR-013 ratified), the doctrine will bump to v2.0, and each cell will be re-checked against it.
+**Note on `conforms_to`:** the doctrine is **v1.4**. All modules declare `conforms_to: "00-foundations (v1.1)"` because **v1.1 is the last version that changed an invariant**. v1.2 added one sentence to §7 (Non-goals). v1.3 added a cross-reference to the plugin developer guide. v1.4 added the "pillar 1 under review" note and the §4 status note. None of these changes an invariant, so the modules do not need to be re-checked. When the pillar is rewritten (ADR-013 ratified), the doctrine will bump to v2.0, and each module will be re-checked against it.
 
 ---
 
@@ -75,7 +75,7 @@ Cells marked *(planned)* below do not have a file yet. Their links are intention
 
 *(planned — none of these files exist yet)*
 
-| ID | Cell | Status | Depends on |
+| ID | Module | Status | Depends on |
 |---|---|---|---|
 | L1.00 | L1-season/00-overview.md | 🚧 planned | L0 |
 | L1.01 | L1-season/01-competitions.md | 🚧 planned | L0, L1.00 |
@@ -98,7 +98,7 @@ Cells marked *(planned)* below do not have a file yet. Their links are intention
 
 *(planned — none of these directories exist yet)*
 
-| ID | Cell | Status |
+| ID | Module | Status |
 |---|---|---|
 | L2.01 | L2-tactics/ | 🚧 planned |
 | L2.02 | L2-market/ | 🚧 planned |
@@ -118,7 +118,7 @@ Cells marked *(planned)* below do not have a file yet. Their links are intention
 
 *(planned — none of these directories exist yet)*
 
-| ID | Cell | Status |
+| ID | Module | Status |
 |---|---|---|
 | L3.01 | L3-registry/ | 🚧 planned |
 | L3.02 | L3-packs/ | 🚧 planned |
@@ -137,19 +137,19 @@ Cells marked *(planned)* below do not have a file yet. Their links are intention
 
 | Former ID | What it was | What it is now |
 |---|---|---|
-| ~~L2-ingest~~ | A core module for Wyscout / StatsBomb / Opta integration | **🔌 External tool**, produces packs, not a core cell. See [ADR-008](../docs/adr/008-provider-integration-external.md). |
+| ~~L2-ingest~~ | A core module for Wyscout / StatsBomb / Opta integration | **🔌 External tool**, produces packs, not a core module. See [ADR-008](../docs/adr/008-provider-integration-external.md). |
 
 The core does not talk to providers. A tool (team, community, or third party) talks to the provider, produces a pack, and the user installs the pack. This keeps the core offline-first, sandboxed, and lightweight.
 
 ---
 
-## Modules and worlds (proposed)
+## Plugins and worlds (proposed)
 
-ADR-012 (Modules: The Brick Contract) and ADR-013 (Worlds: LOD, Manifest, and Local Determinism) define the module system and the world system. They are **proposed**: the framework does not yet implement them.
+ADR-012 (Plugins: The Brick Contract) and ADR-013 (Worlds: LOD, Manifest, and Local Determinism) define the **plugin system** and the **world system**. They are **proposed**: the framework does not yet implement them.
 
-ADR-012 defines the brick contract (sheet, conflicts, narrative, cause traces, debug UI module view). ADR-013 defines how the bricks compose into worlds (LOD = sum of modules, LOD fixed per save, manifest in save, **local determinism**, community plural and aware).
+ADR-012 defines the brick contract (sheet, conflicts, narrative, cause traces, debug UI plugin view). ADR-013 defines how the bricks compose into worlds (LOD = sum of plugins, LOD fixed per save, manifest in save, **local determinism**, community plural and aware).
 
-ADR-013 **supersedes pillar 1** of `00-foundations` §2: the determinism becomes **local** (same save + same match + same module configuration = same result) instead of **global** (same seed regardless of configuration). The pillar is currently marked "under review" in the doctrine.
+ADR-013 **supersedes pillar 1** of `00-foundations` §2: the determinism becomes **local** (same save + same match + same plugin configuration = same result) instead of **global** (same seed regardless of configuration). The pillar is currently marked "under review" in the doctrine.
 
 Read the two ADRs together, in order: [`012-013-reading-guide.md`](../docs/adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
 
@@ -157,12 +157,12 @@ For the current status of the two ADRs, see the **ADR status** table below.
 
 ---
 
-## How to read a cell
+## How to read a module
 
-Every cell has:
+Every module has:
 
-- **Frontmatter** — level, cell, module_id, version, status, dependencies, doctrine compliance (see `STRUCTURE.md` §4)
-- **§0 Purpose** — what the cell covers, what it does not
+- **Frontmatter** — level, module (directory), module_id (sub-module), version, status, dependencies, doctrine compliance (see `STRUCTURE.md` §4)
+- **§0 Purpose** — what the module covers, what it does not
 - **§1 Context** — what it depends on, what depends on it
 - **§2 Specification** — the actual content
 - **§3 Data model** — entities, if any
@@ -171,15 +171,15 @@ Every cell has:
 - **§6 Risks and Mitigations**
 - **§7 References**
 
-If a cell lacks any of these, it is a bug. Open an issue.
+If a module lacks any of these, it is a bug. Open an issue.
 
 ---
 
 ## Doctrine compliance
 
-Every cell declares `conforms_to: 00-foundations (vX.Y)`. The `conforms_to` field means **"the cell has been verified against this version"**, not **"the cell is compatible with any later version"**. When `00-foundations` is revised, a cell that has not been re-verified is marked `status: review` until it is.
+Every module declares `conforms_to: 00-foundations (vX.Y)`. The `conforms_to` field means **"the module has been verified against this version"**, not **"the module is compatible with any later version"**. When `00-foundations` is revised, a module that has not been re-verified is marked `status: review` until it is.
 
-The doctrine is currently **v1.4**. Cells conform to **v1.1**, which is the last version that changed an invariant. v1.2 → v1.4 added clarifications and a status note (pillar 1 under review), none of which change an invariant. The cells do not need to be re-checked. When the pillar is rewritten (ADR-013 ratified), the doctrine will bump to v2.0, and all cells will be re-verified.
+The doctrine is currently **v1.4**. Modules conform to **v1.1**, which is the last version that changed an invariant. v1.2 → v1.4 added clarifications and a status note (pillar 1 under review), none of which change an invariant. The modules do not need to be re-checked. When the pillar is rewritten (ADR-013 ratified), the doctrine will bump to v2.0, and all modules will be re-verified.
 
 ---
 
@@ -195,7 +195,7 @@ L3 ──┐
         (read only)
 ```
 
-A cell at level N may read the **output** of any cell at level `< N`. It may not read the internals. It may not depend on level `> N`.
+A module at level N may read the **output** of any module at level `< N`. It may not read the internals. It may not depend on level `> N`.
 
 ---
 
@@ -203,23 +203,23 @@ A cell at level N may read the **output** of any cell at level `< N`. It may not
 
 | Symbol | Meaning |
 |---|---|
-| ✅ ratified | Accepted, stable, downstream cells may depend on it |
+| ✅ ratified | Accepted, stable, downstream modules may depend on it |
 | 🟡 draft / proposed | Being written or blocked by an open ADR |
-| 🚧 planned | Cell does not exist yet; the row is a placeholder |
-| 🔌 external | Not a core cell; a tool or pack outside the repository |
-| ⛔ superseded | Replaced by a newer cell, kept for history |
+| 🚧 planned | Module does not exist yet; the row is a placeholder |
+| 🔌 external | Not a core module; a tool or pack outside the repository |
+| ⛔ superseded | Replaced by a newer module, kept for history |
 
 ---
 
 ## Components
 
-Some components are referenced across cells but do not (yet) have a dedicated cell. This section is the map: for each component, where it is currently defined and where its dedicated cell (if any) will live.
+Some components are referenced across modules but do not (yet) have a dedicated module. This section is the map: for each component, where it is currently defined and where its dedicated module (if any) will live.
 
 ### Infrastructure components
 
-These are the `pcfm-*` crates that provide infrastructure to multiple cells. They are not domain cells; they are services. Their full specification is **fragmented across the cells that use them**, until a dedicated cell is written.
+These are the `pcfm-*` crates that provide infrastructure to multiple modules. They are not domain modules; they are services. Their full specification is **fragmented across the modules that use them**, until a dedicated module is written.
 
-| Component | Currently defined in | Dedicated cell (planned) | Notes |
+| Component | Currently defined in | Dedicated module (planned) | Notes |
 |---|---|---|---|
 | `pcfm-core` | L0.01 §2.2 (RNG), L0.02 §2.1 (event bus), L0.03 §3.1 (IDs), `00-foundations` §4 (fixed-point) | — | The core crate. Used by every other crate. |
 | `pcfm-stats` | L0.05 §2.4 (`EventChain`), L0.06 (consumer) | `L3-statistics` | Storage of `MatchEvent`, query engine. |
@@ -227,11 +227,11 @@ These are the `pcfm-*` crates that provide infrastructure to multiple cells. The
 | `pcfm-data` | L0.07 §2.3 (migration scripts) | `L3-quality` | Loader, validator, migrations. |
 | `pcfm-bridge` | `docs/adr/004-panic-strategy-ffi.md`, `docs/adr/005-qt-binding.md` | `L3-ui` | Qt FFI shim. The only crate that knows Qt. |
 
-**Rule:** when a new cell needs `pcfm-core` (or any other infrastructure crate), it does not re-specify the crate. It links to the existing definition. The dedicated cell, when written, will be the single source of truth; until then, the "Currently defined in" column is the map.
+**Rule:** when a new module needs `pcfm-core` (or any other infrastructure crate), it does not re-specify the crate. It links to the existing definition. The dedicated module, when written, will be the single source of truth; until then, the "Currently defined in" column is the map.
 
-### Cross-cell components
+### Cross-module components
 
-These are components that are referenced across cells but are not crates. They are either configuration, data, or external concepts.
+These are components that are referenced across modules but are not crates. They are either configuration, data, or external concepts.
 
 | Component | Referenced in | Destination |
 |---|---|---|
@@ -255,7 +255,7 @@ These are components that are referenced across cells but are not crates. They a
 | [006](../docs/adr/006-license.md) | License | 🟡 proposed | Blocks `LICENSE.md` (currently marked `proposed`) and `Cargo.toml` examples |
 | [007](../docs/adr/007-canonical-language.md) | Canonical language | 🟡 proposed | Blocks translations, language policy in `STRUCTURE.md` §6 |
 | [008](../docs/adr/008-provider-integration-external.md) | Provider integration is external | ✅ accepted | Reclassified `L2-ingest` as external tool |
-| [012](../docs/adr/012-plugins.md) | Modules: The Brick Contract | 🟡 proposed | Defines the module sheet, conflicts, narrative, cause traces, debug UI module view |
+| [012](../docs/adr/012-plugins.md) | Plugins: The Brick Contract | 🟡 proposed | Defines the plugin sheet, conflicts, narrative, cause traces, debug UI plugin view |
 | [013](../docs/adr/013-worlds.md) | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | Defines LOD, manifest, local determinism; supersedes pillar 1 |
 
 Open ADRs: **005, 006, 007, 012, 013** (5).
