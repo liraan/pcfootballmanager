@@ -1,6 +1,6 @@
 ---
 title: "Module 00 — Foundations"
-version: "1.2"
+version: "1.3"
 status: "ratified"
 last_updated: "2026-10-25"
 supersedes: "Prompt Master v7 (archived)"
@@ -243,6 +243,7 @@ To keep scope honest, these are **not** in the core, and most are not in v1.0:
 - **Decisions:** [`../docs/adr/`](../docs/adr/) — every open question, every resolved one
 - **Structure:** [`../STRUCTURE.md`](../STRUCTURE.md) — the rules of the repo
 - **Glossary:** [`../docs/GLOSSARY.md`](../docs/GLOSSARY.md) — the terms used across the spec
+- **Crate naming:** crates use the `pcfm-` prefix (`pcfm-core`, `pcfm-hidden`, `pcfm-match`, ...). The historical `fmr-` prefix is deprecated. See `STRUCTURE.md` §3.
 
 ---
 
