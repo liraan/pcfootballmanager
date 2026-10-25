@@ -37,7 +37,7 @@ The rule: **if the match engine does not need it, it is not here.**
 
 - Depends on `00-foundations` and `L0.01` (for ID generation)
 - Used by `L0.04`, `L0.05`, `L0.07`, `L0.08`, `L0.09`
-- The **full** `Player` entity lives in `L1-roster/01-player-attributes.md`. L0 has a **projection** of it.
+- The **full** `Player` entity lives in `L1-roster/01-player-attributes.md` *(planned — the L1-roster directory does not exist yet)*. L0 has a **projection** of it.
 - The latent attributes of a player live in `fmr-hidden`, indexed by `player_id`. They are **not** part of the public `Player` struct. See [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md).
 
 ## 2. Specification
@@ -147,7 +147,7 @@ pub struct Match {
 
 ### 3.1 ID types
 
-All IDs are generational (see `L0.01` and `L3-quality`). At L0:
+All IDs are generational (see `L0.01` and `L3-quality` *(planned)*). At L0:
 
 ```rust
 pub type PlayerId = EntityId<PlayerTag>;
@@ -214,4 +214,4 @@ The match engine holds `&mut GroundTruth` in its context (see [`04-match-engine.
 - [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — `resolve_*` API, no latent fields
 - [`00-overview.md`](00-overview.md) — L0 cell map
 - [`04-match-engine.md`](04-match-engine.md) — consumer
-- [`../L1-roster/01-player-attributes.md`](../L1-roster/01-player-attributes.md) — full Player (stub)
+- `../L1-roster/01-player-attributes.md` — full Player *(planned — the L1-roster directory does not exist yet)*
