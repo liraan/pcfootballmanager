@@ -11,6 +11,11 @@ referenced_by: ["L1-season", "L1-roster", "L1-world", "L2-tactics", "L2-psyche"]
 conforms_to: "00-foundations (v1.0)"
 ---
 
+<!--
+  MAINTAINER NOTE: this is the "front door" of L0. If you change the cell list
+  or the dependency rules, update this file AND _index.md. They must agree.
+-->
+
 # L0 — Match (overview)
 
 This is the **core** of the whole project. Everything else expands it. If L0 does not work, nothing else matters.
@@ -64,6 +69,11 @@ At the end of L0, you can:
 7. Read why each event happened (cause trace)
 
 If any of those seven fails, L0 is not done.
+
+<!--
+  MAINTAINER NOTE: the seven-point checklist is the acceptance test for L0 as a
+  whole. If you add a cell to L0, check that all seven still hold.
+-->
 
 ---
 
