@@ -7,8 +7,9 @@ members = [
     "crates/pcfm-model",
     "crates/pcfm-hidden",
     "crates/pcfm-stats",
+    "crates/pcfm-match",
 ]
-default-members = ["crates/pcfm-core", "crates/pcfm-model", "crates/pcfm-hidden", "crates/pcfm-stats"]
+default-members = ["crates/pcfm-core", "crates/pcfm-model", "crates/pcfm-hidden", "crates/pcfm-stats", "crates/pcfm-match"]
 
 [workspace.package]
 version = "0.1.0"
@@ -26,6 +27,7 @@ pcfm-core = { path = "crates/pcfm-core", version = "0.1.0" }
 pcfm-model = { path = "crates/pcfm-model", version = "0.1.0" }
 pcfm-hidden = { path = "crates/pcfm-hidden", version = "0.1.0" }
 pcfm-stats = { path = "crates/pcfm-stats", version = "0.1.0" }
+pcfm-match = { path = "crates/pcfm-match", version = "0.1.0" }
 # RNG
 rand_chacha = "0.9"
 rand_core = "0.9"

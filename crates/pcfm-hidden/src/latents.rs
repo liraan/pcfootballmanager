@@ -2,14 +2,10 @@
 //!
 //! These are the values that must **never** leave `pcfm-hidden`.
 
+use pcfm_core::rng::next_unit;
 use rand_chacha::ChaCha20Rng;
 
-use crate::noise::next_unit;
-
 /// Latent attributes of a player.
-///
-/// All values are in [0, 1]. They are never exposed. They are used only
-/// inside `resolve_*` to compute outcomes.
 #[derive(Debug, Clone, Copy)]
 pub struct PlayerLatents {
     pub finishing: f32,

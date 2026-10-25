@@ -1,37 +1,13 @@
 //! RNG — deterministic, isolated, named random streams.
 //!
 //! See `modules/L0-match/01-rng.md` for the full specification.
-//!
-//! # Design
-//!
-//! Every stream is identified by a name and derived from
-//! `(world_seed, stream_name)`. Two cells never share a stream. Adding a
-//! new cell with a new stream never shifts the results of existing streams.
-//!
-//! # Algorithm
-//!
-//! `ChaCha20Rng` from the `rand_chacha` crate. Reproducible across platforms
-//! and architectures, cryptographically strong, well-audited.
-//!
-//! # Seed derivation
-//!
-//! `stream_seed = blake3(world_seed.to_le_bytes() || stream_name.as_bytes())`
-//!
-//! Using a cryptographic hash ensures that changing `world_seed` changes all
-//! streams, and that adding a new stream does not change existing streams.
 
 use std::collections::BTreeMap;
 
 use rand_chacha::ChaCha20Rng;
-use rand_core::SeedableRng;
+use rand_core::{RngCore, SeedableRng};
 
 /// A named random stream.
-///
-/// The name is the isolation boundary: two cells with different names get
-/// different streams, and adding a new stream never shifts existing ones.
-///
-/// See `modules/L0-match/01-rng.md` §2.3 for the naming convention
-/// (`{domain}:{scope}:{purpose}`).
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct StreamName(String);
 
@@ -74,13 +50,6 @@ pub enum RngError {
 }
 
 /// A registry of named random streams, all derived from a single `world_seed`.
-///
-/// See `modules/L0-match/01-rng.md` §2.2.
-///
-/// # Determinism
-///
-/// Two `RngRegistry` with the same `world_seed` and the same `StreamName`
-/// return streams that produce the same sequence of bytes.
 pub struct RngRegistry {
     world_seed: u64,
     streams: BTreeMap<StreamName, ChaCha20Rng>,
@@ -97,13 +66,6 @@ impl RngRegistry {
     }
 
     /// Returns the stream with the given name, creating it if it does not exist.
-    ///
-    /// The stream is deterministic: two `RngRegistry` with the same
-    /// `world_seed` and the same `name` will return streams that produce the
-    /// same sequence.
-    ///
-    /// Calling `stream()` multiple times with the same name is idempotent:
-    /// the same stream is returned, and it continues from where it left off.
     pub fn stream(&mut self, name: &StreamName) -> &mut ChaCha20Rng {
         let world_seed = self.world_seed;
         self.streams
@@ -112,10 +74,16 @@ impl RngRegistry {
     }
 }
 
-/// Derives a 32-byte seed from `(world_seed, stream_name)`.
+/// Returns a uniform random number in `[0, 1)` from `rng`.
 ///
-/// Uses BLAKE3, a cryptographic hash. The result is 32 bytes, which is the
-/// seed size expected by `ChaCha20Rng::from_seed`.
+/// The `u32 -> f32` cast is intentional and its precision loss is irrelevant
+/// in this context (a random value in `[0, 1)`).
+#[allow(clippy::cast_precision_loss)]
+#[must_use]
+pub fn next_unit(rng: &mut ChaCha20Rng) -> f32 {
+    (rng.next_u32() as f32) / (u32::MAX as f32)
+}
+
 fn derive_seed(world_seed: u64, name: &StreamName) -> [u8; 32] {
     let mut hasher = blake3::Hasher::new();
     hasher.update(&world_seed.to_le_bytes());
@@ -126,9 +94,7 @@ fn derive_seed(world_seed: u64, name: &StreamName) -> [u8; 32] {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rand_core::RngCore;
 
-    /// Reads `n` bytes from the given RNG.
     fn first_n_bytes(rng: &mut ChaCha20Rng, n: usize) -> Vec<u8> {
         let mut buf = vec![0_u8; n];
         rng.fill_bytes(&mut buf);
@@ -176,10 +142,8 @@ mod tests {
     #[test]
     fn adding_a_stream_does_not_shift_others() {
         let name = StreamName::new("test").unwrap();
-        // Registry A: only "test".
         let mut a = RngRegistry::new(42);
         let seq_a = first_n_bytes(a.stream(&name), 100);
-        // Registry B: "other" first, then "test".
         let mut b = RngRegistry::new(42);
         let other = StreamName::new("other").unwrap();
         let _ = first_n_bytes(b.stream(&other), 50);
@@ -197,5 +161,16 @@ mod tests {
         let _ = first_n_bytes(r2.stream(&name), 10);
         let seq_2 = first_n_bytes(r2.stream(&name), 100);
         assert_eq!(seq_1, seq_2);
+    }
+
+    #[test]
+    fn next_unit_is_in_range() {
+        let mut r = RngRegistry::new(42);
+        let name = StreamName::new("test").unwrap();
+        let rng = r.stream(&name);
+        for _ in 0..1000 {
+            let v = next_unit(rng);
+            assert!((0.0..1.0).contains(&v));
+        }
     }
 }

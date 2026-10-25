@@ -1,0 +1,281 @@
+//! The in-progress state of a match.
+//!
+//! `MatchState` is mutated by the tick loop. At the end of the match, it
+//! produces a `MatchResult` via `finish`.
+
+use pcfm_core::ids::{EventId, PlayerId};
+use pcfm_core::rng::StreamName;
+use pcfm_core::time::GameInstant;
+use pcfm_model::CauseTrace;
+use pcfm_stats::{EventChain, EventType, MatchEvent};
+
+use crate::context::MatchContext;
+use crate::result::{MatchResult, MatchStatistics, Score};
+
+/// Which team has the ball.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum Possession {
+    Home,
+    Away,
+}
+
+/// The in-progress state of a match.
+pub struct MatchState {
+    score: Score,
+    possession: Possession,
+    home_possession_ticks: u64,
+    away_possession_ticks: u64,
+    shots: (u16, u16),
+    xg: (f32, f32),
+    next_event_slot: u32,
+    // Stream names are built once and reused. They are deterministic by
+    // construction (literal non-empty strings) and do not change during a
+    // match.
+    actions_stream: StreamName,
+    action_kind_stream: StreamName,
+    player_pick_stream: StreamName,
+}
+
+impl MatchState {
+    /// Creates the initial state: kickoff, home possession.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the literal stream names used internally are empty. They
+    /// are compile-time constants (`"match:actions"`, `"match:action_kind"`,
+    /// `"match:player_pick"`), so this panic is unreachable in practice.
+    #[must_use]
+    pub fn new() -> Self {
+        Self {
+            score: Score { home: 0, away: 0 },
+            possession: Possession::Home,
+            home_possession_ticks: 0,
+            away_possession_ticks: 0,
+            shots: (0, 0),
+            xg: (0.0, 0.0),
+            next_event_slot: 0,
+            actions_stream: StreamName::new("match:actions")
+                .expect("literal stream name is non-empty"),
+            action_kind_stream: StreamName::new("match:action_kind")
+                .expect("literal stream name is non-empty"),
+            player_pick_stream: StreamName::new("match:player_pick")
+                .expect("literal stream name is non-empty"),
+        }
+    }
+
+    /// Advances the state by one tick.
+    #[allow(clippy::too_many_lines)]
+    pub fn tick(&mut self, tick: u64, ctx: &mut MatchContext<'_>) {
+        match self.possession {
+            Possession::Home => self.home_possession_ticks += 1,
+            Possession::Away => self.away_possession_ticks += 1,
+        }
+
+        let action_roll = pcfm_core::rng::next_unit(ctx.rng.stream(&self.actions_stream));
+        if action_roll >= ctx.config.action_probability {
+            return;
+        }
+
+        let (attacker, defender) = self.pick_players(ctx);
+
+        let action_kind_roll = pcfm_core::rng::next_unit(ctx.rng.stream(&self.action_kind_stream));
+
+        if action_kind_roll < 0.6 {
+            let ctx_pass = pcfm_hidden::PassContext { passer: attacker };
+            let outcome = ctx.hidden.resolve_pass(&ctx_pass);
+            if !outcome.complete {
+                self.flip_possession();
+            }
+        } else if action_kind_roll < 0.85 {
+            let ctx_shot = pcfm_hidden::ShotContext { shooter: attacker };
+            let outcome = ctx.hidden.resolve_shot(&ctx_shot);
+            self.emit_event(
+                ctx,
+                tick,
+                attacker,
+                EventType::Shot,
+                serde_json::json!({ "xg_value": outcome.xg_value, "goal": outcome.goal }),
+                outcome.cause.clone(),
+            );
+            match self.possession {
+                Possession::Home => {
+                    self.shots.0 += 1;
+                    self.xg.0 += outcome.xg_value;
+                }
+                Possession::Away => {
+                    self.shots.1 += 1;
+                    self.xg.1 += outcome.xg_value;
+                }
+            }
+            if outcome.goal {
+                match self.possession {
+                    Possession::Home => self.score.home += 1,
+                    Possession::Away => self.score.away += 1,
+                }
+                self.emit_event(
+                    ctx,
+                    tick,
+                    attacker,
+                    EventType::Goal,
+                    serde_json::json!({ "xg_value": outcome.xg_value }),
+                    outcome.cause,
+                );
+            }
+            self.flip_possession();
+        } else if action_kind_roll < 0.97 {
+            let ctx_duel = pcfm_hidden::DuelContext {
+                attacker,
+                defender,
+                duel_type: pcfm_hidden::DuelType::Ground,
+            };
+            let outcome = ctx.hidden.resolve_duel(&ctx_duel);
+            self.emit_event(
+                ctx,
+                tick,
+                attacker,
+                EventType::Duel,
+                serde_json::json!({ "winner_slot": outcome.winner.slot() }),
+                outcome.cause,
+            );
+            if outcome.winner == defender {
+                self.flip_possession();
+            }
+        } else {
+            let ctx_duel = pcfm_hidden::DuelContext {
+                attacker,
+                defender,
+                duel_type: pcfm_hidden::DuelType::Ground,
+            };
+            let outcome = ctx.hidden.resolve_duel(&ctx_duel);
+            self.emit_event(
+                ctx,
+                tick,
+                defender,
+                EventType::Foul,
+                serde_json::json!({}),
+                outcome.cause,
+            );
+            self.flip_possession();
+        }
+    }
+
+    /// Produces the final result.
+    #[must_use]
+    #[allow(clippy::cast_precision_loss)]
+    pub fn finish(&self, chain: EventChain) -> MatchResult {
+        let total = self.home_possession_ticks + self.away_possession_ticks;
+        let possession = if total == 0 {
+            (0.5, 0.5)
+        } else {
+            let home = (self.home_possession_ticks as f32) / (total as f32);
+            (home, 1.0 - home)
+        };
+
+        let state_hash = chain.chain_hash();
+
+        MatchResult {
+            score: self.score,
+            events: chain,
+            stats: MatchStatistics {
+                possession,
+                shots: self.shots,
+                xg: self.xg,
+                goals: (self.score.home, self.score.away),
+            },
+            state_hash,
+            narrative: Vec::new(),
+        }
+    }
+
+    #[allow(
+        clippy::cast_possible_truncation,
+        clippy::cast_sign_loss,
+        clippy::cast_precision_loss
+    )]
+    fn pick_players(&self, ctx: &mut MatchContext<'_>) -> (PlayerId, PlayerId) {
+        let (attacker_squad, defender_squad) = match self.possession {
+            Possession::Home => (&ctx.match_.home, &ctx.match_.away),
+            Possession::Away => (&ctx.match_.away, &ctx.match_.home),
+        };
+        let roll = pcfm_core::rng::next_unit(ctx.rng.stream(&self.player_pick_stream));
+        let idx_attacker = ((roll * attacker_squad.players.len() as f32) as usize)
+            .min(attacker_squad.players.len() - 1);
+        let idx_defender = ((roll * defender_squad.players.len() as f32) as usize)
+            .min(defender_squad.players.len() - 1);
+        (
+            attacker_squad.players[idx_attacker].id,
+            defender_squad.players[idx_defender].id,
+        )
+    }
+
+    const fn flip_possession(&mut self) {
+        self.possession = match self.possession {
+            Possession::Home => Possession::Away,
+            Possession::Away => Possession::Home,
+        };
+    }
+
+    fn emit_event(
+        &mut self,
+        ctx: &mut MatchContext<'_>,
+        tick: u64,
+        player_id: PlayerId,
+        event_type: EventType,
+        fields: serde_json::Value,
+        cause: CauseTrace,
+    ) {
+        let cause = if cause.primary_cause.is_empty() {
+            CauseTrace {
+                primary_cause: format!("{event_type:?}"),
+                contributing_factors: cause.contributing_factors,
+                explanation_template: cause.explanation_template,
+            }
+        } else {
+            cause
+        };
+
+        let ticks_per_sec = u64::from(ctx.config.ticks_per_second).max(1);
+        let total_secs = tick / ticks_per_sec;
+        let minute = clamp_u8(total_secs / 60, 120);
+        let second = clamp_u8(total_secs % 60, 60);
+        let minutes_played = clamp_u16(total_secs / 60);
+
+        let event = MatchEvent {
+            event_id: EventId::new(self.next_event_slot, 0),
+            match_id: ctx.match_.id,
+            player_id,
+            timestamp_minute: minute,
+            timestamp_second: second,
+            minutes_played_cumulative: minutes_played,
+            career_minutes_cumulative: u32::from(minutes_played),
+            season_label: None,
+            event_type,
+            fields,
+            observed_attrs_snapshot_hash: None,
+            cause_trace: cause,
+            created_at: GameInstant::from_raw(tick),
+        };
+        self.next_event_slot += 1;
+        let result = ctx.chain.try_append(event);
+        debug_assert!(
+            result.is_ok(),
+            "engine produced an invalid event: {result:?}"
+        );
+    }
+}
+
+/// Clamps a `u64` to a `u8`, with a hard upper bound of `max`.
+fn clamp_u8(value: u64, max: u8) -> u8 {
+    u8::try_from(value.min(u64::from(max))).unwrap_or(max)
+}
+
+/// Clamps a `u64` to a `u16`.
+fn clamp_u16(value: u64) -> u16 {
+    u16::try_from(value).unwrap_or(u16::MAX)
+}
+
+impl Default for MatchState {
+    fn default() -> Self {
+        Self::new()
+    }
+}

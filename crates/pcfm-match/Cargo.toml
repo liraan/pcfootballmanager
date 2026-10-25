@@ -1,0 +1,25 @@
+[package]
+name = "pcfm-match"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Match engine for PCFM (L0.04): orchestrator, tick loop, micro-decisions"
+documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules/L0-match/04-match-engine.md"
+
+[dependencies]
+pcfm-core.workspace = true
+pcfm-model.workspace = true
+pcfm-hidden.workspace = true
+pcfm-stats.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[lints]
+workspace = true

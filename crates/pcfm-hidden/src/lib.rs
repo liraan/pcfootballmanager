@@ -23,7 +23,6 @@ pub mod observation;
 pub mod outcome;
 
 mod latents;
-mod noise;
 
 pub use context::{
     DuelContext, DuelType, InjuryContext, PassContext, PressureContext, SaveContext,
@@ -46,7 +45,7 @@ use pcfm_core::rng::{RngRegistry, StreamName};
 use rand_chacha::ChaCha20Rng;
 
 use crate::latents::PlayerLatents;
-use crate::noise::next_unit;
+use pcfm_core::rng::next_unit;
 
 /// Plane A. The actual state of the world, never exposed.
 pub struct GroundTruth {
