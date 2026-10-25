@@ -87,45 +87,52 @@ The specification is not a flat list of 25 modules. It is organised in **four co
 
 ### Current state (as of 2026-10-25)
 
-The repository currently contains **documentation only**. The following directories and files exist:
+The repository contains **documentation and code**.
+
+**Documentation:**
 
 ```
-pc-football-manager/
+modules/
+├── 00-foundations.md
+├── _index.md
+└── L0-match/         (11 files, 00 → 10)
+docs/
+├── GLOSSARY.md
+├── MIGRATION-01-04.md
+├── MODULE_DEVELOPER_GUIDE.md
+├── adr/              (11 files, 000 → 013)
+├── legal/            (.gitkeep)
+└── calibration/      (.gitkeep)
+archive/
 ├── README.md
-├── STRUCTURE.md
-├── CONTRIBUTING.md
-├── LICENSE.md
-├── LICENSE-MIT
-├── LICENSE-APACHE
-├── LICENSE-ASSETS
-├── CHANGELOG.md
-├── CHANGELOG-SIM.md
-├── CHANGELOG-REGISTRY.md
-├── .gitignore
-├── .github/
-│   ├── PULL_REQUEST_TEMPLATE.md
-│   └── ISSUE_TEMPLATE/
-│       ├── bug_report.md
-│       └── module-revision.md
-├── modules/
-│   ├── 00-foundations.md
-│   ├── _index.md
-│   └── L0-match/         (11 files, 00 → 10)
-├── docs/
-│   ├── GLOSSARY.md
-│   ├── MIGRATION-01-04.md
-│   ├── adr/              (9 files, 000 → 008)
-│   ├── legal/            (.gitkeep)
-│   └── calibration/      (.gitkeep)
-├── archive/
-│   ├── README.md
-│   ├── prompts/          (.gitkeep)
-│   ├── doctrine/         (.gitkeep)
-│   └── legacy/           (.gitkeep)
-├── crates/               (.gitkeep)
-├── registry/             (.gitkeep)
-├── mods/                 (.gitkeep)
-└── data/                 (.gitkeep)
+├── prompts/          (.gitkeep)
+├── doctrine/         (.gitkeep)
+└── legacy/           (.gitkeep)
+```
+
+**Code (103 tests passing):**
+
+```
+crates/
+├── pcfm-core/        (RNG, event bus, IDs, hash, time)
+├── pcfm-model/       (minimal entities, CauseTrace)
+├── pcfm-hidden/      (Plane A: GroundTruth, resolve_*)
+├── pcfm-stats/       (Plane B: MatchEvent, EventChain)
+├── pcfm-match/       (engine, narrative, save)
+└── pcfm-debug/       (CLI debug tool)
+```
+
+**Root files:**
+
+```
+README.md
+STRUCTURE.md
+CONTRIBUTING.md
+LICENSE.md, LICENSE-MIT, LICENSE-APACHE, LICENSE-ASSETS
+CHANGELOG.md, CHANGELOG-SIM.md, CHANGELOG-REGISTRY.md
+Cargo.toml, Cargo.lock, rust-toolchain.toml
+.gitignore, .cargo/config.toml
+.github/PULL_REQUEST_TEMPLATE.md, .github/ISSUE_TEMPLATE/
 ```
 
 ### Target state
@@ -159,9 +166,10 @@ pc-football-manager/
 │   ├── legal/
 │   ├── calibration/
 │   ├── GLOSSARY.md
-│   └── MIGRATION-01-04.md
+│   ├── MIGRATION-01-04.md
+│   └── MODULE_DEVELOPER_GUIDE.md
 ├── registry/                  # empty until code exists
-├── crates/                    # empty until code exists
+├── crates/                    # code (see current state)
 ├── mods/                      # empty until user packs exist
 └── data/                      # examples only, never real licensed data
 ```
@@ -194,7 +202,7 @@ When the project ships, this folder holds the dashboards that compare internal m
 
 ### `/crates`, `/registry`, `/mods`, `/data`
 
-Empty until code exists. **Rule:** `data/` contains *examples only*. Never real licensed data. If you need to test with real data, keep it outside the repo.
+`crates/` contains code (6 crates as of 2026-10-25). `registry/`, `mods/`, `data/` are empty until code or user packs exist. **Rule:** `data/` contains *examples only*. Never real licensed data. If you need to test with real data, keep it outside the repo.
 
 ---
 
@@ -311,8 +319,12 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 | 006 | License | 🟡 proposed | `LICENSE.md`, every `Cargo.toml` example |
 | 007 | Canonical language | 🟡 proposed | translations, language policy |
 | 008 | Provider integration is external | ✅ accepted | — (reclassified `L2-ingest` as external tool) |
+| 012 | Modules: The Brick Contract | 🟡 proposed | The module system (step 11+). Ratified when the framework implements it. |
+| 013 | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | The world system (step 11+). Supersedes pillar 1 of `00-foundations`. Ratified when the framework implements it. |
 
-**Open ADRs:** 005, 006, 007. **Accepted:** 001, 002, 003, 004, 008.
+**Open ADRs:** 005, 006, 007, 012, 013. **Accepted:** 001, 002, 003, 004, 008.
+
+**ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`012-013-reading-guide.md`](adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
 
 ---
 
@@ -382,6 +394,8 @@ This is not a restriction on moddability. It is a boundary between "modding the 
 - A pack that adds a new psychological axis: **requires a core PR** (the axis is in `L2-psyche`, and adding it changes the psyche model).
 
 The last two examples are not "forbidden to modders". They are "not doable through a pack alone". The modder writes the PR, the core team reviews it, and if accepted, the new event type or axis becomes part of the core.
+
+**Note on ADR-012 and ADR-013:** once ratified, the module system will allow a further form of extension, the **module**, which is a Rust crate that implements `MatchModule` and ships with a `sheet.toml`. See ADR-012 for the contract. The boundary above (content vs structure) is **unchanged**: a module is not a pack, and it requires a PR. A pack is a bundle of content, a module is a piece of code. Both are welcome, but they are different things.
 
 ## 10. What Does NOT Go in This Repo
 
