@@ -26,6 +26,7 @@
 
 mod args;
 mod demo;
+mod check;
 mod error;
 mod render;
 
@@ -80,6 +81,23 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut engine = TextMatchEngine::new();
     let result = engine.simulate(ctx);
+
+    if args.check {
+        let report = check::run(args.seed)?;
+        println!("=== HEALTH CHECK ===");
+        for p in &report.passed {
+            println!("  ✅ {p}");
+        }
+        for (name, reason) in &report.failed {
+            println!("  ❌ {name}: {reason}");
+        }
+        println!();
+        if report.is_ok() {
+            println!("  {}/{} checks passed", report.passed.len(), report.total());
+            return Ok(());
+        }
+        return Err("health check failed".into());
+    }
 
     if args.quiet {
         println!("{} - {}", result.score.home, result.score.away);

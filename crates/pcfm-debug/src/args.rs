@@ -18,6 +18,8 @@ pub struct Args {
     pub html: Option<String>,
     /// If true, print only the final score.
     pub quiet: bool,
+    /// If true, run the health check instead of simulating a match.
+    pub check: bool,
 }
 
 impl Default for Args {
@@ -27,6 +29,7 @@ impl Default for Args {
             json: false,
             html: None,
             quiet: false,
+            check: false,
         }
     }
 }
@@ -86,6 +89,7 @@ where
             "--help" | "-h" => return Err(ArgError::HelpRequested),
             "--json" => args.json = true,
             "--quiet" | "-q" => args.quiet = true,
+            "--check" => args.check = true,
             "--seed" => {
                 let v = iter
                     .next()
@@ -119,6 +123,7 @@ OPTIONS:
     --json             Output the match result as JSON
     --html <PATH>      Write a self-contained HTML file to PATH
     --quiet, -q        Print only the final score
+    --check            Run the health check instead of simulating a match
     --help, -h         Print this help
 ";
 
