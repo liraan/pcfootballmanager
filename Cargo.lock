@@ -101,6 +101,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "pcfm-debug"
+version = "0.1.0"
+dependencies = [
+ "pcfm-core",
+ "pcfm-hidden",
+ "pcfm-match",
+ "pcfm-model",
+ "pcfm-stats",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
 name = "pcfm-hidden"
 version = "0.1.0"
 dependencies = [

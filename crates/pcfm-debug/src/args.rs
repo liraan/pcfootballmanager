@@ -1,0 +1,194 @@
+//! CLI argument parsing.
+//!
+//! No external dependency: the CLI has four flags, and a parser in 100 lines
+//! is clearer than a dependency. `clap` is deliberately avoided for now; if
+//! the CLI grows, it will be adopted with an ADR.
+
+use std::error::Error;
+use std::fmt;
+
+/// The parsed command-line options.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Args {
+    /// The seed for the match. Default: 42.
+    pub seed: u64,
+    /// If true, output the match result as JSON instead of text.
+    pub json: bool,
+    /// If `Some(path)`, write a self-contained HTML file to that path.
+    pub html: Option<String>,
+    /// If true, print only the final score.
+    pub quiet: bool,
+}
+
+impl Default for Args {
+    fn default() -> Self {
+        Self {
+            seed: 42,
+            json: false,
+            html: None,
+            quiet: false,
+        }
+    }
+}
+
+/// Errors that can occur while parsing arguments.
+#[derive(Debug)]
+pub enum ArgError {
+    /// Unknown flag.
+    Unknown(String),
+    /// Missing value for a flag that requires one.
+    MissingValue(String),
+    /// Invalid value for a flag.
+    InvalidValue {
+        /// The flag name.
+        flag: String,
+        /// The invalid value.
+        value: String,
+    },
+    /// `--help` was requested.
+    HelpRequested,
+}
+
+impl fmt::Display for ArgError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Unknown(s) => write!(f, "unknown argument: {s}"),
+            Self::MissingValue(s) => write!(f, "missing value for {s}"),
+            Self::InvalidValue { flag, value } => {
+                write!(f, "invalid value for {flag}: {value}")
+            }
+            Self::HelpRequested => write!(f, "help requested"),
+        }
+    }
+}
+
+impl Error for ArgError {}
+
+/// Parses command-line arguments.
+///
+/// # Errors
+///
+/// Returns [`ArgError`] if a flag is unknown, a value is missing, or a value
+/// is invalid.
+pub fn parse<I, S>(iter: I) -> Result<Args, ArgError>
+where
+    I: IntoIterator<Item = S>,
+    S: Into<String>,
+{
+    let mut args = Args::default();
+    let mut iter = iter.into_iter().map(Into::into);
+
+    // The first item is the binary name. Skip it.
+    let _ = iter.next();
+
+    while let Some(arg) = iter.next() {
+        match arg.as_str() {
+            "--help" | "-h" => return Err(ArgError::HelpRequested),
+            "--json" => args.json = true,
+            "--quiet" | "-q" => args.quiet = true,
+            "--seed" => {
+                let v = iter
+                    .next()
+                    .ok_or_else(|| ArgError::MissingValue(arg.clone()))?;
+                args.seed = v.parse().map_err(|_| ArgError::InvalidValue {
+                    flag: arg,
+                    value: v,
+                })?;
+            }
+            "--html" => {
+                let v = iter
+                    .next()
+                    .ok_or_else(|| ArgError::MissingValue(arg.clone()))?;
+                args.html = Some(v);
+            }
+            other => return Err(ArgError::Unknown(other.to_string())),
+        }
+    }
+    Ok(args)
+}
+
+/// The help text.
+pub const HELP: &str = "\
+pcfm-debug — simulate a PCFM match
+
+USAGE:
+    pcfm-debug [OPTIONS]
+
+OPTIONS:
+    --seed <U64>       Seed for the match (default: 42)
+    --json             Output the match result as JSON
+    --html <PATH>      Write a self-contained HTML file to PATH
+    --quiet, -q        Print only the final score
+    --help, -h         Print this help
+";
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn argv(items: &[&str]) -> Vec<String> {
+        std::iter::once("pcfm-debug")
+            .chain(items.iter().copied())
+            .map(String::from)
+            .collect()
+    }
+
+    #[test]
+    fn empty_args_gives_default() {
+        let a = parse(argv(&[])).unwrap();
+        assert_eq!(a, Args::default());
+    }
+
+    #[test]
+    fn seed_is_parsed() {
+        let a = parse(argv(&["--seed", "123"])).unwrap();
+        assert_eq!(a.seed, 123);
+    }
+
+    #[test]
+    fn json_flag_is_set() {
+        let a = parse(argv(&["--json"])).unwrap();
+        assert!(a.json);
+    }
+
+    #[test]
+    fn html_path_is_set() {
+        let a = parse(argv(&["--html", "out/match.html"])).unwrap();
+        assert_eq!(a.html.as_deref(), Some("out/match.html"));
+    }
+
+    #[test]
+    fn quiet_flag_is_set() {
+        let a = parse(argv(&["--quiet"])).unwrap();
+        assert!(a.quiet);
+    }
+
+    #[test]
+    fn unknown_flag_is_rejected() {
+        assert!(matches!(parse(argv(&["--foo"])), Err(ArgError::Unknown(_))));
+    }
+
+    #[test]
+    fn missing_value_is_rejected() {
+        assert!(matches!(
+            parse(argv(&["--seed"])),
+            Err(ArgError::MissingValue(_))
+        ));
+    }
+
+    #[test]
+    fn invalid_seed_is_rejected() {
+        assert!(matches!(
+            parse(argv(&["--seed", "abc"])),
+            Err(ArgError::InvalidValue { .. })
+        ));
+    }
+
+    #[test]
+    fn help_is_requested() {
+        assert!(matches!(
+            parse(argv(&["--help"])),
+            Err(ArgError::HelpRequested)
+        ));
+    }
+}

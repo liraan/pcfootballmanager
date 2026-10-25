@@ -31,7 +31,7 @@ use pcfm_stats::{EventChain, EventType, MatchEvent};
 ///
 /// Renderers use this to decide how prominently to display the entry
 /// (e.g. bold for `High`, normal for `Low`, an alert for `Critical`).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize)]
 pub enum Importance {
     /// Low importance (e.g. a generic pass).
     Low,
@@ -44,7 +44,7 @@ pub enum Importance {
 }
 
 /// A single narrative entry.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize)]
 pub struct NarrativeEntry {
     /// The minute of the match (0–120).
     pub minute: u8,
