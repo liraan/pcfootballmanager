@@ -1,0 +1,24 @@
+[package]
+name = "pcfm-stats"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Plane B (Observation) for PCFM: MatchEvent, EventChain, append-only hash chain"
+documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules/L0-match/05-match-events.md"
+
+[dependencies]
+pcfm-core.workspace = true
+pcfm-model.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+blake3.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[lints]
+workspace = true

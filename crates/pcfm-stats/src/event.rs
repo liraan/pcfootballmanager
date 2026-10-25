@@ -1,0 +1,183 @@
+//! `MatchEvent` — the atomic unit of Plane B.
+//!
+//! See `modules/L0-match/05-match-events.md` for the full specification.
+//!
+//! # Append-only
+//!
+//! Events are **never** modified or deleted. The `EventChain` (in `chain.rs`)
+//! enforces this at the storage level: there is no `update` or `delete`.
+
+use pcfm_core::hash::Hash;
+use pcfm_core::ids::{EventId, MatchId, PlayerId};
+use pcfm_core::time::GameInstant;
+use pcfm_model::CauseTrace;
+use serde::{Deserialize, Serialize};
+
+use crate::error::StatsError;
+
+/// The type of a `MatchEvent`.
+///
+/// The set is **closed at L0**. It will be extended via `L3-registry` in the
+/// future (pack-provided event kinds).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum EventType {
+    /// A shot.
+    Shot,
+    /// A pass.
+    Pass,
+    /// A cross.
+    Cross,
+    /// A dribble.
+    Dribble,
+    /// A key pass.
+    KeyPass,
+    /// A tackle.
+    Tackle,
+    /// An interception.
+    Interception,
+    /// A clearance.
+    Clearance,
+    /// A block.
+    Block,
+    /// A save.
+    Save,
+    /// A duel.
+    Duel,
+    /// A foul.
+    Foul,
+    /// A card.
+    Card,
+    /// A corner.
+    Corner,
+    /// A free kick.
+    FreeKick,
+    /// A penalty.
+    Penalty,
+    /// A substitution.
+    Substitution,
+    /// An injury.
+    Injury,
+    /// A goal.
+    Goal,
+    /// An assist.
+    Assist,
+    /// A progressive carry.
+    ProgressiveCarry,
+    /// A progressive pass.
+    ProgressivePass,
+    /// A pressure event.
+    Pressure,
+    /// A random in-match event.
+    RandomEvent,
+    /// Half-time.
+    HalfTime,
+    /// Full-time.
+    FullTime,
+    /// Match abandoned.
+    MatchAbandoned,
+}
+
+/// A `MatchEvent` — the atomic unit of Plane B.
+///
+/// The event is **append-only**: once created, it is never modified or
+/// deleted. See `modules/L0-match/05-match-events.md` §2.4.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MatchEvent {
+    /// The unique identifier of the event (generational).
+    pub event_id: EventId,
+    /// The match this event belongs to.
+    pub match_id: MatchId,
+    /// The player who performed the action.
+    pub player_id: PlayerId,
+    /// The minute of the match, 0–120.
+    pub timestamp_minute: u8,
+    /// The second of the match, 0–59.
+    pub timestamp_second: u8,
+    /// The minutes played by this player, in this match, up to this event.
+    pub minutes_played_cumulative: u16,
+    /// The minutes played by this player, in their career, up to this event.
+    pub career_minutes_cumulative: u32,
+    /// The season label, e.g. `"2026-27"`, or `None` at L0.
+    pub season_label: Option<String>,
+    /// The type of event.
+    pub event_type: EventType,
+    /// Variant-dependent fields.
+    pub fields: serde_json::Value,
+    /// The hash of the observed attributes snapshot at the time of the event.
+    pub observed_attrs_snapshot_hash: Option<Hash>,
+    /// The structured explanation of why the event happened.
+    pub cause_trace: CauseTrace,
+    /// When the event was created (simulation time).
+    pub created_at: GameInstant,
+}
+
+impl MatchEvent {
+    /// Validates the event.
+    ///
+    /// # Errors
+    ///
+    /// - [`StatsError::EmptyCauseTrace`] if `cause_trace.primary_cause` is empty.
+    /// - [`StatsError::InvalidMinute`] if `timestamp_minute > 120`.
+    pub fn validate(&self) -> Result<(), StatsError> {
+        if self.cause_trace.primary_cause.is_empty() {
+            return Err(StatsError::EmptyCauseTrace);
+        }
+        if self.timestamp_minute > 120 {
+            return Err(StatsError::InvalidMinute(self.timestamp_minute));
+        }
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use pcfm_core::ids::{EventId, MatchId, PlayerId};
+    use pcfm_core::time::GameInstant;
+    use pcfm_model::Factor;
+
+    fn valid_event() -> MatchEvent {
+        MatchEvent {
+            event_id: EventId::new(1, 0),
+            match_id: MatchId::new(1, 0),
+            player_id: PlayerId::new(1, 0),
+            timestamp_minute: 45,
+            timestamp_second: 30,
+            minutes_played_cumulative: 45,
+            career_minutes_cumulative: 450,
+            season_label: Some("2026-27".into()),
+            event_type: EventType::Goal,
+            fields: serde_json::json!({ "xg_value": 0.35 }),
+            observed_attrs_snapshot_hash: None,
+            cause_trace: CauseTrace {
+                primary_cause: "shot".into(),
+                contributing_factors: vec![Factor {
+                    name: "finishing".into(),
+                    value: 0.7,
+                    weight: 1.0,
+                }],
+                explanation_template: "explanation.shot".into(),
+            },
+            created_at: GameInstant::from_raw(100),
+        }
+    }
+
+    #[test]
+    fn valid_event_is_accepted() {
+        assert!(valid_event().validate().is_ok());
+    }
+
+    #[test]
+    fn empty_cause_is_rejected() {
+        let mut ev = valid_event();
+        ev.cause_trace.primary_cause = String::new();
+        assert!(matches!(ev.validate(), Err(StatsError::EmptyCauseTrace)));
+    }
+
+    #[test]
+    fn invalid_minute_is_rejected() {
+        let mut ev = valid_event();
+        ev.timestamp_minute = 130;
+        assert!(matches!(ev.validate(), Err(StatsError::InvalidMinute(130))));
+    }
+}

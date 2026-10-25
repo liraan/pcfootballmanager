@@ -1,20 +1,24 @@
 //! `pcfm-core` — core infrastructure for PCFM.
 //!
 //! This crate is the foundation of every other crate in PCFM. It contains
-//! no game logic; only infrastructure: RNG, event bus, IDs, deterministic
-//! math.
+//! no game logic; only infrastructure: RNG, event bus, IDs, time, hash,
+//! deterministic math.
 //!
 //! # Modules
 //!
 //! - [`rng`] — deterministic, isolated, named random streams (L0.01)
 //! - [`event_bus`] — deterministic in-process event dispatch (L0.02)
 //! - [`ids`] — generational entity identifiers (L0.03 §3.1)
+//! - [`time`] — monotonic simulation clock
+//! - [`hash`] — 32-byte BLAKE3 digest
 
 #![deny(missing_docs)]
 
 pub mod event_bus;
+pub mod hash;
 pub mod ids;
 pub mod rng;
+pub mod time;
 
 /// Returns the version of `pcfm-core`, as declared in `Cargo.toml`.
 #[must_use]

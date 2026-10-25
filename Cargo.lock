@@ -124,6 +124,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "pcfm-stats"
+version = "0.1.0"
+dependencies = [
+ "blake3",
+ "pcfm-core",
+ "pcfm-model",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
 name = "ppv-lite86"
 version = "0.2.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"

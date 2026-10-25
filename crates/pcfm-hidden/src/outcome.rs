@@ -5,28 +5,7 @@
 //! observed factors, never raw latents.
 
 use pcfm_core::ids::PlayerId;
-
-/// A contributing factor to an outcome.
-#[derive(Debug, Clone)]
-pub struct Factor {
-    /// The name of the factor (observed).
-    pub name: String,
-    /// The value of the factor (observed).
-    pub value: f32,
-    /// The weight of the factor in the outcome.
-    pub weight: f32,
-}
-
-/// The cause of an outcome, for the `MatchEvent.cause_trace` field.
-#[derive(Debug, Clone)]
-pub struct CauseTrace {
-    /// The primary cause.
-    pub primary_cause: String,
-    /// The contributing factors.
-    pub contributing_factors: Vec<Factor>,
-    /// The template to localise for the UI.
-    pub explanation_template: String,
-}
+use pcfm_model::CauseTrace;
 
 /// The outcome of a duel.
 #[derive(Debug, Clone)]

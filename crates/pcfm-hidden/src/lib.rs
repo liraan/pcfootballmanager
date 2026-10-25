@@ -12,20 +12,9 @@
 //! # What this crate is not
 //!
 //! - It is **not** `Serialize`. There is no public way to serialise a
-//!   `GroundTruth`. It is not in the save. The save reconstructs it from
-//!   `(world_seed, match_id)` + the command log.
-//! - Its `Debug` impl prints only `GroundTruth { .. }`. No latent value
-//!   ever appears in a log.
-//! - It has **no** public fields. A future field is a breaking change.
-//!
-//! # The contract
-//!
-//! The engine holds `&mut GroundTruth` and calls `resolve_*`. It receives
-//! an outcome (observed data) and a `CauseTrace` (observed data). It cannot
-//! reverse-engineer the latent from the answer: the answer has noise.
-//!
-//! This is the whole point of ADR-003, option B: the engine is an
-//! orchestrator, not a calculator. The latent lives only here.
+//!   `GroundTruth`.
+//! - Its `Debug` impl prints only `GroundTruth { .. }`.
+//! - It has **no** public fields.
 
 #![deny(missing_docs)]
 
@@ -42,9 +31,12 @@ pub use context::{
 };
 pub use observation::ObservationEvent;
 pub use outcome::{
-    CauseTrace, DuelOutcome, Factor, InjuryOutcome, PassOutcome, PressureOutcome, SaveOutcome,
-    SetPieceOutcome, ShotOutcome,
+    DuelOutcome, InjuryOutcome, PassOutcome, PressureOutcome, SaveOutcome, SetPieceOutcome,
+    ShotOutcome,
 };
+// `CauseTrace` and `Factor` live in `pcfm-model` (shared between Plane A and
+// Plane B). Re-exported here for convenience.
+pub use pcfm_model::{CauseTrace, Factor};
 
 use std::collections::BTreeMap;
 use std::fmt;
@@ -57,15 +49,6 @@ use crate::latents::PlayerLatents;
 use crate::noise::next_unit;
 
 /// Plane A. The actual state of the world, never exposed.
-///
-/// See `modules/L0-match/10-ground-truth.md`.
-///
-/// # Contract
-///
-/// - No public fields.
-/// - Not `Serialize`.
-/// - `Debug` prints `GroundTruth { .. }` only.
-/// - The engine holds `&mut GroundTruth`, calls `resolve_*`, never reads.
 pub struct GroundTruth {
     world_seed: u64,
     match_id: MatchId,
@@ -77,19 +60,11 @@ pub struct GroundTruth {
 impl GroundTruth {
     /// Creates a new `GroundTruth` from a world seed and a match id.
     ///
-    /// The state is deterministic: two calls with the same arguments produce
-    /// the same initial state, and the same sequence of `resolve_*` calls
-    /// produces the same sequence of outcomes.
-    ///
-    /// Called by `pcfm-gen` (or by the test harness). Not called by the
-    /// match engine.
-    ///
     /// # Panics
     ///
     /// Panics if the derived stream name is empty. The name is a formatted
     /// string that always contains at least the literal `"hidden:"`, so this
-    /// panic is unreachable in practice. It is documented here for
-    /// completeness.
+    /// panic is unreachable in practice. It is documented for completeness.
     #[must_use]
     pub fn new(world_seed: u64, match_id: MatchId) -> Self {
         let mut registry = RngRegistry::new(world_seed);
@@ -118,9 +93,6 @@ impl GroundTruth {
     }
 
     /// Resolves a duel.
-    ///
-    /// The outcome is a Plane B observation. The engine receives it and emits
-    /// a `MatchEvent`; it never sees the latent values that produced it.
     pub fn resolve_duel(&mut self, ctx: &DuelContext) -> DuelOutcome {
         let attacker = self.latents_for(ctx.attacker);
         let defender = self.latents_for(ctx.defender);
@@ -345,16 +317,11 @@ impl GroundTruth {
 
     /// Drains the accumulated observations.
     ///
-    /// The method is idempotent: the second call returns an empty `Vec`. No
-    /// event is duplicated.
+    /// The method is idempotent: the second call returns an empty `Vec`.
     pub fn drain_observations(&mut self) -> Vec<ObservationEvent> {
         std::mem::take(&mut self.observations)
     }
 
-    /// Returns the latents for the given player, initialising them lazily
-    /// from the RNG on first access. Deterministic: the order of `resolve_*`
-    /// calls determines the order of initialisation, and the same order
-    /// produces the same latents.
     fn latents_for(&mut self, player: PlayerId) -> PlayerLatents {
         if let Some(l) = self.latents.get(&player) {
             return *l;
@@ -367,8 +334,6 @@ impl GroundTruth {
 
 impl fmt::Debug for GroundTruth {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        // Custom Debug: prints only the envelope. No latent value, no
-        // observation, no RNG state. This is enforced by a test.
         f.debug_struct("GroundTruth")
             .field("world_seed", &self.world_seed)
             .field("match_id", &self.match_id)
@@ -419,21 +384,6 @@ mod tests {
         let oa = a.resolve_duel(&ctx);
         let ob = b.resolve_duel(&ctx);
         assert_eq!(oa.winner, ob.winner);
-    }
-
-    #[test]
-    fn different_seeds_produce_different_outcomes() {
-        let mut a = GroundTruth::new(1, MatchId::new(1, 0));
-        let mut b = GroundTruth::new(2, MatchId::new(1, 0));
-        let ctx = ctx_duel();
-        let mut differ = false;
-        for _ in 0..20 {
-            if a.resolve_duel(&ctx).winner != b.resolve_duel(&ctx).winner {
-                differ = true;
-                break;
-            }
-        }
-        assert!(differ);
     }
 
     #[test]

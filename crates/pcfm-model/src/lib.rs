@@ -18,6 +18,7 @@
 
 #![deny(missing_docs)]
 
+pub mod cause;
 pub mod error;
 pub mod match_;
 pub mod pitch;
@@ -25,6 +26,7 @@ pub mod player;
 pub mod referee;
 pub mod squad;
 
+pub use cause::{CauseTrace, Factor};
 pub use error::ModelError;
 pub use match_::{Match, MatchRules, MatchSeed};
 pub use pitch::{Pitch, Weather};
