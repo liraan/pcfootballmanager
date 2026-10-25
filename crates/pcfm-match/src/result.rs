@@ -3,6 +3,8 @@
 use pcfm_core::hash::Hash;
 use pcfm_stats::EventChain;
 
+use crate::narrative::NarrativeEntry;
+
 /// The score of a match.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct Score {
@@ -13,9 +15,6 @@ pub struct Score {
 }
 
 /// The statistics of a match.
-///
-/// For step 7, only the basic statistics are computed. The full bundle
-/// (heatmap, momentum, pass completion, PPDA) is filled in step 8.
 #[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub struct MatchStatistics {
     /// Possession, as `(home, away)`, sums to 1.0.
@@ -29,6 +28,11 @@ pub struct MatchStatistics {
 }
 
 /// The result of a match simulation.
+///
+/// The `narrative` field is **data**, not a rendered string. It is filled by
+/// the **renderer** (e.g. `TextMatchEngine`), not by `simulate_match`. A
+/// renderer that does not need narrative leaves it empty.
+#[derive(Debug, Clone)]
 pub struct MatchResult {
     /// The score.
     pub score: Score,
@@ -37,10 +41,7 @@ pub struct MatchResult {
     /// The statistics.
     pub stats: MatchStatistics,
     /// The state hash, equal to `events.chain_hash()`.
-    ///
-    /// Used by golden tests: two simulations with the same seed must
-    /// produce the same `state_hash`.
     pub state_hash: Hash,
-    /// The narrative, empty in step 7.
-    pub narrative: Vec<String>,
+    /// The narrative entries. Empty if no renderer has filled them.
+    pub narrative: Vec<NarrativeEntry>,
 }

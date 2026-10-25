@@ -1,22 +1,25 @@
 //! The `MatchEngine` trait and the text implementation.
 
 use crate::context::MatchContext;
+use crate::narrative::{NarrativeEntry, narrate};
+use crate::orchestrator::simulate_match;
 use crate::result::MatchResult;
-use crate::state::MatchState;
 
 /// The trait that every match engine must implement.
 ///
-/// The trait is an orchestrator: it receives a `MatchContext` (which
-/// contains `&mut GroundTruth`) and returns a `MatchResult`. It never reads
-/// a latent value; it calls `resolve_*` and interprets the outcome.
-///
-/// See `modules/L0-match/04-match-engine.md` §2.1.
+/// The trait is the **rendering** boundary: two implementations can share
+/// the simulation (via `crate::orchestrator::simulate_match`) and differ
+/// only in how they render the `MatchResult`.
 pub trait MatchEngine: Send + Sync {
     /// Simulates the match described by `ctx`, returning the result.
     fn simulate(&mut self, ctx: MatchContext<'_>) -> MatchResult;
 }
 
 /// The text implementation of the match engine.
+///
+/// A thin wrapper around `crate::orchestrator::simulate_match`. It runs the
+/// shared simulation, then fills `MatchResult.narrative` using
+/// `crate::narrative::narrate`.
 pub struct TextMatchEngine;
 
 impl TextMatchEngine {
@@ -35,17 +38,10 @@ impl Default for TextMatchEngine {
 
 impl MatchEngine for TextMatchEngine {
     fn simulate(&mut self, mut ctx: MatchContext<'_>) -> MatchResult {
-        let total_ticks = u64::from(ctx.config.duration_minutes)
-            .saturating_mul(u64::from(ctx.config.ticks_per_second))
-            .saturating_mul(60);
-
-        let mut state = MatchState::new();
-        for tick in 0..total_ticks {
-            state.tick(tick, &mut ctx);
-        }
-
-        let chain = std::mem::take(ctx.chain);
-        state.finish(chain)
+        let mut result = simulate_match(&mut ctx);
+        let narrative: Vec<NarrativeEntry> = narrate(ctx.match_, &result.events);
+        result.narrative = narrative;
+        result
     }
 }
 
@@ -128,11 +124,20 @@ mod tests {
     }
 
     #[test]
-    fn same_seed_same_score() {
+    fn same_seed_same_score_and_stats() {
         let a = simulate_once(42);
         let b = simulate_once(42);
         assert_eq!(a.score.home, b.score.home);
         assert_eq!(a.score.away, b.score.away);
+        assert_eq!(a.stats.shots, b.stats.shots);
+        assert_eq!(a.stats.goals, b.stats.goals);
+    }
+
+    #[test]
+    fn same_seed_same_events() {
+        let a = simulate_once(42);
+        let b = simulate_once(42);
+        assert_eq!(a.events.events(), b.events.events());
     }
 
     #[test]
@@ -173,18 +178,51 @@ mod tests {
 
     #[test]
     fn score_is_plausible() {
-        // Over 10 seeds, the average total goals must be in a sensible range.
         let mut total_goals = 0_u32;
         for seed in 0..10_u64 {
             let r = simulate_once(seed);
             total_goals += u32::from(r.score.home) + u32::from(r.score.away);
         }
-        // Average total goals per match should be in [0, 10]. Outside means
-        // the model is broken (0 = no goals ever, 10+ = absurd).
-        let avg = f64::from(total_goals) / 10.0;
+        #[allow(clippy::cast_precision_loss)]
+        let avg = (total_goals as f32) / 10.0;
         assert!(
             (0.0..=10.0).contains(&avg),
             "average total goals per match is {avg}, expected in [0, 10]"
         );
+    }
+
+    #[test]
+    fn text_engine_fills_narrative() {
+        let r = simulate_once(42);
+        assert_eq!(r.narrative.len(), r.events.len());
+    }
+
+    #[test]
+    fn simulate_match_alone_returns_empty_narrative() {
+        use crate::orchestrator::simulate_match;
+        let match_ = make_match();
+        let mut hidden = GroundTruth::new(42, match_.id);
+        let mut rng = RngRegistry::new(42);
+        let mut chain = EventChain::new();
+        let config = MatchConfig::default();
+        let mut ctx = MatchContext {
+            match_: &match_,
+            hidden: &mut hidden,
+            rng: &mut rng,
+            chain: &mut chain,
+            config,
+        };
+        let result = simulate_match(&mut ctx);
+        assert_eq!(result.narrative.len(), 0);
+    }
+
+    #[test]
+    fn simulation_is_shared_and_renderer_agnostic() {
+        let a = simulate_once(42);
+        let b = simulate_once(42);
+        assert_eq!(a.score, b.score);
+        assert_eq!(a.stats, b.stats);
+        assert_eq!(a.state_hash, b.state_hash);
+        assert_eq!(a.events.events(), b.events.events());
     }
 }
