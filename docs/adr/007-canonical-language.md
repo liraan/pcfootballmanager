@@ -1,6 +1,6 @@
 # ADR-007 — Canonical Language
 
-- **Status:** proposed
+- **Status:** accepted
 - **Date:** 2026-10-25
 - **Supersedes:** none
 - **Superseded by:** none
@@ -15,19 +15,24 @@ The repository currently mixes Italian and English:
 - The legacy files `01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md` are in Italian.
 - The archived `Prompt_Master_v5.md`, `v6.md`, `v7.md` are in Italian.
 
-This is not sustainable. Contributors do not know which language to use for new content, which version of a document is authoritative, or whether they should translate or write original prose. The `STRUCTURE.md` §5 already states "English is canonical, Italian is a translation", but this is a working assumption, not a ratified decision.
+This is not sustainable. Contributors do not know which language to use for new content, which version of a document is authoritative, or whether they should translate or write original prose.
+
+The `STRUCTURE.md` §5 already states "English is canonical, Italian is a translation", but this was a working assumption, not a ratified decision. This ADR ratifies it.
 
 ## Options considered
 
 ### Option A — English canonical, translations optional (RECOMMENDED)
+
 - **Pro:** matches the README and the new modules; international reach; single source of truth; Rust ecosystem is English-first.
 - **Con:** legacy Italian modules need translation; Italian contributors must write in a second language.
 
 ### Option B — Italian canonical, English as translation
+
 - **Pro:** honours the project's Italian roots ("anima PC Calcio"); easier for the original author.
 - **Con:** contradicts the README; limits the international community the project claims to want; Rust ecosystem and code identifiers are English anyway.
 
 ### Option C — Bilingual, both authoritative
+
 - **Pro:** maximum accessibility.
 - **Con:** two sources of truth drift; review cost doubles; ambiguity about which version wins.
 
@@ -59,4 +64,5 @@ This is not sustainable. Contributors do not know which language to use for new 
 The four Italian legacy modules (`01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md`) are translated to English as part of the migration described in `docs/MIGRATION-01-04.md`. Until translated, they carry a frontmatter field:
 
 ```yaml
-translation_status: "italian-only (pending ADR-007 ratification)"
+translation_status: "italian-only (pending translation; ADR-007 accepted)"
+```
