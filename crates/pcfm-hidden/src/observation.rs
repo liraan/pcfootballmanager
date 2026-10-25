@@ -1,0 +1,69 @@
+//! Observation events (Plane B).
+//!
+//! These are the only values that can leave `pcfm-hidden`. They are stripped
+//! of any latent value. The engine forwards them to `pcfm-stats`.
+
+use pcfm_core::ids::PlayerId;
+
+use crate::context::DuelType;
+
+/// A Plane B observation.
+///
+/// The engine calls `drain_observations` and forwards the events to
+/// `pcfm-stats`. The events carry no latent value.
+#[derive(Debug, Clone)]
+pub enum ObservationEvent {
+    /// A duel was resolved.
+    Duel {
+        /// The attacker.
+        attacker: PlayerId,
+        /// The defender.
+        defender: PlayerId,
+        /// The type of duel.
+        duel_type: DuelType,
+        /// The winner.
+        winner: PlayerId,
+    },
+    /// A shot was resolved.
+    Shot {
+        /// The shooter.
+        shooter: PlayerId,
+        /// Whether the shot resulted in a goal.
+        goal: bool,
+    },
+    /// A pass was resolved.
+    Pass {
+        /// The passer.
+        passer: PlayerId,
+        /// Whether the pass was completed.
+        complete: bool,
+    },
+    /// A pressure event was resolved.
+    Pressure {
+        /// The player under pressure.
+        player: PlayerId,
+        /// Whether the pressure succeeded.
+        success: bool,
+    },
+    /// An injury was resolved.
+    Injury {
+        /// The player at risk.
+        player: PlayerId,
+        /// Whether the player was injured.
+        injured: bool,
+    },
+    /// A save was resolved.
+    Save {
+        /// The goalkeeper.
+        goalkeeper: PlayerId,
+        /// Whether the save succeeded.
+        saved: bool,
+    },
+    /// A set piece was resolved.
+    SetPiece {
+        /// The taker.
+        taker: PlayerId,
+        /// Whether the set piece succeeded.
+        success: bool,
+    },
+}

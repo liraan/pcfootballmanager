@@ -5,8 +5,9 @@ resolver = "2"
 members = [
     "crates/pcfm-core",
     "crates/pcfm-model",
+    "crates/pcfm-hidden",
 ]
-default-members = ["crates/pcfm-core", "crates/pcfm-model"]
+default-members = ["crates/pcfm-core", "crates/pcfm-model", "crates/pcfm-hidden"]
 
 [workspace.package]
 version = "0.1.0"
@@ -21,6 +22,7 @@ documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules"
 [workspace.dependencies]
 # Internal
 pcfm-core = { path = "crates/pcfm-core", version = "0.1.0" }
+pcfm-model = { path = "crates/pcfm-model", version = "0.1.0" }
 # RNG
 rand_chacha = "0.9"
 rand_core = "0.9"
