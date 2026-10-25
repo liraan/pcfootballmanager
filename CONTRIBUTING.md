@@ -6,10 +6,10 @@ Thanks for wanting to help. This project is documentation-first, and **good docu
 
 ## Current state (as of 2026-10-25)
 
-- **Documentation only.** No code exists.
-- **L0 is fully specified** (10 cells). L1–L3 are planned.
-- **8 ADRs** exist: 3 accepted (001, 002, 004), 4 proposed (003, 005, 006, 007), 1 template (000).
-- **No `LICENSE.md` yet** — it will be created when ADR-006 is ratified. Until then, the license terms are described in the README and in ADR-006.
+- **Documentation only.** No code exists yet, but the L0 specification is complete and ratified. Code can begin.
+- **L0 is fully specified** (11 cells, all `ratified`). L1–L3 are planned.
+- **8 ADRs** exist: 4 accepted (001, 002, 003, 004), 3 proposed (005, 006, 007), 1 template (000).
+- **`LICENSE.md`** exists but is marked `proposed` pending ADR-006 ratification. The license terms are described in the file and in ADR-006.
 
 If you're new, read the files in the order below before opening a PR.
 
@@ -21,7 +21,8 @@ If you're new, read the files in the order below before opening a PR.
 2. [`modules/00-foundations.md`](modules/00-foundations.md) — the doctrine. **Non-negotiable.**
 3. [`STRUCTURE.md`](STRUCTURE.md) — how the repo works
 4. [`modules/_index.md`](modules/_index.md) — what exists, what's missing
-5. [`docs/adr/`](docs/adr/) — the decisions, including open ones
+5. [`docs/GLOSSARY.md`](docs/GLOSSARY.md) — the terms used across the spec
+6. [`docs/adr/`](docs/adr/) — the decisions, including open ones
 
 ---
 
@@ -86,10 +87,11 @@ Including in AI-drafted text. Especially in AI-drafted text. The AI disclosure i
    - Minor (`1.0 → 1.1`) for clarifications, typo fixes, added examples.
    - Major (`1.0 → 2.0`) for changes that affect downstream cells.
 2. **If major, write an ADR first.** The ADR explains why. It's referenced from the cell.
-3. **Archive the previous version** in `archive/` if the change is structural. (The `archive/` directory is planned; create it if it doesn't exist yet.)
+3. **Archive the previous version** in `archive/` if the change is structural.
 4. **Update `last_updated`.**
 5. **Update `referenced_by`** in downstream cells if the dependency changed.
 6. **Open a PR with one cell.**
+7. **If the change is a status transition** (e.g. `draft → ratified`), update both `modules/_index.md` and the overview cell of the level (`00-overview.md` for L0).
 
 ---
 
@@ -140,17 +142,21 @@ If an ADR is `proposed` and touches an area, **no code is written in that area u
 |---|---|---|---|
 | 001 | Language: Rust | ✅ accepted | — |
 | 002 | Project name and scope | ✅ accepted | — |
-| 003 | Plane A enforcement | 🟡 proposed | `L0.04`, `L0.08` |
+| 003 | Plane A enforcement | ✅ accepted | — (unblocked L0.04, L0.08, L0.10) |
 | 004 | Panic strategy at FFI | ✅ accepted | — |
 | 005 | Qt binding | 🟡 proposed | `L3-ui`, `fmr-bridge` |
-| 006 | License | 🟡 proposed | `LICENSE.md`, every `Cargo.toml` example |
-| 007 | Canonical language | 🟡 proposed | translations, language policy |
+| 006 | License | 🟡 proposed | `LICENSE.md` (currently marked `proposed`), `Cargo.toml` examples |
+| 007 | Canonical language | 🟡 proposed | translations, language policy in `STRUCTURE.md` §6 |
+
+**Open ADRs:** 005, 006, 007. **Accepted:** 001, 002, 003, 004.
 
 ---
 
-## Code (when it exists)
+## Code (now that L0 is ratified)
 
-Not yet. When it does:
+The L0 specification is complete. Code can begin, starting from the `fmr-*` crates listed in `STRUCTURE.md` §3.
+
+When you write code:
 
 - `cargo fmt` and `cargo clippy -- -D warnings` clean
 - Tests for every feature
@@ -159,6 +165,8 @@ Not yet. When it does:
 - No `unwrap()`/`expect()`/`panic!` in simulation paths
 - No dependency without an ADR justifying it
 - Public API documented
+- `catch_unwind` at every FFI entry point (ADR-004)
+- No public field on `GroundTruth`, no `Serialize`, custom `Debug` (ADR-003)
 
 ---
 
@@ -167,11 +175,10 @@ Not yet. When it does:
 Imperative mood, one line ≤ 72 chars, then a body if needed.
 
 ```
-Add ADR-006 on license choice
+Add L1-season overview cell
 
-The README says "open" but Cargo.toml says "Proprietary".
-This ADR proposes MIT + CC-BY-NC-SA-4.0 and explains
-the trade-offs.
+First cell of L1. Defines the boundaries: what a season is, what it
+depends on from L0, what it provides to L2. No code, only spec.
 ```
 
 Not: `fixed stuff`, `update`, `wip`.
@@ -188,8 +195,11 @@ Not: `fixed stuff`, `update`, `wip`.
 - [ ] One change per PR
 - [ ] If it touches an open ADR, the ADR is accepted first
 - [ ] `modules/_index.md` updated if a cell was added
+- [ ] If it is a status transition, the level's overview cell is updated too
 - [ ] No contradiction with existing cells (or the contradiction is the point of the PR)
 - [ ] Language is English (or a translation in `locales/`)
+- [ ] No `License: Proprietary` string anywhere
+- [ ] No `TBD` left in a field that should have a value
 
 ---
 
@@ -200,7 +210,7 @@ By contributing, you agree that:
 - **Code contributions** are licensed under **MIT OR Apache-2.0**.
 - **Asset and documentation contributions** are licensed under **CC-BY-NC-SA-4.0**.
 
-The full license text will be in `LICENSE.md` once ADR-006 is ratified. The terms are described in ADR-006 and in the README.
+See [`LICENSE.md`](LICENSE.md). The file is currently marked `proposed` pending ADR-006 ratification, but the terms are already the intended ones.
 
 If you are contributing on behalf of an employer, make sure you have the right to do so under these terms.
 
