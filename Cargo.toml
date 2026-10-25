@@ -1,16 +1,15 @@
 # Cargo.toml — PCFM workspace root
 
-[workspace]
-resolver = "2"
+[workspace.members]
 members = [
     "crates/pcfm-core",
     "crates/pcfm-model",
     "crates/pcfm-hidden",
-    "crates/pcfm-stats",
     "crates/pcfm-match",
+    "crates/pcfm-stats",
     "crates/pcfm-debug",
+    "crates/pcfm-testkit",   # ← NUOVO
 ]
-default-members = ["crates/pcfm-core", "crates/pcfm-model", "crates/pcfm-hidden", "crates/pcfm-stats", "crates/pcfm-match", "crates/pcfm-debug"]
 
 [workspace.package]
 version = "0.1.0"
