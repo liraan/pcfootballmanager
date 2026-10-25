@@ -4,7 +4,7 @@
 - **Date:** 2026-10-25
 - **Supersedes:** none
 - **Superseded by:** none
-- **Blocks:** `README.md`, `LICENSE.md`, `22-roadmap.md`, every user-facing string
+- **Blocks:** `README.md`, every user-facing string
 
 ## Context
 
@@ -41,7 +41,7 @@ The project name and product scope have been used informally ("PC Football Manag
 - Mobile ports
 - Real licensed datasets (adapters only, user-supplied)
 - Full 6-axis psychology (3 axes in v1.0, the other 3 in a pack)
-- Full 25-module completeness (v1.0 ships modules 00–13 stable)
+- Full 25-module completeness (v1.0 ships L0 and L1 stable, L2 partial)
 
 ### Position relative to Football Manager
 
@@ -75,5 +75,5 @@ PCFM is **not** an FM clone. It is an alternative with a different philosophy:
 ## References
 
 - `README.md` — product description
-- `00-foundations.md` §6, §7 — product goal and non-goals
+- `modules/00-foundations.md` §6, §7 — product goal and non-goals
 - ADR-006 — trademark
