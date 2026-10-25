@@ -34,7 +34,7 @@ At L0, the save contains **only one match**. No season, no world, no club.
 ## 1. Context and dependencies
 
 - Depends on `L0.01` (RNG registry), `L0.03` (entities), `L0.05` (events), `L0.06` (output)
-- Uses `postcard` for compact binary serialisation (see `L3-quality`)
+- Uses `postcard` for compact binary serialisation (see `L3-quality` *(planned)*)
 - The save is **versioned**: `schema_version` and `sim_version`
 - The save **does not contain latents**. `GroundTruth` is reconstructed from the seed and the command log (see §2.6).
 
@@ -79,8 +79,8 @@ pub fn migrate_save_if_needed(save: &mut MatchSave) -> Result<()>;
 
 - If `schema_version < CURRENT`, apply migrations in order
 - If `sim_version != CURRENT`, the save is **readable but not replayable**. The match result is shown as-is, but the user is warned that replay will differ.
-- Migration scripts live in `crates/fmr-data/migrations/match/`
-- The migration procedure (and the `SIM_VERSION` bump rules) is documented in [`../../docs/MIGRATION-01-04.md`](../../docs/MIGRATION-01-04.md)
+- Migration scripts live in `crates/fmr-data/migrations/match/` *(planned — the `crates/` directory does not exist yet)*
+- The migration procedure (and the `SIM_VERSION` bump rules) is documented in `docs/MIGRATION-01-04.md` *(planned)*
 
 ### 2.4 Verification
 
@@ -101,7 +101,7 @@ The save does not contain `GroundTruth`. When a match is reloaded:
 
 1. The `world_seed` and `match_id` are read from the save.
 2. The `RngRegistry` is recreated with the same seed.
-3. The `GroundTruth` is recreated by `fmr-gen` from `(world_seed, match_id)`.
+3. The `GroundTruth` is recreated by `fmr-gen` *(planned)* from `(world_seed, match_id)`.
 4. The `command_log` is replayed from the start of the match.
 5. The events are re-emitted, and the chain hash is verified against the saved hash.
 
@@ -115,7 +115,7 @@ At L0, there are no interactive commands (a friendly match runs to completion). 
 
 ## 3. Data model
 
-`MatchSave`, `Command` (defined in `L1-season`; at L0, the variant is `Empty`).
+`MatchSave`, `Command` (defined in `L1-season` *(planned)*; at L0, the variant is `Empty`).
 
 ## 4. Edge cases
 
@@ -161,5 +161,5 @@ At L0, there are no interactive commands (a friendly match runs to completion). 
 - [`05-match-events.md`](05-match-events.md) — event chain
 - [`06-match-output.md`](06-match-output.md) — result saved
 - [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — no latent in the save
-- [`../../docs/MIGRATION-01-04.md`](../../docs/MIGRATION-01-04.md) — migration procedure
-- [`../L1-season/03-standings.md`](../L1-season/03-standings.md) — L1 save extends this (stub)
+- `../../docs/MIGRATION-01-04.md` — migration procedure *(planned)*
+- `../L1-season/03-standings.md` — L1 save extends this *(planned — the L1-season directory does not exist yet)*
