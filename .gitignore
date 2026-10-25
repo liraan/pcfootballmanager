@@ -1,0 +1,167 @@
+# =============================================================================
+# .gitignore — PC Football Manager
+# =============================================================================
+# Rules for what must NEVER be committed to the repository.
+# See STRUCTURE.md §9 ("What Does NOT Go in This Repo") for the policy.
+#
+# Rule of thumb: if a file is generated, user-specific, secret, or
+# regenerable, it does not belong in git. If in doubt, ignore it.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# Rust build artifacts
+# -----------------------------------------------------------------------------
+
+/target/
+**/target/
+*.rs.bk
+*.pdb
+
+# NOTE: Cargo.lock is intentionally NOT ignored.
+# This is a binary application, not a library. Cargo.lock must be committed
+# so that builds are reproducible. See docs/adr/001-language-rust.md.
+
+
+# -----------------------------------------------------------------------------
+# Profiling and instrumentation
+# -----------------------------------------------------------------------------
+
+*.profraw
+*.profdata
+perf.data*
+*.dSYM/
+*.o
+*.a
+
+# Miri (undefined-behaviour detection)
+*.mir
+
+
+# -----------------------------------------------------------------------------
+# IDE and editor
+# -----------------------------------------------------------------------------
+
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+
+# -----------------------------------------------------------------------------
+# Operating system
+# -----------------------------------------------------------------------------
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+
+# -----------------------------------------------------------------------------
+# Logs and runtime output
+# -----------------------------------------------------------------------------
+
+*.log
+logs/
+
+
+# -----------------------------------------------------------------------------
+# User data — never in the repository
+# -----------------------------------------------------------------------------
+
+saves/
+*.save
+*.pcfm
+*.sav
+
+
+# -----------------------------------------------------------------------------
+# Secrets — NEVER commit
+# -----------------------------------------------------------------------------
+
+.env
+.env.*
+*.pem
+*.key
+*.keystore
+credentials.toml
+secrets.toml
+
+
+# -----------------------------------------------------------------------------
+# Pack cache and quarantine — regenerable, user-specific
+# -----------------------------------------------------------------------------
+
+mods/_cache/
+mods/quarantined/
+
+
+# -----------------------------------------------------------------------------
+# Generated worlds — regenerable from seed + generator
+# -----------------------------------------------------------------------------
+
+data/generated/
+
+
+# -----------------------------------------------------------------------------
+# Temporary files
+# -----------------------------------------------------------------------------
+
+*.tmp
+*.temp
+*.bak
+*.orig
+
+
+# -----------------------------------------------------------------------------
+# Test fixtures — generated, not committed
+# -----------------------------------------------------------------------------
+
+tests/fixtures/generated/
+
+
+# -----------------------------------------------------------------------------
+# Coverage
+# -----------------------------------------------------------------------------
+
+*.lcov
+coverage/
+tarpaulin-report.html
+
+
+# -----------------------------------------------------------------------------
+# Local cache
+# -----------------------------------------------------------------------------
+
+.cache/
+
+
+# =============================================================================
+# NOTES FOR FUTURE EDITORS:
+#
+# - This file is intentionally explicit. Each section has a comment explaining
+#   why those rules exist. Do not remove comments without a reason.
+# - The `.gitkeep` files in empty directories (crates/, registry/, mods/, data/)
+#   are NOT ignored. They are the mechanism that keeps empty directories in git.
+# - `mods/installed/`, `mods/disabled/`, `mods/_cache/`, `mods/quarantined/`:
+#   the directory structure is tracked, the content is not. This means a user's
+#   local packs never end up in the repository, but the directory layout is
+#   always available after a fresh clone.
+# - `data/` is tracked (for example data), `data/generated/` is not (it is
+#   regenerable and potentially huge).
+# - If you add a rule, add it to the section it belongs to. Do not create a
+#   "misc" section at the end.
+# - This file is linked from:
+#     - STRUCTURE.md §9
+#     - CONTRIBUTING.md
+# =============================================================================
