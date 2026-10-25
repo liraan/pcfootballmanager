@@ -1,6 +1,6 @@
 # Repository Structure
 
-**Version:** 1.5
+**Version:** 1.6
 **Status:** active
 **Last updated:** 2026-10-25
 
@@ -250,9 +250,11 @@ conforms_to: "00-foundations (v1.1)"
 | `supersedes` | The ID of the version this replaces, or `null` |
 | `depends_on` | Module IDs this cell reads from |
 | `referenced_by` | Module IDs that read from this cell |
-| `conforms_to` | The doctrine version this cell obeys |
+| `conforms_to` | The doctrine version this cell obeys. **Means "verified against", not "compatible with".** |
 
 **Version policy:** bump the minor version for clarifications, the major version for changes that affect downstream modules. A major bump requires an ADR if it changes an invariant.
+
+**`conforms_to` policy:** the field records the doctrine version the cell was **verified against**. It is not bumped automatically when the doctrine changes for clarifications. It is bumped only when the cell is re-verified (which happens when an invariant changes). See `modules/_index.md` §"Doctrine compliance" for the rationale.
 
 ---
 
@@ -320,11 +322,13 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 | 007 | Canonical language | 🟡 proposed | translations, language policy |
 | 008 | Provider integration is external | ✅ accepted | — (reclassified `L2-ingest` as external tool) |
 | 012 | Modules: The Brick Contract | 🟡 proposed | The module system (step 11+). Ratified when the framework implements it. |
-| 013 | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | The world system (step 11+). Supersedes pillar 1 of `00-foundations`. Ratified when the framework implements it. |
+| 013 | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | The world system (step 11+). Supersedes pillar 1 of `00-foundations` (currently under review). Ratified when the framework implements it. |
 
 **Open ADRs:** 005, 006, 007, 012, 013. **Accepted:** 001, 002, 003, 004, 008.
 
 **ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`012-013-reading-guide.md`](adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
+
+**Note on pillar 1.** ADR-013, if ratified, will supersede pillar 1 of `00-foundations` §2 ("Traceable determinism. Same seed + same inputs = same result. Never compromised.") and replace it with a **local** determinism (same save + same match + same module configuration = same result). The pillar is currently marked **under review** in the doctrine. Until ratification, the doctrine is unchanged: the determinism is **global**.
 
 ---
 
