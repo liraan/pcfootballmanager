@@ -3,8 +3,8 @@ title: "L0.04 — Match Engine"
 level: 0
 cell: "L0-match"
 module_id: "L0.04"
-version: "1.1"
-status: "draft"
+version: "1.2"
+status: "ratified"
 last_updated: "2026-10-25"
 supersedes: null
 depends_on: ["00-foundations", "L0.01", "L0.02", "L0.03", "L0.10"]
@@ -13,17 +13,9 @@ conforms_to: "00-foundations (v1.1)"
 ---
 
 <!--
-  MAINTAINER NOTE: this file is intentionally `draft` until ADR-003 is accepted.
-  Do not write code against this spec yet. The spec is complete; the code waits.
-  If you're tempted to "just start with a stub", stop. The interface is what
-  ADR-003 is deciding. A stub written before the decision will need to be
-  rewritten. Wait.
-
-  Once ADR-003 is accepted, change `status: draft` to `status: ratified` and
-  begin implementation.
-
-  IMPORTANT: the `GroundTruth` API is defined in L0.10, not here. This cell
-  consumes it. If you change the API, change L0.10, not this cell.
+  MAINTAINER NOTE: ADR-003 is accepted (option B). This cell is now `ratified`.
+  The `GroundTruth` API is defined in L0.10, not here. This cell consumes it.
+  If you change the API, change L0.10, not this cell.
 -->
 
 # L0.04 — Match Engine
@@ -32,7 +24,7 @@ conforms_to: "00-foundations (v1.1)"
 
 Define the `MatchEngine` trait and specify its text implementation. The match engine is the **orchestrator** of L0: it drives the tick loop, calls `GroundTruth::resolve_*` for every resolution, publishes events, and produces a `MatchResult`.
 
-**Status: `draft`.** Implementation is blocked by [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md). The specification below is complete; the code waits.
+**Status: `ratified`.** ADR-003 (Plane A enforcement, option B) is accepted. The implementation can proceed.
 
 ## 1. Context and dependencies
 
@@ -182,7 +174,7 @@ The engine produces `MatchEvent`s (see `L0.05`) and consumes `ContextModifiers` 
 
 ## 5. Definition of Done
 
-- [ ] ADR-003 accepted
+- [x] ADR-003 accepted (option B)
 - [ ] Trait `MatchEngine` implemented for text mode
 - [ ] Tick loop deterministic (state hash stable across 100 runs)
 - [ ] Micro-decision model documented and implemented
@@ -219,7 +211,7 @@ The engine produces `MatchEvent`s (see `L0.05`) and consumes `ContextModifiers` 
 - [`08-random-events.md`](08-random-events.md) — discrete events
 - [`09-context-modifiers.md`](09-context-modifiers.md) — external state
 - [`10-ground-truth.md`](10-ground-truth.md) — the `GroundTruth` API (Plane A access)
-- [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — `resolve_*` API
+- [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — `resolve_*` API (accepted)
 - [`../../docs/adr/004-panic-strategy-ffi.md`](../../docs/adr/004-panic-strategy-ffi.md) — `catch_unwind`
 - `../../archive/Prompt_Master_v7.md` §12 — original match engine *(planned — the archive/ directory does not exist yet)*
 - [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — terms used in this cell
