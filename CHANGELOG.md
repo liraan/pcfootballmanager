@@ -23,6 +23,26 @@ This project does not use semantic versioning for the docs; the version of each 
 
 ---
 
+## [2026-10-25] — Rename crate prefix `fmr-` → `pcfm-`
+
+### Changed
+
+- **All documentation files**: the crate prefix `fmr-` was renamed to `pcfm-` (e.g. `fmr-core` → `pcfm-core`, `fmr-hidden` → `pcfm-hidden`, `fmr-match` → `pcfm-match`). The historical prefix `fmr-` (from the original "FMR project" name) is deprecated.
+- **All documentation files**: the module path prefix `fmr_` was renamed to `pcfm_` (e.g. `fmr_core::rng` → `pcfm_core::rng`).
+
+### Why
+
+The project is called **PC Football Manager** (PCFM). The prefix `pcfm-` matches the project name. The old prefix `fmr-` was a historical abbreviation from the initial "FMR project" naming, never adopted in user-facing material. The rename was done before any code was written, so no `Cargo.toml` or import needs to change. Doing it now costs minutes; doing it after the first line of code costs days.
+
+### What did not change
+
+- The repository name (`pcfootballmanager`) — unchanged.
+- The project name (`PC Football Manager`) — unchanged.
+- All architectural decisions — unchanged.
+- The `LICENSE.md` file — unchanged (it refers to "PC Football Manager" by name, not by crate prefix).
+
+---
+
 ## [2026-10-25] — ADR-008: provider integration is external, not core
 
 ### Added
