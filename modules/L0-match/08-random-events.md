@@ -3,8 +3,8 @@ title: "L0.08 — Random Events (in-match)"
 level: 0
 cell: "L0-match"
 module_id: "L0.08"
-version: "1.1"
-status: "draft"
+version: "1.2"
+status: "ratified"
 last_updated: "2026-10-25"
 supersedes: null
 depends_on: ["00-foundations", "L0.01", "L0.03", "L0.04", "L0.05", "L0.10"]
@@ -13,18 +13,17 @@ conforms_to: "00-foundations (v1.1)"
 ---
 
 <!--
-  MAINTAINER NOTE: "random" here means "unpredictable to the player", not
-  "non-deterministic to the system". Every event is sampled from a dedicated
-  stream. Same seed + same state = same event. If someone says "but it's random,
-  it can't be deterministic", they've misunderstood the design. Point them to
-  this comment.
+  MAINTAINER NOTE: ADR-003 is accepted (option B). This cell is now `ratified`.
+
+  "random" here means "unpredictable to the player", not "non-deterministic
+  to the system". Every event is sampled from a dedicated stream. Same seed +
+  same state = same event. If someone says "but it's random, it can't be
+  deterministic", they've misunderstood the design. Point them to this comment.
 
   Also: the probability function reads OBSERVED state (fatigue, condition,
   morale, confidence) and, when a latent is needed (injury_proneness), it is
   accessed via GroundTruth::resolve_injury_risk (API in L0.10), NOT by reading
-  a latent field. The example probability function below is a simplified
-  illustration; the real implementation calls resolve_* and applies the
-  returned probability modifier.
+  a latent field.
 -->
 
 # L0.08 — Random Events (in-match)
@@ -35,7 +34,7 @@ The catalogue of **discrete, in-match events** that are not part of the normal t
 
 **"Random" here means unpredictable to the player, not non-deterministic to the system.** Every event is sampled from a dedicated RNG stream, with a probability function of the current state. Same seed + same state → same event.
 
-**Status: `draft`.** Implementation is blocked by [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — the engine calls `resolve_*` for the underlying checks, and the API is defined in [`10-ground-truth.md`](10-ground-truth.md).
+**Status: `ratified`.** ADR-003 (Plane A enforcement, option B) is accepted. The engine calls `resolve_*` for the underlying checks, and the API is defined in [`10-ground-truth.md`](10-ground-truth.md). The implementation can proceed.
 
 ## 1. Context and dependencies
 
@@ -181,7 +180,7 @@ The `resolve_*` contexts and outcomes (`InjuryContext`, `InjuryOutcome`, etc.) a
 
 ## 5. Definition of Done
 
-- [ ] ADR-003 accepted
+- [x] ADR-003 accepted (option B)
 - [ ] Event catalogue in `balance/random_events.toml` with ≥ 30 events
 - [ ] Each event has trigger, probability, effects, narrative, explanation
 - [ ] Sampling uses dedicated stream
@@ -216,6 +215,6 @@ The `resolve_*` contexts and outcomes (`InjuryContext`, `InjuryOutcome`, etc.) a
 - [`05-match-events.md`](05-match-events.md) — event type
 - [`09-context-modifiers.md`](09-context-modifiers.md) — external state
 - [`10-ground-truth.md`](10-ground-truth.md) — `GroundTruth` API (contexts, outcomes, modifiers)
-- [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — no latent access
+- [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — no latent access (accepted)
 - `../../archive/Prompt_Master_v7.md` §Psiche — original event families *(planned — the archive/ directory does not exist yet)*
 - [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — terms used in this cell
