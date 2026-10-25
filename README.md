@@ -71,7 +71,7 @@ The specification is **concentric**, not flat. Read in this order:
 
 | Layer | File | What it answers |
 |---|---|---|
-| **1. Doctrine** | [`modules/00-foundations.md`](modules/00-foundations.md) | Why does this project exist? What are the non-negotiable rules? |
+| **1. Doctrine** | [`modules/00-foundations.md`](modules/00-foundations.md) | Why does this project exist? What are the non-negotiable rules? *(v1.1)* |
 | **2. Structure** | [`STRUCTURE.md`](STRUCTURE.md) | How is the repo organised? How do I add or revise a module? |
 | **3. Index** | [`modules/_index.md`](modules/_index.md) | What exists at each level? What is its status? |
 | **4. Decisions** | [`docs/adr/`](docs/adr/) | Which architectural choices have been made, and why? |
@@ -190,25 +190,27 @@ See [`docs/adr/005-qt-binding.md`](docs/adr/005-qt-binding.md).
 
 See **[`STRUCTURE.md`](STRUCTURE.md)** for the full layout and the rules that govern it.
 
+The layout below is the **target** structure. Items marked *(planned)* do not exist yet.
+
 ```
 pc-football-manager/
 ├── README.md
 ├── STRUCTURE.md
 ├── CONTRIBUTING.md
-├── LICENSE.md                 # dual license: MIT/Apache-2.0 + CC-BY-NC-SA-4.0
-├── CHANGELOG.md
-├── CHANGELOG-SIM.md
-├── CHANGELOG-REGISTRY.md
+├── LICENSE.md                 # *(planned)* dual license: MIT/Apache-2.0 + CC-BY-NC-SA-4.0
+├── CHANGELOG.md               # *(planned)*
+├── CHANGELOG-SIM.md           # *(planned)*
+├── CHANGELOG-REGISTRY.md      # *(planned)*
 ├── modules/                   # specification, concentric L0–L3
-├── archive/                   # historical prompt masters (v5, v6, v7)
+├── archive/                   # *(planned)* historical prompt masters (v5, v6, v7)
 ├── docs/
 │   ├── adr/                   # architecture decision records
-│   ├── legal/                 # data source compliance
-│   └── calibration/           # model calibration dashboards
-├── registry/                  # empty until code exists
-├── crates/                    # empty until code exists
-├── mods/                      # empty until user packs exist
-└── data/                      # examples only, never real licensed data
+│   ├── legal/                 # *(planned)* data source compliance
+│   └── calibration/           # *(planned)* model calibration dashboards
+├── registry/                  # *(planned)* empty until code exists
+├── crates/                    # *(planned)* empty until code exists
+├── mods/                      # *(planned)* empty until user packs exist
+└── data/                      # *(planned)* examples only, never real licensed data
 ```
 
 ---
@@ -233,7 +235,7 @@ pc-football-manager/
 See **[`CONTRIBUTING.md`](CONTRIBUTING.md)** for the full process. Quick summary:
 
 - One change per PR (one module, one ADR, one fix).
-- Use the standard frontmatter (see `STRUCTURE.md` §3).
+- Use the standard frontmatter (see `STRUCTURE.md` §4).
 - Cite sources for factual claims.
 - Explain the **WHY**, not just the what.
 - Changing an invariant requires a new ADR.
@@ -256,7 +258,7 @@ Yes. The documentation needs feedback, corrections, and additions. If you unders
 This is the documentation phase. Alpha arrives when L0 and L1 are stable and a minimal kernel runs. Indicative timeline: **Q1 2027**.
 
 **Is any of this actually decided?**
-Partly. Open decisions are tracked in [`docs/adr/`](docs/adr/). Three remain unresolved: the Plane A enforcement strategy (ADR-003), the Qt binding (ADR-005), and the license (ADR-006). The FFI panic strategy was settled in ADR-004.
+Partly. Open decisions are tracked in [`docs/adr/`](docs/adr/). Four remain unresolved: the Plane A enforcement strategy (ADR-003), the Qt binding (ADR-005), the license (ADR-006), and the canonical language (ADR-007). The FFI panic strategy was settled in ADR-004.
 
 **How much of this was written by AI?**
 See [Built With AI Assistance](#-built-with-ai-assistance). Short answer: drafted by AI, reviewed by a human, and every technical claim should be verified before you depend on it.
@@ -291,13 +293,13 @@ There are no private email addresses, Telegram channels, or WhatsApp groups. Eve
 
 ## 📄 License
 
-**Dual license:**
+**Proposed: dual license** (see [`docs/adr/006-license.md`](docs/adr/006-license.md)).
 
 - **Code** (`crates/`, executables): MIT OR Apache-2.0.
 - **Assets and documentation** (`mods/`, `data/`, `assets/`, `locales/`, `docs/`, `modules/`): CC-BY-NC-SA-4.0.
 - **Trademark:** the name "PC Football Manager" and the logo are trademarks of the project team. The licenses do not grant trademark rights.
 
-See [`LICENSE.md`](LICENSE.md), [`docs/adr/006-license.md`](docs/adr/006-license.md).
+The `LICENSE.md` file will be created when ADR-006 is ratified.
 
 ---
 
