@@ -7,8 +7,8 @@ Thanks for wanting to help. This project is documentation-first, and **good docu
 ## Current state (as of 2026-10-25)
 
 - **L0 is implemented.** 6 crates (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-debug`), 103 tests passing.
-- **8 ADRs exist:** 5 accepted (001, 002, 003, 004, 008), 3 proposed (005, 006, 007), 1 template (000).
-- **2 ADRs are proposed:** 012 (modules) and 013 (worlds). They define the module system and the world system, and may revise pillar 1 of `00-foundations` (determinism, from global to local). They are **not** ratified: the framework does not implement the module system yet.
+- **10 ADRs exist:** 5 accepted (001, 002, 003, 004, 008), 5 proposed (005, 006, 007, 012, 013), 1 template (000).
+- **2 of the proposed ADRs are 012 and 013.** They define the module system and the world system, and may revise pillar 1 of `00-foundations` (determinism, from global to local). They are **not** ratified: the framework does not implement the module system yet.
 - **`LICENSE.md`** exists but is marked `proposed` pending ADR-006 ratification. The license terms are described in the file and in ADR-006.
 
 If you're new, read the files in the order below before opening a PR.
@@ -139,24 +139,12 @@ You don't need to be a maintainer to review. If the options are unbalanced, say 
 
 If an ADR is `proposed` and touches an area, **no code is written in that area until it's accepted**. This is how we avoid the "we'll decide later" trap.
 
-### Current ADR status
+**For the current list of open ADRs, and what each one blocks, see [`STRUCTURE.md`](STRUCTURE.md) §5 ("Current ADR status").** That table is the single source of truth. It is **not duplicated here**, to avoid drift between the two files.
 
-| ADR | Title | Status | Blocks |
-|---|---|---|---|
-| 001 | Language: Rust | ✅ accepted | — |
-| 002 | Project name and scope | ✅ accepted | — |
-| 003 | Plane A enforcement | ✅ accepted | — (unblocked L0.04, L0.08, L0.10) |
-| 004 | Panic strategy at FFI | ✅ accepted | — |
-| 005 | Qt binding | 🟡 proposed | `L3-ui`, `pcfm-bridge` |
-| 006 | License | 🟡 proposed | `LICENSE.md` (currently marked `proposed`), `Cargo.toml` examples |
-| 007 | Canonical language | 🟡 proposed | translations, language policy in `STRUCTURE.md` §6 |
-| 008 | Provider integration is external | ✅ accepted | — (reclassified `L2-ingest` as external tool) |
-| 012 | Modules: The Brick Contract | 🟡 proposed | The module system (step 11+). Ratified when the framework implements it. |
-| 013 | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | The world system (step 11+). Supersedes pillar 1 of `00-foundations`. Ratified when the framework implements it. |
+Two notes that are specific to the current state:
 
-**Open ADRs:** 005, 006, 007, 012, 013. **Accepted:** 001, 002, 003, 004, 008.
-
-**ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`012-013-reading-guide.md`](docs/adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
+- **ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`012-013-reading-guide.md`](docs/adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
+- **Pillar 1 of `00-foundations` is under review.** ADR-013, if ratified, will supersede it (determinism, from global to local). Until then, the doctrine is unchanged.
 
 ---
 
