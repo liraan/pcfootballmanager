@@ -235,7 +235,7 @@ Some documentation and code in this repo was **drafted with AI**, then **reviewe
 No. It's an alternative with a different philosophy. FM is proprietary, uses closed datasets, and ships telemetry. PCFM is community-driven, transparent, offline-first.
 
 **Will you use Wyscout / Opta data?**
-No. Bundling licensed datasets is ruled out by design. Provider integration is an *external tool* that produces packs, not a core module → [ADR-008](docs/adr/008-provider-integration.md). Open data, procedural data, and community packs (with clear provenance) only.
+No. Bundling licensed datasets is ruled out by design. Provider integration is an *external tool* that produces packs, not a core module → [ADR-008](docs/adr/008-provider-integration-external.md). Open data, procedural data, and community packs (with clear provenance) only.
 
 **Can I contribute without knowing how to program?**
 Yes. The documentation needs feedback, corrections, and additions. If you understand football or game design, your input matters.
