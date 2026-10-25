@@ -7,9 +7,11 @@
 //! # Modules
 //!
 //! - [`rng`] — deterministic, isolated, named random streams (L0.01)
+//! - [`event_bus`] — deterministic in-process event dispatch (L0.02)
 
 #![deny(missing_docs)]
 
+pub mod event_bus;
 pub mod rng;
 
 /// Returns the version of `pcfm-core`, as declared in `Cargo.toml`.
