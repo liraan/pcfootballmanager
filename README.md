@@ -4,9 +4,9 @@
 
 **An open football management simulation built around transparency, privacy, and tactical depth.**
 
-![Status](https://img.shields.io/badge/status-documentation_phase-yellow)
+![Status](https://img.shields.io/badge/status-L0_ratified-yellow)
 ![Structure](https://img.shields.io/badge/structure-L0--L3-blue)
-![Code](https://img.shields.io/badge/code-not_written_yet-lightgrey)
+![Code](https://img.shields.io/badge/code-ready_to_start-lightgrey)
 ![Built with](https://img.shields.io/badge/built_with-AI_assistance-purple)
 
 </div>
@@ -48,10 +48,10 @@ This project's documentation is drafted with the help of a large language model,
 ## 🏗️ Project Status
 
 ```
-L0 — MATCH     ████████████████  100%   specified (2 cells draft, blocked by ADR-003)
-L1 — SEASON    ░░░░░░░░░░░░░░░░    0%   not started
-L2 — CAREER    ░░░░░░░░░░░░░░░░    0%   not started
-L3 — META      ░░░░░░░░░░░░░░░░    0%   not started
+L0 — MATCH     ████████████████  100%   ratified (11 cells, ADR-003 accepted)
+L1 — SEASON    ░░░░░░░░░░░░░░░░    0%   not started (12 cells)
+L2 — CAREER    ░░░░░░░░░░░░░░░░    0%   not started (9 cells)
+L3 — META      ░░░░░░░░░░░░░░░░    0%   not started (8 cells)
 
 PHASE 2 — PROTOTYPE (Q1 2027)
 PHASE 3 — ALPHA     (Q3 2027)
@@ -59,9 +59,9 @@ PHASE 4 — BETA      (Q1 2028)
 PHASE 5 — v1.0      (Q2 2028)
 ```
 
-**Right now:** the repository contains **documentation only**. No code exists. That's deliberate — we define *what* and *why* before writing *how*.
+**Right now:** the repository contains **documentation only**. The L0 specification is complete and ratified; code can begin. L1 (the season) is the next specification milestone. Dates are indicative, not commitments.
 
-L0 (the match) is fully specified. L1 (the season) is the next milestone. Dates are indicative, not commitments.
+The three planes, the ban on CA/PA, the determinism rules, and the Plane A enforcement strategy (ADR-003, option B) are all locked in. The specification is no longer in flux for L0.
 
 ---
 
@@ -75,7 +75,8 @@ The specification is **concentric**, not flat. Read in this order:
 | **2. Structure** | [`STRUCTURE.md`](STRUCTURE.md) | How is the repo organised? How do I add or revise a module? |
 | **3. Index** | [`modules/_index.md`](modules/_index.md) | What exists at each level? What is its status? |
 | **4. Decisions** | [`docs/adr/`](docs/adr/) | Which architectural choices have been made, and why? |
-| **5. Process** | [`CONTRIBUTING.md`](CONTRIBUTING.md) | How do I propose a change? What's the review process? |
+| **5. Glossary** | [`docs/GLOSSARY.md`](docs/GLOSSARY.md) | What does each term mean? Where is it defined? |
+| **6. Process** | [`CONTRIBUTING.md`](CONTRIBUTING.md) | How do I propose a change? What's the review process? |
 
 ### Levels
 
@@ -120,7 +121,7 @@ PCFM separates three distinct layers of data, and keeps them separated:
 
 **Why bother?** Because the gap between *how good a player really is* (A), *what we saw him do* (B), and *what we think he's worth* (C) is the entire point of a management game. Collapse those layers and scouting becomes a lookup table.
 
-Full doctrine: [`modules/00-foundations.md`](modules/00-foundations.md).
+Full doctrine: [`modules/00-foundations.md`](modules/00-foundations.md). The Plane A enforcement strategy is in [ADR-003](docs/adr/003-plane-a-enforcement.md) (accepted, option B: capability API).
 
 ### No CA / PA
 
@@ -150,7 +151,7 @@ Same seed → same world, same season, same match. **Always.**
 - `BTreeMap` everywhere in the simulation path (no non-deterministic `HashMap`)
 - Fixed-point arithmetic for money — zero numerical drift
 - Golden tests across 10 seasons against a verified state hash
-- `SIM_VERSION` bumped whenever simulation behaviour changes
+- `SIM_VERSION` bumped whenever simulation behaviour changes (see [`CHANGELOG-SIM.md`](CHANGELOG-SIM.md))
 
 Details: [`modules/L0-match/01-rng.md`](modules/L0-match/01-rng.md).
 
@@ -180,7 +181,7 @@ Details: [`modules/L0-match/01-rng.md`](modules/L0-match/01-rng.md).
 ### UI
 | Technology | Status | Notes |
 |------------|--------|-------|
-| `cxx-qt` + QWidgets + QML | Chosen (ADR-005) | Only binding covering both QWidgets (data grids) and QML (skins) |
+| `cxx-qt` + QWidgets + QML | Proposed (ADR-005) | Only binding covering both QWidgets (data grids) and QML (skins) |
 
 See [`docs/adr/005-qt-binding.md`](docs/adr/005-qt-binding.md).
 
@@ -197,16 +198,35 @@ pc-football-manager/
 ├── README.md
 ├── STRUCTURE.md
 ├── CONTRIBUTING.md
-├── LICENSE.md                 # *(planned)* dual license: MIT/Apache-2.0 + CC-BY-NC-SA-4.0
-├── CHANGELOG.md               # *(planned)*
-├── CHANGELOG-SIM.md           # *(planned)*
-├── CHANGELOG-REGISTRY.md      # *(planned)*
+├── LICENSE.md                 # dual license, marked proposed pending ADR-006
+├── LICENSE-MIT
+├── LICENSE-APACHE
+├── LICENSE-ASSETS
+├── CHANGELOG.md
+├── CHANGELOG-SIM.md
+├── CHANGELOG-REGISTRY.md
+├── .gitignore
+├── .github/
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── ISSUE_TEMPLATE/
 ├── modules/                   # specification, concentric L0–L3
-├── archive/                   # *(planned)* historical prompt masters (v5, v6, v7)
+│   ├── 00-foundations.md
+│   ├── _index.md
+│   ├── L0-match/              # 11 cells, ratified
+│   ├── L1-*/                  # *(planned)* 12 cells
+│   ├── L2-*/                  # *(planned)* 9 cells
+│   └── L3-*/                  # *(planned)* 8 cells
+├── archive/
+│   ├── README.md
+│   ├── prompts/               # *(planned)* Prompt Masters v5, v6, v7
+│   ├── doctrine/              # *(planned)* previous 00-foundations versions
+│   └── legacy/                # *(planned)* four Italian pre-concentric modules
 ├── docs/
-│   ├── adr/                   # architecture decision records
+│   ├── adr/                   # 8 ADRs, 000 → 007
 │   ├── legal/                 # *(planned)* data source compliance
-│   └── calibration/           # *(planned)* model calibration dashboards
+│   ├── calibration/           # *(planned)* model calibration dashboards
+│   ├── GLOSSARY.md
+│   └── MIGRATION-01-04.md
 ├── registry/                  # *(planned)* empty until code exists
 ├── crates/                    # *(planned)* empty until code exists
 ├── mods/                      # *(planned)* empty until user packs exist
@@ -241,6 +261,8 @@ See **[`CONTRIBUTING.md`](CONTRIBUTING.md)** for the full process. Quick summary
 - Changing an invariant requires a new ADR.
 - If you spot an error, say so plainly — including in AI-drafted text.
 
+The **L0 specification is complete and ratified**. Code can begin. If you want to contribute code, read the L0 cells first, then start from `fmr-core` (see `STRUCTURE.md` §3).
+
 ---
 
 ## 🙋 FAQ
@@ -258,7 +280,7 @@ Yes. The documentation needs feedback, corrections, and additions. If you unders
 This is the documentation phase. Alpha arrives when L0 and L1 are stable and a minimal kernel runs. Indicative timeline: **Q1 2027**.
 
 **Is any of this actually decided?**
-Partly. Open decisions are tracked in [`docs/adr/`](docs/adr/). Four remain unresolved: the Plane A enforcement strategy (ADR-003), the Qt binding (ADR-005), the license (ADR-006), and the canonical language (ADR-007). The FFI panic strategy was settled in ADR-004.
+Mostly, yes. The doctrine, the Three Planes, the Plane A enforcement strategy (ADR-003, option B), and the FFI panic strategy (ADR-004) are settled. **Three decisions remain open:** the Qt binding (ADR-005), the license (ADR-006), and the canonical language (ADR-007). Open decisions are tracked in [`docs/adr/`](docs/adr/).
 
 **How much of this was written by AI?**
 See [Built With AI Assistance](#-built-with-ai-assistance). Short answer: drafted by AI, reviewed by a human, and every technical claim should be verified before you depend on it.
@@ -278,8 +300,8 @@ There are no private email addresses, Telegram channels, or WhatsApp groups. Eve
 ## 📈 Roadmap
 
 ```
-2026-Q4  ████████████░░░░░░░░░░░░  Documentation (L0 + L1)
-2027-Q1  ████░░░░░░░░░░░░░░░░░░░░  Kernel prototype (L0)
+2026-Q4  ████████████░░░░░░░░░░░░  Documentation (L0 ratified, L1 next)
+2027-Q1  ████░░░░░░░░░░░░░░░░░░░░  Kernel prototype (L0 code)
 2027-Q2  ████████░░░░░░░░░░░░░░░░  Closed alpha (L0–L2 partial)
 2027-Q3  ████████████░░░░░░░░░░░░  Public alpha (L0–L3 partial)
 2027-Q4  ████████████████░░░░░░░░  Beta
@@ -287,7 +309,7 @@ There are no private email addresses, Telegram channels, or WhatsApp groups. Eve
 2028-Q2  ████████████████████████  v1.0
 ```
 
-**These dates are estimates.** Documentation has to be solid before code gets written.
+**These dates are estimates.** Documentation has to be solid before code gets written. The L0 specification is now solid; the L1 specification is next.
 
 ---
 
@@ -299,7 +321,7 @@ There are no private email addresses, Telegram channels, or WhatsApp groups. Eve
 - **Assets and documentation** (`mods/`, `data/`, `assets/`, `locales/`, `docs/`, `modules/`): CC-BY-NC-SA-4.0.
 - **Trademark:** the name "PC Football Manager" and the logo are trademarks of the project team. The licenses do not grant trademark rights.
 
-The `LICENSE.md` file will be created when ADR-006 is ratified.
+See [`LICENSE.md`](LICENSE.md). The file is currently marked `proposed`; it becomes definitive when ADR-006 is accepted.
 
 ---
 
