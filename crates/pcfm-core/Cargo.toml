@@ -1,0 +1,17 @@
+[package]
+name = "pcfm-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Core infrastructure for PCFM: RNG, event bus, IDs, deterministic math"
+documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules/L0-match"
+
+[dependencies]
+# No dependencies yet. When the first one is needed, it goes here,
+# with a comment explaining why.
+
+[lints]
+workspace = true
