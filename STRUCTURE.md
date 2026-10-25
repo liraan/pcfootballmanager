@@ -1,6 +1,6 @@
 # Repository Structure
 
-**Version:** 1.4
+**Version:** 1.5
 **Status:** active
 **Last updated:** 2026-10-25
 
@@ -114,7 +114,7 @@ pc-football-manager/
 ├── docs/
 │   ├── GLOSSARY.md
 │   ├── MIGRATION-01-04.md
-│   ├── adr/              (8 files, 000 → 007)
+│   ├── adr/              (9 files, 000 → 008)
 │   ├── legal/            (.gitkeep)
 │   └── calibration/      (.gitkeep)
 ├── archive/
@@ -167,6 +167,8 @@ pc-football-manager/
 ```
 
 **File naming:** `NN-kebab-case-name.md`, two-digit prefix, no Italian, no version in the filename. `04-match-engine.md`, not `Modulo 04 — Motore Partita (rev 1.1).md`. The filename is stable; the revision lives in the frontmatter.
+
+**Crate naming:** the crates in `crates/` use the `pcfm-` prefix (e.g. `pcfm-core`, `pcfm-hidden`, `pcfm-match`, `pcfm-stats`, `pcfm-model`, `pcfm-packs`, `pcfm-assets`, `pcfm-debug`, `pcfm-pack`). The historical prefix `fmr-` (from the original "FMR project" name) is deprecated and must not be used in new files. Rust module paths follow the same convention with an underscore: `pcfm_core::rng`, `pcfm_match::simulate`, etc.
 
 **Cells vs sub-cells:** A **cell** is a directory (`L0-match`, `L2-psyche`). A **sub-cell** is a file inside a cell (`04-match-engine.md`). A sub-sub-cell is a section (`##`) inside a file. There is no third level of directories. If a sub-cell needs its own children, it becomes a new cell at the same level, not a deeper directory.
 
@@ -308,8 +310,9 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 | 005 | Qt binding | 🟡 proposed | `L3-ui`, `pcfm-bridge` |
 | 006 | License | 🟡 proposed | `LICENSE.md`, every `Cargo.toml` example |
 | 007 | Canonical language | 🟡 proposed | translations, language policy |
+| 008 | Provider integration is external | ✅ accepted | — (reclassified `L2-ingest` as external tool) |
 
-**Open ADRs:** 005, 006, 007. **Accepted:** 001, 002, 003, 004.
+**Open ADRs:** 005, 006, 007. **Accepted:** 001, 002, 003, 004, 008.
 
 ---
 
