@@ -1,6 +1,6 @@
 ---
 title: "Modules Index"
-version: "2.2"
+version: "2.3"
 status: "active"
 last_updated: "2026-10-25"
 ---
@@ -30,7 +30,7 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 ## Current state (as of 2026-10-25)
 
 - ✅ **Doctrine**: ratified (v1.1, with §9 concentric structure)
-- ✅ **L0 — Match**: fully specified (11 cells; 3 draft, blocked by ADR-003)
+- ✅ **L0 — Match**: fully specified, **all 11 cells ratified** (ADR-003 accepted)
 - 🚧 **L1 — Season**: planned, not started (12 cells)
 - 🚧 **L2 — Career**: planned, not started (9 cells)
 - 🚧 **L3 — Meta**: planned, not started (8 cells)
@@ -55,15 +55,15 @@ Cells marked *(planned)* below do not have a file yet. Their links are intention
 | L0.01 | [`L0-match/01-rng.md`](L0-match/01-rng.md) | ✅ ratified | 00 |
 | L0.02 | [`L0-match/02-event-bus.md`](L0-match/02-event-bus.md) | ✅ ratified | 00 |
 | L0.03 | [`L0-match/03-entities-minimal.md`](L0-match/03-entities-minimal.md) | ✅ ratified | 00, L0.01 |
-| L0.04 | [`L0-match/04-match-engine.md`](L0-match/04-match-engine.md) | 🟡 draft (ADR-003) | 00, L0.01, L0.02, L0.03, L0.10 |
+| L0.04 | [`L0-match/04-match-engine.md`](L0-match/04-match-engine.md) | ✅ ratified | 00, L0.01, L0.02, L0.03, L0.10 |
 | L0.05 | [`L0-match/05-match-events.md`](L0-match/05-match-events.md) | ✅ ratified | 00, L0.01, L0.03 |
 | L0.06 | [`L0-match/06-match-output.md`](L0-match/06-match-output.md) | ✅ ratified | 00, L0.05 |
 | L0.07 | [`L0-match/07-save-minimal.md`](L0-match/07-save-minimal.md) | ✅ ratified | 00, L0.01, L0.03, L0.05, L0.06, L0.10 |
-| L0.08 | [`L0-match/08-random-events.md`](L0-match/08-random-events.md) | 🟡 draft (ADR-003) | 00, L0.01, L0.03, L0.04, L0.05, L0.10 |
+| L0.08 | [`L0-match/08-random-events.md`](L0-match/08-random-events.md) | ✅ ratified | 00, L0.01, L0.03, L0.04, L0.05, L0.10 |
 | L0.09 | [`L0-match/09-context-modifiers.md`](L0-match/09-context-modifiers.md) | ✅ ratified | 00, L0.03 |
-| L0.10 | [`L0-match/10-ground-truth.md`](L0-match/10-ground-truth.md) | 🟡 draft (ADR-003) | 00, L0.01, L0.03 |
+| L0.10 | [`L0-match/10-ground-truth.md`](L0-match/10-ground-truth.md) | ✅ ratified | 00, L0.01, L0.03 |
 
-**L0 is done when:** a friendly match is playable, savable, reloadable, deterministic, and every event has a cause trace.
+**L0 is done when:** a friendly match is playable, savable, reloadable, deterministic, and every event has a cause trace. The **specification** is complete; the **code** can now be written (ADR-003 accepted).
 
 ---
 
@@ -197,21 +197,16 @@ These components are referenced across L0 cells but do not (yet) have a dedicate
 
 ---
 
-## Open ADRs affecting this index
+## ADR status
 
 | ADR | Title | Status | Effect |
 |---|---|---|---|
-| [003](../docs/adr/003-plane-a-enforcement.md) | Plane A enforcement | 🟡 proposed | Blocks L0.04, L0.08, L0.10 |
+| [001](../docs/adr/001-language-rust.md) | Language: Rust | ✅ accepted | — |
+| [002](../docs/adr/002-project-name-and-scope.md) | Project name and scope | ✅ accepted | — |
+| [003](../docs/adr/003-plane-a-enforcement.md) | Plane A enforcement | ✅ accepted | Unblocked L0.04, L0.08, L0.10 |
+| [004](../docs/adr/004-panic-strategy-ffi.md) | Panic strategy at FFI | ✅ accepted | — |
 | [005](../docs/adr/005-qt-binding.md) | Qt binding | 🟡 proposed | Blocks L3-ui |
 | [006](../docs/adr/006-license.md) | License | 🟡 proposed | Blocks `LICENSE.md` and `Cargo.toml` examples |
 | [007](../docs/adr/007-canonical-language.md) | Canonical language | 🟡 proposed | Blocks translations |
 
----
-
-## Accepted ADRs (for reference)
-
-| ADR | Title | Status |
-|---|---|---|
-| [001](../docs/adr/001-language-rust.md) | Language: Rust | ✅ accepted |
-| [002](../docs/adr/002-project-name-and-scope.md) | Project name and scope | ✅ accepted |
-| [004](../docs/adr/004-panic-strategy-ffi.md) | Panic strategy at FFI | ✅ accepted |
+Open ADRs: **005, 006, 007** (3).
