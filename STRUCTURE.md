@@ -1,6 +1,6 @@
 # Repository Structure
 
-**Version:** 1.1
+**Version:** 1.2
 **Status:** active
 **Last updated:** 2026-10-25
 
@@ -85,63 +85,55 @@ The specification is not a flat list of 25 modules. It is organised in **four co
 
 ## 3. Directory Layout
 
-### `/modules` — the specification
+### Current state (as of 2026-10-25)
 
-The specification is organised by level, then by cell. Each cell is a directory. Each file inside a cell is a sub-cell.
+The repository currently contains **documentation only**. The following directories and files exist:
 
 ```
-modules/
-├── 00-foundations.md           # the doctrine, above all levels
-├── _index.md                   # the map of all cells
-│
-├── L0-match/
-│   ├── 00-overview.md          # the "border" of the cell
-│   ├── 01-rng.md
-│   ├── 02-event-bus.md
-│   ├── 03-entities-minimal.md
-│   ├── 04-match-engine.md
-│   ├── 05-match-events.md
-│   ├── 06-match-output.md
-│   ├── 07-save-minimal.md
-│   ├── 08-random-events.md
-│   └── 09-context-modifiers.md
-│
-├── L1-season/
-│   ├── 00-overview.md
-│   ├── 01-competitions.md
-│   ├── 02-calendar.md
-│   └── 03-standings.md
-│
-├── L1-world/
-│   ├── 00-overview.md
-│   ├── 01-nation.md
-│   ├── 02-city.md
-│   └── 03-stadium.md
-│
-├── L1-roster/
-│   ├── 00-overview.md
-│   ├── 01-player-attributes.md
-│   ├── 02-staff.md
-│   └── 03-contracts.md
-│
-├── L2-tactics/
-├── L2-market/
-├── L2-finance/
-├── L2-youth/
-├── L2-scouting/
-├── L2-psyche/
-├── L2-crowd/
-├── L2-media/
-├── L2-ai/
-│
-├── L3-registry/
-├── L3-packs/
-├── L3-generator/
-├── L3-editor/
-├── L3-assets/
-├── L3-ui/
-├── L3-statistics/
-└── L3-quality/
+pc-football-manager/
+├── README.md
+├── STRUCTURE.md
+├── CONTRIBUTING.md
+├── modules/
+│   ├── 00-foundations.md
+│   ├── _index.md
+│   └── L0-match/         (10 files, 00 → 09)
+└── docs/
+    └── adr/              (8 files, 000 → 007)
+```
+
+### Target state
+
+The full structure, once code and supporting files exist. Items marked *(planned)* do not exist yet.
+
+```
+pc-football-manager/
+├── README.md
+├── STRUCTURE.md
+├── CONTRIBUTING.md
+├── LICENSE.md                 # *(planned)* dual license (ADR-006)
+├── CHANGELOG.md               # *(planned)*
+├── CHANGELOG-SIM.md           # *(planned)*
+├── CHANGELOG-REGISTRY.md      # *(planned)*
+├── modules/                   # specification, concentric L0–L3
+│   ├── 00-foundations.md
+│   ├── _index.md
+│   ├── L0-match/
+│   ├── L1-season/             # *(planned)*
+│   ├── L1-world/              # *(planned)*
+│   ├── L1-roster/             # *(planned)*
+│   ├── L2-*/                  # *(planned)* 9 cells
+│   └── L3-*/                  # *(planned)* 8 cells
+├── archive/                   # *(planned)* historical Prompt Masters (v5, v6, v7)
+├── docs/
+│   ├── adr/                   # architecture decision records
+│   ├── legal/                 # *(planned)* data source compliance
+│   ├── calibration/           # *(planned)* model calibration dashboards
+│   └── MIGRATION-01-04.md     # *(planned)* legacy module migration
+├── registry/                  # *(planned)* empty until code exists
+├── crates/                    # *(planned)* empty until code exists
+├── mods/                      # *(planned)* empty until user packs exist
+└── data/                      # *(planned)* examples only, never real licensed data
 ```
 
 **File naming:** `NN-kebab-case-name.md`, two-digit prefix, no Italian, no version in the filename. `04-match-engine.md`, not `Modulo 04 — Motore Partita (rev 1.1).md`. The filename is stable; the revision lives in the frontmatter.
@@ -160,11 +152,11 @@ One file per architectural decision. See §5.
 
 ### `/docs/legal` — data source compliance
 
-Licensing terms, provider constraints, what we can and cannot do with third-party data.
+Licensing terms, provider constraints, what we can and cannot do with third-party data. *(planned)*
 
 ### `/docs/calibration` — model calibration dashboards
 
-When the project ships, this folder holds the dashboards that compare internal models (xG, IR, projections) against real data. It is empty until the code exists.
+When the project ships, this folder holds the dashboards that compare internal models (xG, IR, projections) against real data. *(planned)*
 
 ### `/crates`, `/registry`, `/mods`, `/data`
 
@@ -196,7 +188,7 @@ referenced_by:
   - "L0.06"
   - "L0.08"
   - "L0.09"
-conforms_to: "00-foundations (v1.0)"
+conforms_to: "00-foundations (v1.1)"
 ---
 ```
 
@@ -275,13 +267,13 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 
 | ADR | Title | Status | Blocks |
 |---|---|---|---|
-| 001 | Language: Rust | accepted | — |
-| 002 | Project name and scope | accepted | — |
-| 003 | Plane A enforcement | proposed | `L0.04`, `L0.08` |
-| 004 | Panic strategy at FFI | accepted | — |
-| 005 | Qt binding | proposed | `L3-ui`, `fmr-bridge` |
-| 006 | License | proposed | `LICENSE.md`, every `Cargo.toml` example |
-| 007 | Canonical language | proposed | translations, language policy |
+| 001 | Language: Rust | ✅ accepted | — |
+| 002 | Project name and scope | ✅ accepted | — |
+| 003 | Plane A enforcement | 🟡 proposed | `L0.04`, `L0.08` |
+| 004 | Panic strategy at FFI | ✅ accepted | — |
+| 005 | Qt binding | 🟡 proposed | `L3-ui`, `fmr-bridge` |
+| 006 | License | 🟡 proposed | `LICENSE.md`, every `Cargo.toml` example |
+| 007 | Canonical language | 🟡 proposed | translations, language policy |
 
 ---
 
