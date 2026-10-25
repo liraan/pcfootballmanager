@@ -1,48 +1,51 @@
-# ADR-014 — Mobile Support Strategy
+cd ~/pcfootballmanager && cat > docs/adr/014-mobile-strategy.md <<'ADR014_EOF'
+# ADR-014 — Mobile Strategy: Native UI, No Plugins, Data Packs Only
 
 - **Status:** accepted
 - **Date:** 2026-10-25
 - **Supersedes:** none
 - **Superseded by:** none
-- **Depends on:** ADR-005 (Qt binding), ADR-012 (Plugins)
-- **Blocks:** the mobile UI (Phase 3+), the plugin system (mobile constraints)
+- **Depends on:** ADR-005 (Qt binding), ADR-012 (Plugins), ADR-013 (Worlds)
+- **Blocks:** the mobile UI (Phase 3+)
 
 ## Context
 
 The project targets PC first (Windows, Linux, macOS) with a Qt UI (ADR-005). The question is whether — and how — to support Android and iOS.
 
-The core is **mobile-ready by design**: it is pure Rust, has no Qt dependency, and the match engine is textual (low CPU). The `simulate_match` function, the RNG, the save format, and the deterministic rules are platform-agnostic. A phone can run them.
+The core is **mobile-ready by design**: pure Rust, no Qt, textual match engine (low CPU), platform-agnostic save format. A phone can run `simulate_match`, the RNG, and the deterministic rules.
 
-The **UI is not mobile-ready**. The desktop UI is QWidgets (data grids) + QML (skins). QWidgets does not exist on iOS and is limited on Android. QML exists on mobile, but it is a different paradigm (touch, animations, declarative layout). And Qt on iOS raises a **licensing problem**: Qt requires static linking on iOS, and LGPL with static linking is legally contested (the FSF and the Qt Company disagree). Many projects choose the commercial Qt license for iOS, or a non-Qt UI.
+The **UI is not mobile-ready**. QWidgets does not exist on iOS and is limited on Android. Qt on iOS raises a licensing problem (static linking + LGPL). The desktop UI and the mobile UI are two frontends, not a port.
 
-The plugin system (ADR-012) is also affected: iOS **forbids** downloading and executing code (App Store Guidelines 2.5.2). A "plugin = Rust crate loaded at runtime" model **cannot exist on iOS** in that form. On Android it is technically possible, but complex (JNI, ABI, sandbox). The pack system (data-only packs) is unaffected.
+The **plugin system (ADR-012) is not mobile-compatible**. iOS forbids downloading and executing code (App Store Guidelines 2.5.2). A "plugin = Rust crate loaded at runtime" model cannot exist on iOS in that form. On Android it is technically possible, but complex and against the simplicity of the project.
 
-This ADR decides the strategy. It does **not** implement mobile support: mobile is Phase 3+ (after L1, after the desktop UI). It declares the constraints so that the desktop UI, the plugin system, and the pack system are designed with the mobile target in mind, instead of discovering the incompatibilities later.
+The **pack system (data-only packs) works on every platform**: registry files, themes, assets, generated worlds are data that the app reads, not code that the app executes.
+
+This ADR decides the strategy. It does **not** implement mobile support: mobile is Phase 3+ (after L1, L2, desktop UI, L3). It declares the constraints so that the desktop UI, the plugin system, and the pack system are designed with the mobile target in mind.
 
 ## Options considered
 
-### Option A — Qt/QML everywhere (desktop + mobile)
-Desktop: QWidgets + QML. Mobile: QML native (Qt for Android/iOS).
-- **Pro:** one UI language, one team, one pipeline.
-- **Con:** QML is a different paradigm from QWidgets; QWidgets is absent on mobile; Qt on iOS has a licensing problem; `cxx-qt` on mobile is young and undertested.
+### Option A — Qt/QML everywhere
+Desktop: QWidgets + QML. Mobile: QML native.
+- **Pro:** one UI language.
+- **Con:** QML is a different paradigm from QWidgets; QWidgets is absent on mobile; Qt on iOS has a licensing problem.
 
-### Option B — Qt desktop, native mobile UI (CHOSEN)
-Desktop: Qt/QML + QWidgets (ADR-005). Mobile: SwiftUI (iOS) / Jetpack Compose (Android) + FFI to the Rust core.
-- **Pro:** truly native UI on each platform; Qt remains the desktop UI; Qt licensing is a desktop-only concern; each UI can follow the platform's conventions (touch, sessions, notifications).
-- **Con:** two UIs to maintain; two skill sets (or two teams); two FFI layers (Rust↔Swift, Rust↔Kotlin/JNI) to write and test; the plugin system is limited on iOS (see §"Plugin system on mobile").
+### Option B — Qt desktop, native mobile UI, plugins on both
+Desktop: Qt/QML + QWidgets. Mobile: SwiftUI / Jetpack Compose + FFI. Plugins on both (build-time on iOS, runtime on Android).
+- **Pro:** truly native UI; plugin moddability on both.
+- **Con:** two UIs, two FFIs, and the plugin system is limited on iOS (no runtime loading), which creates a confusing half-moddability on mobile.
 
-### Option C — Core Rust + WebView UI on mobile
-Desktop: Qt/QML. Mobile: WebView + HTML/JS UI, with the core compiled to WASM.
-- **Pro:** one web UI, reusable for debug and mobile; zero Qt licensing on iOS; the core is already Rust.
-- **Con:** WebView performance is lower than native; UX is not truly native; WASM has limits (no filesystem, limited threading); the save/load needs platform-specific APIs.
+### Option C — Qt desktop, native mobile UI, data packs only (CHOSEN)
+Desktop: Qt/QML + QWidgets, plugins + data packs. Mobile: SwiftUI / Jetpack Compose + FFI, **data packs only**, no plugins.
+- **Pro:** the core is portable; each UI is native; the mobile is honest (no promise of plugin moddability that iOS cannot keep); the pack system is shared across platforms.
+- **Con:** two UIs, two FFIs; the community is split between packs (all platforms) and plugins (desktop only); the mobile LOD is fixed.
 
 ## Decision
 
-**Option B is accepted.**
+**Option C is accepted.**
 
 ### 1. The core is mobile-ready, the UI is not
 
-The Rust core (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`) is designed to be **platform-agnostic**. It cross-compiles to ARM64 for Android and iOS without changes. The determinism rules apply on every target: the golden tests must run on ARM as well, not only on x86, otherwise "deterministic" means "deterministic on x86".
+The Rust core (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`) cross-compiles to ARM64 for Android and iOS without changes. The determinism rules apply on every target: the golden tests must run on ARM as well, not only on x86.
 
 The UI is **not** mobile-ready. The desktop UI is Qt (ADR-005). The mobile UI is native (SwiftUI / Jetpack Compose), and is a **separate** frontend, not a port of the desktop UI.
 
@@ -52,6 +55,7 @@ The UI is **not** mobile-ready. The desktop UI is Qt (ADR-005). The mobile UI is
 ┌─────────────────────┐     ┌─────────────────────┐
 │  Desktop UI (Qt)    │     │  Mobile UI (native) │
 │  QWidgets + QML     │     │  SwiftUI / Compose  │
+│  plugins + packs    │     │  data packs only    │
 └──────────┬──────────┘     └──────────┬──────────┘
            │                            │
            │  FFI (Rust↔C++)            │  FFI (Rust↔Swift, Rust↔Kotlin)
@@ -64,77 +68,103 @@ The UI is **not** mobile-ready. The desktop UI is Qt (ADR-005). The mobile UI is
               └───────────────────────┘
 ```
 
-The FFI layers are **separate crates**: `pcfm-bridge` (Rust↔C++ for Qt, per ADR-004), `pcfm-ffi-swift` (Rust↔Swift), `pcfm-ffi-kotlin` (Rust↔Kotlin/JNI). Each FFI layer follows the rules of ADR-004: thin shim, `catch_unwind` at the boundary, contract tests, no game logic in the shim.
+The FFI layers are **separate crates**: `pcfm-bridge` (Rust↔C++ for Qt, per ADR-004), `pcfm-ffi-swift`, `pcfm-ffi-kotlin`. Each FFI follows ADR-004: thin shim, `catch_unwind`, contract tests, no game logic.
 
-### 3. The plugin system on mobile
+### 3. Plugins are desktop-only
 
-ADR-012 defines a plugin as a Rust crate with a `sheet.toml`. On desktop, a plugin can be **loaded at runtime** (dynamic library). On mobile:
+ADR-012 defines a plugin as a Rust crate with a `sheet.toml`, loaded at runtime. **This is a desktop feature.** It does not exist on mobile:
 
-- **iOS:** runtime loading is **forbidden** by the App Store. A plugin can only be **compiled into the binary** at build time. There is no "user installs a plugin on iOS".
-- **Android:** runtime loading is technically possible, but complex. The default is the same as iOS: **compiled-in plugins**. Runtime loading is an opt-in for advanced users, with the same constraints as the desktop (see ADR-004).
+- **iOS:** runtime loading is forbidden by the App Store (Guidelines 2.5.2). A plugin cannot be loaded on iOS. There is no workaround.
+- **Android:** runtime loading is technically possible, but it is not part of the mobile strategy. Android uses the same model as iOS: **no plugins**. This keeps the two mobile targets identical and the mobile UI simple.
 
-**Consequence for ADR-012:** the plugin system is **build-time on mobile, runtime on desktop**. The plugin sheet, the conflict detection, and the LOD computation are identical in both cases (they operate on the metadata, not on the loading mechanism). Only the loading mechanism differs.
+**Consequence for ADR-012:** the plugin system is **desktop-only**. The ADR applies to the desktop target. On mobile, only data packs are supported.
 
-**Consequence for the pack system (L3-packs, planned):** data packs (registry, themes, assets, generated worlds) work on every platform. Code packs (sandboxed DSL, scripts) may be restricted on iOS depending on Apple's review; this is an open question, to be resolved when L3-packs is written.
+**Consequence for the pack system (L3-packs, planned):** data packs (registry, themes, assets, generated worlds) work on **every platform**. Code packs (sandboxed DSL, scripts) are **not** part of the mobile strategy. They may be restricted on desktop too, depending on future decisions. The default is: mobile = data only.
 
-### 4. Mobile is Phase 3+
+### 4. The LOD is fixed on mobile
+
+ADR-013 defines the LOD as the sum of the `weight` of active plugins. On mobile, there are no plugins. Therefore:
+
+- **Desktop:** LOD = sum of the `weight` of active plugins. The player chooses which plugins to activate, and the LOD varies.
+- **Mobile:** LOD = **core LOD** (fixed). Data packs do not modify it. The mobile player has a fixed LOD, determined by the framework, not by configuration.
+
+**Consequence for ADR-013:** the LOD is **defined only where plugins are active** (desktop). On mobile, the LOD is the core LOD, and data packs do not change it.
+
+### 5. The mobile UI is a pack manager, not a plugin manager
+
+The mobile UI manages **data packs only**. It does not expose the concept of "plugin". It allows:
+
+- Install a data pack (from local file, or from a community pack)
+- Activate / deactivate a data pack
+- Configure the parameters of a data pack
+- See the conflicts between data packs (e.g. two packs that modify the same registry entry)
+- See the content of a data pack (registry, assets, generated worlds)
+- See the **core LOD** (fixed), not a variable LOD
+
+The mobile UI does **not** expose:
+- Plugins (they do not exist on mobile)
+- Variable LOD (the LOD is fixed)
+- Code packs (data only)
+
+### 6. Mobile is Phase 3+
 
 Mobile support is **not** in v1.0. The sequence:
 
 1. L0 (done) — match engine, save/load, CLI.
 2. L1 — season, world, roster.
-3. L2 — career (market, finance, youth, scouting, psyche, crowd, media, AI).
+3. L2 — career.
 4. Desktop UI (Qt, ADR-005) — the first user-facing UI.
 5. L3 — registry, packs, generator, editor, assets, statistics, quality.
-6. **Mobile (Phase 3+)** — the native UI frontends, the FFI layers, the build-time plugin model.
+6. **Mobile (Phase 3+)** — the native UI frontends, the FFI layers, the pack manager.
 
-Mobile is after the desktop UI is stable, not before. The desktop UI is the reference for the gameplay; the mobile UI adapts it to touch and sessions.
+Mobile is after the desktop UI is stable. The desktop UI is the reference; the mobile UI adapts it to touch and sessions.
 
-### 5. Determinism on ARM
+### 7. Determinism on ARM
 
-The golden tests must run on **both x86_64 and ARM64**. A simulation that is deterministic on x86 but not on ARM is not deterministic. The CI must include an ARM runner (or a cross-compilation test with QEMU), and the golden hash must match.
-
-Transcendental functions (`libm`) and floating-point rounding can diverge between architectures. The fixed-point arithmetic for money is unaffected. The `simulate_match` path must be tested for bit-identical output on both architectures.
+The golden tests must run on **both x86_64 and ARM64**. A simulation that is deterministic on x86 but not on ARM is not deterministic. The CI must include an ARM runner (or a cross-compilation test), and the golden hash must match.
 
 ## Consequences
 
 ### Easier
 - The core is portable: one Rust codebase, two UIs.
-- The desktop UI (Qt) remains the reference; the mobile UI adapts.
+- The desktop UI (Qt) remains the reference.
 - Each UI follows the platform's conventions (touch, sessions, notifications).
 - Qt licensing is a desktop-only concern.
-- The plugin sheet, the conflict detection, the LOD computation are platform-agnostic.
+- The pack system is shared across platforms.
+- The mobile UI is simple: a pack manager, not a plugin manager.
 
 ### Harder
 - Two UIs to maintain (Qt + SwiftUI/Compose).
-- Two FFI layers to write and test (`pcfm-ffi-swift`, `pcfm-ffi-kotlin`).
-- The plugin system is build-time on mobile, runtime on desktop. The model is the same; the loading mechanism differs.
+- Two FFI layers to write and test.
+- The community is split: packs (all platforms) vs plugins (desktop only).
+- The LOD is fixed on mobile: the mobile player cannot choose a deeper or shallower world.
 - The golden tests must run on ARM64 (CI complexity).
-- The mobile UI must be designed for touch and short sessions, not as a port of the desktop UI.
-- The App Store / Play Store review processes add constraints (no runtime code, privacy manifest, etc.).
 
 ### Locked in
-- Desktop UI: Qt (ADR-005).
-- Mobile UI: native (SwiftUI / Jetpack Compose).
+- Desktop UI: Qt (ADR-005). Desktop has plugins + data packs.
+- Mobile UI: native (SwiftUI / Jetpack Compose). Mobile has data packs only.
 - Core: Rust, no Qt, mobile-ready.
 - FFI layers: separate crates, ADR-004 rules apply.
-- Plugin system: build-time on mobile, runtime on desktop.
+- Plugins: desktop-only.
+- LOD: variable on desktop, fixed (core LOD) on mobile.
 - Mobile: Phase 3+, not v1.0.
 - Determinism: golden tests on x86_64 and ARM64.
 
 ## Open questions
 
 1. **FFI crates.** The exact shape of `pcfm-ffi-swift` and `pcfm-ffi-kotlin` is not defined. They will be defined when the mobile UI is written (Phase 3+).
-2. **Code packs on iOS.** Whether the sandboxed DSL is allowed by Apple's review is an open question. It will be resolved when L3-packs is written.
-3. **Mobile UX.** The mobile UI design (screens, flows, touch, sessions) is a separate effort, to be specified in a future module (mobile UI is not in the 25 modules; it will be a separate spec, or an extension of `L3-ui`).
-4. **Who maintains the mobile UIs.** The project is single-developer today. The mobile UIs may be community-driven, or may require a second maintainer. This is a governance question, not a technical one.
-5. **App Store / Play Store.** Distribution, pricing, privacy manifest, and review are not decided. They will be when mobile is closer.
+2. **Mobile UX.** The mobile UI design (screens, flows, touch, sessions) is a separate effort, to be specified in a future module.
+3. **Who maintains the mobile UIs.** The project is single-developer today. The mobile UIs may be community-driven, or may require a second maintainer. Governance question.
+4. **App Store / Play Store.** Distribution, pricing, privacy manifest, and review are not decided.
+5. **Pack distribution on mobile.** Whether packs are installed from a file, from a URL, or from a community "pack store" is not decided. It will be when the mobile UI is written.
 
 ## References
 
 - ADR-004 — Panic strategy at the FFI boundary
 - ADR-005 — Qt binding
-- ADR-012 — Plugins: The Brick Contract
-- ADR-013 — Worlds: LOD, Manifest, and Local Determinism
+- ADR-012 — Plugins: The Brick Contract (desktop-only, see §"Scope")
+- ADR-013 — Worlds: LOD, Manifest, and Local Determinism (LOD on mobile, see §"Scope")
 - `modules/00-foundations.md` §4 — Determinism (golden tests)
 - `STRUCTURE.md` §3 — Crate naming
+ADR014_EOF
+echo "✅ ADR-014 creato" && wc -l docs/adr/014-mobile-strategy.md
