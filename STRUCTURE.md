@@ -1,6 +1,6 @@
 # Repository Structure
 
-**Version:** 1.3
+**Version:** 1.4
 **Status:** active
 **Last updated:** 2026-10-25
 
@@ -168,7 +168,9 @@ pc-football-manager/
 
 **File naming:** `NN-kebab-case-name.md`, two-digit prefix, no Italian, no version in the filename. `04-match-engine.md`, not `Modulo 04 — Motore Partita (rev 1.1).md`. The filename is stable; the revision lives in the frontmatter.
 
-**Cells vs sub-cells:** A cell is a directory. A sub-cell is a file. A sub-sub-cell is a section (`##`) inside a file. There is no third level of directories. If a sub-cell needs its own children, it becomes a new cell at the same level, not a deeper directory.
+**Cells vs sub-cells:** A **cell** is a directory (`L0-match`, `L2-psyche`). A **sub-cell** is a file inside a cell (`04-match-engine.md`). A sub-sub-cell is a section (`##`) inside a file. There is no third level of directories. If a sub-cell needs its own children, it becomes a new cell at the same level, not a deeper directory.
+
+The field `module_id` in the frontmatter is the stable identifier (`L0.04`). The field `cell` is the directory name (`L0-match`). In prose, prefer "sub-cell L0.04" over "module L0.04" when talking about a file, and "cell L0-match" when talking about a directory.
 
 ### `/archive` — the history
 
@@ -231,7 +233,7 @@ conforms_to: "00-foundations (v1.1)"
 | `title` | Human-readable title, includes the module ID |
 | `level` | 0, 1, 2, or 3 (see §2) |
 | `cell` | The directory name (`L0-match`, `L2-psyche`, ...) |
-| `module_id` | `L{level}.{NN}` for cells, `L{level}.{NN}` for sub-cells |
+| `module_id` | `L{level}.{NN}` for sub-cells |
 | `version` | Semver-ish: bump minor for clarifications, major for invariant changes |
 | `status` | `draft` (being written) / `review` (ready for comments) / `ratified` (stable) / `superseded` (replaced) |
 | `last_updated` | ISO date |
@@ -348,7 +350,37 @@ Rationale:
 5. Open a PR with **one cell only**.
 6. If the revision changes a dependency, update `referenced_by` in downstream cells.
 
-## 9. What Does NOT Go in This Repo
+## 9. What Packs Can and Cannot Extend
+
+The distinction is between **content** and **structure**.
+
+| Packs **can** extend | Packs **cannot** extend |
+|---|---|
+| The **registry** (roles, formations, instructions, attributes, metrics, index models) — see `L3-registry` *(planned)* | The **cells** of the specification (L0–L3) |
+| **Assets** (logos, kits, stadium images, audio) — see `L3-assets` *(planned)* | The **levels** of the concentric structure (L0, L1, L2, L3) |
+| **Data** (squads, players, competitions, nations) — as provided or generated data | The **doctrine** (`00-foundations.md`) |
+| **Configuration** (`balance/*.toml`, `theme/*.toml`) | The **frontmatter schema** of a cell |
+| **Scripts** in the sandboxed DSL (see `L3-packs` *(planned)*) | The **dependency rules** between levels |
+
+**Rule:** a pack that needs a new cell is a pack that is trying to be a different game. A new cell is an **architectural decision**, not a content extension. It requires:
+
+1. An ADR that justifies the new cell (why does it exist? why is it not a sub-cell of an existing cell? why is it not a pack-provided registry entry?).
+2. A PR to the core repository that adds the cell, with frontmatter, DoD, and `_index.md` update.
+3. A review by a maintainer.
+
+This is not a restriction on moddability. It is a boundary between "modding the content" (welcome) and "modding the architecture" (welcome, but through a PR, not through a pack). The two are different activities, with different review needs.
+
+**Examples:**
+
+- A pack that adds a new role: **allowed** (registry extension).
+- A pack that adds a new formation: **allowed** (registry extension).
+- A pack that adds a new visual skin: **allowed** (asset extension).
+- A pack that adds a new type of match event: **requires a core PR** (the `EventType` enum is in L0.05, and its extension is an architectural change).
+- A pack that adds a new psychological axis: **requires a core PR** (the axis is in `L2-psyche`, and adding it changes the psyche model).
+
+The last two examples are not "forbidden to modders". They are "not doable through a pack alone". The modder writes the PR, the core team reviews it, and if accepted, the new event type or axis becomes part of the core.
+
+## 10. What Does NOT Go in This Repo
 
 - Real licensed data (Wyscout, Opta, StatsBomb, FBref scrapes)
 - Credentials, API keys, tokens
@@ -358,7 +390,7 @@ Rationale:
 
 ---
 
-## 10. The Honesty Rule
+## 11. The Honesty Rule
 
 This project was drafted with AI assistance and is honest about it. That honesty applies to the documentation too:
 
