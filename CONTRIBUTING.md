@@ -4,6 +4,17 @@ Thanks for wanting to help. This project is documentation-first, and **good docu
 
 ---
 
+## Current state (as of 2026-10-25)
+
+- **Documentation only.** No code exists.
+- **L0 is fully specified** (10 cells). L1–L3 are planned.
+- **8 ADRs** exist: 3 accepted (001, 002, 004), 4 proposed (003, 005, 006, 007), 1 template (000).
+- **No `LICENSE.md` yet** — it will be created when ADR-006 is ratified. Until then, the license terms are described in the README and in ADR-006.
+
+If you're new, read the files in the order below before opening a PR.
+
+---
+
 ## Read in this order
 
 1. [`README.md`](README.md) — what the project is
@@ -75,7 +86,7 @@ Including in AI-drafted text. Especially in AI-drafted text. The AI disclosure i
    - Minor (`1.0 → 1.1`) for clarifications, typo fixes, added examples.
    - Major (`1.0 → 2.0`) for changes that affect downstream cells.
 2. **If major, write an ADR first.** The ADR explains why. It's referenced from the cell.
-3. **Archive the previous version** in `archive/` if the change is structural.
+3. **Archive the previous version** in `archive/` if the change is structural. (The `archive/` directory is planned; create it if it doesn't exist yet.)
 4. **Update `last_updated`.**
 5. **Update `referenced_by`** in downstream cells if the dependency changed.
 6. **Open a PR with one cell.**
@@ -123,14 +134,17 @@ You don't need to be a maintainer to review. If the options are unbalanced, say 
 
 If an ADR is `proposed` and touches an area, **no code is written in that area until it's accepted**. This is how we avoid the "we'll decide later" trap.
 
-### Current open ADRs
+### Current ADR status
 
-| ADR | Title | Blocks |
-|---|---|---|
-| 003 | Plane A enforcement | `L0.04`, `L0.08` |
-| 005 | Qt binding | `L3-ui`, `fmr-bridge` |
-| 006 | License | `LICENSE.md`, every `Cargo.toml` example |
-| 007 | Canonical language | translations, language policy |
+| ADR | Title | Status | Blocks |
+|---|---|---|---|
+| 001 | Language: Rust | ✅ accepted | — |
+| 002 | Project name and scope | ✅ accepted | — |
+| 003 | Plane A enforcement | 🟡 proposed | `L0.04`, `L0.08` |
+| 004 | Panic strategy at FFI | ✅ accepted | — |
+| 005 | Qt binding | 🟡 proposed | `L3-ui`, `fmr-bridge` |
+| 006 | License | 🟡 proposed | `LICENSE.md`, every `Cargo.toml` example |
+| 007 | Canonical language | 🟡 proposed | translations, language policy |
 
 ---
 
@@ -183,8 +197,10 @@ Not: `fixed stuff`, `update`, `wip`.
 
 By contributing, you agree that:
 
-- **Code contributions** are licensed under **MIT OR Apache-2.0** (see `LICENSE.md`).
-- **Asset and documentation contributions** are licensed under **CC-BY-NC-SA-4.0** (see `LICENSE.md`).
+- **Code contributions** are licensed under **MIT OR Apache-2.0**.
+- **Asset and documentation contributions** are licensed under **CC-BY-NC-SA-4.0**.
+
+The full license text will be in `LICENSE.md` once ADR-006 is ratified. The terms are described in ADR-006 and in the README.
 
 If you are contributing on behalf of an employer, make sure you have the right to do so under these terms.
 
