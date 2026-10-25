@@ -4,13 +4,13 @@
 //! no game logic; only infrastructure: RNG, event bus, IDs, deterministic
 //! math.
 //!
-//! # Status
+//! # Modules
 //!
-//! **Step 0 of L0.** This file is intentionally minimal: it compiles and
-//! passes a trivial test. The real modules (`rng`, `event_bus`, `ids`) are
-//! added in Steps 1, 2, and 3.
+//! - [`rng`] — deterministic, isolated, named random streams (L0.01)
 
 #![deny(missing_docs)]
+
+pub mod rng;
 
 /// Returns the version of `pcfm-core`, as declared in `Cargo.toml`.
 #[must_use]

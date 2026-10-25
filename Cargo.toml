@@ -1,11 +1,4 @@
 # Cargo.toml — PCFM workspace root
-#
-# This is a *virtual* workspace: it has no package of its own. It only
-# declares members, shared package metadata, shared dependencies, and
-# shared lints.
-#
-# See STRUCTURE.md §3 for the crate layout and docs/adr/001-language-rust.md
-# for the choice of Rust.
 
 [workspace]
 resolver = "2"
@@ -25,11 +18,14 @@ homepage = "https://github.com/liraan/pcfootballmanager"
 documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules"
 
 [workspace.dependencies]
-# No external dependencies yet. When the first one is needed, it goes here,
-# with a comment explaining why. See docs/adr/ for the justification rule.
-#
-# Example (do not uncomment until needed):
-# thiserror = "2"
+# The RNG crate: ChaCha20Rng, reproducible across platforms.
+rand_chacha = "0.9"
+# The traits used by ChaCha20Rng: SeedableRng, RngCore.
+rand_core = "0.9"
+# Cryptographic hash used for seed derivation. Deterministic, no random seed.
+blake3 = "1"
+# Error derive macro. Small, stable, no_std compatible.
+thiserror = "2"
 
 [workspace.lints.rust]
 unsafe_code = "deny"
@@ -43,7 +39,3 @@ suspicious = "warn"
 perf = "warn"
 pedantic = "warn"
 nursery = "warn"
-
-# Profiles are added at the end of Step 0, when the first binary exists.
-# See STRUCTURE.md §2 and docs/adr/004-panic-strategy-ffi.md for the
-# panic strategy that the release profile must implement.

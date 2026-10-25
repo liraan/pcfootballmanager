@@ -10,8 +10,10 @@ description = "Core infrastructure for PCFM: RNG, event bus, IDs, deterministic 
 documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules/L0-match"
 
 [dependencies]
-# No dependencies yet. When the first one is needed, it goes here,
-# with a comment explaining why.
+rand_chacha.workspace = true
+rand_core.workspace = true
+blake3.workspace = true
+thiserror.workspace = true
 
 [lints]
 workspace = true
