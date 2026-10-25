@@ -1,6 +1,6 @@
 ---
 title: "Modules Index"
-version: "2.4"
+version: "2.5"
 status: "active"
 last_updated: "2026-10-25"
 ---
@@ -20,7 +20,7 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 **Reading order:**
 
-1. [`00-foundations.md`](00-foundations.md) — the doctrine *(v1.1)*
+1. [`00-foundations.md`](00-foundations.md) — the doctrine *(v1.2)*
 2. The level that matches your task (L0 → L3)
 3. [`../STRUCTURE.md`](../STRUCTURE.md) — the rules of the repo
 4. [`../docs/adr/`](../docs/adr/) — the decisions
@@ -29,11 +29,12 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 ## Current state (as of 2026-10-25)
 
-- ✅ **Doctrine**: ratified (v1.1, with §9 concentric structure)
+- ✅ **Doctrine**: ratified (v1.2, with §9 concentric structure and the provider non-goal)
 - ✅ **L0 — Match**: fully specified, **all 11 cells ratified** (ADR-003 accepted)
 - 🚧 **L1 — Season**: planned, not started (12 cells)
 - 🚧 **L2 — Career**: planned, not started (9 cells)
 - 🚧 **L3 — Meta**: planned, not started (8 cells)
+- 🔌 **Provider integrations** (Wyscout, StatsBomb, Opta): **external tools, not core cells** (ADR-008)
 
 Cells marked *(planned)* below do not have a file yet. Their links are intentionally not clickable.
 
@@ -43,7 +44,9 @@ Cells marked *(planned)* below do not have a file yet. Their links are intention
 
 | File | Status |
 |---|---|
-| [`00-foundations.md`](00-foundations.md) | ✅ ratified (v1.1) |
+| [`00-foundations.md`](00-foundations.md) | ✅ ratified (v1.2) |
+
+**Note on `conforms_to`:** all cells declare `conforms_to: "00-foundations (v1.1)"`. v1.2 is a clarification that adds one sentence to §7 (Non-goals) and does not change any invariant. Cells do not need to be re-checked. The next invariant-changing doctrine revision will bump all cells.
 
 ---
 
@@ -129,6 +132,16 @@ Cells marked *(planned)* below do not have a file yet. Their links are intention
 
 ---
 
+## Provider integrations (external, not core)
+
+| Former ID | What it was | What it is now |
+|---|---|---|
+| ~~L2-ingest~~ | A core module for Wyscout / StatsBomb / Opta integration | **🔌 External tool**, produces packs, not a core cell. See [ADR-008](../docs/adr/008-provider-integration-external.md). |
+
+The core does not talk to providers. A tool (team, community, or third party) talks to the provider, produces a pack, and the user installs the pack. This keeps the core offline-first, sandboxed, and lightweight.
+
+---
+
 ## How to read a cell
 
 Every cell has:
@@ -139,7 +152,7 @@ Every cell has:
 - **§2 Specification** — the actual content
 - **§3 Data model** — entities, if any
 - **§4 Edge cases**
-- **§5 Definition of Done**
+- **§5 Definition of Done** (split into "Specification" and "Implementation" once code starts)
 - **§6 Risks and Mitigations**
 - **§7 References**
 
@@ -151,7 +164,7 @@ If a cell lacks any of these, it is a bug. Open an issue.
 
 Every cell declares `conforms_to: 00-foundations (vX.Y)`. When `00-foundations` is revised, every cell's `conforms_to` is checked. A cell that has not been re-checked is marked `status: review` until it is.
 
-The current doctrine version is **v1.1**. All ratified L0 cells conform to v1.1.
+The current doctrine version is **v1.2**. Cells conform to **v1.1** (the last invariant-changing version). v1.2 adds one sentence to §7 and does not change any invariant, so cells do not need to be re-checked.
 
 ---
 
@@ -178,6 +191,7 @@ A cell at level N may read the **output** of any cell at level `< N`. It may not
 | ✅ ratified | Accepted, stable, downstream cells may depend on it |
 | 🟡 draft | Being written or blocked by an open ADR |
 | 🚧 planned | Cell does not exist yet; the row is a placeholder |
+| 🔌 external | Not a core cell; a tool or pack outside the repository |
 | ⛔ superseded | Replaced by a newer cell, kept for history |
 
 ---
@@ -225,5 +239,6 @@ These are components that are referenced across cells but are not crates. They a
 | [005](../docs/adr/005-qt-binding.md) | Qt binding | 🟡 proposed | Blocks L3-ui |
 | [006](../docs/adr/006-license.md) | License | 🟡 proposed | Blocks `LICENSE.md` and `Cargo.toml` examples |
 | [007](../docs/adr/007-canonical-language.md) | Canonical language | 🟡 proposed | Blocks translations |
+| [008](../docs/adr/008-provider-integration-external.md) | Provider integration is external | ✅ accepted | Reclassified `L2-ingest` as external tool |
 
 Open ADRs: **005, 006, 007** (3).
