@@ -1,6 +1,6 @@
 ---
 title: "Modules Index"
-version: "2.3"
+version: "2.4"
 status: "active"
 last_updated: "2026-10-25"
 ---
@@ -182,15 +182,32 @@ A cell at level N may read the **output** of any cell at level `< N`. It may not
 
 ---
 
-## Cross-cell components
+## Components
 
-These components are referenced across L0 cells but do not (yet) have a dedicated cell. The destination is indicated.
+Some components are referenced across cells but do not (yet) have a dedicated cell. This section is the map: for each component, where it is currently defined and where its dedicated cell (if any) will live.
+
+### Infrastructure components
+
+These are the `fmr-*` crates that provide infrastructure to multiple cells. They are not domain cells; they are services. Their full specification is **fragmented across the cells that use them**, until a dedicated cell is written.
+
+| Component | Currently defined in | Dedicated cell (planned) | Notes |
+|---|---|---|---|
+| `fmr-core` | L0.01 §2.2 (RNG), L0.02 §2.1 (event bus), L0.03 §3.1 (IDs), `00-foundations` §4 (fixed-point) | — | The core crate. Used by every other crate. |
+| `fmr-stats` | L0.05 §2.4 (`EventChain`), L0.06 (consumer) | `L3-statistics` | Storage of `MatchEvent`, query engine. |
+| `fmr-metrics` | L0.04 §2.4 (sub-models), L0.06 §2.3 (`MatchStatistics`) | `L3-statistics` | xG, PPDA, progressive actions. Minimal version at L0. |
+| `fmr-data` | L0.07 §2.3 (migration scripts) | `L3-quality` | Loader, validator, migrations. |
+| `fmr-bridge` | `docs/adr/004-panic-strategy-ffi.md`, `docs/adr/005-qt-binding.md` | `L3-ui` | Qt FFI shim. The only crate that knows Qt. |
+
+**Rule:** when a new cell needs `fmr-core` (or any other infrastructure crate), it does not re-specify the crate. It links to the existing definition. The dedicated cell, when written, will be the single source of truth; until then, the "Currently defined in" column is the map.
+
+### Cross-cell components
+
+These are components that are referenced across cells but are not crates. They are either configuration, data, or external concepts.
 
 | Component | Referenced in | Destination |
 |---|---|---|
-| `fmr-hidden` / `GroundTruth` | L0.03, L0.04, L0.08, ADR-003 | **L0.10** (documented here) ✅ |
+| `fmr-hidden` / `GroundTruth` | L0.03, L0.04, L0.07, L0.08, ADR-003 | **L0.10** (documented here) ✅ |
 | `fmr-gen` | ADR-003, L0.07, L0.10 | L3-generator *(planned)* |
-| `fmr-stats` / `EventChain` | L0.05, L0.06 | `EventChain` documented in L0.05 ✅; storage at L3-statistics *(planned)* |
 | `balance/*.toml` | L0.04, L0.06, L0.08 | L3-quality *(planned)* |
 | `registry/*.yaml` | L0.03, L0.05 | L3-registry *(planned)* |
 | `locales/*` | L0.06 | L3-assets *(planned)*; translations at `locales/it/` *(planned)* |
