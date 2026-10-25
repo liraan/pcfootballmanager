@@ -1,6 +1,6 @@
 # ADR-005 — Qt Binding
 
-- **Status:** proposed
+- **Status:** accepted
 - **Date:** 2026-10-25
 - **Supersedes:** none
 - **Superseded by:** none
@@ -15,25 +15,25 @@ The UI requires Qt (QML for skin-friendly screens, QWidgets/model-view for data 
 ### Option A — `cxx-qt` (KDAB)
 
 - **Pro:**
-  - Maintained by KDAB (Qt specialists), active releases (`0.9.1`, `0.10.0` in 2026)[reference:0].
-  - Supports **QWidgets** (limited) and **QML** — both needed by PCFM[reference:1].
-  - Bidirectional Rust ⇄ C++ bindings, safe Rust, integrates with CMake and Cargo[reference:2].
-  - Tested on Linux, Windows, macOS, WebAssembly[reference:3].
+  - Maintained by KDAB (Qt specialists), active releases (`0.9.1`, `0.10.0` in 2026).
+  - Supports **QWidgets** (limited) and **QML** — both needed by PCFM.
+  - Bidirectional Rust ⇄ C++ bindings, safe Rust, integrates with CMake and Cargo.
+  - Tested on Linux, Windows, macOS, WebAssembly.
 - **Con:**
-  - "Early development, API changes frequently" (README)[reference:4].
-  - QWidgets support is "limited" — may require raw C++ for complex data grids[reference:5].
+  - "Early development, API changes frequently" (README).
+  - QWidgets support is "limited" — may require raw C++ for complex data grids.
   - Build complexity: `cxx-qt-build` generates C++ code, adds build time.
 
 ### Option B — `qmetaobject` (woboq)
 
 - **Pro:**
-  - Mature, stable API (`0.2.10` since 2026)[reference:6].
-  - Simpler build: no C++ generation, pure Rust macros[reference:7].
+  - Mature, stable API (`0.2.10` since 2026).
+  - Simpler build: no C++ generation, pure Rust macros.
   - Good QML support.
 - **Con:**
-  - **No QWidgets support** at all[reference:8]. PCFM needs QWidgets for data grids (model/view).
+  - **No QWidgets support** at all. PCFM needs QWidgets for data grids (model/view).
   - Requires Qt ≥ 5.8, but QWidgets absent means it cannot cover the full UI surface.
-  - Less active maintenance than cxx-qt (single maintainer, 615 stars vs 941)[reference:9][reference:10].
+  - Less active maintenance than cxx-qt (single maintainer, 615 stars vs 941).
 
 ### Option C — Hybrid: `cxx-qt` for QWidgets, `qmetaobject` for QML
 
@@ -62,33 +62,35 @@ The UI requires Qt (QML for skin-friendly screens, QWidgets/model-view for data 
 ## Consequences
 
 ### Easier
+
 - One binding covers both QML and QWidgets.
 - KDAB maintenance means the project tracks Qt releases.
 - The FFI boundary is already mandated thin by ADR-004, so `cxx-qt` fits naturally.
 
 ### Harder
+
 - `cxx-qt` API is unstable; upgrades may require code changes.
 - QWidgets support is "limited"; some complex model/view features may need raw C++ shims.
 - Build times increase (C++ code generation).
 
 ### Locked in
+
 - `cxx-qt` is the Qt binding.
 - `pcfm-bridge` is the only crate that imports it.
 - `qmetaobject` is not used (unless a future ADR supersedes this).
 
 ## Implementation notes
 
-1. Ratify this ADR.
-2. Add `cxx-qt` as a dependency of `pcfm-bridge` only.
-3. Write a minimal `pcfm-bridge` example: a QObject with one signal, one slot.
-4. Verify the FFI boundary with ADR-004 rules (`catch_unwind`, no panic across FFI).
-5. Add `cxx-qt` to `deny.toml` allow-list with a pinned version.
-6. Write a `L3-ui` smoke test: one QML screen, one QWidgets table.
+1. Add `cxx-qt` as a dependency of `pcfm-bridge` only.
+2. Write a minimal `pcfm-bridge` example: a QObject with one signal, one slot.
+3. Verify the FFI boundary with ADR-004 rules (`catch_unwind`, no panic across FFI).
+4. Add `cxx-qt` to `deny.toml` allow-list with a pinned version.
+5. Write a `L3-ui` smoke test: one QML screen, one QWidgets table.
 
 ## References
 
 - `cxx-qt` repository: https://github.com/KDAB/cxx-qt
 - CXX-Qt Book: https://kdab.github.io/cxx-qt/book/
-- Comparison table (KDAB README)[reference:11]
+- Comparison table (KDAB README)
 - ADR-004 — panic strategy at FFI boundary
 - ADR-003 — Plane A enforcement (no latent types in `pcfm-bridge`)
