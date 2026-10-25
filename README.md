@@ -5,7 +5,7 @@
 **An open football management simulation built around transparency, privacy, and tactical depth.**
 
 ![Status](https://img.shields.io/badge/status-documentation_phase-yellow)
-![Modules](https://img.shields.io/badge/modules-5_of_25-blue)
+![Structure](https://img.shields.io/badge/structure-L0--L3-blue)
 ![Code](https://img.shields.io/badge/code-not_written_yet-lightgrey)
 ![Built with](https://img.shields.io/badge/built_with-AI_assistance-purple)
 
