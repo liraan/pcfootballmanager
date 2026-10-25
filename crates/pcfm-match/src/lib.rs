@@ -17,6 +17,10 @@
 //! `ThreeDEngine` can use `NarrativeEntry.text` as subtitles, or use
 //! `NarrativeEntry.template_key + params` to render its own localised text,
 //! or ignore narrative entirely.
+//!
+//! The **save** (see [`save`]) serialises the match, the event chain, and
+//! the result. `GroundTruth` is not saved: it is reconstructed from
+//! `(world_seed, match_id)` at load time.
 
 #![deny(missing_docs)]
 
@@ -25,6 +29,7 @@ pub mod engine;
 pub mod narrative;
 pub mod orchestrator;
 pub mod result;
+pub mod save;
 pub mod state;
 
 pub use context::{MatchConfig, MatchContext};
@@ -32,6 +37,7 @@ pub use engine::{MatchEngine, TextMatchEngine};
 pub use narrative::{Importance, NarrativeEntry, narrate};
 pub use orchestrator::simulate_match;
 pub use result::{MatchResult, MatchStatistics, Score};
+pub use save::{MatchSave, SCHEMA_VERSION, SIM_VERSION, SaveError, replay};
 pub use state::MatchState;
 
 /// Returns the version of `pcfm-match`, as declared in `Cargo.toml`.

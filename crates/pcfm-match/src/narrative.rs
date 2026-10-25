@@ -26,12 +26,13 @@ use std::collections::BTreeMap;
 use pcfm_core::ids::{EventId, PlayerId};
 use pcfm_model::Match;
 use pcfm_stats::{EventChain, EventType, MatchEvent};
+use serde::{Deserialize, Serialize};
 
 /// How important a narrative entry is.
 ///
 /// Renderers use this to decide how prominently to display the entry
 /// (e.g. bold for `High`, normal for `Low`, an alert for `Critical`).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Importance {
     /// Low importance (e.g. a generic pass).
     Low,
@@ -44,7 +45,7 @@ pub enum Importance {
 }
 
 /// A single narrative entry.
-#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct NarrativeEntry {
     /// The minute of the match (0–120).
     pub minute: u8,

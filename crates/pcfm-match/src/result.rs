@@ -2,12 +2,12 @@
 
 use pcfm_core::hash::Hash;
 use pcfm_stats::EventChain;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use crate::narrative::NarrativeEntry;
 
 /// The score of a match.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub struct Score {
     /// The home team's goals.
     pub home: u8,
@@ -16,7 +16,7 @@ pub struct Score {
 }
 
 /// The statistics of a match.
-#[derive(Debug, Clone, Copy, PartialEq, Default, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Default, Serialize, Deserialize)]
 pub struct MatchStatistics {
     /// Possession, as `(home, away)`, sums to 1.0.
     pub possession: (f32, f32),
@@ -33,7 +33,7 @@ pub struct MatchStatistics {
 /// The `narrative` field is **data**, not a rendered string. It is filled by
 /// the **renderer** (e.g. `TextMatchEngine`), not by `simulate_match`. A
 /// renderer that does not need narrative leaves it empty.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MatchResult {
     /// The score.
     pub score: Score,
