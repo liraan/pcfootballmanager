@@ -18,9 +18,42 @@ This project does not use semantic versioning for the docs; the version of each 
 - Write L2 cells (tactics, market, finance, youth, scouting, psyche, crowd, media, ai): 9 cells.
 - Write L3 cells (registry, packs, generator, editor, assets, ui, statistics, quality): 8 cells.
 - Recover and archive the three Prompt Master versions (v5, v6, v7) into `archive/prompts/`.
-- Complete the migration of the four legacy Italian modules (`01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md`), tracked in [`docs/MIGRATION-01-04.md`](docs/MIGRATION-01-04.md).
 - Begin code: `fmr-core`, `fmr-hidden`, `fmr-match` (L0 implementation).
 - Ratify ADR-005 (Qt binding), ADR-006 (license), ADR-007 (canonical language).
+
+---
+
+## [2026-10-25] — ADR-008: provider integration is external, not core
+
+### Added
+
+- **`docs/adr/008-provider-integration-external.md`** — accepted. Provider integrations (Wyscout, StatsBomb, Opta, etc.) are **external tools that produce packs**, not core modules. The core does not talk to providers, does not read credentials, does not model rate limits. This keeps the core offline-first, sandboxed, and lightweight.
+
+### Changed
+
+- **`modules/00-foundations.md`**: version 1.1 → **1.2**. Added one sentence to §7 (Non-goals): provider integrations are external tools, not core modules. No invariant changed. Cells do not need to be re-checked.
+- **`modules/_index.md`**: version 2.4 → **2.5**. The `L2-ingest` row was reclassified from a core cell to **🔌 external tool**. Added a dedicated section "Provider integrations (external, not core)". ADR status table updated with ADR-008.
+
+### Summary
+
+Before this entry, the specification contained a planned `L2-ingest` cell for Wyscout / StatsBomb / Opta integration. That cell conflicted with three core principles:
+
+- The core is **offline-first** (a core module that talks to the network is not).
+- The core is **sandboxed** (a core module that reads credentials is not).
+- The core is **lightweight** (provider integration is a large, provider-specific, license-sensitive feature).
+
+After this entry:
+
+- **`L2-ingest` no longer exists as a core cell.**
+- **A tool** (team, community, or third party) talks to the provider, produces a pack, and the user installs the pack.
+- **The core does not know that Wyscout exists.**
+
+This is consistent with ADR-002 (offline-first), `00-foundations` §5 (no bundled commercial data), and `STRUCTURE.md` §9 (packs extend content, not structure).
+
+### Related ADRs
+
+- ADR-002 — offline-first
+- ADR-008 — this decision
 
 ---
 
@@ -47,7 +80,7 @@ Before this entry, three L0 cells were `draft` (L0.04, L0.08, L0.10) and blocked
 - **The L0 specification is complete.**
 - **Code can begin**, starting from `fmr-core`, `fmr-hidden`, and `fmr-match` (see `STRUCTURE.md` §3).
 
-The Doctrine is unchanged. `00-foundations` remains at v1.1.
+The Doctrine was unchanged at that point. `00-foundations` remained at v1.1.
 
 ---
 
@@ -56,7 +89,7 @@ The Doctrine is unchanged. `00-foundations` remains at v1.1.
 ### Added
 
 - **`docs/GLOSSARY.md`** (v1.0) — 30+ terms with definitions and links to the source. Sections: Core, Data model, Determinism, Architecture, Process, Banned, External, Abbreviations, Historical.
-- **`modules/L0-match/10-ground-truth.md`** (v1.0, `draft`) — the cell that centralises the public API of `fmr-hidden`. Before this cell, the API was scattered across L0.03 §3.2, L0.04 §1, L0.05 §2.3 and ADR-003.
+- **`modules/L0-match/10-ground-truth.md`** (v1.0, `draft` at the time) — the cell that centralises the public API of `fmr-hidden`. Before this cell, the API was scattered across L0.03 §3.2, L0.04 §1, L0.05 §2.3 and ADR-003.
 - **9 `.gitkeep` files** in `crates/`, `registry/`, `mods/`, `data/`, `docs/legal/`, `docs/calibration/`, `archive/prompts/`, `archive/doctrine/`, `archive/legacy/` — placeholder directories kept in git.
 
 ### Changed
@@ -100,11 +133,11 @@ The `fmr-hidden` API now has a single home (`L0.10`). Before, a reader who wante
 
 ### Removed
 
-- **Flat 25-module structure** (previously implied by `01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md`). These four files were removed from the repository. Their content is being migrated to the concentric structure; a formal `docs/MIGRATION-01-04.md` tracks the migration. Until then, the content is considered lost from the repository and must be recovered from history or from the author's local copy.
+- **Flat 25-module structure** (previously implied by `01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md`). These four files were removed from the repository. Their content is being migrated to the concentric structure; a formal `docs/MIGRATION-01-04.md` tracks the migration. The files were never committed to git and are not recoverable from history; they are recoverable from the initial project conversation.
 
 ### Fixed
 
-- **Broken links to `archive/Prompt_Master_v7.md`** in `00-foundations.md`, `L0.00`, `L0.01`, `L0.04`, `L0.05`, `L0.06`, `L0.08`. Now marked `(planned)` in plain text; they will be restored when the `archive/` directory is populated.
+- **Broken links to `archive/Prompt_Master_v7.md`** in `00-foundations.md`, `L0.00`, `L0.01`, `L0.04`, `L0.05`, `L0.06`, `L0.08`. Now marked `(planned)` in plain text.
 - **Broken links to `balance/*.toml`, `crates/*`, `locales/*`, `L1-*`, `L2-*`, `L3-*`** in all L0 cells. Now marked `(planned)` in plain text.
 - **Inconsistent `conforms_to` field** — all ratified L0 cells now declare `conforms_to: "00-foundations (v1.1)"`.
 
@@ -124,7 +157,7 @@ The `fmr-hidden` API now has a single home (`L0.10`). Before, a reader who wante
 ### Notes
 
 - This drop used a **flat 25-module numbering**. It was superseded the following day by the concentric model.
-- `01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md` were written in Italian. Under ADR-007 they will be translated to English before being re-integrated into the concentric structure.
+- `01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md` were written in Italian. They were never committed to git.
 
 ---
 
