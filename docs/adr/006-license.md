@@ -1,6 +1,6 @@
 # ADR-006 — License
 
-- **Status:** proposed
+- **Status:** accepted
 - **Date:** 2026-10-25
 - **Supersedes:** none
 - **Superseded by:** none
