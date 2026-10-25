@@ -18,7 +18,6 @@ This project does not use semantic versioning for the docs; the version of each 
 - Write L2 cells (tactics, market, finance, youth, scouting, psyche, crowd, media, ai): 9 cells.
 - Write L3 cells (registry, packs, generator, editor, assets, ui, statistics, quality): 8 cells.
 - Recover and archive the three Prompt Master versions (v5, v6, v7) into `archive/prompts/`.
-- Begin code: `pcfm-core`, `pcfm-hidden`, `pcfm-match` (L0 implementation).
 - Ratify ADR-005 (Qt binding), ADR-006 (license), ADR-007 (canonical language).
 - Ratify ADR-012 (modules) and ADR-013 (worlds) when the framework implements them.
 
@@ -34,11 +33,11 @@ This project does not use semantic versioning for the docs; the version of each 
 
 ### Changed
 
-- **`modules/_index.md`**: ADR status table updated with 012 and 013 (both `proposed`). Open ADRs: 005, 006, 007, 012, 013 (5).
-- **`STRUCTURE.md`**: §5 ADR status table updated with 012 and 013. "Open ADRs" line updated.
-- **`modules/00-foundations.md`**: pillar 1 ("Traceable determinism") marked **under review** (ADR-013). The pillar text is unchanged; the note says "under review, see ADR-013 (proposed)". The pillar will be rewritten when the framework implements the module system.
-- **`README.md`**: the "Deterministic" bullet is updated to "Deterministic (locally)" with a link to ADR-013 (proposed). The badge and the "How it differs from commercial titles" table are unchanged (they refer to "Total determinism", which is still the intent, but the scope is now "per save").
-- **`CONTRIBUTING.md`**: ADR status table updated with 012 and 013.
+- **`modules/00-foundations.md`**: version 1.3 → **1.4**. **Pillar 1** ("Traceable determinism. Same seed + same inputs = same result. Never compromised.") is marked **under review** (ADR-013, proposed). The pillar text is unchanged; a note says "under review, see ADR-013 (proposed)". §4 (Determinism) gains a **status note**: the scope of the section is under review (global vs local); the rules (named streams, no `HashMap`, golden tests, `SIM_VERSION`) are not under review. The banned-things list (§5) gains a parenthetical on "No compromising determinism for convenience. *(Scope under review, see §4.)*". §8 (References) gains links to ADR-012, ADR-013, and the module developer guide.
+- **`modules/_index.md`**: version 2.5 → **2.7**. The "Modules and worlds" section is rewritten as **prose + link to the ADR status table** (no duplicate table). The "Doctrine" section, "Current state", and "Doctrine compliance" are updated to say the doctrine is **v1.4** and the cells conform to **v1.1** (the last invariant-changing version). "Open ADRs" is still listed here (single source of truth for the project map). ADR status table updated with 012 and 013 (both `proposed`).
+- **`STRUCTURE.md`**: version 1.5 → **1.6**. §4 (Cell Frontmatter) gains an explicit note that `conforms_to` means **"verified against"**, not "compatible with". §5 (Current ADR status) updated with 012 and 013, and a **note on pillar 1** (ADR-013, if ratified, will supersede it). §3 (Current state) shows the code (6 crates, 103 tests). §9 (What Packs Can and Cannot Extend) gains a note on the module system (once ratified).
+- **`CONTRIBUTING.md`**: version 1.1 → **1.2**. The ADR status table is **removed** (it was a duplicate of `STRUCTURE.md` §5); the file now links to `STRUCTURE.md` §5 as the single source of truth. "Current state" is corrected ("10 ADRs exist: 5 accepted, 5 proposed" — the previous version said "8 ADRs, 3 proposed", which was stale). Two notes on ADR-012/013 and pillar 1 are kept (they are specific to the current state and useful before opening a PR).
+- **`README.md`**: version 1.1 → **1.2**. The `code` badge is updated to `code-103_tests_green`. The "Project Status" section reflects that L0 is **implemented** (6 crates, 103 tests). The "Deterministic" bullet is annotated with "*(Currently global; under review for local, see ADR-013.)*". The "Determinism" section gains a **"Under review (ADR-013, proposed)"** note. The "Documentation Map" gains a row for `MODULE_DEVELOPER_GUIDE.md`. The "Repository Structure" shows the 6 crates. The FAQ is updated: "**five** remain unresolved" (005, 006, 007, 012, 013), plus a new FAQ entry "What is ADR-012 / ADR-013 about?". The roadmap is updated to "L0 ratified + implemented".
 
 ### Why
 
