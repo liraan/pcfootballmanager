@@ -3,11 +3,11 @@ title: "L0.04 — Match Engine"
 level: 0
 cell: "L0-match"
 module_id: "L0.04"
-version: "1.0"
+version: "1.1"
 status: "draft"
 last_updated: "2026-10-25"
 supersedes: null
-depends_on: ["00-foundations", "L0.01", "L0.02", "L0.03"]
+depends_on: ["00-foundations", "L0.01", "L0.02", "L0.03", "L0.10"]
 referenced_by: ["L0.05", "L0.06", "L0.08", "L0.09", "L1-season"]
 conforms_to: "00-foundations (v1.1)"
 ---
@@ -21,6 +21,9 @@ conforms_to: "00-foundations (v1.1)"
 
   Once ADR-003 is accepted, change `status: draft` to `status: ratified` and
   begin implementation.
+
+  IMPORTANT: the `GroundTruth` API is defined in L0.10, not here. This cell
+  consumes it. If you change the API, change L0.10, not this cell.
 -->
 
 # L0.04 — Match Engine
@@ -33,8 +36,8 @@ Define the `MatchEngine` trait and specify its text implementation. The match en
 
 ## 1. Context and dependencies
 
-- Depends on `00-foundations`, `L0.01` (RNG), `L0.02` (event bus), `L0.03` (entities)
-- Reads `GroundTruth` from `fmr-hidden` via `resolve_*` (ADR-003, option B)
+- Depends on `00-foundations`, `L0.01` (RNG), `L0.02` (event bus), `L0.03` (entities), **`L0.10` (`GroundTruth` API)**
+- Reads `GroundTruth` via `resolve_*` — the API is defined in **[`10-ground-truth.md`](10-ground-truth.md)**, not here
 - Publishes events to `L0.02-event-bus`
 - Produces `MatchEvent` (Plane B) consumed by `L0.05` and `L0.06`
 - Reads `ContextModifiers` from `L0.09` for external state
@@ -52,7 +55,7 @@ pub trait MatchEngine: Send + Sync {
 
 pub struct MatchContext<'a> {
     pub match_: Match,                       // from L0.03
-    pub hidden: &'a mut GroundTruth,         // from fmr-hidden, opaque
+    pub hidden: &'a mut GroundTruth,         // from L0.10 — opaque, no public fields
     pub rng: &'a mut RngRegistry,            // from L0.01
     pub bus: &'a mut EventBus,               // from L0.02
     pub modifiers: ContextModifiers,         // from L0.09
@@ -68,7 +71,7 @@ pub struct MatchResult {
 }
 ```
 
-`GroundTruth` is opaque. The engine can only call its `resolve_*` methods (see `L0.03` §3.2 and ADR-003). It cannot read a latent value, cannot iterate over internal state, cannot `Debug` it into a log that leaks data.
+`GroundTruth` is **opaque**. Its full API is defined in [`10-ground-truth.md`](10-ground-truth.md) §2.1: `resolve_*` methods and `drain_observations`. The engine cannot read a latent value, cannot iterate over internal state, cannot `Debug` it into a log that leaks data. The type system enforces this (no public fields, no `Serialize`, custom `Debug`).
 
 ### 2.2 Tick loop
 
@@ -96,9 +99,11 @@ For each player, each tick:
 
 Each step has an error term. Errors are drawn from the match stream `match:{id}:micro-decisions`.
 
+The context and outcome types (`DuelContext`, `DuelOutcome`, etc.) are defined in `L0.10` §2.2. The engine constructs a context, passes it to `GroundTruth`, receives an outcome, and emits a `MatchEvent` (see `L0.05`). It never sees the latent values that produced the outcome.
+
 ### 2.4 Sub-models
 
-The engine calls the following `resolve_*` methods. The mapping from sub-model to method is fixed:
+The engine calls the following `resolve_*` methods. The mapping from sub-model to method is fixed.
 
 | Sub-model | Method |
 |---|---|
@@ -111,6 +116,8 @@ The engine calls the following `resolve_*` methods. The mapping from sub-model t
 | Set pieces | `resolve_set_piece` |
 
 Additional sub-models (collective positioning, coordinated pressing, offside trap) are implemented **inside** `fmr-hidden` and exposed through the `resolve_*` functions above. The match engine does not know how they work; it only sees the outcomes.
+
+The full API (with `Context` / `Outcome` types) is in [`10-ground-truth.md`](10-ground-truth.md) §2.1–§2.2.
 
 ### 2.5 Ratings
 
@@ -128,10 +135,11 @@ Additional sub-models (collective positioning, coordinated pressing, offside tra
 
 - It does not know about clubs, seasons, money, contracts
 - It does not compute ratings (those are in `L0.06`)
-- It does not read `fmr-hidden` values directly (it calls `resolve_*`)
+- It does not read `fmr-hidden` values directly (it calls `resolve_*`, whose API is in `L0.10`)
 - It does not compute `ContextModifiers` (those come from `L0.09`)
-- It does not implement `resolve_*` logic (that is `fmr-hidden`'s job)
+- It does not implement `resolve_*` logic (that is `fmr-hidden`'s job, documented in `L0.10`)
 - It does not implement random events (those are `L0.08`)
+- It does not construct `GroundTruth` (that is `L3-generator`'s job, or the test harness)
 
 ### 2.8 Configuration
 
@@ -159,7 +167,7 @@ Nothing in the engine is hardcoded. Changing a parameter requires no recompile (
 
 `MatchContext`, `MatchResult`, `MatchConfig`, `Score`.
 
-The engine produces `MatchEvent`s (see `L0.05`) and consumes `ContextModifiers` (see `L0.09`). It has no data model of its own.
+The engine produces `MatchEvent`s (see `L0.05`) and consumes `ContextModifiers` (see `L0.09`). The `GroundTruth` API is in `L0.10`. The engine has no data model of its own beyond these types.
 
 ## 4. Edge cases
 
@@ -170,6 +178,7 @@ The engine produces `MatchEvent`s (see `L0.05`) and consumes `ContextModifiers` 
 - **Penalty shootout**: not in L0, only in L1
 - **`GroundTruth::resolve_*` returns an error**: panic (caught at the call site per ADR-004), the match is abandoned, the save is preserved
 - **`EventBus` handler panics**: caught at the handler boundary, the event is logged as failed, the match continues
+- **`GroundTruth` is not drained often enough**: `drain_observations` must be called at least once per tick; a test verifies this (see `L0.10` §4)
 
 ## 5. Definition of Done
 
@@ -177,9 +186,10 @@ The engine produces `MatchEvent`s (see `L0.05`) and consumes `ContextModifiers` 
 - [ ] Trait `MatchEngine` implemented for text mode
 - [ ] Tick loop deterministic (state hash stable across 100 runs)
 - [ ] Micro-decision model documented and implemented
-- [ ] Sub-models implemented inside `fmr-hidden`
+- [ ] Sub-models implemented inside `fmr-hidden` (API documented in `L0.10`)
 - [ ] No ratings computed in the engine
 - [ ] No latent value read outside `resolve_*` (compile-time check: no field access on `GroundTruth`)
+- [ ] `drain_observations` called at least once per tick
 - [ ] Performance: 90 min < 1 s on mid-range hardware
 - [ ] Golden test: 1,000 matches, same seed → same hash
 - [ ] All tuneable parameters in `balance/match_engine.toml`
@@ -189,13 +199,14 @@ The engine produces `MatchEvent`s (see `L0.05`) and consumes `ContextModifiers` 
 
 | Risk | Severity | Mitigation |
 |---|---|---|
-| Engine becomes a monolith | High | Hard API; `L0.08` and `L0.09` are separate cells; sub-models live in `fmr-hidden` |
+| Engine becomes a monolith | High | Hard API; `L0.08`, `L0.09`, `L0.10` are separate cells; sub-models live in `fmr-hidden` |
 | Ratings leak latents | Critical | Type system: ratings only accept `&[MatchEvent]`; test of violation |
 | Determinism drift | Critical | Golden test + `SIM_VERSION` bump procedure |
 | Performance insufficient | Medium | Tick budget, profiling, benchmark in CI |
 | Match "always wins the strong team" | High | Calibration in `L3-quality` *(planned)* |
 | `fmr-hidden` API too coarse | Medium | `resolve_*` methods are the contract; adding a new resolution type is additive, not breaking |
-| `fmr-hidden` API too fine | Medium | Fewer, larger `resolve_*` methods are preferred; granularity is a design choice, documented per method |
+| `fmr-hidden` API too fine | Medium | Fewer, larger `resolve_*` methods are preferred; granularity is a design choice, documented per method in `L0.10` |
+| Engine duplicates the `GroundTruth` API description | Medium | The API is in `L0.10`; this cell only references it. If the API changes, only `L0.10` changes |
 
 ## 7. References
 
@@ -203,10 +214,12 @@ The engine produces `MatchEvent`s (see `L0.05`) and consumes `ContextModifiers` 
 - [`00-overview.md`](00-overview.md) — L0 cell map
 - [`01-rng.md`](01-rng.md) — RNG
 - [`02-event-bus.md`](02-event-bus.md) — event bus
-- [`03-entities-minimal.md`](03-entities-minimal.md) — entities and `GroundTruth` API
+- [`03-entities-minimal.md`](03-entities-minimal.md) — entities (without latents)
 - [`05-match-events.md`](05-match-events.md) — event type
 - [`08-random-events.md`](08-random-events.md) — discrete events
 - [`09-context-modifiers.md`](09-context-modifiers.md) — external state
+- [`10-ground-truth.md`](10-ground-truth.md) — the `GroundTruth` API (Plane A access)
 - [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — `resolve_*` API
 - [`../../docs/adr/004-panic-strategy-ffi.md`](../../docs/adr/004-panic-strategy-ffi.md) — `catch_unwind`
 - `../../archive/Prompt_Master_v7.md` §12 — original match engine *(planned — the archive/ directory does not exist yet)*
+- [`../../docs/GLOSSARY.md`](../../docs/GLOSSARY.md) — terms used in this cell
