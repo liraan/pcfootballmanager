@@ -3,7 +3,7 @@ title: "L0.03 — Minimal Entities"
 level: 0
 cell: "L0-match"
 module_id: "L0.03"
-version: "1.1"
+version: "1.2"
 status: "ratified"
 last_updated: "2026-10-25"
 supersedes: null
@@ -23,6 +23,10 @@ conforms_to: "00-foundations (v1.1)"
   live in fmr-hidden, indexed by player_id. The public Player struct has only
   observed/minimal state. The match engine calls resolve_* on GroundTruth
   (defined in L0.10), not field access on Player.
+
+  This cell contains 7 entities. The index at the top of §2 is there to make
+  it navigable without splitting the file. If the cell grows beyond ~250 lines,
+  split it into L0.03a, L0.03b, L0.03c.
 -->
 
 # L0.03 — Minimal Entities
@@ -41,6 +45,19 @@ The rule: **if the match engine does not need it, it is not here.**
 - The latent attributes of a player live in `fmr-hidden`, indexed by `player_id`. They are **not** part of the public `Player` struct. The public API to access Plane A is defined in [`10-ground-truth.md`](10-ground-truth.md) and in [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md).
 
 ## 2. Specification
+
+**Entities in this cell:**
+
+| § | Entity | Purpose |
+|---|---|---|
+| [2.1](#21-player-l0-projection) | `Player` | Player projection: id, role, physical, psychological |
+| [2.2](#22-physicalstateminimal) | `PhysicalStateMinimal` | Condition, sharpness, fatigue |
+| [2.3](#23-psychologicalstateminimal) | `PsychologicalStateMinimal` | Confidence, morale, pressure_load |
+| [2.4](#24-squad) | `Squad` | 11 starters + bench + formation |
+| [2.5](#25-pitch) | `Pitch` | Dimensions, condition, weather |
+| [2.6](#26-referee) | `Referee` | Strictness, consistency |
+| [2.7](#27-match) | `Match` | Home + away + pitch + referee + seed + rules |
+| [2.8](#28-what-is-not-here) | *Not here* | What does not belong in L0 |
 
 ### 2.1 Player (L0 projection)
 
@@ -175,11 +192,19 @@ The contract, in one sentence: the engine holds `&mut GroundTruth` (defined in `
 
 ## 5. Definition of Done
 
-- [ ] All entities defined, `#[derive(Serialize, Deserialize)]`
+### Specification (complete)
+
+- [x] All entities defined, `#[derive(Serialize, Deserialize)]`
+- [x] Validation on construction (`try_new`, not `new`) specified
+- [x] No entity from L1/L2 leaks into L0
+- [x] No field of `Player` exposes latent data (type system check specified)
+- [x] The `GroundTruth` API is defined in `L0.10`, not duplicated here
+- [x] Index at the top of §2
+
+### Implementation (pending)
+
+- [ ] All entities implemented, `#[derive(Serialize, Deserialize)]`
 - [ ] Validation on construction (`try_new`, not `new`)
-- [ ] No entity from L1/L2 leaks into L0
-- [ ] No field of `Player` exposes latent data (type system check)
-- [ ] The `GroundTruth` API is defined in `L0.10`, not duplicated here
 - [ ] Test: construct a match from two squads, run it, get a result
 - [ ] Test: no `Player` field can be used to derive a latent value
 - [ ] Test: `fmr-hidden` does not export `LatentAttributes` as a public type
@@ -188,12 +213,13 @@ The contract, in one sentence: the engine holds `&mut GroundTruth` (defined in `
 
 | Risk | Severity | Mitigation |
 |---|---|---|
-| L0 entities grow into L1 entities | High | Hard rule: if the match engine doesn't need it, it's not here. Reviewed at PR |
-| Latent leakage via `Debug` | Critical | `Player` has no latent fields (ADR-003); `GroundTruth` has a custom `Debug` that prints only `GroundTruth { .. }` (see `L0.10`) |
-| `fmr-hidden` accidentally exposes a latent getter | Critical | Review + type system; the `L0.10` API is the only surface |
-| Clamping hides bugs | Medium | Log a warning when clamping occurs |
-| `Squad` with 0 bench | Low | Allowed (friendly match) |
-| Duplication between `L0.03` and `L0.10` | Medium | `L0.03` defines the entities; `L0.10` defines the API. They link, they do not duplicate |
+| L0 entities grow into L1 entities | High | Hard rule: if the match engine doesn't need it, it's not here. Reviewed at PR. |
+| Latent leakage via `Debug` | Critical | `Player` has no latent fields (ADR-003); `GroundTruth` has a custom `Debug` that prints only `GroundTruth { .. }` (see `L0.10`). |
+| `fmr-hidden` accidentally exposes a latent getter | Critical | Review + type system; the `L0.10` API is the only surface. |
+| Clamping hides bugs | Medium | Log a warning when clamping occurs. |
+| `Squad` with 0 bench | Low | Allowed (friendly match). |
+| Duplication between `L0.03` and `L0.10` | Medium | `L0.03` defines the entities; `L0.10` defines the API. They link, they do not duplicate. |
+| Cell grows beyond ~250 lines | Medium | If it does, split into L0.03a (Player, Squad), L0.03b (Pitch, Referee), L0.03c (Match). |
 
 ## 7. References
 
