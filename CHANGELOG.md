@@ -20,6 +20,36 @@ This project does not use semantic versioning for the docs; the version of each 
 - Recover and archive the three Prompt Master versions (v5, v6, v7) into `archive/prompts/`.
 - Begin code: `pcfm-core`, `pcfm-hidden`, `pcfm-match` (L0 implementation).
 - Ratify ADR-005 (Qt binding), ADR-006 (license), ADR-007 (canonical language).
+- Ratify ADR-012 (modules) and ADR-013 (worlds) when the framework implements them.
+
+---
+
+## [2026-10-25] — ADR-012 (modules) and ADR-013 (worlds), proposed
+
+### Added
+
+- **`docs/adr/012-modules.md`** — proposed. The brick contract: module sheet mandatory and validated, behaviour open / metadata closed, conflicts critical (blocked) vs minor (warned), narrative is the modder's responsibility, cause traces have two levels (diegetic + meta), debug UI module view.
+- **`docs/adr/013-worlds.md`** — proposed. Worlds: LOD = sum of active module weights, LOD chosen at save creation and fixed, manifest is part of the save and validated, **local determinism** (same save + same match + same module configuration = same result), community plural and aware, meta level visible to the PCFM player, debug UI world view, low LOD is a valid game, low LOD is blind by design, framework understandable without the debug UI.
+- **`docs/adr/012-013-reading-guide.md`** — a reading guide for the two ADRs: why they are two, what each covers, the points of contact, what changes in the doctrine.
+
+### Changed
+
+- **`modules/_index.md`**: ADR status table updated with 012 and 013 (both `proposed`). Open ADRs: 005, 006, 007, 012, 013 (5).
+- **`STRUCTURE.md`**: §5 ADR status table updated with 012 and 013. "Open ADRs" line updated.
+- **`modules/00-foundations.md`**: pillar 1 ("Traceable determinism") marked **under review** (ADR-013). The pillar text is unchanged; the note says "under review, see ADR-013 (proposed)". The pillar will be rewritten when the framework implements the module system.
+- **`README.md`**: the "Deterministic" bullet is updated to "Deterministic (locally)" with a link to ADR-013 (proposed). The badge and the "How it differs from commercial titles" table are unchanged (they refer to "Total determinism", which is still the intent, but the scope is now "per save").
+- **`CONTRIBUTING.md`**: ADR status table updated with 012 and 013.
+
+### Why
+
+The two ADRs are **proposed**, not accepted, because the framework does not yet implement the module system. The doctrine (`00-foundations`) cannot declare "local determinism" before the code does. The Honesty Rule (`STRUCTURE.md` §11) requires that the docs say the truth: the determinism is global today, and the move to local determinism is **under review**.
+
+When the framework implements the module system (steps 11+), ADR-012 and ADR-013 will be ratified, and `00-foundations.md` will be rewritten in the same commit. Until then, the docs say "under review".
+
+### Related ADRs
+
+- ADR-012 — Modules: The Brick Contract
+- ADR-013 — Worlds: LOD, Manifest, and Local Determinism
 
 ---
 
