@@ -1,320 +1,271 @@
-# PC Football Manager
+<div align="center">
 
-**An open football management simulation built around transparency, privacy, and tactical depth.**
-![Status](https://img.shields.io/badge/status-L0_ratified-yellow)
-![Structure](https://img.shields.io/badge/structure-L0--L3-blue)
-![Code](https://img.shields.io/badge/code-103_tests_green-lightgrey)
-![Built with](https://img.shields.io/badge/built_with-AI_assistance-purple)
+# ⚽ PC Football Manager
 
-## What Is This?
+**An open football management simulation.**
+*Transparent by design. Deterministic by construction. Yours by default.*
 
-PC Football Manager (PCFM) is an attempt to rebuild the classic football management experience **without the compromises** that come with commercial titles:
+[![Status](https://img.shields.io/badge/status-L0_ratified-yellow)](https://github.com/liraan/pcfootballmanager)
+[![Tests](https://img.shields.io/badge/tests-103_passing-brightgreen)](https://github.com/liraan/pcfootballmanager)
+[![License](https://img.shields.io/badge/license-MIT_OR_Apache--2.0-blue)](LICENSE-MIT)
+[![Built with](https://img.shields.io/badge/docs-AI--assisted-purple)](#-ai-disclosure)
 
-- ✅ **No telemetry** — Nothing leaves your machine
-- ✅ **Open data** — No proprietary feeds, no licensed datasets baked in
-- ✅ **Tactical depth** — Deep role, formation, and instruction systems
-- ✅ **Moddable** — Extend the game without compiling anything
-- ✅ **Deterministic** — Same seed, same match. Every time. *(Global, per the doctrine. ADR-013 proposes local determinism; not yet ratified.)*
-- ✅ **Privacy-first** — Offline-first by design, not as an afterthought
+</div>
 
-**This is not Football Manager, and it doesn't try to be.** It's a community alternative where design decisions are public, mechanics are explainable, and you own everything.
+---
 
-The full doctrine — the Three Planes, the ban on CA/PA, the determinism rules — lives in **[`modules/00-foundations.md`](modules/00-foundations.md)**. Read that first. Everything else is downstream of it.
+## Why this project exists
 
-## Built With AI Assistance
+Football Manager and its ancestors built a genre. They also built walls around it: closed datasets, closed formulas, closed ecosystems. PC Football Manager is an attempt to rebuild that experience **without the walls**.
 
-This project's documentation is drafted with the help of a large language model, then reviewed and ratified by humans. Being upfront about this matters more than looking impressive.
+- ❌ No telemetry. Nothing leaves your machine.
+- ❌ No proprietary data feeds. Open, procedural, and community packs only.
+- ❌ No hidden `CA/PA` scalars pretending to be truth.
+- ✅ Every formula is public.
+- ✅ Every decision is documented in an ADR.
+- ✅ Every save is reproducible from its seed.
 
-| Reality | Detail |
-|---------|--------|
-| **AI drafts, humans decide** | Every architectural decision — the three planes, the ban on CA/PA, the determinism rules — came from a person. The AI helps articulate, structure, and stress-test them. |
-| **AI makes mistakes** | Errors caught during review include a **non-existent crate dependency**, a **hasher that would have silently broken determinism**, and a **contradictory panic strategy at the FFI boundary**. Assume any technical detail here needs verification before you rely on it. |
-| **AI has no memory** | Each session starts blank. **This repository is the memory.** Nothing persists between conversations unless it lives in a file here. |
-| **No unreviewed AI-written code** | There is no unreviewed AI-written code in this repository. AI may draft; every line is reviewed and owned by a human. |
+> **This is not a Football Manager clone.** It's a different philosophy, applied to the same genre. Where FM optimizes for fidelity to licensed data, we optimize for **explainability and ownership**.
 
-**Why disclose this?** Because you deserve to know how a document was produced before you trust it. Projects that quietly hide AI involvement are asking for a kind of trust they haven't earned.
+---
 
-## ️ Project Status
+## The core idea: Three Planes
+
+The single most important architectural choice in PCFM is the strict separation of *what the simulation knows*, *what the game shows*, and *what people believe*. Collapsing these layers is what turns scouting into a lookup table — the thing every modern management sim accidentally does.
 
 ```
-L0 — MATCH       ████████████████ 100%  ratified + implemented (11 cells, 6 crates, 103 tests)
-L1 — SEASON      ░░░░░░░░░░░░░░░░   0%  not started (12 cells)
-L2 — CAREER      ░░░░░░░░░░░░░░░░   0%  not started (9 cells)
-L3 — META        ░░░░░░░░░░░░░░░░   0%  not started (8 cells)
-
-PHASE 2 — PROTOTYPE (Q1 2027)
-PHASE 3 — ALPHA     (Q3 2027)
-PHASE 4 — BETA      (Q1 2028)
-PHASE 5 — v1.0      (Q2 2028)
+┌─────────────────────────────────────────────────────────┐
+│  PLANE A — Ground Truth                     (hidden)    │
+│  True attributes, real fatigue, latent psyche.          │
+│  Readable only by the match engine and the world gen.   │
+├─────────────────────────────────────────────────────────┤
+│  PLANE B — Observation                      (events)    │
+│  MatchEvents: shots, passes, duels.                     │
+│  Ratings computed from events, never from latents.      │
+├─────────────────────────────────────────────────────────┤
+│  PLANE C — Estimation                       (visible)   │
+│  Windowed indexes, projection bands, scout reports.     │
+│  Never feeds back into Plane A.                         │
+└─────────────────────────────────────────────────────────┘
 ```
 
-**Right now:** the repository contains **documentation and code**. The L0 specification is complete and ratified; L0 is implemented (6 crates, 103 tests). L1 (the season) is the next specification milestone. The three planes, the ban on CA/PA, the determinism rules, and the Plane A enforcement strategy (ADR-003, option B) are all locked in.
+**Why it matters:** scouting in PCFM is not a lookup — it's an *estimate of an observation of the truth*. The player is meant to be uncertain. That uncertainty is the game.
 
-**ADR-013 (proposed).** The scope of determinism is being discussed: today it is **global**, the proposal is to make it **local** (per save, per module configuration). ADR-013 is **not ratified**. The doctrine therefore stands as written: pillar 1 is stable and global.
+Full doctrine → [`modules/00-foundations.md`](modules/00-foundations.md) · Enforcement → [ADR-003](docs/adr/003-plane-a-enforcement.md)
 
-Dates are indicative, not commitments.
+---
 
-## Documentation Map
+## Determinism, taken seriously
 
-The specification is **concentric**, not flat. Read in this order:
-
-| Layer | File | What it answers |
-|-------|------|-----------------|
-| **1. Doctrine** | [`modules/00-foundations.md`](modules/00-foundations.md) | Why does this project exist? What are the non-negotiable rules? *(v1.4, pillar 1 stable; ADR-013 not ratified)* |
-| **2. Structure** | [`STRUCTURE.md`](STRUCTURE.md) | How is the repo organised? How do I add or revise a module? |
-| **3. Index** | [`modules/_index.md`](modules/_index.md) | What exists at each level? What is its status? |
-| **4. Decisions** | [`docs/adr/`](docs/adr/) | Which architectural choices have been made, and why? |
-| **5. Glossary** | [`docs/GLOSSARY.md`](docs/GLOSSARY.md) | What does each term mean? Where is it defined? |
-| **6. Developer guide** | [`docs/PLUGIN_DEVELOPER_GUIDE.md`](docs/PLUGIN_DEVELOPER_GUIDE.md) | How do I write a module? Why does the simulation/rendering split matter? |
-| **7. Process** | [`CONTRIBUTING.md`](CONTRIBUTING.md) | How do I propose a change? What's the review process? |
-
-### Levels
-
-The specification is organised in four concentric levels. Dependencies flow **inward**: a level may depend on the levels below it, never above.
+Same seed → same match, same season, same career. **Always.** This is verified on every CI run by `pcfm-debug --check`:
 
 ```
-L0 — MATCH   Two teams play one match. Deterministic, savable.
-L1 — SEASON  A league, a calendar, a world.
-L2 — CAREER  Market, finance, youth, scouting, psyche, crowd, media, AI.
-L3 — META    Registry, packs, generator, editor, assets, UI, statistics, quality.
+  ✅ demo teams are valid
+  ✅ same seed → same state_hash
+  ✅ different seed → different state_hash
+  ✅ save/load roundtrip preserves state_hash
+  ✅ event chain is valid
+  ✅ statistics are sane
 ```
 
-Full map: [`modules/_index.md`](modules/_index.md).
+The rules that make this possible are non-negotiable:
 
-## Technical Philosophy
-
-### The Three Planes
-
-PCFM separates three distinct layers of data, and keeps them separated:
-
-```
-┌──────────────────────────────────────────────────────┐
-│ PLANE A — Ground Truth (pcfm-hidden)                 │
-│ • Latent attributes (true finishing, passing)        │
-│ • Physiological state (internal fatigue)             │
-│ • Latent psychological state                         │
-│ • NEVER exposed to the player                        │
-│                                                      │
-│ PLANE B — Observation (pcfm-stats)                   │
-│ • MatchEvents (shot, pass, duel)                     │
-│ • Ratings computed FROM EVENTS, not from latents     │
-│ • Append-only, immutable                             │
-│                                                      │
-│ PLANE C — Estimation (pcfm-index, pcfm-projection)   │
-│ • Observed attributes (estimates derived from B)     │
-│ • Indexes (striker effectiveness, playmaker impact)  │
-│ • Projections (NOT CA/PA — confidence bands)         │
-└──────────────────────────────────────────────────────┘
-```
-
-**Why bother?** Because the gap between *how good a player really is* (A), *what we saw him do* (B), and *what we think he's worth* (C) is the entire point of a management game. Collapse those layers and scouting becomes a lookup table.
-
-Full doctrine: [`modules/00-foundations.md`](modules/00-foundations.md). The Plane A enforcement strategy is in [ADR-003](docs/adr/003-plane-a-enforcement.md) (accepted, option B: capability API).
-
-### No CA / PA
-
-**Banned:** `current_ability`, `potential_ability`, or any equivalent scalar.
-
-**Replaced by:**
-- **IndexSnapshot** — Windowed observed measurement over time
-- **ProjectionProfile** — A forecast expressed as a **confidence band**, never a single number
-
-```yaml
-# Instead of: "potential: 172"
-projection:
-  expected_band: [72, 88]  # a band, not a number
-  confidence_curve:
-    - { year: "2027", confidence: 0.95 }
-    - { year: "2029", confidence: 0.72 }
-    - { year: "2031", confidence: 0.48 }
-  positive_drivers: ["consistent_minutes", "improving_metrics"]
-  risk_factors: ["injury_history", "age_curve"]
-```
-
-### Determinism
-
-Same seed → same result. **Global.** The rules are non-negotiable:
-
-- Named RNG streams — adding a new consumer never shifts existing results
-- `BTreeMap` everywhere in the simulation path (no non-deterministic `HashMap`)
+- Named RNG streams, so adding a new consumer never shifts existing results
+- `BTreeMap` (never `HashMap`) in any simulation path
 - Fixed-point arithmetic for money — zero numerical drift
-- Golden tests against a verified state hash
-- `SIM_VERSION` bumped whenever simulation behaviour changes (see [`CHANGELOG-SIM.md`](CHANGELOG-SIM.md))
+- Golden hash tests on every simulation change
+- `SIM_VERSION` bump procedure documented in [`CHANGELOG-SIM.md`](CHANGELOG-SIM.md)
 
-**ADR-013 (proposed).** The scope of determinism is being discussed. The current contract is **global**: same seed across all configurations. ADR-013 proposes **local** determinism, but it is **not ratified**. Until it is, the doctrine is the current contract.
+> **A note on scope:** determinism today is **global** — same seed across all configurations. [ADR-013](docs/adr/013-worlds.md) proposes making it **local** (per save, per module). It is *proposed, not ratified*. Until it is, the doctrine stands as written.
 
-Details: [`modules/00-foundations.md`](modules/00-foundations.md) §4, [`docs/adr/013-worlds.md`](docs/adr/013-worlds.md) (proposed, not ratified).
+---
 
-## ️ Technology Stack
+## Project status
 
-### Core
+<div align="center">
 
-| Technology | Version | Why |
-|------------|---------|-----|
-| Rust | 1.85+ | Type safety, zero-cost abstractions, guaranteed determinism |
-| Cargo | — | Integrated package manager, reproducible builds |
-| `fixed` | * | Fixed-point arithmetic for money |
-| `libm` | * | Portable transcendentals (no floating-point drift) |
+| Level | Specification | Code |
+|:-----:|:-------------:|:----:|
+| **L0** — Match   | 🟢 11 cells, ratified | 🟢 6 crates, 103 tests |
+| **L1** — Season  | ⚪ 12 cells planned   | ⚪ not started |
+| **L2** — Career  | ⚪ 9 cells planned    | ⚪ not started |
+| **L3** — Meta    | ⚪ 8 cells planned    | ⚪ not started |
 
-*Version numbers are deliberately left unpinned in the specs — any number written there would be invented. Every dependency gets verified against crates.io and justified in an ADR before adoption.*
+</div>
 
-### Testing & Analysis
+**Where we are:** L0 is **complete, ratified, and implemented**. The framework compiles, the health check is green, the determinism contract is enforced. L1 (the season) is the next specification milestone. **No playable build exists yet** — the docs have to be solid before the engine is.
 
-| Tool | Purpose |
-|------|---------|
-| `proptest` | Property-based testing |
-| `criterion` | Benchmarking |
-| Miri | Undefined-behaviour detection (excluding FFI) |
-| AddressSanitizer | Memory errors |
-| `cargo-deny` | Dependency auditing |
+**Roadmap (indicative, not commitments):**
 
-### UI
+| Phase | Target |
+|-------|--------|
+| Prototype | Q1 2027 |
+| Alpha (closed) | Q3 2027 |
+| Beta | Q1 2028 |
+| v1.0 | Q2 2028 |
 
-| Technology | Status | Notes |
-|------------|--------|-------|
-| `cxx-qt` + QWidgets + QML | **Accepted** (ADR-005) | Only binding covering both QWidgets (data grids) and QML (skins) |
+---
 
-See [`docs/adr/005-qt-binding.md`](docs/adr/005-qt-binding.md).
+## What makes it different
 
-## Repository Structure
-
-See **[`STRUCTURE.md`](STRUCTURE.md)** for the full layout and the rules that govern it. The layout below is the **target** structure. Items marked *(planned)* do not exist yet.
-
-```
-pc-football-manager/
-├── README.md
-├── STRUCTURE.md
-├── CONTRIBUTING.md
-├── LICENSE.md              # dual license (ADR-006 accepted)
-├── LICENSE-MIT
-├── LICENSE-APACHE
-├── LICENSE-ASSETS
-├── CHANGELOG.md
-├── CHANGELOG-SIM.md
-├── CHANGELOG-REGISTRY.md
-├── Cargo.toml, Cargo.lock, rust-toolchain.toml
-├── .gitignore, .cargo/config.toml
-├── .github/
-│   ├── PULL_REQUEST_TEMPLATE.md
-│   └── ISSUE_TEMPLATE/
-├── modules/                # specification, concentric L0–L3
-│   ├── 00-foundations.md
-│   ├── _index.md
-│   ├── L0-match/           # 11 cells, ratified + implemented
-│   ├── L1-*/               # *(planned)* 12 cells
-│   ├── L2-*/               # *(planned)* 9 cells
-│   └── L3-*/               # *(planned)* 8 cells
-├── archive/
-│   ├── README.md
-│   ├── prompts/            # *(planned)* Prompt Masters v5, v6, v7
-│   ├── doctrine/           # *(planned)* previous 00-foundations versions
-│   └── legacy/             # *(planned)* four Italian pre-concentric modules
-├── docs/
-│   ├── adr/                # 11 ADRs, 000 → 013
-│   ├── legal/              # *(planned)* data source compliance
-│   ├── calibration/        # *(planned)* model calibration dashboards
-│   ├── GLOSSARY.md
-│   ├── MIGRATION-01-04.md
-│   └── PLUGIN_DEVELOPER_GUIDE.md
-├── crates/                 # code (6 crates, 103 tests)
-│   ├── pcfm-core/
-│   ├── pcfm-model/
-│   ├── pcfm-hidden/
-│   ├── pcfm-stats/
-│   ├── pcfm-match/
-│   └── pcfm-debug/
-├── registry/               # *(planned)* empty until code exists
-├── mods/                   # *(planned)* empty until user packs exist
-└── data/                   # *(planned)* examples only, never real licensed data
-```
-
-## How It Differs From Commercial Titles
-
-| Feature | Traditional FM | PC Football Manager |
-|---------|----------------|---------------------|
-| **Potential** | Single secret scalar (CA/PA) | Transparent confidence band |
-| **Attributes** | True value = displayed value | True ≠ displayed; displayed is an estimate |
+| | Traditional FM | **PC Football Manager** |
+|---|---|---|
+| **Potential** | Secret scalar (`CA/PA`) | Transparent confidence band |
+| **Attributes** | True = displayed | True ≠ displayed; displayed is an estimate |
 | **Scouting** | Accurate reports | Reports with **declared bias** |
-| **Telemetry** | Optional / off | Does not exist |
-| **Data** | Proprietary (Wyscout, Opta) | Open + procedural + community packs |
+| **Telemetry** | Optional | Does not exist |
+| **Data** | Proprietary (Wyscout, Opta) | Open + procedural + community |
 | **Modding** | Limited tooling | Modular registry, local packs |
-| **Determinism** | Partial | Total (golden tests) |
+| **Determinism** | Partial | **Total**, verified by golden tests |
 | **Privacy** | Online-adjacent | Offline-first |
+
+---
+
+## Technology
+
+| Layer | Choice | Why |
+|-------|--------|-----|
+| Language | **Rust 1.85+** | Type safety, zero-cost abstractions, guaranteed determinism |
+| Numerics | `fixed`, `libm` | Fixed-point money; portable transcendentals |
+| UI | `cxx-qt` + QWidgets + QML | Only binding covering data grids *and* skins → [ADR-005](docs/adr/005-qt-binding.md) |
+| Testing | `proptest`, `criterion`, Miri, ASan | Property-based, benchmarks, UB detection |
+| Audit | `cargo-deny` | Dependency hygiene |
+
+Dependencies are pinned and justified in ADRs. No `*` versions in `Cargo.toml`. Every upgrade goes through a deliberate process.
+
+---
+
+## Repository layout
+
+```
+pcfootballmanager/
+├── modules/          # specification, concentric L0–L3
+│   ├── 00-foundations.md
+│   └── L0-match/     # 11 cells, ratified + implemented
+├── crates/           # code, one crate per architectural concern
+│   ├── pcfm-core/    # primitives: RNG, time, hashing
+│   ├── pcfm-model/   # domain types
+│   ├── pcfm-hidden/  # Plane A — accessible only to pcfm-match and pcfm-gen
+│   ├── pcfm-match/   # match engine
+│   ├── pcfm-stats/   # event chain, aggregations
+│   └── pcfm-debug/   # CLI: health checks, demo rendering
+├── docs/
+│   ├── adr/          # architectural decisions, 000 → 013
+│   └── GLOSSARY.md
+└── archive/          # historical Prompt Masters, legacy modules
+```
+
+Full layout and rules → [`STRUCTURE.md`](STRUCTURE.md) · Index of all modules → [`modules/_index.md`](modules/_index.md)
+
+---
+
+## Getting started
+
+Requires **Rust 1.85+ (stable)**.
+
+```bash
+git clone https://github.com/liraan/pcfootballmanager.git
+cd pcfootballmanager
+cargo build --release
+cargo run --release --bin pcfm-debug -- --check --seed 42
+```
+
+If `--check` prints `6/6 checks passed`, the framework is healthy. If it doesn't, something in the simulation contract is broken — please [open an issue](https://github.com/liraan/pcfootballmanager/issues).
+
+---
+
+## Reading order (for newcomers)
+
+The specification is **concentric**. Read in this order:
+
+| # | File | Answers |
+|---|------|---------|
+| 1 | [`modules/00-foundations.md`](modules/00-foundations.md) | *Why does this project exist? What are the non-negotiable rules?* |
+| 2 | [`STRUCTURE.md`](STRUCTURE.md) | *How is the repo organised?* |
+| 3 | [`modules/_index.md`](modules/_index.md) | *What exists at each level, and in what state?* |
+| 4 | [`docs/adr/`](docs/adr/) | *Which decisions have been made, and why?* |
+| 5 | [`docs/GLOSSARY.md`](docs/GLOSSARY.md) | *What does each term mean?* |
+| 6 | [`docs/PLUGIN_DEVELOPER_GUIDE.md`](docs/PLUGIN_DEVELOPER_GUIDE.md) | *How do I write a module?* |
+
+---
 
 ## Contributing
 
-See **[`CONTRIBUTING.md`](CONTRIBUTING.md)** for the full process. Quick summary:
+Contributions are welcome — code, docs, data, bug reports, honest criticism.
 
+**The short version:**
 - One change per PR (one module, one ADR, one fix).
-- Use the standard frontmatter (see `STRUCTURE.md` §4).
-- Cite sources for factual claims.
-- Explain the **WHY**, not just the what.
-- Changing an invariant requires a new ADR.
-- If you spot an error, say so plainly — including in AI-drafted text.
+- English is canonical for code, commits, and technical docs → [ADR-007](docs/adr/007-canonical-language.md).
+- Every factual claim needs a source. Every decision needs an ADR if it changes an invariant.
+- Every contribution is **reviewed by a human**. AI may draft; humans decide.
+- Determinism is not negotiable: PRs that break the seed → hash invariant require an ADR.
 
-The **L0 specification is complete and ratified, and L0 is implemented**. Code contributions are welcome, and must follow [`docs/PLUGIN_DEVELOPER_GUIDE.md`](docs/PLUGIN_DEVELOPER_GUIDE.md).
+Full process → [`CONTRIBUTING.md`](CONTRIBUTING.md)
+
+---
+
+## License
+
+**Dual license** ([ADR-006](docs/adr/006-license.md), accepted):
+
+- **Code** — `MIT OR Apache-2.0` → [`LICENSE-MIT`](LICENSE-MIT), [`LICENSE-APACHE`](LICENSE-APACHE)
+- **Assets and documentation** — `CC-BY-NC-SA-4.0` → [`LICENSE-ASSETS`](LICENSE-ASSETS)
+- **Trademarks** — the "PC Football Manager" name and logo are project trademarks; the licenses do not grant trademark rights
+
+Use the code however you want. Share the assets under the same terms, for non-commercial purposes.
+
+---
+
+## AI disclosure
+
+Some documentation and code in this repo was **drafted with AI**, then **reviewed, corrected, and owned by a human**. We say this openly because transparency applies to our own process too.
+
+| Reality | What it means |
+|---------|---------------|
+| **AI drafts, humans decide** | Every architectural decision — the Three Planes, the ban on CA/PA, the determinism rules — was made by a person. |
+| **AI makes mistakes** | Caught in review: a non-existent crate dependency, a hasher that would have broken determinism, a contradictory panic strategy at the FFI boundary. **Verify before you rely.** |
+| **AI has no memory** | Each session starts blank. **This repository is the memory.** |
+| **No unreviewed AI code** | There is no unreviewed AI-written code in this repo. Every line has a human owner. |
+
+---
 
 ## FAQ
 
 **Is this a Football Manager clone?**
-No. It's an alternative with a different philosophy. FM is proprietary, uses closed datasets, and ships telemetry. PCFM is community-driven, transparent, and offline-first.
+No. It's an alternative with a different philosophy. FM is proprietary, uses closed datasets, and ships telemetry. PCFM is community-driven, transparent, offline-first.
 
 **Will you use Wyscout / Opta data?**
-No. Bundling licensed datasets is ruled out by design. Provider integration is an external tool that produces packs, not a core module (ADR-008). We use open data, procedurally generated data, and community packs with clear provenance.
+No. Bundling licensed datasets is ruled out by design. Provider integration is an *external tool* that produces packs, not a core module → [ADR-008](docs/adr/008-provider-integration.md). Open data, procedural data, and community packs (with clear provenance) only.
 
 **Can I contribute without knowing how to program?**
-Yes. The documentation needs feedback, corrections, and additions. If you understand football or game design, your input is useful.
+Yes. The documentation needs feedback, corrections, and additions. If you understand football or game design, your input matters.
 
 **When is the alpha?**
-This is the documentation phase. Alpha arrives when L0 and L1 are stable and a minimal kernel runs. Indicative timeline: **Q1 2027**.
+When L0 and L1 are stable and a minimal kernel runs. Indicatively **Q1 2027**. No promises.
 
-**Is any of this actually decided?**
-Partly. The doctrine, the Three Planes, the Plane A enforcement strategy (ADR-003), the FFI panic strategy (ADR-004), the provider integration policy (ADR-008), the Qt binding (ADR-005), the license (ADR-006), and the canonical language (ADR-007) are settled. **Two decisions remain open:** the module system (ADR-012) and the world system (ADR-013).
+**Which decisions are actually settled?**
+Settled: the doctrine, the Three Planes, Plane A enforcement (ADR-003), FFI panic strategy (ADR-004), Qt binding (ADR-005), license (ADR-006), canonical language (ADR-007), provider integration policy (ADR-008).
+Still open: module system ([ADR-012](docs/adr/012-plugins.md)), world system ([ADR-013](docs/adr/013-worlds.md)).
 
-**What is ADR-012 / ADR-013 about?**
-ADR-012 defines the module contract (the "brick"): what a module is, what it declares, how conflicts are handled. ADR-013 defines the world system: how the bricks compose into worlds, the Level of Detail, the manifest, and **local determinism**. They are **proposed**. If ratified, ADR-013 will supersede pillar 1 of the doctrine (determinism, from global to local). Read them together: [`012-013-reading-guide.md`](docs/adr/012-013-reading-guide.md).
+**How much was written by AI?**
+See [AI disclosure](#-ai-disclosure). Short version: drafted by AI, reviewed by a human. Every technical claim should be verified before you depend on it.
 
-**How much of this was written by AI?**
-See [Built With AI Assistance](#-built-with-ai-assistance). Short answer: drafted by AI, reviewed by a human, and every technical claim should be verified before you depend on it.
+---
 
 ## Contact
 
-- **Discussions:** GitHub Discussions
-- **Bugs / Features:** GitHub Issues
-- **Community chat:** *to be decided*
+- **Discussions** — [GitHub Discussions](https://github.com/liraan/pcfootballmanager/discussions)
+- **Bugs / features** — [GitHub Issues](https://github.com/liraan/pcfootballmanager/issues)
+- **Community chat** — *to be decided*
 
-There are no private email addresses, Telegram channels, or WhatsApp groups. Everything happens publicly on GitHub.
+No private emails, no Telegram, no WhatsApp. Everything happens publicly on GitHub.
 
-## Roadmap
+---
 
-```
-2026-Q4  ████████████░░░░░░░░░░░░  Documentation (L0 ratified + implemented, L1 next)
-2027-Q1  ████░░░░░░░░░░░░░░░░░░░░  L1 kernel (season)
-2027-Q2  ████████░░░░░░░░░░░░░░░░  Closed alpha (L0–L2 partial)
-2027-Q3  ████████████░░░░░░░░░░░░  Public alpha (L0–L3 partial)
-2027-Q4  ████████████████░░░░░░░░  Beta
-2028-Q1  ████████████████████░░░░  Release candidate
-2028-Q2  ████████████████████████  v1.0
-```
-
-**These dates are estimates.** Documentation has to be solid before code gets written. L0 is solid; L1 is next.
-
-## License
-
-**Dual license (ADR-006 accepted).**
-
-- **Code** (`crates/`, executables): **MIT OR Apache-2.0** — see [`LICENSE-MIT`](LICENSE-MIT) and [`LICENSE-APACHE`](LICENSE-APACHE).
-- **Assets and documentation** (`mods/`, `data/`, `assets/`, `locales/`, `docs/`, `modules/`): **CC-BY-NC-SA-4.0** — see [`LICENSE-ASSETS`](LICENSE-ASSETS).
-- **Trademark:** the name "PC Football Manager" and the logo are trademarks of the project team. The licenses do not grant trademark rights.
-
-The full rationale is in [ADR-006](docs/adr/006-license.md). The file is accepted and definitive.
-
-## Acknowledgements
-
-- The Football Manager community, for showing what a management game can be
-- Developers of earlier management sims who opened the road
-- The open-source ecosystem that makes transparency possible
-- Anyone who contributes to this project
+<div align="center">
 
 **© 2026 PC Football Manager Team**
+
 *Transparent by design. Open data. Your control.*
+
+</div>
