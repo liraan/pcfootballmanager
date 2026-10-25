@@ -172,5 +172,5 @@ The struct is `Serialize`/`Deserialize` (it is saved with the match; it contains
 - [`03-entities-minimal.md`](03-entities-minimal.md) — `Pitch`, `Referee` (source of two modifiers)
 - [`04-match-engine.md`](04-match-engine.md) — consumer
 - [`08-random-events.md`](08-random-events.md) — consumer
-- [`../L2-psyche/00-overview.md`](../L2-psyche/00-overview.md) — producer (stub)
-- [`../L2-crowd/00-overview.md`](../L2-crowd/00-overview.md) — producer (stub)
+- `../L2-psyche/00-overview.md` — producer *(planned — the L2-psyche directory does not exist yet)*
+- `../L2-crowd/00-overview.md` — producer *(planned — the L2-crowd directory does not exist yet)*
