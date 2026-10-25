@@ -1,0 +1,13 @@
+# .cargo/config.toml — Cargo configuration for the workspace.
+#
+# Intentionally minimal. Add only what is needed, and document why.
+#
+# Future entries (uncomment when needed):
+#
+# [alias]
+# check-all = "check --workspace --all-targets --all-features"
+# test-all  = "test --workspace --all-targets --all-features"
+# clippy-all = "clippy --workspace --all-targets --all-features -- -D warnings"
+#
+# [build]
+# rustflags = ["-D", "warnings"]   # in CI only, not in local development
