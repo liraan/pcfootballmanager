@@ -144,7 +144,7 @@ If an ADR is `proposed` and touches an area, **no code is written in that area u
 | 002 | Project name and scope | ✅ accepted | — |
 | 003 | Plane A enforcement | ✅ accepted | — (unblocked L0.04, L0.08, L0.10) |
 | 004 | Panic strategy at FFI | ✅ accepted | — |
-| 005 | Qt binding | 🟡 proposed | `L3-ui`, `fmr-bridge` |
+| 005 | Qt binding | 🟡 proposed | `L3-ui`, `pcfm-bridge` |
 | 006 | License | 🟡 proposed | `LICENSE.md` (currently marked `proposed`), `Cargo.toml` examples |
 | 007 | Canonical language | 🟡 proposed | translations, language policy in `STRUCTURE.md` §6 |
 
@@ -154,7 +154,7 @@ If an ADR is `proposed` and touches an area, **no code is written in that area u
 
 ## Code (now that L0 is ratified)
 
-The L0 specification is complete. Code can begin, starting from the `fmr-*` crates listed in `STRUCTURE.md` §3.
+The L0 specification is complete. Code can begin, starting from the `pcfm-*` crates listed in `STRUCTURE.md` §3.
 
 When you write code:
 

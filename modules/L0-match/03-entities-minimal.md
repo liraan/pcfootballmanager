@@ -20,7 +20,7 @@ conforms_to: "00-foundations (v1.1)"
   a monolith.
 
   IMPORTANT: with ADR-003 (option B), latents are NOT a field of Player. They
-  live in fmr-hidden, indexed by player_id. The public Player struct has only
+  live in pcfm-hidden, indexed by player_id. The public Player struct has only
   observed/minimal state. The match engine calls resolve_* on GroundTruth
   (defined in L0.10), not field access on Player.
 
@@ -42,7 +42,7 @@ The rule: **if the match engine does not need it, it is not here.**
 - Depends on `00-foundations` and `L0.01` (for ID generation)
 - Used by `L0.04`, `L0.05`, `L0.07`, `L0.08`, `L0.09`, `L0.10`
 - The **full** `Player` entity lives in `L1-roster/01-player-attributes.md` *(planned — the L1-roster directory does not exist yet)*. L0 has a **projection** of it.
-- The latent attributes of a player live in `fmr-hidden`, indexed by `player_id`. They are **not** part of the public `Player` struct. The public API to access Plane A is defined in [`10-ground-truth.md`](10-ground-truth.md) and in [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md).
+- The latent attributes of a player live in `pcfm-hidden`, indexed by `player_id`. They are **not** part of the public `Player` struct. The public API to access Plane A is defined in [`10-ground-truth.md`](10-ground-truth.md) and in [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md).
 
 ## 2. Specification
 
@@ -77,7 +77,7 @@ pub struct Player {
 
 **Notes:**
 
-- There is **no** `latent` field. Latent attributes live in `fmr-hidden` and are accessed by the match engine only via `GroundTruth::resolve_*` (see `L0.10`). The engine never sees a latent number. This is the whole point of ADR-003 (option B).
+- There is **no** `latent` field. Latent attributes live in `pcfm-hidden` and are accessed by the match engine only via `GroundTruth::resolve_*` (see `L0.10`). The engine never sees a latent number. This is the whole point of ADR-003 (option B).
 - `physical` and `psychological` are minimal: only what the match engine needs.
 - The `Player` struct is `Serialize`/`Deserialize`, but it contains no Plane A data, so serialising it never leaks latents.
 
@@ -175,7 +175,7 @@ pub type RefereeId = EntityId<RefereeTag>;
 
 ### 3.2 Where are the latents?
 
-They are in `fmr-hidden`. The crate's public API is defined in **[`10-ground-truth.md`](10-ground-truth.md)**, not here. This cell only defines the entities that live **outside** `fmr-hidden`.
+They are in `pcfm-hidden`. The crate's public API is defined in **[`10-ground-truth.md`](10-ground-truth.md)**, not here. This cell only defines the entities that live **outside** `pcfm-hidden`.
 
 The contract, in one sentence: the engine holds `&mut GroundTruth` (defined in `L0.10`) and calls `resolve_*` on it. It never reads a latent value. This is enforced by the absence of any public accessor on `GroundTruth`, and documented in full in `L0.10` and in [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md).
 
@@ -207,7 +207,7 @@ The contract, in one sentence: the engine holds `&mut GroundTruth` (defined in `
 - [ ] Validation on construction (`try_new`, not `new`)
 - [ ] Test: construct a match from two squads, run it, get a result
 - [ ] Test: no `Player` field can be used to derive a latent value
-- [ ] Test: `fmr-hidden` does not export `LatentAttributes` as a public type
+- [ ] Test: `pcfm-hidden` does not export `LatentAttributes` as a public type
 
 ## 6. Risks and Mitigations
 
@@ -215,7 +215,7 @@ The contract, in one sentence: the engine holds `&mut GroundTruth` (defined in `
 |---|---|---|
 | L0 entities grow into L1 entities | High | Hard rule: if the match engine doesn't need it, it's not here. Reviewed at PR. |
 | Latent leakage via `Debug` | Critical | `Player` has no latent fields (ADR-003); `GroundTruth` has a custom `Debug` that prints only `GroundTruth { .. }` (see `L0.10`). |
-| `fmr-hidden` accidentally exposes a latent getter | Critical | Review + type system; the `L0.10` API is the only surface. |
+| `pcfm-hidden` accidentally exposes a latent getter | Critical | Review + type system; the `L0.10` API is the only surface. |
 | Clamping hides bugs | Medium | Log a warning when clamping occurs. |
 | `Squad` with 0 bench | Low | Allowed (friendly match). |
 | Duplication between `L0.03` and `L0.10` | Medium | `L0.03` defines the entities; `L0.10` defines the API. They link, they do not duplicate. |

@@ -14,9 +14,9 @@ conforms_to: "00-foundations (v1.1)"
 
 <!--
   MAINTAINER NOTE: ADR-003 is accepted (option B). This cell is now `ratified`.
-  It exists because the `fmr-hidden` API was scattered across L0.03 §3.2,
+  It exists because the `pcfm-hidden` API was scattered across L0.03 §3.2,
   L0.04 §1, L0.05 §2.3 and ADR-003. A reader who wanted to understand "what
-  can fmr-hidden do?" had to read four files. This cell centralises the API
+  can pcfm-hidden do?" had to read four files. This cell centralises the API
   and the contract. It does NOT introduce new behaviour; it documents
   behaviour that already exists in the other cells.
 
@@ -29,7 +29,7 @@ conforms_to: "00-foundations (v1.1)"
 
 ## 0. Purpose
 
-Define the **public API of `fmr-hidden`**, the crate that contains Plane A (Ground Truth). Specify what the crate exposes, what it does not expose, and the contract that the match engine (`L0.04`) and the random events cell (`L0.08`) must respect.
+Define the **public API of `pcfm-hidden`**, the crate that contains Plane A (Ground Truth). Specify what the crate exposes, what it does not expose, and the contract that the match engine (`L0.04`) and the random events cell (`L0.08`) must respect.
 
 This cell does not define the entities (those are in `L0.03`). It does not define the match engine (that is `L0.04`). It defines the **only door** through which Plane A can be reached.
 
@@ -40,7 +40,7 @@ This cell does not define the entities (those are in `L0.03`). It does not defin
 - Depends on `00-foundations` (the doctrine, §3 and §5), `L0.01` (RNG, because `GroundTruth` is seeded from it), `L0.03` (entities, because `GroundTruth` is indexed by `PlayerId`)
 - Read by `L0.04` (match engine), `L0.07` (save reconstruction), and `L0.08` (random events)
 - Written by `L3-generator` *(planned)*, which creates `GroundTruth` from a world seed
-- Implemented in the crate `fmr-hidden`
+- Implemented in the crate `pcfm-hidden`
 - **Never** serialised. The save (`L0.07`) reconstructs `GroundTruth` from `(world_seed, match_id)` + the command log. See `L0.07` §2.6.
 
 ## 2. Specification
@@ -48,14 +48,14 @@ This cell does not define the entities (those are in `L0.03`). It does not defin
 ### 2.1 The type
 
 ```rust
-// fmr-hidden, public API
+// pcfm-hidden, public API
 pub struct GroundTruth {
     // private fields: no public accessor
 }
 
 impl GroundTruth {
     /// Create a new `GroundTruth` from a world seed and a match id.
-    /// Called by `fmr-gen` (or by the test harness). Not called by the engine.
+    /// Called by `pcfm-gen` (or by the test harness). Not called by the engine.
     pub fn new(world_seed: u64, match_id: MatchId) -> Self;
 
     // Resolution functions — the only way to read Plane A
@@ -110,11 +110,11 @@ The following rules are enforced by the type system (no public fields, no `Seria
 3. **`GroundTruth` has no public fields.** A future field is a breaking change and requires an ADR.
 4. **`GroundTruth` has a custom `Debug`** that prints `GroundTruth { .. }` and nothing else. No latent value ever appears in a log.
 5. **The engine holds `&mut GroundTruth`.** It cannot clone it, cannot share it across threads within a match, cannot store it in a field that outlives `simulate`. The borrow checker enforces this.
-6. **The engine does not construct `GroundTruth`.** Construction is the responsibility of `fmr-gen` (or the test harness). The engine receives it as a parameter.
+6. **The engine does not construct `GroundTruth`.** Construction is the responsibility of `pcfm-gen` (or the test harness). The engine receives it as a parameter.
 
-### 2.4 What `fmr-hidden` is not allowed to do
+### 2.4 What `pcfm-hidden` is not allowed to do
 
-- It cannot return a `Player` with latent fields. If the engine needs a player, it uses the `Player` from `L0.03`, not a `Player` from `fmr-hidden`.
+- It cannot return a `Player` with latent fields. If the engine needs a player, it uses the `Player` from `L0.03`, not a `Player` from `pcfm-hidden`.
 - It cannot return a raw latent value. `fn finishing(&self) -> f32` is forbidden. If the engine needs to know "how good is this player at finishing", it calls `resolve_shot` and receives an outcome, not a number.
 - It cannot be `Serialize`d. See §2.3 rule 2.
 - It cannot be logged in full. See §2.3 rule 4.
@@ -122,15 +122,15 @@ The following rules are enforced by the type system (no public fields, no `Seria
 
 ### 2.5 Why this API, and not a field access
 
-This is the whole point of ADR-003, option B. If `fmr-hidden` exposed `player.latent.finishing`, the engine would read the latent and decide the outcome itself. That is the **circularity trap**: the outcome would be a deterministic function of the latent, and the gap between "how good the player is" and "what the player did" would collapse.
+This is the whole point of ADR-003, option B. If `pcfm-hidden` exposed `player.latent.finishing`, the engine would read the latent and decide the outcome itself. That is the **circularity trap**: the outcome would be a deterministic function of the latent, and the gap between "how good the player is" and "what the player did" would collapse.
 
-By exposing only `resolve_shot`, the crate keeps the gap: the engine asks "does this shot go in?", receives "yes/no" plus a cause trace, and cannot reverse-engineer the latent from the answer (the answer has noise). The engine is an orchestrator, not a calculator. The latent lives only in `fmr-hidden`, and the engine cannot see it.
+By exposing only `resolve_shot`, the crate keeps the gap: the engine asks "does this shot go in?", receives "yes/no" plus a cause trace, and cannot reverse-engineer the latent from the answer (the answer has noise). The engine is an orchestrator, not a calculator. The latent lives only in `pcfm-hidden`, and the engine cannot see it.
 
 The cost is verbosity: one call per resolution type. The benefit is that the Three Planes doctrine is enforced by the compiler, not by review. See ADR-003 for the full trade-off.
 
 ### 2.6 The `drain_observations` method
 
-`drain_observations` returns the observations accumulated by `GroundTruth` since the last drain. These are `ObservationEvent`s (Plane B), already stripped of any latent value. They are the bridge between "what `fmr-hidden` computed internally" and "what `fmr-stats` can store".
+`drain_observations` returns the observations accumulated by `GroundTruth` since the last drain. These are `ObservationEvent`s (Plane B), already stripped of any latent value. They are the bridge between "what `pcfm-hidden` computed internally" and "what `pcfm-stats` can store".
 
 Typical use: at the end of each tick, the engine calls `drain_observations()` and forwards the events to `L0.05` (which appends them to the `EventChain`). The engine does not interpret them; it only forwards them.
 
@@ -138,7 +138,7 @@ Typical use: at the end of each tick, the engine calls `drain_observations()` an
 
 `GroundTruth`, `DuelContext`, `DuelOutcome`, `ShotContext`, `ShotOutcome`, `PassContext`, `PassOutcome`, `PressureContext`, `PressureOutcome`, `InjuryContext`, `InjuryOutcome`, `SaveContext`, `SaveOutcome`, `SetPieceContext`, `SetPieceOutcome`, `ObservationEvent`, `DuelType`.
 
-The full schema of each context/outcome is defined in `fmr-hidden`'s source, not here. This cell defines the **shape** of the API, not the field-by-field schema of each context (that is an implementation detail that can evolve without breaking the contract, as long as the public types stay opaque to the engine).
+The full schema of each context/outcome is defined in `pcfm-hidden`'s source, not here. This cell defines the **shape** of the API, not the field-by-field schema of each context (that is an implementation detail that can evolve without breaking the contract, as long as the public types stay opaque to the engine).
 
 ## 4. Edge cases
 

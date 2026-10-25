@@ -18,7 +18,7 @@ This project does not use semantic versioning for the docs; the version of each 
 - Write L2 cells (tactics, market, finance, youth, scouting, psyche, crowd, media, ai): 9 cells.
 - Write L3 cells (registry, packs, generator, editor, assets, ui, statistics, quality): 8 cells.
 - Recover and archive the three Prompt Master versions (v5, v6, v7) into `archive/prompts/`.
-- Begin code: `fmr-core`, `fmr-hidden`, `fmr-match` (L0 implementation).
+- Begin code: `pcfm-core`, `pcfm-hidden`, `pcfm-match` (L0 implementation).
 - Ratify ADR-005 (Qt binding), ADR-006 (license), ADR-007 (canonical language).
 
 ---
@@ -61,7 +61,7 @@ This is consistent with ADR-002 (offline-first), `00-foundations` §5 (no bundle
 
 ### Changed
 
-- **ADR-003** (`docs/adr/003-plane-a-enforcement.md`): status `proposed` → **`accepted`**. Option B (capability API) is now the binding decision. `fmr-hidden` exposes only `resolve_*` and `drain_observations`; latents never cross the crate boundary.
+- **ADR-003** (`docs/adr/003-plane-a-enforcement.md`): status `proposed` → **`accepted`**. Option B (capability API) is now the binding decision. `pcfm-hidden` exposes only `resolve_*` and `drain_observations`; latents never cross the crate boundary.
 - **`modules/L0-match/04-match-engine.md`**: version 1.1 → **1.2**, status `draft` → **`ratified`**. The match engine can now be implemented.
 - **`modules/L0-match/08-random-events.md`**: version 1.1 → **1.2**, status `draft` → **`ratified`**. The random events cell can now be implemented.
 - **`modules/L0-match/10-ground-truth.md`**: version 1.0 → **1.1**, status `draft` → **`ratified`**. The `GroundTruth` API is now the implementation contract.
@@ -78,7 +78,7 @@ Before this entry, three L0 cells were `draft` (L0.04, L0.08, L0.10) and blocked
 - **All 11 L0 cells are `ratified`.**
 - **ADR-003 is `accepted`** (option B: capability API, `GroundTruth` with `resolve_*` only).
 - **The L0 specification is complete.**
-- **Code can begin**, starting from `fmr-core`, `fmr-hidden`, and `fmr-match` (see `STRUCTURE.md` §3).
+- **Code can begin**, starting from `pcfm-core`, `pcfm-hidden`, and `pcfm-match` (see `STRUCTURE.md` §3).
 
 The Doctrine was unchanged at that point. `00-foundations` remained at v1.1.
 
@@ -89,7 +89,7 @@ The Doctrine was unchanged at that point. `00-foundations` remained at v1.1.
 ### Added
 
 - **`docs/GLOSSARY.md`** (v1.0) — 30+ terms with definitions and links to the source. Sections: Core, Data model, Determinism, Architecture, Process, Banned, External, Abbreviations, Historical.
-- **`modules/L0-match/10-ground-truth.md`** (v1.0, `draft` at the time) — the cell that centralises the public API of `fmr-hidden`. Before this cell, the API was scattered across L0.03 §3.2, L0.04 §1, L0.05 §2.3 and ADR-003.
+- **`modules/L0-match/10-ground-truth.md`** (v1.0, `draft` at the time) — the cell that centralises the public API of `pcfm-hidden`. Before this cell, the API was scattered across L0.03 §3.2, L0.04 §1, L0.05 §2.3 and ADR-003.
 - **9 `.gitkeep` files** in `crates/`, `registry/`, `mods/`, `data/`, `docs/legal/`, `docs/calibration/`, `archive/prompts/`, `archive/doctrine/`, `archive/legacy/` — placeholder directories kept in git.
 
 ### Changed
@@ -104,7 +104,7 @@ The Doctrine was unchanged at that point. `00-foundations` remained at v1.1.
 
 ### Summary
 
-The `fmr-hidden` API now has a single home (`L0.10`). Before, a reader who wanted to understand "what can `fmr-hidden` do?" had to read four files. After, they read one. The other L0 cells link to it.
+The `pcfm-hidden` API now has a single home (`L0.10`). Before, a reader who wanted to understand "what can `pcfm-hidden` do?" had to read four files. After, they read one. The other L0 cells link to it.
 
 ---
 

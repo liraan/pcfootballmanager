@@ -106,7 +106,7 @@ The content of each legacy module is re-integrated into the concentric structure
 
 The four legacy modules were written before ADR-003 (Plane A enforcement) and before the explicit ban on CA/PA. When their content is re-integrated, the following must be **removed or rewritten**:
 
-1. **Any reference to `LatentAttributes` as a public struct or field.** Under ADR-003, option B, latents live only in `fmr-hidden` and are accessed only via `resolve_*`. A public `Player` struct with a `latent: LatentHandle` field is **not** acceptable (see `L0.03` §2.1).
+1. **Any reference to `LatentAttributes` as a public struct or field.** Under ADR-003, option B, latents live only in `pcfm-hidden` and are accessed only via `resolve_*`. A public `Player` struct with a `latent: LatentHandle` field is **not** acceptable (see `L0.03` §2.1).
 2. **Any mention of CA/PA.** The `current_ability` / `potential_ability` scalars are banned (`00-foundations` §5). Where the legacy text uses them, replace with `IndexSnapshot` / `ProjectionProfile`.
 3. **Any reference to `HashMap` in simulation paths.** Banned (`00-foundations` §4, `L0.01` §2.5). Replace with `BTreeMap` / `BTreeSet` / sorted `Vec`.
 4. **Any hardcoded balance value.** Move to `balance/*.toml` *(planned)*.

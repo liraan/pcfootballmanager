@@ -202,17 +202,17 @@ Some components are referenced across cells but do not (yet) have a dedicated ce
 
 ### Infrastructure components
 
-These are the `fmr-*` crates that provide infrastructure to multiple cells. They are not domain cells; they are services. Their full specification is **fragmented across the cells that use them**, until a dedicated cell is written.
+These are the `pcfm-*` crates that provide infrastructure to multiple cells. They are not domain cells; they are services. Their full specification is **fragmented across the cells that use them**, until a dedicated cell is written.
 
 | Component | Currently defined in | Dedicated cell (planned) | Notes |
 |---|---|---|---|
-| `fmr-core` | L0.01 §2.2 (RNG), L0.02 §2.1 (event bus), L0.03 §3.1 (IDs), `00-foundations` §4 (fixed-point) | — | The core crate. Used by every other crate. |
-| `fmr-stats` | L0.05 §2.4 (`EventChain`), L0.06 (consumer) | `L3-statistics` | Storage of `MatchEvent`, query engine. |
-| `fmr-metrics` | L0.04 §2.4 (sub-models), L0.06 §2.3 (`MatchStatistics`) | `L3-statistics` | xG, PPDA, progressive actions. Minimal version at L0. |
-| `fmr-data` | L0.07 §2.3 (migration scripts) | `L3-quality` | Loader, validator, migrations. |
-| `fmr-bridge` | `docs/adr/004-panic-strategy-ffi.md`, `docs/adr/005-qt-binding.md` | `L3-ui` | Qt FFI shim. The only crate that knows Qt. |
+| `pcfm-core` | L0.01 §2.2 (RNG), L0.02 §2.1 (event bus), L0.03 §3.1 (IDs), `00-foundations` §4 (fixed-point) | — | The core crate. Used by every other crate. |
+| `pcfm-stats` | L0.05 §2.4 (`EventChain`), L0.06 (consumer) | `L3-statistics` | Storage of `MatchEvent`, query engine. |
+| `pcfm-metrics` | L0.04 §2.4 (sub-models), L0.06 §2.3 (`MatchStatistics`) | `L3-statistics` | xG, PPDA, progressive actions. Minimal version at L0. |
+| `pcfm-data` | L0.07 §2.3 (migration scripts) | `L3-quality` | Loader, validator, migrations. |
+| `pcfm-bridge` | `docs/adr/004-panic-strategy-ffi.md`, `docs/adr/005-qt-binding.md` | `L3-ui` | Qt FFI shim. The only crate that knows Qt. |
 
-**Rule:** when a new cell needs `fmr-core` (or any other infrastructure crate), it does not re-specify the crate. It links to the existing definition. The dedicated cell, when written, will be the single source of truth; until then, the "Currently defined in" column is the map.
+**Rule:** when a new cell needs `pcfm-core` (or any other infrastructure crate), it does not re-specify the crate. It links to the existing definition. The dedicated cell, when written, will be the single source of truth; until then, the "Currently defined in" column is the map.
 
 ### Cross-cell components
 
@@ -220,8 +220,8 @@ These are components that are referenced across cells but are not crates. They a
 
 | Component | Referenced in | Destination |
 |---|---|---|
-| `fmr-hidden` / `GroundTruth` | L0.03, L0.04, L0.07, L0.08, ADR-003 | **L0.10** (documented here) ✅ |
-| `fmr-gen` | ADR-003, L0.07, L0.10 | L3-generator *(planned)* |
+| `pcfm-hidden` / `GroundTruth` | L0.03, L0.04, L0.07, L0.08, ADR-003 | **L0.10** (documented here) ✅ |
+| `pcfm-gen` | ADR-003, L0.07, L0.10 | L3-generator *(planned)* |
 | `balance/*.toml` | L0.04, L0.06, L0.08 | L3-quality *(planned)* |
 | `registry/*.yaml` | L0.03, L0.05 | L3-registry *(planned)* |
 | `locales/*` | L0.06 | L3-assets *(planned)*; translations at `locales/it/` *(planned)* |

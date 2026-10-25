@@ -84,7 +84,7 @@ The single most important architectural rule. Violating it introduces systemic b
 - Latent psychological state (the six axes, unexposed raw)
 - Internal random seed (never exposed)
 
-**Who reads it:** only `fmr-match` (the match engine) and the world generator (`fmr-gen`).
+**Who reads it:** only `pcfm-match` (the match engine) and the world generator (`pcfm-gen`).
 
 **Rule:** no external module may read Plane A. Ever. Not even for debugging.
 
@@ -181,7 +181,7 @@ These are not preferences. They are prohibitions.
 -->
 
 - **No CA/PA.** No `current_ability`, `potential_ability`, or equivalent scalar. Ever.
-- **No truth leakage.** No module outside `fmr-match` and `fmr-gen` reads Plane A.
+- **No truth leakage.** No module outside `pcfm-match` and `pcfm-gen` reads Plane A.
 - **No ratings from latents.** Ratings come from events.
 - **No Plane C → Plane A feedback.**
 - **No hardcoded rules, names, colours, or balance values.** Everything lives in files.

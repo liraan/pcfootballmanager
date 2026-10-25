@@ -4,7 +4,7 @@
 - **Date:** 2026-10-25
 - **Supersedes:** none
 - **Superseded by:** none
-- **Blocks:** `fmr-bridge` (FFI crate), `L3-ui` (Qt UI)
+- **Blocks:** `pcfm-bridge` (FFI crate), `L3-ui` (Qt UI)
 
 ## Context
 
@@ -47,7 +47,7 @@ With `panic = "abort"` there is no unwinding, so `catch_unwind` cannot catch any
 
 ### FFI rules
 
-Every Rust function exposed to C++ through `fmr-bridge` must:
+Every Rust function exposed to C++ through `pcfm-bridge` must:
 
 1. Be wrapped in `std::panic::catch_unwind`.
 2. Convert a caught panic into a C-compatible error code.
@@ -57,9 +57,9 @@ Every Rust function exposed to C++ through `fmr-bridge` must:
 ### Canonical pattern
 
 ```rust
-// fmr-bridge — every function exposed to C++
+// pcfm-bridge — every function exposed to C++
 #[no_mangle]
-pub extern "C" fn fmr_query_player(id: u64, out: *mut PlayerDto) -> i32 {
+pub extern "C" fn pcfm_query_player(id: u64, out: *mut PlayerDto) -> i32 {
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         // ... logic ...
         Ok(())

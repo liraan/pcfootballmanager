@@ -4,11 +4,11 @@
 - **Date:** 2026-10-25
 - **Supersedes:** none
 - **Superseded by:** none
-- **Blocks:** `L3-ui` (UI implementation), `fmr-bridge` (FFI crate), `L0.04` (if UI affects match display)
+- **Blocks:** `L3-ui` (UI implementation), `pcfm-bridge` (FFI crate), `L0.04` (if UI affects match display)
 
 ## Context
 
-The UI requires Qt (QML for skin-friendly screens, QWidgets/model-view for data grids). Two mature Rust-Qt bindings exist: `cxx-qt` (KDAB) and `qmetaobject` (woboq). The choice determines the shape of `fmr-bridge` and `L3-ui`, and affects the entire FFI strategy (ADR-004).
+The UI requires Qt (QML for skin-friendly screens, QWidgets/model-view for data grids). Two mature Rust-Qt bindings exist: `cxx-qt` (KDAB) and `qmetaobject` (woboq). The choice determines the shape of `pcfm-bridge` and `L3-ui`, and affects the entire FFI strategy (ADR-004).
 
 ## Options considered
 
@@ -44,12 +44,12 @@ The UI requires Qt (QML for skin-friendly screens, QWidgets/model-view for data 
 
 **Option A — `cxx-qt`.**
 
-`cxx-qt` is the only binding that covers both QML (skins) and QWidgets (data grids), which are both hard requirements. The "early development" risk is mitigated by pinning the version and isolating the dependency in `fmr-bridge` (ADR-004 already requires a thin FFI boundary).
+`cxx-qt` is the only binding that covers both QML (skins) and QWidgets (data grids), which are both hard requirements. The "early development" risk is mitigated by pinning the version and isolating the dependency in `pcfm-bridge` (ADR-004 already requires a thin FFI boundary).
 
 ### What this means for the architecture
 
-- `fmr-bridge` is the **only** crate that depends on `cxx-qt`.
-- `fmr-ui` depends on `fmr-bridge`, not on `cxx-qt` directly.
+- `pcfm-bridge` is the **only** crate that depends on `cxx-qt`.
+- `pcfm-ui` depends on `pcfm-bridge`, not on `cxx-qt` directly.
 - `L3-ui` uses QML for skin-friendly screens, QWidgets for data-heavy tables.
 - The FFI boundary follows ADR-004: `catch_unwind`, no panic propagation, contract tests.
 
@@ -73,14 +73,14 @@ The UI requires Qt (QML for skin-friendly screens, QWidgets/model-view for data 
 
 ### Locked in
 - `cxx-qt` is the Qt binding.
-- `fmr-bridge` is the only crate that imports it.
+- `pcfm-bridge` is the only crate that imports it.
 - `qmetaobject` is not used (unless a future ADR supersedes this).
 
 ## Implementation notes
 
 1. Ratify this ADR.
-2. Add `cxx-qt` as a dependency of `fmr-bridge` only.
-3. Write a minimal `fmr-bridge` example: a QObject with one signal, one slot.
+2. Add `cxx-qt` as a dependency of `pcfm-bridge` only.
+3. Write a minimal `pcfm-bridge` example: a QObject with one signal, one slot.
 4. Verify the FFI boundary with ADR-004 rules (`catch_unwind`, no panic across FFI).
 5. Add `cxx-qt` to `deny.toml` allow-list with a pinned version.
 6. Write a `L3-ui` smoke test: one QML screen, one QWidgets table.
@@ -91,4 +91,4 @@ The UI requires Qt (QML for skin-friendly screens, QWidgets/model-view for data 
 - CXX-Qt Book: https://kdab.github.io/cxx-qt/book/
 - Comparison table (KDAB README)[reference:11]
 - ADR-004 — panic strategy at FFI boundary
-- ADR-003 — Plane A enforcement (no latent types in `fmr-bridge`)
+- ADR-003 — Plane A enforcement (no latent types in `pcfm-bridge`)

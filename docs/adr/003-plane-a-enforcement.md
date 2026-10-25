@@ -27,17 +27,17 @@ The Three Planes doctrine (`00-foundations` §3) says:
 
 The doctrine is clear on the *what*. It is not yet clear on the *how*. Two enforcement strategies are viable, and they produce **different crate architectures**. Choosing late means rewriting the match engine.
 
-Concretely: `L0.04-match-engine` cannot be implemented until this ADR is accepted, because the shape of the `fmr-hidden` API is exactly what this ADR decides.
+Concretely: `L0.04-match-engine` cannot be implemented until this ADR is accepted, because the shape of the `pcfm-hidden` API is exactly what this ADR decides.
 
 ## Options considered
 
 ### Option A — Doctrine + process enforcement
 
-`fmr-hidden` is a normal crate that exposes `LatentAttributes` as public types. The match engine (`fmr-match`) imports `fmr-hidden` and reads latent values directly.
+`pcfm-hidden` is a normal crate that exposes `LatentAttributes` as public types. The match engine (`pcfm-match`) imports `pcfm-hidden` and reads latent values directly.
 
 Enforcement is:
-- **Dependency hygiene**: only `fmr-match` and `fmr-gen` declare `fmr-hidden` in their `Cargo.toml`.
-- **CI check**: a script (`scripts/check-plane-a.sh`) fails the build if any other crate declares `fmr-hidden`.
+- **Dependency hygiene**: only `pcfm-match` and `pcfm-gen` declare `pcfm-hidden` in their `Cargo.toml`.
+- **CI check**: a script (`scripts/check-plane-a.sh`) fails the build if any other crate declares `pcfm-hidden`.
 - **Review discipline**: a human reviewer rejects PRs that leak latents.
 
 **Pro:**
@@ -46,17 +46,17 @@ Enforcement is:
 - Lower initial cost.
 
 **Con:**
-- The enforcement is **social and process-based**, not type-based. A distracted refactor can add `fmr-hidden` to a `Cargo.toml` and the CI is the only guard.
-- Once a crate depends on `fmr-hidden`, removing the dependency is a breaking change.
+- The enforcement is **social and process-based**, not type-based. A distracted refactor can add `pcfm-hidden` to a `Cargo.toml` and the CI is the only guard.
+- Once a crate depends on `pcfm-hidden`, removing the dependency is a breaking change.
 - The `LatentAttributes` type is public. It can be logged, printed, serialised, sent over the wire — all things that "never expose Plane A" forbids. Guarding every `Debug` impl, every `Serialize`, every `Display` is whack-a-mole.
 - A developer debugging a UI issue can `dbg!(player.latent)` and the truth leaks into a screenshot. That's not hypothetical; it happens on every project that takes this route.
 
 ### Option B — Capability API: latents never cross the crate boundary
 
-`fmr-hidden` exposes **only computations**, not values. The match engine asks questions and receives answers, but never sees the numbers that produced the answer.
+`pcfm-hidden` exposes **only computations**, not values. The match engine asks questions and receives answers, but never sees the numbers that produced the answer.
 
 ```rust
-// fmr-hidden — public API
+// pcfm-hidden — public API
 pub struct GroundTruth {
     // fields are private, no public accessor
 }
@@ -77,21 +77,21 @@ impl GroundTruth {
 }
 ```
 
-The match engine (`fmr-match`) is an **orchestrator**, not a calculator. It calls `resolve_*` and turns the outcome into a `MatchEvent`. It never sees `finishing`, `passing_long`, `injury_proneness`.
+The match engine (`pcfm-match`) is an **orchestrator**, not a calculator. It calls `resolve_*` and turns the outcome into a `MatchEvent`. It never sees `finishing`, `passing_long`, `injury_proneness`.
 
 **Pro:**
-- Plane A is not "protected". It is **unreachable**. No latent type exists outside `fmr-hidden`. The violation is **impossible by construction**, not by discipline.
+- Plane A is not "protected". It is **unreachable**. No latent type exists outside `pcfm-hidden`. The violation is **impossible by construction**, not by discipline.
 - `Debug`, `Serialize`, `Display`, logging — all moot. The types don't exist outside the crate.
 - The match engine's API is small and stable: `resolve_duel`, `resolve_shot`, `resolve_injury_risk`, `resolve_pass`, `resolve_pressure`, `drain_observations`. Adding a new resolution type is additive.
 - Testability: the match engine can be tested with a mock `GroundTruth` that returns fixed outcomes, no need for real latents.
 - The "no truth leakage" rule becomes a compiler guarantee, not a code-review checklist.
 
 **Con:**
-- Requires that `fmr-match` be an orchestrator, not a calculator. The engine's internal structure changes: instead of `if player.latent.finishing > defender.latent.tackling { ... }`, it calls `resolve_duel(...)` and gets an outcome.
-- The `fmr-match` API becomes more verbose. One call per resolution type.
+- Requires that `pcfm-match` be an orchestrator, not a calculator. The engine's internal structure changes: instead of `if player.latent.finishing > defender.latent.tackling { ... }`, it calls `resolve_duel(...)` and gets an outcome.
+- The `pcfm-match` API becomes more verbose. One call per resolution type.
 - Initial refactor cost is higher. The match engine has to be designed around the capability API from day one.
-- The `fmr-hidden` crate is non-trivial: it contains all the latent calculations, and it must be careful not to leak them through `Debug` (fields are private, so this is manageable).
-- Slightly harder to unit-test `fmr-hidden` in isolation, because the interesting behaviour is the composite `resolve_*` functions. Mitigation: `fmr-hidden` has its own tests, with access to its private fields.
+- The `pcfm-hidden` crate is non-trivial: it contains all the latent calculations, and it must be careful not to leak them through `Debug` (fields are private, so this is manageable).
+- Slightly harder to unit-test `pcfm-hidden` in isolation, because the interesting behaviour is the composite `resolve_*` functions. Mitigation: `pcfm-hidden` has its own tests, with access to its private fields.
 
 ## Decision
 
@@ -111,7 +111,7 @@ The reasoning:
 
 ### Concrete API
 
-The full `fmr-hidden` public API at v1.0:
+The full `pcfm-hidden` public API at v1.0:
 
 ```rust
 pub struct GroundTruth { /* private */ }
@@ -131,7 +131,7 @@ impl GroundTruth {
 
 That's the entire public surface. No fields, no `LatentAttributes`, no `Player` with latents. The match engine cannot see anything else.
 
-### What `fmr-hidden` is not allowed to do
+### What `pcfm-hidden` is not allowed to do
 
 - It cannot return a `Player` with latent fields.
 - It cannot return `f32` values that are raw latents (e.g. `fn finishing(&self) -> f32` is forbidden).
@@ -142,18 +142,18 @@ That's the entire public surface. No fields, no `LatentAttributes`, no `Player` 
 
 ```
 crates/
-├── fmr-hidden/          ← public API: resolve_*, drain_observations
-├── fmr-match/           ← orchestrator: calls resolve_*, emits MatchEvent
-├── fmr-stats/           ← stores MatchEvent, computes aggregates
-├── fmr-gen/             ← creates GroundTruth (write access, no read)
+├── pcfm-hidden/          ← public API: resolve_*, drain_observations
+├── pcfm-match/           ← orchestrator: calls resolve_*, emits MatchEvent
+├── pcfm-stats/           ← stores MatchEvent, computes aggregates
+├── pcfm-gen/             ← creates GroundTruth (write access, no read)
 └── ...
 ```
 
-- `fmr-hidden` is a **normal crate** with a **tiny public API**.
-- No `#[deny(unsafe_code)]` exception is needed. `fmr-hidden` can be pure safe Rust.
-- `fmr-match` depends on `fmr-hidden`, `fmr-core`, `fmr-stats`.
-- `fmr-stats` **does not** depend on `fmr-hidden`. Ever.
-- `fmr-gen` depends on `fmr-hidden` (write access to create GroundTruth), but not on `fmr-match`.
+- `pcfm-hidden` is a **normal crate** with a **tiny public API**.
+- No `#[deny(unsafe_code)]` exception is needed. `pcfm-hidden` can be pure safe Rust.
+- `pcfm-match` depends on `pcfm-hidden`, `pcfm-core`, `pcfm-stats`.
+- `pcfm-stats` **does not** depend on `pcfm-hidden`. Ever.
+- `pcfm-gen` depends on `pcfm-hidden` (write access to create GroundTruth), but not on `pcfm-match`.
 
 ## Consequences
 
@@ -168,30 +168,30 @@ crates/
 ### What becomes harder
 
 - **The match engine's internal code is more verbose.** Instead of `if a > b`, it's `match ground_truth.resolve_duel(ctx) { ... }`. This is acceptable.
-- **`fmr-hidden` must be designed carefully.** Its public API is the entire surface of Plane A. Every function is a commitment.
-- **The `fmr-gen` crate needs write access to `GroundTruth`.** It creates the data, `fmr-match` only queries it. This is fine, but it means `fmr-gen` is also a special crate.
+- **`pcfm-hidden` must be designed carefully.** Its public API is the entire surface of Plane A. Every function is a commitment.
+- **The `pcfm-gen` crate needs write access to `GroundTruth`.** It creates the data, `pcfm-match` only queries it. This is fine, but it means `pcfm-gen` is also a special crate.
 - **Adding a new latent type** (e.g. a new psychological axis) requires adding a new `resolve_*` function or extending an existing one. This is a deliberate friction: it forces the question "does this actually need to be Plane A?".
 
 ### What is now locked in
 
 - The `MatchEngine` trait is an orchestrator. It calls `resolve_*`, not field access.
-- `fmr-hidden` is the only crate with latent values. It has no public fields, no `Serialize`, no `Debug` leaking.
-- `fmr-stats` is independent of `fmr-hidden`.
+- `pcfm-hidden` is the only crate with latent values. It has no public fields, no `Serialize`, no `Debug` leaking.
+- `pcfm-stats` is independent of `pcfm-hidden`.
 - The save does not contain latents.
 
 ## Implementation notes
 
 - **Step 1:** Define `GroundTruth` with private fields and the `resolve_*` API. No behaviour yet, just signatures.
-- **Step 2:** Implement the `resolve_*` functions in `fmr-hidden`. They contain all the latent math.
+- **Step 2:** Implement the `resolve_*` functions in `pcfm-hidden`. They contain all the latent math.
 - **Step 3:** Implement `MatchEngine` as an orchestrator. It never touches latents directly.
 - **Step 4:** Write a `MockGroundTruth` for testing. It returns fixed outcomes.
-- **Step 5:** CI check: `fmr-stats` does not depend on `fmr-hidden`. `fmr-ui` does not depend on `fmr-hidden`. `fmr-market` does not depend on `fmr-hidden`.
+- **Step 5:** CI check: `pcfm-stats` does not depend on `pcfm-hidden`. `pcfm-ui` does not depend on `pcfm-hidden`. `pcfm-market` does not depend on `pcfm-hidden`.
 - **Step 6:** Remove `scripts/check-plane-a.sh`. It is no longer needed: the compiler is the check.
 
 ## Related ADRs
 
-- **ADR-004** (panic strategy at FFI): `fmr-hidden` is pure Rust, no FFI, so this ADR does not interact with ADR-004 directly.
-- **ADR-005** (Qt binding): `fmr-ui` and `fmr-bridge` must not depend on `fmr-hidden`. This is enforced by the dependency rules in §"Consequences".
+- **ADR-004** (panic strategy at FFI): `pcfm-hidden` is pure Rust, no FFI, so this ADR does not interact with ADR-004 directly.
+- **ADR-005** (Qt binding): `pcfm-ui` and `pcfm-bridge` must not depend on `pcfm-hidden`. This is enforced by the dependency rules in §"Consequences".
 
 ## References
 

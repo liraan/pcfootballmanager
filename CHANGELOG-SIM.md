@@ -16,7 +16,7 @@ SIM_VERSION = 1
 
 This is the **initial baseline**. No code exists yet, so no bump has occurred. When the first line of simulation code is merged, this value becomes the reference against which all future bumps are measured.
 
-`SIM_VERSION` is defined in `fmr-core` (planned) and embedded in every save (see `L0.07` §2.1).
+`SIM_VERSION` is defined in `pcfm-core` (planned) and embedded in every save (see `L0.07` §2.1).
 
 ---
 
@@ -26,7 +26,7 @@ This is the **initial baseline**. No code exists yet, so no bump has occurred. W
 
 1. **RNG behaviour changes** — algorithm, seed derivation, or stream naming (see `L0.01` §2.6).
 2. **Event emission changes** — an event type is added, removed, or its emission rules change in a way that affects the event stream (see `L0.05`).
-3. **Resolution logic changes** — a `resolve_*` function in `fmr-hidden` returns a different outcome for the same inputs (see `L0.03` §3.2).
+3. **Resolution logic changes** — a `resolve_*` function in `pcfm-hidden` returns a different outcome for the same inputs (see `L0.03` §3.2).
 4. **Tick loop changes** — the order of operations within a tick changes, or the tick granularity changes (see `L0.04` §2.2).
 5. **Random event catalogue changes** — a `RandomEventDef` is added, removed, or its probability function changes in a way that affects the distribution (see `L0.08` §2.5).
 
@@ -38,7 +38,7 @@ If none of the above is true, `SIM_VERSION` is **not** bumped. A refactor that p
 
 A `SIM_VERSION` bump requires **all five steps**, in order. The CI will not merge a bump that skips any of them.
 
-1. **Bump the value** in `fmr-core` (planned). The value is a monotonic integer. It never goes down.
+1. **Bump the value** in `pcfm-core` (planned). The value is a monotonic integer. It never goes down.
 2. **Regenerate the golden hash** — the expected state hash for the 10-season golden test (see `00-foundations` §4). The new hash is committed alongside the bump.
 3. **Write the entry** in the "History" section below, using the template.
 4. **Verify save compatibility** — every existing save fixture must still load. If a save cannot be reconstructed under the new `SIM_VERSION`, the entry must say so explicitly and a migration must be provided (see `L0.07` §2.3).

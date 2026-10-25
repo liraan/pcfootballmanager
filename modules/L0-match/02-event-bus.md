@@ -92,7 +92,7 @@ Extensible via `L3-registry` (pack-provided event kinds). L0 uses only the enum 
 - Dispatching in parallel within a match
 - Handlers that mutate the bus during dispatch (they must queue)
 - Handlers that depend on `HashMap` iteration order
-- Handlers that read `fmr-hidden` directly (they must go through the match engine)
+- Handlers that read `pcfm-hidden` directly (they must go through the match engine)
 
 ### 2.5 Replay compatibility
 

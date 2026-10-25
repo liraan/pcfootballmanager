@@ -18,11 +18,11 @@ The non-negotiable architectural separation of data into three layers. Plane A (
 
 ### Plane A — Ground Truth
 
-The actual state of the world: latent attributes, physiological state, latent psychological state, internal RNG seed. Lives in `fmr-hidden`. Never exposed. Read only by `fmr-match` and `fmr-gen`, via `resolve_*` functions. See [`modules/00-foundations.md`](../modules/00-foundations.md) §3 and [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md).
+The actual state of the world: latent attributes, physiological state, latent psychological state, internal RNG seed. Lives in `pcfm-hidden`. Never exposed. Read only by `pcfm-match` and `pcfm-gen`, via `resolve_*` functions. See [`modules/00-foundations.md`](../modules/00-foundations.md) §3 and [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md).
 
 ### Plane B — Observation
 
-Events and statistics computed exclusively from observable outcomes. Includes `MatchEvent`, aggregated statistics, ratings (computed from events, never from attributes), and temporal trends. Append-only. Lives in `fmr-stats`. See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md).
+Events and statistics computed exclusively from observable outcomes. Includes `MatchEvent`, aggregated statistics, ratings (computed from events, never from attributes), and temporal trends. Append-only. Lives in `pcfm-stats`. See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md).
 
 ### Plane C — Estimation
 
@@ -66,11 +66,11 @@ The structured explanation carried by every `MatchEvent`, describing why the eve
 
 ### `GroundTruth`
 
-The opaque type exposed by `fmr-hidden`. Contains Plane A. Has no public fields; only the `resolve_*` methods. See [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md) and [`modules/L0-match/03-entities-minimal.md`](../modules/L0-match/03-entities-minimal.md) §3.2.
+The opaque type exposed by `pcfm-hidden`. Contains Plane A. Has no public fields; only the `resolve_*` methods. See [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md) and [`modules/L0-match/03-entities-minimal.md`](../modules/L0-match/03-entities-minimal.md) §3.2.
 
 ### `resolve_*`
 
-The public API of `fmr-hidden`: `resolve_duel`, `resolve_shot`, `resolve_pass`, `resolve_pressure`, `resolve_injury_risk`, `resolve_save`, `resolve_set_piece`, `drain_observations`. The match engine calls these; it never reads a latent value. See [`modules/L0-match/03-entities-minimal.md`](../modules/L0-match/03-entities-minimal.md) §3.2.
+The public API of `pcfm-hidden`: `resolve_duel`, `resolve_shot`, `resolve_pass`, `resolve_pressure`, `resolve_injury_risk`, `resolve_save`, `resolve_set_piece`, `drain_observations`. The match engine calls these; it never reads a latent value. See [`modules/L0-match/03-entities-minimal.md`](../modules/L0-match/03-entities-minimal.md) §3.2.
 
 ### `IndexSnapshot`
 
@@ -118,7 +118,7 @@ The top-level seed from which all streams are derived. Changing it changes the e
 
 ### `SIM_VERSION`
 
-The version identifier of the simulation behaviour. Bumped whenever the outcome of a simulation changes for the same seed and inputs. Tracked in [`CHANGELOG-SIM.md`](../CHANGELOG-SIM.md). Defined in `fmr-core` (planned).
+The version identifier of the simulation behaviour. Bumped whenever the outcome of a simulation changes for the same seed and inputs. Tracked in [`CHANGELOG-SIM.md`](../CHANGELOG-SIM.md). Defined in `pcfm-core` (planned).
 
 ### Golden test
 
@@ -132,22 +132,22 @@ A test that asserts a property that must hold for all inputs (e.g. "money is con
 
 ## 4. Architecture
 
-### `fmr-*` crates
+### `pcfm-*` crates
 
 The Rust crates of the project. Each has a single responsibility. The mapping:
-- `fmr-core` — time, IDs, RNG, event bus, deterministic math
-- `fmr-hidden` — Plane A (latents, `resolve_*`)
-- `fmr-match` — the match engine (orchestrator, L0.04)
-- `fmr-stats` — Plane B storage (append-only)
-- `fmr-model` — pure entities
-- `fmr-gen` — world generator
+- `pcfm-core` — time, IDs, RNG, event bus, deterministic math
+- `pcfm-hidden` — Plane A (latents, `resolve_*`)
+- `pcfm-match` — the match engine (orchestrator, L0.04)
+- `pcfm-stats` — Plane B storage (append-only)
+- `pcfm-model` — pure entities
+- `pcfm-gen` — world generator
 - Others — see [`modules/00-foundations.md`](../modules/00-foundations.md) §8 and [`STRUCTURE.md`](../STRUCTURE.md) §2.
 
-### `fmr-bridge`
+### `pcfm-bridge`
 
 The only crate that knows Qt. Contains the FFI shim. See [`docs/adr/004-panic-strategy-ffi.md`](adr/004-panic-strategy-ffi.md) and [`docs/adr/005-qt-binding.md`](adr/005-qt-binding.md).
 
-### `fmr-hidden`
+### `pcfm-hidden`
 
 The crate that contains Plane A. Its public API is `resolve_*` and `drain_observations`. There are no public latent fields. See [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md).
 
@@ -205,7 +205,7 @@ Frontmatter fields that declare the dependency graph. `depends_on` lists cells t
 
 ### Truth leakage
 
-Any path by which Plane A data reaches a module outside `fmr-hidden` / `fmr-match` / `fmr-gen`. **Banned.** See [`modules/00-foundations.md`](../modules/00-foundations.md) §3.
+Any path by which Plane A data reaches a module outside `pcfm-hidden` / `pcfm-match` / `pcfm-gen`. **Banned.** See [`modules/00-foundations.md`](../modules/00-foundations.md) §3.
 
 ### `HashMap` in simulation paths
 

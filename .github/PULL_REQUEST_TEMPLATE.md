@@ -54,7 +54,7 @@ If "Other", describe:
 -->
 
 - [ ] **No CA/PA.** No `current_ability`, `potential_ability`, or equivalent scalar introduced.
-- [ ] **No truth leakage.** No module outside `fmr-hidden` and `fmr-match` (or `fmr-gen`) reads Plane A.
+- [ ] **No truth leakage.** No module outside `pcfm-hidden` and `pcfm-match` (or `pcfm-gen`) reads Plane A.
 - [ ] **No ratings from latents.** Any rating formula introduced takes `&[MatchEvent]`, not latent fields.
 - [ ] **No Plane C → Plane A feedback.**
 - [ ] **No hardcoded rules, names, colours, or balance values.** Everything lives in files.

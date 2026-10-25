@@ -37,7 +37,7 @@ This is where the "observation" plane is born. Ratings, statistics, projections,
 - Depends on `00-foundations`, `L0.01` (ID generation), `L0.03` (entities)
 - Written by `L0.04-match-engine`
 - Read by `L0.06-match-output`, `L0.07-save-minimal`, and every L1/L2 module that consumes statistics
-- **Never** reads `fmr-hidden`
+- **Never** reads `pcfm-hidden`
 
 ## 2. Specification
 

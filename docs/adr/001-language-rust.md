@@ -32,7 +32,7 @@ The project needs a language for a deterministic, performance-sensitive, long-li
 
 **Option A — Rust.**
 
-Edition 2024, MSRV 1.85, pinned via `rust-toolchain.toml`. The choice is locked: every module, every crate, every tool is written in Rust. Qt interop is handled via `cxx-qt` (ADR-005). The FFI boundary is thin and isolated in `fmr-bridge` (ADR-004).
+Edition 2024, MSRV 1.85, pinned via `rust-toolchain.toml`. The choice is locked: every module, every crate, every tool is written in Rust. Qt interop is handled via `cxx-qt` (ADR-005). The FFI boundary is thin and isolated in `pcfm-bridge` (ADR-004).
 
 ## Consequences
 
@@ -51,15 +51,15 @@ Edition 2024, MSRV 1.85, pinned via `rust-toolchain.toml`. The choice is locked:
 - Rust is the implementation language.
 - `rust-toolchain.toml` pins the toolchain.
 - `Cargo.lock` is committed.
-- No C++ code outside `fmr-bridge`'s thin shim.
+- No C++ code outside `pcfm-bridge`'s thin shim.
 
 ## Implementation notes
 
 1. Pin `rust-toolchain.toml` to `1.85.0`.
 2. Commit `Cargo.lock`.
 3. Add `cargo-deny` to CI.
-4. Add `MIRIFLAGS="-Zmiri-disable-isolation" cargo miri test` to CI (excluding `fmr-bridge`).
-5. Keep `unsafe` confined to `fmr-bridge` and `fmr-core::math`.
+4. Add `MIRIFLAGS="-Zmiri-disable-isolation" cargo miri test` to CI (excluding `pcfm-bridge`).
+5. Keep `unsafe` confined to `pcfm-bridge` and `pcfm-core::math`.
 
 ## References
 

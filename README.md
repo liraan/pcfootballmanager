@@ -101,18 +101,18 @@ PCFM separates three distinct layers of data, and keeps them separated:
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│  PLANE A — Ground Truth (fmr-hidden)                 │
+│  PLANE A — Ground Truth (pcfm-hidden)                 │
 │  • Latent attributes (true finishing, passing)       │
 │  • Physiological state (internal fatigue)            │
 │  • Latent psychological state                        │
 │  • NEVER exposed to the player                       │
 │                                                      │
-│  PLANE B — Observation (fmr-stats)                   │
+│  PLANE B — Observation (pcfm-stats)                   │
 │  • MatchEvents (shot, pass, duel)                    │
 │  • Ratings computed FROM EVENTS, not from latents    │
 │  • Append-only, immutable                            │
 │                                                      │
-│  PLANE C — Estimation (fmr-index, fmr-projection)    │
+│  PLANE C — Estimation (pcfm-index, pcfm-projection)    │
 │  • Observed attributes (estimates derived from B)    │
 │  • Indexes (striker effectiveness, playmaker impact) │
 │  • Projections (NOT CA/PA — confidence bands)        │
@@ -261,7 +261,7 @@ See **[`CONTRIBUTING.md`](CONTRIBUTING.md)** for the full process. Quick summary
 - Changing an invariant requires a new ADR.
 - If you spot an error, say so plainly — including in AI-drafted text.
 
-The **L0 specification is complete and ratified**. Code can begin. If you want to contribute code, read the L0 cells first, then start from `fmr-core` (see `STRUCTURE.md` §3).
+The **L0 specification is complete and ratified**. Code can begin. If you want to contribute code, read the L0 cells first, then start from `pcfm-core` (see `STRUCTURE.md` §3).
 
 ---
 

@@ -305,7 +305,7 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 | 002 | Project name and scope | ✅ accepted | — |
 | 003 | Plane A enforcement | ✅ accepted | — (unblocked L0.04, L0.08, L0.10) |
 | 004 | Panic strategy at FFI | ✅ accepted | — |
-| 005 | Qt binding | 🟡 proposed | `L3-ui`, `fmr-bridge` |
+| 005 | Qt binding | 🟡 proposed | `L3-ui`, `pcfm-bridge` |
 | 006 | License | 🟡 proposed | `LICENSE.md`, every `Cargo.toml` example |
 | 007 | Canonical language | 🟡 proposed | translations, language policy |
 

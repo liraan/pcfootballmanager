@@ -101,7 +101,7 @@ If any of those seven fails, L0 is not done.
 | L0.07 | [`07-save-minimal.md`](07-save-minimal.md) | Save/load a single match | ✅ ratified |
 | L0.08 | [`08-random-events.md`](08-random-events.md) | Discrete in-match events (injuries, cards, brawls) | ✅ ratified |
 | L0.09 | [`09-context-modifiers.md`](09-context-modifiers.md) | How external state enters the engine | ✅ ratified |
-| L0.10 | [`10-ground-truth.md`](10-ground-truth.md) | Public API of `fmr-hidden` (Plane A access) | ✅ ratified |
+| L0.10 | [`10-ground-truth.md`](10-ground-truth.md) | Public API of `pcfm-hidden` (Plane A access) | ✅ ratified |
 
 **11 cells in total.** All `ratified`. ADR-003 (Plane A enforcement, option B) is accepted. The specification is complete; the code can be written.
 
@@ -133,14 +133,14 @@ L0 is where the Three Planes are born.
 
 | Plane | Lives in | Read by | Written by |
 |---|---|---|---|
-| A — Ground Truth | `fmr-hidden` | `10-ground-truth` (API), `04-match-engine`, `08-random-events` | `03-entities-minimal` (creation), `L3-generator` *(planned)* |
-| B — Observation | `fmr-stats` (via `EventChain`) | `06-match-output`, L2 modules | `04-match-engine` via `05-match-events` |
+| A — Ground Truth | `pcfm-hidden` | `10-ground-truth` (API), `04-match-engine`, `08-random-events` | `03-entities-minimal` (creation), `L3-generator` *(planned)* |
+| B — Observation | `pcfm-stats` (via `EventChain`) | `06-match-output`, L2 modules | `04-match-engine` via `05-match-events` |
 | C — Estimation | not in L0 | — | L2 (index, projection) |
 
 **Critical rules:**
 
 - `10-ground-truth` is the **only** door to Plane A. It exposes `resolve_*` and `drain_observations`, nothing else.
-- `06-match-output` computes ratings from `MatchEvent` only. It does not read `fmr-hidden`. This is tested in L0's DoD.
+- `06-match-output` computes ratings from `MatchEvent` only. It does not read `pcfm-hidden`. This is tested in L0's DoD.
 - `07-save-minimal` does not save Plane A. `GroundTruth` is reconstructed from `(world_seed, match_id)` + the command log (see `07-save-minimal.md` §2.6).
 
 ---
@@ -169,7 +169,7 @@ Golden test: `same_seed → same MatchResult` bit-for-bit, across 1,000 randomly
 - [ ] The match is saveable and reloadable, same seed → same result
 - [ ] Each event has a consultable cause trace
 - [ ] No ratings computed from latents (test passes)
-- [ ] No module outside `fmr-hidden`, `10-ground-truth`, `04-match-engine`, and `08-random-events` reads Plane A (test passes)
+- [ ] No module outside `pcfm-hidden`, `10-ground-truth`, `04-match-engine`, and `08-random-events` reads Plane A (test passes)
 - [ ] `GroundTruth` is not `Serialize`, has no public fields, and has a custom `Debug` that does not leak
 - [ ] Performance: 90 min simulated in < 1 s on mid-range hardware
 - [ ] Golden test: 1,000 matches, same seed → same hash
@@ -183,10 +183,10 @@ The specification half of the DoD is done. The implementation half begins with t
 | Risk | Severity | Mitigation |
 |---|---|---|
 | Match engine becomes a monolith | High | Cell boundaries enforced; `04-match-engine` has a hard API; random events, context modifiers, and ground truth are separate cells |
-| Ratings leak Plane A | Critical | Type system + test of violation (`06-match-output` has no access to `fmr-hidden`) |
+| Ratings leak Plane A | Critical | Type system + test of violation (`06-match-output` has no access to `pcfm-hidden`) |
 | Determinism drifts | Critical | Named streams + golden test + `SIM_VERSION` |
 | Random events feel "cheap" | High | Every event has a cause trace; distribution tested |
-| `fmr-hidden` leaks a latent getter | Critical | `10-ground-truth` API is the only surface; review + grep in CI |
+| `pcfm-hidden` leaks a latent getter | Critical | `10-ground-truth` API is the only surface; review + grep in CI |
 | Performance insufficient | Medium | Profiling, tick budget, benchmarks in CI |
 | Implementation drifts from spec | Medium | Every PR against L0.04, L0.08, L0.10 is checked against the cell spec; a drift is a bug in the code, not in the spec |
 

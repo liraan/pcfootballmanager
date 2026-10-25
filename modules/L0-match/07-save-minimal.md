@@ -82,7 +82,7 @@ pub fn migrate_save_if_needed(save: &mut MatchSave) -> Result<()>;
 
 - If `schema_version < CURRENT`, apply migrations in order
 - If `sim_version != CURRENT`, the save is **readable but not replayable**. The match result is shown as-is, but the user is warned that replay will differ.
-- Migration scripts live in `crates/fmr-data/migrations/match/` *(planned — the `crates/` directory does not exist yet)*
+- Migration scripts live in `crates/pcfm-data/migrations/match/` *(planned — the `crates/` directory does not exist yet)*
 - The migration procedure (and the `SIM_VERSION` bump rules) is documented in `docs/MIGRATION-01-04.md` *(planned)* and in [`CHANGELOG-SIM.md`](../../CHANGELOG-SIM.md)
 
 ### 2.4 Verification
@@ -108,7 +108,7 @@ The save does not contain `GroundTruth`. When a match is reloaded:
 4. The `command_log` is replayed from the start of the match.
 5. The events are re-emitted, and the chain hash is verified against the saved hash.
 
-This is why the save is small and why it cannot leak latents: the latents never leave `fmr-hidden`. The reconstruction is the mechanism that makes the save work without storing Plane A.
+This is why the save is small and why it cannot leak latents: the latents never leave `pcfm-hidden`. The reconstruction is the mechanism that makes the save work without storing Plane A.
 
 **Consequence:** if `sim_version` differs, the reconstruction may produce different events (the simulation changed). The save is still readable, but the chain won't verify against a new replay. The user sees a warning.
 

@@ -14,7 +14,7 @@ conforms_to: "00-foundations (v1.1)"
 
 <!--
   MAINTAINER NOTE: the ratings formula is the single most likely place for the
-  "Plane A leak" bug to sneak in. Guard it with a type that CANNOT see fmr-hidden.
+  "Plane A leak" bug to sneak in. Guard it with a type that CANNOT see pcfm-hidden.
   If someone asks "but we could make ratings more accurate by reading finishing",
   the answer is no. That's the whole point of Plane B.
 
@@ -28,12 +28,12 @@ conforms_to: "00-foundations (v1.1)"
 
 Transform `MatchEvent` (Plane B) into the things a human reads: score, ratings, statistics, narrative.
 
-**Hard rule:** everything here is computed from events. Nothing here reads `fmr-hidden`.
+**Hard rule:** everything here is computed from events. Nothing here reads `pcfm-hidden`.
 
 ## 1. Context and dependencies
 
 - Reads `MatchEvent` from `L0.05`
-- **Never** reads `fmr-hidden`
+- **Never** reads `pcfm-hidden`
 - Produces `MatchResult` for `L0.04` and `L0.07`
 - Does not compute xG/PPDA from latents: those are computed from events (minimal versions at L0, full versions in `L3-statistics` *(planned)*)
 
@@ -62,7 +62,7 @@ pub fn compute_rating(
 ) -> f32;
 ```
 
-**Signature constraint:** the function takes `&[MatchEvent]` and a config. It does **not** take `&Player`, `&GroundTruth`, or any type from `fmr-hidden`. This is the type-system guard against leakage. If you need player context (role, position), pass it as an explicit parameter of an **observed** type (`ObservedRole`), never as a latent.
+**Signature constraint:** the function takes `&[MatchEvent]` and a config. It does **not** take `&Player`, `&GroundTruth`, or any type from `pcfm-hidden`. This is the type-system guard against leakage. If you need player context (role, position), pass it as an explicit parameter of an **observed** type (`ObservedRole`), never as a latent.
 
 - `config` lives in `balance/ratings.toml` *(planned — the `balance/` directory does not exist yet)*
 - The formula is exposed and tunable
@@ -159,7 +159,7 @@ forward = { goal = 1.5, assist = 1.2 }
 - [ ] Ratings computed from events only (signature check: no `Player`, no `GroundTruth`)
 - [ ] Statistics bundle complete
 - [ ] Narrative localisable, with fallback
-- [ ] No access to `fmr-hidden` in this cell (compile-time check: no `use fmr_hidden::*`)
+- [ ] No access to `pcfm-hidden` in this cell (compile-time check: no `use pcfm_hidden::*`)
 - [ ] Test: two matches with same seed → same ratings, same stats, same narrative
 - [ ] Test: `RatingConfig` is loaded from file, not hardcoded
 - [ ] Test: fallback narrative template is used when the specific one is missing

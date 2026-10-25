@@ -107,7 +107,7 @@ The engine calls the following `resolve_*` methods. The mapping from sub-model t
 | Goalkeeper saves | `resolve_save` |
 | Set pieces | `resolve_set_piece` |
 
-Additional sub-models (collective positioning, coordinated pressing, offside trap) are implemented **inside** `fmr-hidden` and exposed through the `resolve_*` functions above. The match engine does not know how they work; it only sees the outcomes.
+Additional sub-models (collective positioning, coordinated pressing, offside trap) are implemented **inside** `pcfm-hidden` and exposed through the `resolve_*` functions above. The match engine does not know how they work; it only sees the outcomes.
 
 The full API (with `Context` / `Outcome` types) is in [`10-ground-truth.md`](10-ground-truth.md) §2.1–§2.2.
 
@@ -127,9 +127,9 @@ The full API (with `Context` / `Outcome` types) is in [`10-ground-truth.md`](10-
 
 - It does not know about clubs, seasons, money, contracts
 - It does not compute ratings (those are in `L0.06`)
-- It does not read `fmr-hidden` values directly (it calls `resolve_*`, whose API is in `L0.10`)
+- It does not read `pcfm-hidden` values directly (it calls `resolve_*`, whose API is in `L0.10`)
 - It does not compute `ContextModifiers` (those come from `L0.09`)
-- It does not implement `resolve_*` logic (that is `fmr-hidden`'s job, documented in `L0.10`)
+- It does not implement `resolve_*` logic (that is `pcfm-hidden`'s job, documented in `L0.10`)
 - It does not implement random events (those are `L0.08`)
 - It does not construct `GroundTruth` (that is `L3-generator`'s job, or the test harness)
 
@@ -178,7 +178,7 @@ The engine produces `MatchEvent`s (see `L0.05`) and consumes `ContextModifiers` 
 - [ ] Trait `MatchEngine` implemented for text mode
 - [ ] Tick loop deterministic (state hash stable across 100 runs)
 - [ ] Micro-decision model documented and implemented
-- [ ] Sub-models implemented inside `fmr-hidden` (API documented in `L0.10`)
+- [ ] Sub-models implemented inside `pcfm-hidden` (API documented in `L0.10`)
 - [ ] No ratings computed in the engine
 - [ ] No latent value read outside `resolve_*` (compile-time check: no field access on `GroundTruth`)
 - [ ] `drain_observations` called at least once per tick
@@ -191,13 +191,13 @@ The engine produces `MatchEvent`s (see `L0.05`) and consumes `ContextModifiers` 
 
 | Risk | Severity | Mitigation |
 |---|---|---|
-| Engine becomes a monolith | High | Hard API; `L0.08`, `L0.09`, `L0.10` are separate cells; sub-models live in `fmr-hidden` |
+| Engine becomes a monolith | High | Hard API; `L0.08`, `L0.09`, `L0.10` are separate cells; sub-models live in `pcfm-hidden` |
 | Ratings leak latents | Critical | Type system: ratings only accept `&[MatchEvent]`; test of violation |
 | Determinism drift | Critical | Golden test + `SIM_VERSION` bump procedure |
 | Performance insufficient | Medium | Tick budget, profiling, benchmark in CI |
 | Match "always wins the strong team" | High | Calibration in `L3-quality` *(planned)* |
-| `fmr-hidden` API too coarse | Medium | `resolve_*` methods are the contract; adding a new resolution type is additive, not breaking |
-| `fmr-hidden` API too fine | Medium | Fewer, larger `resolve_*` methods are preferred; granularity is a design choice, documented per method in `L0.10` |
+| `pcfm-hidden` API too coarse | Medium | `resolve_*` methods are the contract; adding a new resolution type is additive, not breaking |
+| `pcfm-hidden` API too fine | Medium | Fewer, larger `resolve_*` methods are preferred; granularity is a design choice, documented per method in `L0.10` |
 | Engine duplicates the `GroundTruth` API description | Medium | The API is in `L0.10`; this cell only references it. If the API changes, only `L0.10` changes |
 
 ## 7. References
