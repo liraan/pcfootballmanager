@@ -1,6 +1,6 @@
 ---
 title: "Modules Index"
-version: "2.6"
+version: "2.7"
 status: "active"
 last_updated: "2026-10-25"
 ---
@@ -20,7 +20,7 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 **Reading order:**
 
-1. [`00-foundations.md`](00-foundations.md) — the doctrine *(v1.2, pillar 1 under review)*
+1. [`00-foundations.md`](00-foundations.md) — the doctrine *(v1.4, pillar 1 under review)*
 2. The level that matches your task (L0 → L3)
 3. [`../STRUCTURE.md`](../STRUCTURE.md) — the rules of the repo
 4. [`../docs/adr/`](../docs/adr/) — the decisions
@@ -29,7 +29,7 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 ## Current state (as of 2026-10-25)
 
-- ✅ **Doctrine**: ratified (v1.2). **Pillar 1 is under review** (ADR-013, proposed).
+- ✅ **Doctrine**: ratified (v1.4). **Pillar 1 is under review** (ADR-013, proposed).
 - ✅ **L0 — Match**: fully specified, **all 11 cells ratified** (ADR-003 accepted)
 - 🚧 **L1 — Season**: planned, not started (12 cells)
 - 🚧 **L2 — Career**: planned, not started (9 cells)
@@ -45,9 +45,9 @@ Cells marked *(planned)* below do not have a file yet. Their links are intention
 
 | File | Status |
 |---|---|
-| [`00-foundations.md`](00-foundations.md) | ✅ ratified (v1.2) — pillar 1 under review (ADR-013) |
+| [`00-foundations.md`](00-foundations.md) | ✅ ratified (v1.4) — pillar 1 under review (ADR-013) |
 
-**Note on `conforms_to`:** all cells declare `conforms_to: "00-foundations (v1.1)"`. v1.2 is a clarification that adds one sentence to §7 (Non-goals) and does not change any invariant. The pillar 1 revision, when ratified, will bump all cells to `v1.3` or higher, and each cell will be re-checked.
+**Note on `conforms_to`:** the doctrine is **v1.4**. All cells declare `conforms_to: "00-foundations (v1.1)"` because **v1.1 is the last version that changed an invariant**. v1.2 added one sentence to §7 (Non-goals). v1.3 added a cross-reference to the module developer guide. v1.4 added the "pillar 1 under review" note and the §4 status note. None of these changes an invariant, so the cells do not need to be re-checked. When the pillar is rewritten (ADR-013 ratified), the doctrine will bump to v2.0, and each cell will be re-checked against it.
 
 ---
 
@@ -67,9 +67,7 @@ Cells marked *(planned)* below do not have a file yet. Their links are intention
 | L0.09 | [`L0-match/09-context-modifiers.md`](L0-match/09-context-modifiers.md) | ✅ ratified | 00, L0.03 |
 | L0.10 | [`L0-match/10-ground-truth.md`](L0-match/10-ground-truth.md) | ✅ ratified | 00, L0.01, L0.03 |
 
-**L0 is done when:** a friendly match is playable, savable, reloadable, deterministic, and every event has a cause trace. The **specification** is complete; the **code** can now be written (ADR-003 accepted).
-
-**Implementation status (code):** `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-debug`. 103 tests passing. See `STRUCTURE.md` §3.
+**L0 is done when:** a friendly match is playable, savable, reloadable, deterministic, and every event has a cause trace. The **specification** is complete; the **code** is complete (6 crates, 103 tests). See `STRUCTURE.md` §3.
 
 ---
 
@@ -147,14 +145,15 @@ The core does not talk to providers. A tool (team, community, or third party) ta
 
 ## Modules and worlds (proposed)
 
-| ADR | Title | Status | Effect |
-|---|---|---|---|
-| [012](../docs/adr/012-modules.md) | Modules: The Brick Contract | 🟡 proposed | Defines the module sheet, conflicts, narrative, cause traces (two levels), debug UI module view |
-| [013](../docs/adr/013-worlds.md) | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | Defines LOD = sum of modules, LOD fixed per save, manifest in save, **local determinism**, community plural and aware |
+ADR-012 (Modules: The Brick Contract) and ADR-013 (Worlds: LOD, Manifest, and Local Determinism) define the module system and the world system. They are **proposed**: the framework does not yet implement them.
 
-**When ratified, these ADRs will supersede pillar 1 of `00-foundations` §2** ("Traceable determinism. Same seed + same inputs = same result. Never compromised.") and replace it with "Local determinism: same save + same match + same module configuration = same result."
+ADR-012 defines the brick contract (sheet, conflicts, narrative, cause traces, debug UI module view). ADR-013 defines how the bricks compose into worlds (LOD = sum of modules, LOD fixed per save, manifest in save, **local determinism**, community plural and aware).
 
-Read the two ADRs together, in order: [`012-013-reading-guide.md`](../docs/adr/012-013-reading-guide.md).
+ADR-013 **supersedes pillar 1** of `00-foundations` §2: the determinism becomes **local** (same save + same match + same module configuration = same result) instead of **global** (same seed regardless of configuration). The pillar is currently marked "under review" in the doctrine.
+
+Read the two ADRs together, in order: [`012-013-reading-guide.md`](../docs/adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
+
+For the current status of the two ADRs, see the **ADR status** table below.
 
 ---
 
@@ -178,9 +177,9 @@ If a cell lacks any of these, it is a bug. Open an issue.
 
 ## Doctrine compliance
 
-Every cell declares `conforms_to: 00-foundations (vX.Y)`. When `00-foundations` is revised, every cell's `conforms_to` is checked. A cell that has not been re-checked is marked `status: review` until it is.
+Every cell declares `conforms_to: 00-foundations (vX.Y)`. The `conforms_to` field means **"the cell has been verified against this version"**, not **"the cell is compatible with any later version"**. When `00-foundations` is revised, a cell that has not been re-verified is marked `status: review` until it is.
 
-The current doctrine version is **v1.2**. Cells conform to **v1.1** (the last invariant-changing version). v1.2 adds one sentence to §7 and does not change any invariant, so cells do not need to be re-checked. **Pillar 1 is under review** (ADR-013, proposed). When the pillar is rewritten, all cells will be re-checked and the version will bump.
+The doctrine is currently **v1.4**. Cells conform to **v1.1**, which is the last version that changed an invariant. v1.2 → v1.4 added clarifications and a status note (pillar 1 under review), none of which change an invariant. The cells do not need to be re-checked. When the pillar is rewritten (ADR-013 ratified), the doctrine will bump to v2.0, and all cells will be re-verified.
 
 ---
 
