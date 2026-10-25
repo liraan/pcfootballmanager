@@ -1,63 +1,63 @@
 # License
 
-**Status: proposed.** The terms below are the ones recommended in [`docs/adr/006-license.md`](docs/adr/006-license.md). Until that ADR is ratified (`status: accepted`), treat this file as the **intended** license, not the final one. Once ratified, the status line above will be removed and the terms below will be the binding license.
+PC Football Manager uses a **dual license** to balance openness (for code) with protection of the project's identity (for assets). The full rationale is in [ADR-006](docs/adr/006-license.md), which is **accepted** and definitive.
 
-This project uses **two licenses**: one for code, one for assets.
+## TL;DR
 
----
+| What | License | File |
+|------|---------|------|
+| **Code** — `crates/`, executables, build scripts | **MIT OR Apache-2.0** (at your option) | [`LICENSE-MIT`](LICENSE-MIT), [`LICENSE-APACHE`](LICENSE-APACHE) |
+| **Assets and documentation** — `mods/`, `data/`, `assets/`, `locales/`, `docs/`, `modules/` | **CC BY-NC-SA 4.0** | [`LICENSE-ASSETS`](LICENSE-ASSETS) |
+| **Trademarks** — the "PC Football Manager" name and logo | Trademark rights reserved | This file |
 
-## Code
+## Code — MIT OR Apache-2.0
 
-All source code in `crates/` and all executables are dual-licensed under **MIT** or **Apache-2.0**, at your option.
+Every crate in `crates/` and every executable is dual-licensed under MIT or Apache-2.0, at your option. This is the Rust ecosystem standard, and it maximizes compatibility with downstream projects.
 
-- See [`LICENSE-MIT`](LICENSE-MIT) and [`LICENSE-APACHE`](LICENSE-APACHE).
+You may use, modify, and redistribute the code under **either** license. You do not need to choose one at build time; the choice is yours as a consumer.
 
-`Cargo.toml` files declare:
+`Cargo.toml` files in the workspace declare:
 
 ```toml
 license = "MIT OR Apache-2.0"
 ```
 
----
+## Assets and documentation — CC BY-NC-SA 4.0
 
-## Assets and documentation
+All non-code content — data packs, images, sounds, documentation in `modules/` and `docs/`, translations in `locales/` — is licensed under **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International**.
 
-All assets in `mods/`, `data/`, `assets/`, `locales/`, and all prose documentation in `docs/` and `modules/` are licensed under **CC-BY-NC-SA-4.0** (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International).
+In short:
 
-- See [`LICENSE-ASSETS`](LICENSE-ASSETS).
+- ✅ Share and adapt the material freely.
+- ✅ Use it in personal projects, research, education, community packs.
+- ❌ Do not use it commercially.
+- ✅ If you remix, share under the same license.
+- ✅ Give appropriate credit.
 
-The CC-BY-NC-SA-4.0 means:
+The non-commercial clause is a **default, not a prohibition to negotiate**. For commercial licensing of the assets, contact the project team.
 
-- **Attribution** — you must credit the project.
-- **NonCommercial** — you may not use the material for commercial purposes.
-- **ShareAlike** — if you remix, transform, or build upon the material, you must distribute your contributions under the same license.
+## Trademarks
 
----
+The name **"PC Football Manager"** and the project logo are trademarks of the PC Football Manager Team. The licenses above do **not** grant trademark rights.
 
-## Code snippets in documentation
+You may:
 
-Code snippets embedded in documentation are dual-licensed under **MIT** or **Apache-2.0**, at your option.
+- Use the name to refer to the project (nominative fair use).
+- State that your work is "built on" or "compatible with" PC Football Manager, provided it does not imply endorsement.
 
----
+You may not:
 
-## Trademark
+- Use the name or logo as the name of your fork or derivative product.
+- Imply official status or endorsement without permission.
 
-The name **"PC Football Manager"** and the project logo are trademarks of the project team. The licenses above do not grant trademark rights.
+## Contributing
 
-A fork may use the code and assets under the terms above, but must not:
-
-- call itself "PC Football Manager" or "PCFM";
-- use the project logo;
-- suggest endorsement by the project team.
-
----
-
-## Contribution
-
-By contributing, you agree to license your contributions under the terms above. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for details.
-
----
+By contributing to this repository, you agree to license your contribution under the terms above (MIT OR Apache-2.0 for code, CC BY-NC-SA 4.0 for assets). See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full process.
 
 ## Questions
 
-Open an issue on GitHub. There is no private channel for licensing questions.
+If anything here is unclear, open a [Discussion](https://github.com/liraan/pcfootballmanager/discussions) or read [ADR-006](docs/adr/006-license.md). This file is informational; in case of conflict, the full license texts prevail.
+
+---
+
+**© 2026 PC Football Manager Team**
