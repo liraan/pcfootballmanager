@@ -1,6 +1,6 @@
 # Repository Structure
 
-**Version:** 1.2
+**Version:** 1.3
 **Status:** active
 **Last updated:** 2026-10-25
 
@@ -57,7 +57,7 @@ The specification is not a flat list of 25 modules. It is organised in **four co
 │  L0 — MATCH (core)                                          │
 │  rng, event-bus, entities-minimal, match-engine,            │
 │  match-events, match-output, save-minimal, random-events,   │
-│  context-modifiers                                          │
+│  context-modifiers, ground-truth                            │
 └──────────────────────────┬──────────────────────────────────┘
                            │ grounded in
 ┌──────────────────────────▼──────────────────────────────────┐
@@ -94,28 +94,57 @@ pc-football-manager/
 ├── README.md
 ├── STRUCTURE.md
 ├── CONTRIBUTING.md
+├── LICENSE.md
+├── LICENSE-MIT
+├── LICENSE-APACHE
+├── LICENSE-ASSETS
+├── CHANGELOG.md
+├── CHANGELOG-SIM.md
+├── CHANGELOG-REGISTRY.md
+├── .gitignore
+├── .github/
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── ISSUE_TEMPLATE/
+│       ├── bug_report.md
+│       └── module-revision.md
 ├── modules/
 │   ├── 00-foundations.md
 │   ├── _index.md
-│   └── L0-match/         (10 files, 00 → 09)
-└── docs/
-    └── adr/              (8 files, 000 → 007)
+│   └── L0-match/         (11 files, 00 → 10)
+├── docs/
+│   ├── GLOSSARY.md
+│   ├── MIGRATION-01-04.md
+│   ├── adr/              (8 files, 000 → 007)
+│   ├── legal/            (.gitkeep)
+│   └── calibration/      (.gitkeep)
+├── archive/
+│   ├── README.md
+│   ├── prompts/          (.gitkeep)
+│   ├── doctrine/         (.gitkeep)
+│   └── legacy/           (.gitkeep)
+├── crates/               (.gitkeep)
+├── registry/             (.gitkeep)
+├── mods/                 (.gitkeep)
+└── data/                 (.gitkeep)
 ```
 
 ### Target state
 
-The full structure, once code and supporting files exist. Items marked *(planned)* do not exist yet.
+The full structure, once L1–L3 are written. Items marked *(planned)* do not exist yet.
 
 ```
 pc-football-manager/
 ├── README.md
 ├── STRUCTURE.md
 ├── CONTRIBUTING.md
-├── LICENSE.md                 # *(planned)* dual license (ADR-006)
-├── CHANGELOG.md               # *(planned)*
-├── CHANGELOG-SIM.md           # *(planned)*
-├── CHANGELOG-REGISTRY.md      # *(planned)*
-├── modules/                   # specification, concentric L0–L3
+├── LICENSE.md
+├── LICENSE-MIT
+├── LICENSE-APACHE
+├── LICENSE-ASSETS
+├── CHANGELOG.md
+├── CHANGELOG-SIM.md
+├── CHANGELOG-REGISTRY.md
+├── modules/
 │   ├── 00-foundations.md
 │   ├── _index.md
 │   ├── L0-match/
@@ -124,16 +153,17 @@ pc-football-manager/
 │   ├── L1-roster/             # *(planned)*
 │   ├── L2-*/                  # *(planned)* 9 cells
 │   └── L3-*/                  # *(planned)* 8 cells
-├── archive/                   # *(planned)* historical Prompt Masters (v5, v6, v7)
+├── archive/                   # historical Prompt Masters, when recovered
 ├── docs/
-│   ├── adr/                   # architecture decision records
-│   ├── legal/                 # *(planned)* data source compliance
-│   ├── calibration/           # *(planned)* model calibration dashboards
-│   └── MIGRATION-01-04.md     # *(planned)* legacy module migration
-├── registry/                  # *(planned)* empty until code exists
-├── crates/                    # *(planned)* empty until code exists
-├── mods/                      # *(planned)* empty until user packs exist
-└── data/                      # *(planned)* examples only, never real licensed data
+│   ├── adr/
+│   ├── legal/
+│   ├── calibration/
+│   ├── GLOSSARY.md
+│   └── MIGRATION-01-04.md
+├── registry/                  # empty until code exists
+├── crates/                    # empty until code exists
+├── mods/                      # empty until user packs exist
+└── data/                      # examples only, never real licensed data
 ```
 
 **File naming:** `NN-kebab-case-name.md`, two-digit prefix, no Italian, no version in the filename. `04-match-engine.md`, not `Modulo 04 — Motore Partita (rev 1.1).md`. The filename is stable; the revision lives in the frontmatter.
@@ -142,7 +172,7 @@ pc-football-manager/
 
 ### `/archive` — the history
 
-Every superseded document goes here. Nothing is deleted. `Prompt_Master_v5.md`, `_v6.md`, `_v7.md` live here. When `00-foundations.md` is revised, the previous version is archived as `00-foundations-vX.Y.md`.
+Every superseded document goes here. Nothing is deleted. `Prompt_Master_v5.md`, `_v6.md`, `_v7.md` will live in `archive/prompts/` once recovered. When `00-foundations.md` is revised, the previous version is archived in `archive/doctrine/`. The four legacy Italian modules (`01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md`) will be moved to `archive/legacy/` after migration (see `docs/MIGRATION-01-04.md`).
 
 **Rule:** the archive is read-only. Do not edit archived files. They exist for traceability, not for maintenance.
 
@@ -152,11 +182,11 @@ One file per architectural decision. See §5.
 
 ### `/docs/legal` — data source compliance
 
-Licensing terms, provider constraints, what we can and cannot do with third-party data. *(planned)*
+Licensing terms, provider constraints, what we can and cannot do with third-party data. *(planned — the directory exists but is empty)*
 
 ### `/docs/calibration` — model calibration dashboards
 
-When the project ships, this folder holds the dashboards that compare internal models (xG, IR, projections) against real data. *(planned)*
+When the project ships, this folder holds the dashboards that compare internal models (xG, IR, projections) against real data. *(planned — the directory exists but is empty)*
 
 ### `/crates`, `/registry`, `/mods`, `/data`
 
@@ -174,7 +204,7 @@ title: "L0.04 — Match Engine"
 level: 0
 cell: "L0-match"
 module_id: "L0.04"
-version: "1.0"
+version: "1.2"
 status: "ratified"          # draft | review | ratified | superseded
 last_updated: "2026-10-25"
 supersedes: null             # or "previous-version-id"
@@ -183,11 +213,13 @@ depends_on:
   - "L0.01"
   - "L0.02"
   - "L0.03"
+  - "L0.10"
 referenced_by:
   - "L0.05"
   - "L0.06"
   - "L0.08"
   - "L0.09"
+  - "L1-season"
 conforms_to: "00-foundations (v1.1)"
 ---
 ```
@@ -269,11 +301,13 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 |---|---|---|---|
 | 001 | Language: Rust | ✅ accepted | — |
 | 002 | Project name and scope | ✅ accepted | — |
-| 003 | Plane A enforcement | 🟡 proposed | `L0.04`, `L0.08` |
+| 003 | Plane A enforcement | ✅ accepted | — (unblocked L0.04, L0.08, L0.10) |
 | 004 | Panic strategy at FFI | ✅ accepted | — |
 | 005 | Qt binding | 🟡 proposed | `L3-ui`, `fmr-bridge` |
 | 006 | License | 🟡 proposed | `LICENSE.md`, every `Cargo.toml` example |
 | 007 | Canonical language | 🟡 proposed | translations, language policy |
+
+**Open ADRs:** 005, 006, 007. **Accepted:** 001, 002, 003, 004.
 
 ---
 
@@ -288,7 +322,7 @@ Rationale:
 - Commit messages, code identifiers, and ADRs are English by convention
 - A single language avoids the "which version is authoritative?" problem
 
-**Translations:** Italian is the first planned translation, in `locales/it/`. Translations are maintained by volunteers, are marked with the English version they correspond to, and are **never** the source of truth.
+**Translations:** Italian is the first planned translation, in `locales/it/`. Translations are maintained by volunteers, are marked with the English version they correspond to, and are **never** the source of truth. *(planned — the `locales/` directory does not exist yet)*
 
 **This policy is itself a decision** and is ratified in **ADR-007**.
 
