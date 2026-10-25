@@ -35,7 +35,7 @@ Transform `MatchEvent` (Plane B) into the things a human reads: score, ratings, 
 - Reads `MatchEvent` from `L0.05`
 - **Never** reads `fmr-hidden`
 - Produces `MatchResult` for `L0.04` and `L0.07`
-- Does not compute xG/PPDA from latents: those are computed from events (minimal versions at L0, full versions in `L3-statistics`)
+- Does not compute xG/PPDA from latents: those are computed from events (minimal versions at L0, full versions in `L3-statistics` *(planned)*)
 
 ## 2. Specification
 
@@ -64,7 +64,7 @@ pub fn compute_rating(
 
 **Signature constraint:** the function takes `&[MatchEvent]` and a config. It does **not** take `&Player`, `&GroundTruth`, or any type from `fmr-hidden`. This is the type-system guard against leakage. If you need player context (role, position), pass it as an explicit parameter of an **observed** type (`ObservedRole`), never as a latent.
 
-- `config` lives in `balance/ratings.toml`
+- `config` lives in `balance/ratings.toml` *(planned — the `balance/` directory does not exist yet)*
 - The formula is exposed and tunable
 - Different roles have different weightings (a goalkeeper is rated on saves, a striker on goals)
 - The role used for weighting is the **observed role** at the time of the event, not the latent one
@@ -88,7 +88,7 @@ pub struct MatchStatistics {
 }
 ```
 
-All computed from events. At L0, xG and PPDA use the formulas in `balance/metrics.toml` (minimal versions). `L3-statistics` replaces them with the full versions. The interface is identical; the formula is versioned.
+All computed from events. At L0, xG and PPDA use the formulas in `balance/metrics.toml` *(planned)* (minimal versions). `L3-statistics` *(planned)* replaces them with the full versions. The interface is identical; the formula is versioned.
 
 **Possession** is computed from time-of-possession events (a `Pass`, `Dribble`, `ProgressiveCarry` by team A counts as possession for team A until an `Interception`, `Tackle`, `Clearance`, or `Pass` by team B).
 
@@ -104,7 +104,7 @@ pub struct NarrativeEntry {
 }
 ```
 
-Templates live in `locales/en/narrative/*.toml`. The narrative is **generated from events**, never from latents. A goal is "a goal", not "a goal because the striker has finishing 18".
+Templates live in `locales/en/narrative/*.toml` *(planned)*. The narrative is **generated from events**, never from latents. A goal is "a goal", not "a goal because the striker has finishing 18".
 
 ### 2.5 What is **not** here
 
@@ -118,7 +118,7 @@ Templates live in `locales/en/narrative/*.toml`. The narrative is **generated fr
 
 `Score`, `Rating`, `MatchStatistics`, `Heatmap`, `MomentumSample`, `NarrativeEntry`, `Importance`, `RatingConfig`.
 
-`RatingConfig` lives in `balance/ratings.toml`:
+`RatingConfig` lives in `balance/ratings.toml` *(planned)*:
 
 ```toml
 [baseline]
@@ -182,4 +182,4 @@ forward = { goal = 1.5, assist = 1.2 }
 - [`05-match-events.md`](05-match-events.md) — input
 - [`07-save-minimal.md`](07-save-minimal.md) — persistence
 - [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — no latent access
-- [`../../archive/Prompt_Master_v7.md`](../../archive/Prompt_Master_v7.md) §23
+- `../../archive/Prompt_Master_v7.md` §23 — original spec *(planned — the archive/ directory does not exist yet)*
