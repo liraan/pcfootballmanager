@@ -13,7 +13,7 @@ conforms_to: "self"
 
 This is the **canonical doctrine** of PC Football Manager. Every other module is downstream of it. If a module contradicts this file, the module is wrong.
 
-The full historical version — `Prompt Master v7` — is archived in [`../archive/Prompt_Master_v7.md`](../archive/Prompt_Master_v7.md). This module distils it. When in doubt, this module wins.
+The full historical version — `Prompt Master v7` — will be archived at `archive/Prompt_Master_v7.md` once the `archive/` directory exists *(planned)*. This module distils it. When in doubt, this module wins.
 
 <!--
   MAINTAINER NOTE: this is the single source of truth for the project's
@@ -166,7 +166,7 @@ Operational rules:
 - **Portable transcendentals**: `libm` pinned, or fixed-point for the critical path
 - **Deterministic parallelism**: `rayon` with fixed partitioning and ordered reduction
 - **Golden tests**: 10 seasons from a known seed → state hash comparison
-- **`SIM_VERSION`**: bumped whenever simulation behaviour changes, with the five-step procedure in [`L3-quality/00-overview.md`](L3-quality/00-overview.md) (not yet written; for now, see `docs/MIGRATION-01-04.md`)
+- **`SIM_VERSION`**: bumped whenever simulation behaviour changes, with the five-step procedure documented in [`../docs/MIGRATION-01-04.md`](../docs/MIGRATION-01-04.md) *(planned)*
 
 ---
 
@@ -235,7 +235,7 @@ To keep scope honest, these are **not** in v1.0:
 
 ## 8. References
 
-- **Historical:** [`../archive/Prompt_Master_v7.md`](../archive/Prompt_Master_v7.md) — the full source doctrine
+- **Historical:** `archive/Prompt_Master_v7.md` *(planned — the archive/ directory does not exist yet)* — the full source doctrine
 - **Architecture:** [`L0-match/00-overview.md`](L0-match/00-overview.md) — how determinism and Plane A are enforced at L0
 - **Index of all modules:** [`_index.md`](_index.md)
 - **Decisions:** [`../docs/adr/`](../docs/adr/) — every open question, every resolved one
