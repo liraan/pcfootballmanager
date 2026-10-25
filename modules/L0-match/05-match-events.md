@@ -182,4 +182,4 @@ All fields are `Serialize`/`Deserialize` for the save (see `L0.07`). None of the
 - [`06-match-output.md`](06-match-output.md) — consumer
 - [`07-save-minimal.md`](07-save-minimal.md) — persistence
 - [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — no latent access
-- [`../../archive/Prompt_Master_v7.md`](../../archive/Prompt_Master_v7.md) §23.2
+- `../../archive/Prompt_Master_v7.md` §23.2 — original spec *(planned — the archive/ directory does not exist yet)*
