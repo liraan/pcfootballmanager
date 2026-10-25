@@ -1,16 +1,19 @@
 # ADR-003 — Plane A Enforcement
 
-- **Status:** proposed
+- **Status:** accepted
 - **Date:** 2026-10-25
 - **Supersedes:** none
 - **Superseded by:** none
-- **Blocks:** L0.04 (match engine), L0.08 (random events), all L2 modules that touch latents
+- **Blocks:** none (accepted — unblocks L0.04, L0.08, L0.10)
 
 <!--
   MAINTAINER NOTE: this is the single most consequential ADR in the project.
   It decides HOW Plane A (Ground Truth) is protected from the rest of the code.
-  Two options are on the table. Option B is recommended, but the project lead
-  must ratify. Until ratified, no code that touches fmr-hidden may be written.
+  Option B was chosen. Once ratified, the cells L0.04, L0.08, L0.10 can move
+  from `draft` to `ratified` and the code can be written.
+
+  Changing this decision requires a new ADR that supersedes this one. Do not
+  edit this file to change the decision. Write ADR-NNN instead.
 -->
 
 ## Context
@@ -72,3 +75,128 @@ impl GroundTruth {
     /// The only readable output: Plane B data.
     pub fn drain_observations(&mut self) -> Vec<ObservationEvent>;
 }
+```
+
+The match engine (`fmr-match`) is an **orchestrator**, not a calculator. It calls `resolve_*` and turns the outcome into a `MatchEvent`. It never sees `finishing`, `passing_long`, `injury_proneness`.
+
+**Pro:**
+- Plane A is not "protected". It is **unreachable**. No latent type exists outside `fmr-hidden`. The violation is **impossible by construction**, not by discipline.
+- `Debug`, `Serialize`, `Display`, logging — all moot. The types don't exist outside the crate.
+- The match engine's API is small and stable: `resolve_duel`, `resolve_shot`, `resolve_injury_risk`, `resolve_pass`, `resolve_pressure`, `drain_observations`. Adding a new resolution type is additive.
+- Testability: the match engine can be tested with a mock `GroundTruth` that returns fixed outcomes, no need for real latents.
+- The "no truth leakage" rule becomes a compiler guarantee, not a code-review checklist.
+
+**Con:**
+- Requires that `fmr-match` be an orchestrator, not a calculator. The engine's internal structure changes: instead of `if player.latent.finishing > defender.latent.tackling { ... }`, it calls `resolve_duel(...)` and gets an outcome.
+- The `fmr-match` API becomes more verbose. One call per resolution type.
+- Initial refactor cost is higher. The match engine has to be designed around the capability API from day one.
+- The `fmr-hidden` crate is non-trivial: it contains all the latent calculations, and it must be careful not to leak them through `Debug` (fields are private, so this is manageable).
+- Slightly harder to unit-test `fmr-hidden` in isolation, because the interesting behaviour is the composite `resolve_*` functions. Mitigation: `fmr-hidden` has its own tests, with access to its private fields.
+
+## Decision
+
+**Option B is accepted.**
+
+The reasoning:
+
+1. **The doctrine says "never exposed". Option A makes it "usually not exposed".** The difference is not academic. Every project that relies on discipline has leaked at some point. The cost of a leak in this project is that the entire Three Planes doctrine becomes a lie, and the game's core differentiator — the gap between truth and observation — collapses.
+
+2. **The refactor cost is one-time. The discipline cost is forever.** Option B costs more on day one. Option A costs a review on every PR, forever, and still fails occasionally.
+
+3. **The `MatchEngine` trait is already designed to be an orchestrator.** `L0.04` says: "The engine emits events, not ratings." That's already the orchestrator posture. Option B makes it explicit and enforced.
+
+4. **The mock is trivial.** With Option B, the match engine can be tested with a `MockGroundTruth` that returns fixed `DuelOutcome`s. That's a huge testability win. With Option A, testing the engine requires real `LatentAttributes`, which are hard to construct and easy to get wrong.
+
+5. **Future 3D engine.** `L0.04` says the `MatchEngine` trait must allow a 3D engine to be plugged in later. A 3D engine is even more of an orchestrator than a text engine. Option B is the right shape for both.
+
+### Concrete API
+
+The full `fmr-hidden` public API at v1.0:
+
+```rust
+pub struct GroundTruth { /* private */ }
+
+impl GroundTruth {
+    pub fn resolve_duel(&mut self, ctx: DuelContext) -> DuelOutcome;
+    pub fn resolve_shot(&mut self, ctx: ShotContext) -> ShotOutcome;
+    pub fn resolve_pass(&mut self, ctx: PassContext) -> PassOutcome;
+    pub fn resolve_pressure(&mut self, ctx: PressureContext) -> PressureOutcome;
+    pub fn resolve_injury_risk(&mut self, ctx: InjuryContext) -> InjuryOutcome;
+    pub fn resolve_save(&mut self, ctx: SaveContext) -> SaveOutcome;
+    pub fn resolve_set_piece(&mut self, ctx: SetPieceContext) -> SetPieceOutcome;
+
+    pub fn drain_observations(&mut self) -> Vec<ObservationEvent>;
+}
+```
+
+That's the entire public surface. No fields, no `LatentAttributes`, no `Player` with latents. The match engine cannot see anything else.
+
+### What `fmr-hidden` is not allowed to do
+
+- It cannot return a `Player` with latent fields.
+- It cannot return `f32` values that are raw latents (e.g. `fn finishing(&self) -> f32` is forbidden).
+- It cannot expose a `Debug` impl that prints latent values. Fields are private; a custom `Debug` that prints only "GroundTruth { .. }" is fine.
+- It cannot be `Serialize`d. The save does not contain latents. If the match is interrupted, the latents are reconstructed from the seed + the command log, not from the save.
+
+### Consequences for the workspace
+
+```
+crates/
+├── fmr-hidden/          ← public API: resolve_*, drain_observations
+├── fmr-match/           ← orchestrator: calls resolve_*, emits MatchEvent
+├── fmr-stats/           ← stores MatchEvent, computes aggregates
+├── fmr-gen/             ← creates GroundTruth (write access, no read)
+└── ...
+```
+
+- `fmr-hidden` is a **normal crate** with a **tiny public API**.
+- No `#[deny(unsafe_code)]` exception is needed. `fmr-hidden` can be pure safe Rust.
+- `fmr-match` depends on `fmr-hidden`, `fmr-core`, `fmr-stats`.
+- `fmr-stats` **does not** depend on `fmr-hidden`. Ever.
+- `fmr-gen` depends on `fmr-hidden` (write access to create GroundTruth), but not on `fmr-match`.
+
+## Consequences
+
+### What becomes easier
+
+- **The doctrine is enforced by the compiler.** No CI script needed. No review checklist. If it compiles, it does not leak.
+- **Testing is simpler.** Mock `GroundTruth` with fixed outcomes. No real latents in unit tests.
+- **Debugging is simpler.** When something goes wrong in the match engine, you know it's the orchestrator, not a latent-reading bug.
+- **The save is smaller.** No latents in the save. Reconstruct from seed + command log.
+- **The 3D engine is a drop-in.** It uses the same `MatchEngine` trait, calls the same `resolve_*` functions.
+
+### What becomes harder
+
+- **The match engine's internal code is more verbose.** Instead of `if a > b`, it's `match ground_truth.resolve_duel(ctx) { ... }`. This is acceptable.
+- **`fmr-hidden` must be designed carefully.** Its public API is the entire surface of Plane A. Every function is a commitment.
+- **The `fmr-gen` crate needs write access to `GroundTruth`.** It creates the data, `fmr-match` only queries it. This is fine, but it means `fmr-gen` is also a special crate.
+- **Adding a new latent type** (e.g. a new psychological axis) requires adding a new `resolve_*` function or extending an existing one. This is a deliberate friction: it forces the question "does this actually need to be Plane A?".
+
+### What is now locked in
+
+- The `MatchEngine` trait is an orchestrator. It calls `resolve_*`, not field access.
+- `fmr-hidden` is the only crate with latent values. It has no public fields, no `Serialize`, no `Debug` leaking.
+- `fmr-stats` is independent of `fmr-hidden`.
+- The save does not contain latents.
+
+## Implementation notes
+
+- **Step 1:** Define `GroundTruth` with private fields and the `resolve_*` API. No behaviour yet, just signatures.
+- **Step 2:** Implement the `resolve_*` functions in `fmr-hidden`. They contain all the latent math.
+- **Step 3:** Implement `MatchEngine` as an orchestrator. It never touches latents directly.
+- **Step 4:** Write a `MockGroundTruth` for testing. It returns fixed outcomes.
+- **Step 5:** CI check: `fmr-stats` does not depend on `fmr-hidden`. `fmr-ui` does not depend on `fmr-hidden`. `fmr-market` does not depend on `fmr-hidden`.
+- **Step 6:** Remove `scripts/check-plane-a.sh`. It is no longer needed: the compiler is the check.
+
+## Related ADRs
+
+- **ADR-004** (panic strategy at FFI): `fmr-hidden` is pure Rust, no FFI, so this ADR does not interact with ADR-004 directly.
+- **ADR-005** (Qt binding): `fmr-ui` and `fmr-bridge` must not depend on `fmr-hidden`. This is enforced by the dependency rules in §"Consequences".
+
+## References
+
+- `00-foundations.md` §3 — Three Planes
+- `modules/L0-match/10-ground-truth.md` — the cell that documents the API
+- `modules/L0-match/03-entities-minimal.md` — entities, without latents
+- `modules/L0-match/04-match-engine.md` — the orchestrator
+- `STRUCTURE.md` §2 — level rules
