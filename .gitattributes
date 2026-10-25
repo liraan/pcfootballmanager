@@ -1,4 +1,36 @@
+# Normalize line endings to LF for all text files.
+# This prevents "fake diffs" between Windows (CRLF) and Unix (LF) checkouts.
 * text=auto eol=lf
-*.rs text eol=lf
+
+# Source code — always LF
+*.rs   text eol=lf
 *.toml text eol=lf
-*.md text eol=lf
+*.md   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.sh   text eol=lf
+*.py   text eol=lf
+
+# Windows-specific scripts — keep CRLF
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binary files — never touch
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.otf  binary
+*.zip  binary
+*.gz   binary
+*.tar  binary
+*.pdf  binary
+
+# Cargo lock — merge strategy (regenerate, don't merge)
+Cargo.lock merge=binary
