@@ -76,7 +76,7 @@ The rules that make this possible are non-negotiable:
 - Golden hash tests on every simulation change
 - `SIM_VERSION` bump procedure documented in [`CHANGELOG-SIM.md`](CHANGELOG-SIM.md)
 
-> **A note on scope:** determinism today is **global** — same seed across all configurations. [ADR-013](docs/adr/013-worlds.md) proposes making it **local** (per save, per module). It is *proposed, not ratified*. Until it is, the doctrine stands as written.
+> **A note on scope:** determinism is **local** — same save + same match + same plugin configuration = same result ([ADR-013](docs/adr/013-worlds.md), accepted 2026-10-25; revised pillar 1 of the doctrine in v2.0).
 
 ---
 
@@ -264,7 +264,7 @@ When L0 and L1 are stable and a minimal kernel runs. Indicatively **Q1 2027**. N
 
 **Which decisions are actually settled?**
 Settled: the doctrine, the Three Planes, Plane A enforcement (ADR-003), FFI panic strategy (ADR-004), Qt binding (ADR-005), license (ADR-006), canonical language (ADR-007), provider integration policy (ADR-008).
-All decisions are now accepted. See [`docs/adr/`](docs/adr/) for the full list.
+All decisions except ADR-016 are now accepted. ADR-016 (v1.0 content selections) is `proposed`. See [`docs/adr/`](docs/adr/) for the full list.
 
 **What is `pcfm-testkit`?**
 A small crate that defines the `Scenario` trait and the `TestRegistry`. It has **no dependency on any other `pcfm-*` crate**, so core modules, plugins, and tools can all contribute test scenarios without coupling. `pcfm-debug --check` runs them; `--list` and `--coverage` inspect them.
