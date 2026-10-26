@@ -1,7 +1,7 @@
 # ADR-018 — Defer crowd and media to v1.1
 
-- **Status:** proposed
-- **Date:** 2026-10-27
+- **Status:** accepted
+- **Date:** 2026-10-27 (ratified 2026-10-27)
 - **Supersedes:** ADR-015 (partial — only the "basic crowd ships" and "basic media ships" clauses)
 - **Superseded by:** none
 - **Blocks:** ADR-016 D5 ratification
