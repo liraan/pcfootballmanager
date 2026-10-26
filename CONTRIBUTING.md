@@ -163,3 +163,48 @@ When you write code:
 ## Commit messages
 
 Imperative mood, one line ≤ 72 chars, then a body if needed.
+
+---
+
+## Review checklist (for reviewers)
+
+- [ ] Frontmatter present and correct (see `STRUCTURE.md` §4)
+- [ ] Doctrine not contradicted (or doctrine ADR linked)
+- [ ] Level dependency rules not violated (see `STRUCTURE.md` §2)
+- [ ] Sources cited for factual claims
+- [ ] The WHY is explained, not just the what
+- [ ] One change per PR
+- [ ] If it touches an open ADR, the ADR is accepted first
+- [ ] `modules/_index.md` updated if a cell was added
+- [ ] If it is a status transition, the level's overview cell is updated too
+- [ ] No contradiction with existing cells (or the contradiction is the point of the PR)
+- [ ] Language is English (or a translation in `locales/`)
+- [ ] No `License: Proprietary` string anywhere
+- [ ] No `TBD` left in a field that should have a value
+- [ ] If it is code, `docs/PLUGIN_DEVELOPER_GUIDE.md` is respected (plane separation, simulation/rendering split, no dependency without an ADR)
+- [ ] If it is a test scenario, it is registered via `pcfm-debug/src/features/register_all` (see `docs/PLUGIN_DEVELOPER_GUIDE.md` §11)
+
+---
+
+## Licensing of contributions
+
+By contributing, you agree that:
+
+- **Code contributions** are licensed under **MIT OR Apache-2.0**.
+- **Asset and documentation contributions** are licensed under **CC-BY-NC-SA-4.0**.
+
+See [`LICENSE.md`](LICENSE.md). ADR-006 (accepted) defines the rationale.
+
+If you are contributing on behalf of an employer, make sure you have the right to do so under these terms.
+
+---
+
+## Code of conduct
+
+Be plain. Argue with the idea, not the person. If you're wrong, say so. If you don't know, say so. The project's honesty about AI is the same honesty we expect from each other.
+
+---
+
+## Questions?
+
+Open an issue with the `question` label. There are no private channels. Everything happens on GitHub.
