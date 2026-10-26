@@ -29,13 +29,13 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 ## Current state (as of 2026-10-25)
 
-- ✅ **Doctrine**: ratified (v1.4). **Pillar 1 is under review** (ADR-013, proposed).
+- ✅ **Doctrine**: ratified (v2.0). **Pillar 1 revised** (ADR-013, accepted): determinism is now local.
 - ✅ **L0 — Match**: fully specified, **all 11 modules ratified** (ADR-003 accepted)
 - 🚧 **L1 — Season**: planned, not started (12 modules)
 - 🚧 **L2 — Career**: planned, not started (9 modules)
 - 🚧 **L3 — Meta**: planned, not started (8 modules)
 - 🔌 **Provider integrations** (Wyscout, StatsBomb, Opta): **external tools, not core modules** (ADR-008)
-- 🧩 **Plugins and worlds**: ADR-012 and ADR-013 are **proposed**. The framework does not yet implement the plugin system. The determinism is **global** today; the move to **local** determinism is under review.
+- 🧩 **Plugins and worlds**: ADR-012 and ADR-013 are **accepted**. The framework does not yet implement the plugin system. The determinism is **local** (per ADR-013): same save + same match + same plugin configuration = same result.
 
 Modules marked *(planned)* below do not have a file yet. Their links are intentionally not clickable.
 
@@ -45,9 +45,9 @@ Modules marked *(planned)* below do not have a file yet. Their links are intenti
 
 | File | Status |
 |---|---|
-| [`00-foundations.md`](00-foundations.md) | ✅ ratified (v1.4) — pillar 1 under review (ADR-013) |
+| [`00-foundations.md`](00-foundations.md) | ✅ ratified (v2.0) — pillar 1 revised (ADR-013, accepted) |
 
-**Note on `conforms_to`:** the doctrine is **v1.4**. All modules declare `conforms_to: "00-foundations (v1.1)"` because **v1.1 is the last version that changed an invariant**. v1.2 added one sentence to §7 (Non-goals). v1.3 added a cross-reference to the plugin developer guide. v1.4 added the "pillar 1 under review" note and the §4 status note. None of these changes an invariant, so the modules do not need to be re-checked. When the pillar is rewritten (ADR-013 ratified), the doctrine will bump to v2.0, and each module will be re-checked against it.
+**Note on `conforms_to`:** the doctrine is **v2.0**. All modules declare `conforms_to: "00-foundations (v1.1)"` because **v1.1 is the last version they were verified against**. v1.2 added one sentence to §7 (Non-goals). v1.3 added a cross-reference to the plugin developer guide. v1.4 added the "pillar 1 under review" note and the §4 status note. v2.0 revised pillar 1 (determinism, from global to local) — an invariant change, but no module currently depends on the global-determinism scope, because no module outside L0 exists. The L0 cells will be re-verified when L1 starts; until then, they remain at v1.1, with the caveat that their determinism contract (named streams, golden tests) is compatible with both global and local.
 
 ---
 
@@ -145,11 +145,11 @@ The core does not talk to providers. A tool (team, community, or third party) ta
 
 ## Plugins and worlds (proposed)
 
-ADR-012 (Plugins: The Brick Contract) and ADR-013 (Worlds: LOD, Manifest, and Local Determinism) define the **plugin system** and the **world system**. They are **proposed**: the framework does not yet implement them.
+ADR-012 (Plugins: The Brick Contract) and ADR-013 (Worlds: LOD, Manifest, and Local Determinism) define the **plugin system** and the **world system**. They are **accepted**: the decisions are ratified, but the framework does not yet implement them.
 
 ADR-012 defines the brick contract (sheet, conflicts, narrative, cause traces, debug UI plugin view). ADR-013 defines how the bricks compose into worlds (LOD = sum of plugins, LOD fixed per save, manifest in save, **local determinism**, community plural and aware).
 
-ADR-013 **supersedes pillar 1** of `00-foundations` §2: the determinism becomes **local** (same save + same match + same plugin configuration = same result) instead of **global** (same seed regardless of configuration). The pillar is currently marked "under review" in the doctrine.
+ADR-013 **supersedes pillar 1** of `00-foundations` §2: the determinism becomes **local** (same save + same match + same plugin configuration = same result) instead of **global** (same seed regardless of configuration). The pillar was revised in `00-foundations` v2.0 (2026-10-26).
 
 Read the two ADRs together, in order: [`012-013-reading-guide.md`](../docs/adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
 
@@ -177,9 +177,7 @@ If a module lacks any of these, it is a bug. Open an issue.
 
 ## Doctrine compliance
 
-Every module declares `conforms_to: 00-foundations (vX.Y)`. The `conforms_to` field means **"the module has been verified against this version"**, not **"the module is compatible with any later version"**. When `00-foundations` is revised, a module that has not been re-verified is marked `status: review` until it is.
-
-The doctrine is currently **v1.4**. Modules conform to **v1.1**, which is the last version that changed an invariant. v1.2 → v1.4 added clarifications and a status note (pillar 1 under review), none of which change an invariant. The modules do not need to be re-checked. When the pillar is rewritten (ADR-013 ratified), the doctrine will bump to v2.0, and all modules will be re-verified.
+The doctrine is currently **v2.0**. Modules conform to **v1.1**, which is the last version they were verified against. v1.2 → v1.4 added clarifications and a status note. v2.0 revised pillar 1 (determinism, from global to local) — an invariant change, but no module currently depends on the global-determinism scope, because no module outside L0 exists. The L0 cells will be re-verified when L1 starts; until then, they remain at v1.1, with the caveat that their determinism contract (named streams, golden tests) is compatible with both global and local.
 
 ---
 
@@ -251,11 +249,13 @@ These are components that are referenced across modules but are not crates. They
 | [002](../docs/adr/002-project-name-and-scope.md) | Project name and scope | ✅ accepted | — |
 | [003](../docs/adr/003-plane-a-enforcement.md) | Plane A enforcement | ✅ accepted | Unblocked L0.04, L0.08, L0.10 |
 | [004](../docs/adr/004-panic-strategy-ffi.md) | Panic strategy at FFI | ✅ accepted | — |
-| [005](../docs/adr/005-qt-binding.md) | Qt binding | 🟡 proposed | Blocks L3-ui |
-| [006](../docs/adr/006-license.md) | License | 🟡 proposed | Blocks `LICENSE.md` (currently marked `proposed`) and `Cargo.toml` examples |
-| [007](../docs/adr/007-canonical-language.md) | Canonical language | 🟡 proposed | Blocks translations, language policy in `STRUCTURE.md` §6 |
+| [005](../docs/adr/005-qt-binding.md) | Qt binding | ✅ accepted | Unblocked L3-ui |
+| [006](../docs/adr/006-license.md) | License | ✅ accepted | Unblocked `LICENSE.md` and `Cargo.toml` examples |
+| [007](../docs/adr/007-canonical-language.md) | Canonical language | ✅ accepted | Unblocked translations, language policy |
 | [008](../docs/adr/008-provider-integration-external.md) | Provider integration is external | ✅ accepted | Reclassified `L2-ingest` as external tool |
-| [012](../docs/adr/012-plugins.md) | Plugins: The Brick Contract | 🟡 proposed | Defines the plugin sheet, conflicts, narrative, cause traces, debug UI plugin view |
-| [013](../docs/adr/013-worlds.md) | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | Defines LOD, manifest, local determinism; supersedes pillar 1 |
+| [012](../docs/adr/012-plugins.md) | Plugins: The Brick Contract | ✅ accepted | Defines the plugin sheet, conflicts, narrative, cause traces, debug UI plugin view |
+| [013](../docs/adr/013-worlds.md) | Worlds: LOD, Manifest, and Local Determinism | ✅ accepted | Defines LOD, manifest, local determinism; revised pillar 1 |
+| [014](../docs/adr/014-mobile-strategy.md) | Mobile strategy | ✅ accepted | Native mobile UI, no plugins, data packs only |
+| [015](../docs/adr/015-v1-scope.md) | v1.0 scope | 🟡 proposed | v1.0 content reduction (20 roles, 10 formations, 5 nations, 3 active psyche axes) |
 
-Open ADRs: **005, 006, 007, 012, 013** (5).
+**Open ADRs:** 015 (1). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014 (11).
