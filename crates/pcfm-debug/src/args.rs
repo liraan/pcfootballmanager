@@ -8,6 +8,12 @@ use std::error::Error;
 use std::fmt;
 
 /// The parsed command-line options.
+///
+/// The flags are independent: `--json --quiet` is valid, and so is
+/// `--check --list` (the first command wins in `main::run`). Clippy's
+/// `struct_excessive_bools` lint assumes mutually exclusive flags, which
+/// is not the case here, so the lint is explicitly allowed.
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Args {
     /// The seed for the match. Default: 42.
