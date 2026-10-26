@@ -13,7 +13,7 @@ pub struct TestContext {
 impl TestContext {
     /// Create a new context with the given seed.
     #[must_use]
-    pub fn new(seed: u64) -> Self {
+    pub const fn new(seed: u64) -> Self {
         Self {
             seed,
             log: Vec::new(),
