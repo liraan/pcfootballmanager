@@ -4,15 +4,11 @@ Thanks for wanting to help. This project is documentation-first, and **good docu
 
 ---
 
-## Current state (as of 2026-10-26)
+## Current state
 
-- **L0 is implemented.** 7 crates (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`), 107 tests passing.
-- **14 ADRs exist:** 12 accepted (001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015), 0 proposed, 1 template (000), 1 reading guide (PLUGINS-WORLDS-READING-GUIDE).
-- **ADR-012 and ADR-013 are accepted.** They define the plugin system and the world system. ADR-013 revised pillar 1 of `00-foundations` (determinism, from global to local). The framework does not implement the plugin system yet, but the decisions are ratified.
-- **The doctrine is v2.0** (2026-10-26): pillar 1 revised to local determinism.
-- **`LICENSE.md`** exists and is accepted (ADR-006). The dual license is: MIT OR Apache-2.0 for code, CC-BY-NC-SA-4.0 for assets.
+The live state of the project — crates, tests, ADRs, L0 modules, last commit — is maintained in **one place only**: [`docs/REPO-SNAPSHOT.md`](docs/REPO-SNAPSHOT.md) §1. It is not duplicated here, to avoid drift.
 
-If you're new, read the files in the order below before opening a PR.
+If you are new, read the files in the order below before opening a PR.
 
 ---
 
@@ -142,7 +138,7 @@ If an ADR is `proposed` and touches an area, **no code is written in that area u
 
 **For the current list of open ADRs, and what each one blocks, see [`STRUCTURE.md`](STRUCTURE.md) §5 ("Current ADR status").** That table is the single source of truth. It is **not duplicated here**, to avoid drift between the two files.
 
-**Current state:** only ADR-015 (v1.0 scope) is `proposed`. ADR-012 and ADR-013 are **accepted** (decisions ratified; framework implementation pending). See [`docs/PLUGINS-WORLDS-READING-GUIDE.md`](docs/PLUGINS-WORLDS-READING-GUIDE.md) for how to read them together.
+**Current state:** see [`STRUCTURE.md`](STRUCTURE.md) §5 and [`docs/REPO-SNAPSHOT.md`](docs/REPO-SNAPSHOT.md) §1. ADR-012, ADR-013, and ADR-015 are **accepted**. ADR-016 is **proposed**. See [`docs/PLUGINS-WORLDS-READING-GUIDE.md`](docs/PLUGINS-WORLDS-READING-GUIDE.md) for how to read ADR-012 and ADR-013 together.
 
 ---
 
@@ -169,57 +165,3 @@ When you write code:
 ## Commit messages
 
 Imperative mood, one line ≤ 72 chars, then a body if needed.
-
-```
-Add ADR-012 on module contract
-
-The module sheet is mandatory and validated. Behaviour is open,
-metadata is closed. Critical conflicts block, minor conflicts warn.
-```
-
-Not: `fixed stuff`, `update`, `wip`.
-
----
-
-## Review checklist (for reviewers)
-
-- [ ] Frontmatter present and correct (see `STRUCTURE.md` §4)
-- [ ] Doctrine not contradicted (or doctrine ADR linked)
-- [ ] Level dependency rules not violated (see `STRUCTURE.md` §2)
-- [ ] Sources cited for factual claims
-- [ ] The WHY is explained, not just the what
-- [ ] One change per PR
-- [ ] If it touches an open ADR, the ADR is accepted first
-- [ ] `modules/_index.md` updated if a cell was added
-- [ ] If it is a status transition, the level's overview cell is updated too
-- [ ] No contradiction with existing cells (or the contradiction is the point of the PR)
-- [ ] Language is English (or a translation in `locales/`)
-- [ ] No `License: Proprietary` string anywhere
-- [ ] No `TBD` left in a field that should have a value
-- [ ] If it is code, `docs/PLUGIN_DEVELOPER_GUIDE.md` is respected (plane separation, simulation/rendering split, no dependency without an ADR)
-- [ ] If it is a test scenario, it is registered via `pcfm-debug/src/features/register_all` (see `docs/PLUGIN_DEVELOPER_GUIDE.md` §11)
-
----
-
-## Licensing of contributions
-
-By contributing, you agree that:
-
-- **Code contributions** are licensed under **MIT OR Apache-2.0**.
-- **Asset and documentation contributions** are licensed under **CC-BY-NC-SA-4.0**.
-
-See [`LICENSE.md`](LICENSE.md). ADR-006 (accepted) defines the rationale.
-
-If you are contributing on behalf of an employer, make sure you have the right to do so under these terms.
-
----
-
-## Code of conduct
-
-Be plain. Argue with the idea, not the person. If you're wrong, say so. If you don't know, say so. The project's honesty about AI is the same honesty we expect from each other.
-
----
-
-## Questions?
-
-Open an issue with the `question` label. There are no private channels. Everything happens on GitHub.
