@@ -13,9 +13,9 @@
 | Metric | Value | Source |
 |--------|-------|--------|
 | Branch | `main` | `git status` |
-| Last commit | `edcbb6f` — "chore: apply cargo fmt to l0_match.rs" | `git log` |
+| Last commit | `76ae391` — "docs: update README for ADR-016/018 accepted, ADR-017 proposed" | `git log` |
 | Working tree | clean | `git status` |
-| Tracked files | 118 | `git ls-files \| wc -l` |
+| Tracked files | 120 | `git ls-files \| wc -l` |
 | Crates | 7 (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`) | `git ls-files` |
 | Tests | 107 (0 failed) | `cargo test --workspace` |
 | Clippy | clean (`-D warnings`) | `cargo clippy -- -D warnings` |
@@ -355,8 +355,8 @@ All 16 identified inconsistencies have been closed. Summary:
 | L0 modules | 11, all ratified | `git ls-files` |
 | Broken links | 0 | verification script (2026-10-26) |
 | Working tree | clean | `git status` |
-| Last commit | `edcbb6f` (HEAD at snapshot time) | `git log` |
-| Tracked files read | 118/118 (100%) | this snapshot |
+| Last commit | `76ae391` (HEAD at snapshot time) | `git log` |
+| Tracked files read | 120/120 (100%) | this snapshot |
 
 ---
 
