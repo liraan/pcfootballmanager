@@ -84,7 +84,7 @@ In dependency order:
 
 1. **Read the 3 key documents** (`PROJECT-IDEA-LOG.md`, `REPO-SNAPSHOT.md`, `ARCHITECTURE.md`) before proposing anything.
 2. **Confirm the state** with the commands I ask you for (`git pull`, `git log`, `cargo test`, etc.), without assuming it is what I describe.
-3. **Propose the next concrete step** (ADR-016 or whatever I prefer) and, if needed, give me the complete file to paste.
+3. **Propose the next concrete step** (whatever I prefer) and, if needed, give me the exact `sed`/`awk` command. Do not send the full file in chat if it exceeds ~120 lines: it truncates.
 4. **Do not invent anything.** If you don't know, ask. If you haven't read a file, say so.
 5. **If a test fails, stop.** Do not "fix" the test to make it pass.
 
@@ -92,8 +92,8 @@ In dependency order:
 
 - Do not give me "lots of comments" scattered through the code: the codebase is already documented (`///`, `//!`, `# Errors`, `# Panics`, `# Example`), plus `ARCHITECTURE.md` and `CODE_TOUR.md`. If you want to add documentation, propose **where** and **why**, not "across the board".
 - Do not assume that ADR-012, ADR-013, ADR-015, ADR-016, ADR-018 are "proposed". They are **accepted** (2026-10-25/26/27).
-- Do not assume that `00-foundations.md` is v1.4. It is **v2.0** (pillar 1 rewritten: local determinism).
-- Do not assume there are "13 ADRs". There are **14 accepted ADRs + 1 proposed (017) + 1 template (000) + 1 reading guide** (outside `docs/adr/`).
+- Do not assume there are "13 ADRs". There are **16 files in `docs/adr/`**: 14 accepted (001-008, 012-016, 018), 1 proposed (017), 1 template (000). Plus 1 reading guide outside `docs/adr/`.
+- Do not paste a full file > 120 lines in chat: it truncates. Use `sed`/`awk` commands, or split into consecutive parts with no text in between.
 - Do not invent commit hashes or file contents you have not read.
 - Do not propose Python scripts (Python is not installed). Use Bash/Git Bash.
 - Do not assume CI exists: there is no `.github/workflows/`. Clippy/test/build/fmt/check are **manual**, and must be run after every change.
