@@ -341,15 +341,17 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 | 013 | Worlds: LOD, Manifest, and Local Determinism | ✅ accepted | Defines LOD, manifest, local determinism; revised pillar 1 of `00-foundations` |
 | 014 | Mobile strategy | ✅ accepted | — |
 | 015 | v1.0 scope | ✅ accepted | v1.0 content reduction (20 roles, 10 formations, 5 nations, 3 active psyche axes) |
-| 016 | v1.0 content selections | 🟡 proposed | Resolves ADR-015 deferred decisions (3 axes, 20 roles, 10 formations, 5 nations, L2/L3 subset). Blocks `L2-tactics`, `L2-psyche`, `L1-world/01-nation.md` |
+| 016 | v1.0 content selections | ✅ accepted | Resolves ADR-015: 3 axes, 20 roles (catalogue in L1-roster), 10 formations, 5 nations (real cities), 7 L2 modules (crowd/media to v1.1). |
+| 017 | Roles are labels, not modifiers | 🟡 proposed | Role catalogue in L1-roster; the engine is blind to roles |
+| 018 | Defer crowd and media to v1.1 | ✅ accepted | Partially supersedes ADR-015: crowd and media ship in v1.1 |
 
-**Open ADRs:** 016 (proposed). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015 (12).
+**Open ADRs:** 017 (proposed). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015, 016, 018 (14).
 
 **ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`PLUGINS-WORLDS-READING-GUIDE.md`](docs/PLUGINS-WORLDS-READING-GUIDE.md). ADR-013 depends on ADR-012.
 
 **Note on pillar 1.** ADR-013 (accepted, 2026-10-25) superseded pillar 1 of `00-foundations` §2 and replaced the **global** determinism with **local** determinism (same save + same match + same plugin configuration = same result). `modules/00-foundations.md` v2.0 reflects this; pillar 1 now reads "local".
 
-**Note on ADR-015.** ADR-015 (accepted 2026-10-26) formalises the v1.0 scope reduction. It depends on ADR-012 and ADR-013, both accepted. The specific selections are deferred to ADR-016 (proposed).
+**Note on ADR-015.** ADR-015 (accepted 2026-10-26) formalises the v1.0 scope reduction. It depends on ADR-012 and ADR-013, both accepted. The specific selections were resolved in ADR-016 (accepted 2026-10-27); ADR-018 (accepted) partially supersedes ADR-015 for crowd and media.
 
 ---
 
