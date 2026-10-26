@@ -18,6 +18,8 @@ The doctrine already contains a precedent for scope reduction: `00-foundations.m
 The original review of this project (the DeepSeek conversation of 2026-10-24, summarised in `docs/PROJECT-IDEA-LOG.md`) recommended:
 
 > *"Riduci lo scope della v1.0. Il v7 dice '3 assi psicologici attivi'. Fai lo stesso per il resto: 20 ruoli invece di 56, 10 formazioni invece di 20, 5 nazioni invece di 20. La v1.0 deve essere giocabile, non completa. Le espansioni esistono per questo."*
+>
+> *[English translation: "Reduce the v1.0 scope. v7 says '3 active psychological axes'. Do the same for the rest: 20 roles instead of 56, 10 formations instead of 20, 5 nations instead of 20. v1.0 must be playable, not complete. Expansions exist for this."]*
 
 This ADR turns that recommendation into a formal decision.
 
