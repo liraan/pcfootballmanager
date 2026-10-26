@@ -13,7 +13,7 @@
 | Metrica | Valore | Fonte |
 |---------|--------|-------|
 | Branch | `main` | `git status` |
-| Ultimo commit | `3a8a0d2` — "docs: update links to PLUGINS-WORLDS-READING-GUIDE" | `git log` |
+| Ultimo commit | `9002f65` — "Create repository snapshot documentation" | `git log` |
 | Working tree | clean | `git status` |
 | File tracciati | 113 | `git ls-files \| wc -l` |
 | Crate | 7 (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`) | `git ls-files` |
@@ -44,23 +44,23 @@ pcfootballmanager/
 │   ├── legacy/.gitkeep
 │   └── prompts/.gitkeep
 ├── crates/
-│   ├── pcfm-core/           (6 src file + Cargo.toml)
-│   ├── pcfm-model/          (8 src file + Cargo.toml)
-│   ├── pcfm-hidden/         (5 src file + Cargo.toml)
-│   ├── pcfm-stats/          (4 src file + Cargo.toml)
-│   ├── pcfm-match/          (8 src file + Cargo.toml)
-│   ├── pcfm-testkit/        (6 src file + Cargo.toml)
-│   └── pcfm-debug/          (6 src file + features/ + Cargo.toml)
+│   ├── pcfm-core/           (7 file: Cargo.toml + 6 src)
+│   ├── pcfm-model/          (9 file: Cargo.toml + 8 src)
+│   ├── pcfm-hidden/         (6 file: Cargo.toml + 5 src)
+│   ├── pcfm-stats/          (5 file: Cargo.toml + 4 src)
+│   ├── pcfm-match/          (9 file: Cargo.toml + 8 src)
+│   ├── pcfm-testkit/        (7 file: Cargo.toml + 6 src)
+│   └── pcfm-debug/          (9 file: Cargo.toml + 8 src)
 ├── data/.gitkeep
 ├── docs/
 │   ├── adr/                 (14 file: 000-008, 012-015)
 │   ├── calibration/.gitkeep
 │   ├── legal/.gitkeep
-│   ├── ADR-012-013-READING-GUIDE.md  ← non più (rinominato)
-│   ├── PLUGINS-WORLDS-READING-GUIDE.md  ← nuovo path
 │   ├── GLOSSARY.md
 │   ├── MIGRATION-01-04.md
-│   └── PLUGIN_DEVELOPER_GUIDE.md
+│   ├── PLUGIN_DEVELOPER_GUIDE.md
+│   ├── PLUGINS-WORLDS-READING-GUIDE.md
+│   └── REPO-SNAPSHOT.md      ← questo file
 ├── mods/.gitkeep
 ├── modules/
 │   ├── 00-foundations.md
@@ -84,8 +84,6 @@ pcfootballmanager/
 ├── STRUCTURE.md
 └── rust-toolchain.toml
 ```
-
-**Nota:** la directory `docs/adr/` non contiene più `012-013-reading-guide.md` (spostato e rinominato in `docs/PLUGINS-WORLDS-READING-GUIDE.md` con commit `749f154`).
 
 ---
 
@@ -118,7 +116,7 @@ pcfootballmanager/
 |------|------|-------|---------|
 | `docs/GLOSSARY.md` | 313 | ✅ | v1.1. Termini, acronimi, concetti. Sezioni: Core, Data model, Determinism, Architecture, Process, Banned, External, Abbreviations, Historical. |
 | `docs/MIGRATION-01-04.md` | 186 | ✅ | Piano di migrazione dei 4 moduli legacy italiani (01-04), mai committati in git. Mapping target verso moduli concentrici. |
-| `docs/PLUGIN_DEVELOPER_GUIDE.md` | 436 | ✅ | v1.1 (2026-10-26). Contiene: two kinds of extension, crate layout (7 crate), simulation/rendering split, adding EventType, adding `resolve_*`, dependencies, conventions, plane separation, checklist PR, examples, **§11 Contributing test scenarios** (nuovo), references. |
+| `docs/PLUGIN_DEVELOPER_GUIDE.md` | 436 | ✅ | v1.1 (2026-10-26). Contiene: two kinds of extension, crate layout (7 crate), simulation/rendering split, adding EventType, adding `resolve_*`, dependencies, conventions, plane separation, checklist PR, examples, §11 Contributing test scenarios, references. |
 | `docs/PLUGINS-WORLDS-READING-GUIDE.md` | ~95 | ✅ | Contenuto nuovo (2026-10-26): `Status: accepted`, `Type: reading guide (non-ADR)`, terminologia `plugin` (non `module`), `MatchPlugin` (non `MatchModule`), riferimento a `00-foundations` v2.0. |
 
 ### 4.1 ADR (`docs/adr/`)
@@ -135,7 +133,7 @@ pcfootballmanager/
 | `007-canonical-language.md` | 68 | ✅ | `Status: accepted`. Decision: Option A (inglese canonico). |
 | `008-provider-integration-external.md` | 77 | ✅ | `Status: accepted`. Provider integration = external tool, non modulo core. |
 | `012-plugins.md` | 139 | ✅ | `Status: accepted` (commit `ec29aba`). Brick contract: sheet mandatory, behaviour open/metadata closed, conflicts critical/minor, narrative modder's responsibility, cause traces 2 livelli, debug UI plugin view. |
-| `013-worlds.md` | 165 | ✅ | `Status: accepted` (commit `73f51aa`). LOD = sum of plugin weights, fixed per save, manifest nel save, **local determinism**, community plural. |
+| `013-worlds.md` | 165 | ✅ | `Status: accepted` (commit `73f51aa`). LOD = sum of plugin weights, fixed per save, manifest nel save, local determinism, community plural. |
 | `014-mobile-strategy.md` | 167 | ✅ | `Status: accepted`. Native mobile UI, no plugin, data packs only. Mobile = Phase 3+. |
 | `015-v1-scope.md` | 145 | ✅ | `Status: proposed`. Riduzione scope v1.0: 20 ruoli, 10 formazioni, 5 nazioni, 3 assi psicologici attivi, subset L2/L3. Dipende da ADR-012/013 (ora accepted). |
 
@@ -145,7 +143,7 @@ pcfootballmanager/
 
 | File | Riga | Stato | Cosa so |
 |------|------|-------|---------|
-| `modules/00-foundations.md` | ~245 | ✅ | v2.0 (2026-10-26). **Pillar 1 revised** (ADR-013): determinismo locale. §1 Role, §2 Design Pillars (10), §3 Three Planes, §4 Determinism (locale), §5 Banned Things, §6 Product Goal, §7 Non-Goals, §8 References, §9 Concentric Structure. |
+| `modules/00-foundations.md` | ~245 | ✅ | v2.0 (2026-10-26). Pillar 1 revised (ADR-013): determinismo locale. §1 Role, §2 Design Pillars (10), §3 Three Planes, §4 Determinism (locale), §5 Banned Things, §6 Product Goal, §7 Non-Goals, §8 References, §9 Concentric Structure. |
 | `modules/_index.md` | ~265 | ✅ | v2.9. Current state (2026-10-26), Doctrine, L0 (11 ratified), L1-L3 (planned), Provider integrations, Plugins and worlds (accepted), How to read, Doctrine compliance, Level graph, Status legend, Components, ADR status (12 ADR + template + reading guide). |
 | `modules/L0-match/00-overview.md` | 203 | ✅ | `Status: ratified`. 11 celle, 7-point checklist, dependency rules. |
 | `modules/L0-match/01-rng.md` | 150 | ✅ | `Status: ratified`. ChaCha20Rng, stream nominati, seed derivation, SIM_VERSION. |
@@ -165,59 +163,133 @@ pcfootballmanager/
 
 ### 6.1 Tabella riassuntiva
 
-| Crate | Test | File src | Stato lettura | Cosa so |
-|-------|------|----------|---------------|---------|
-| `pcfm-core` | 22 | 6 | ❌ | **Non letto.** Da `PLUGIN_DEVELOPER_GUIDE.md` §2: "RNG, event bus, IDs, hash, time". |
-| `pcfm-model` | 21 | 8 | ❌ | **Non letto.** Da §2: "Minimal entities (`Player`, `Squad`, `Match`, …) + `CauseTrace`". |
-| `pcfm-hidden` | 4 | 5 | ❌ | **Non letto.** Da §2: "`GroundTruth`, `resolve_*`, `drain_observations`". |
-| `pcfm-stats` | 11 | 4 | ❌ | **Non letto.** Da §2: "`MatchEvent`, `EventType`, `EventChain`". |
-| `pcfm-match` | 10 | 8 | ❌ | **Non letto.** Da §2: "The match engine (orchestrator + shared simulation)". |
-| `pcfm-testkit` | 0 | 6 | ✅ | Contract only. `Scenario`, `Feature`, `TestRegistry`, `TestContext`, `Check`, `ScenarioResult`. |
-| `pcfm-debug` | 18 | 9 | ✅ (6/9) | `main.rs`, `args.rs`, `check.rs`, `commands.rs`, `features/mod.rs`, `features/l0_match.rs` letti. `demo.rs`, `error.rs`, `render.rs` **non letti**. |
+| Crate | File | Test | Dipendenze | Responsabilità |
+|-------|------|------|------------|----------------|
+| `pcfm-core` | 7 | 22 | `rand_chacha`, `rand_core`, `blake3`, `thiserror`, `serde` | RNG, event bus, IDs, hash, time |
+| `pcfm-model` | 9 | 21 | `pcfm-core`, `serde`, `thiserror` | Entità minime (Player senza latents, Squad, Pitch, Referee, Match, CauseTrace) |
+| `pcfm-hidden` | 6 | 4 | `pcfm-core`, `pcfm-model`, `rand_chacha`, `rand_core`, `blake3`, `thiserror` | Plane A: `GroundTruth`, `resolve_*`, `drain_observations` |
+| `pcfm-stats` | 5 | 11 | `pcfm-core`, `pcfm-model`, `serde`, `serde_json`, `thiserror`, `blake3` | Plane B: `MatchEvent`, `EventChain` append-only con hash chain |
+| `pcfm-match` | 9 | 10 | `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `serde`, `serde_json`, `thiserror` | Match engine: orchestrator `simulate_match`, `TextMatchEngine`, save/load, narrative |
+| `pcfm-testkit` | 7 | 0 | **Nessuna** | Contract: `Scenario`, `Feature`, `TestRegistry`, `TestContext`, `Check`, `ScenarioResult` |
+| `pcfm-debug` | 9 | 18 | `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `serde_json` | CLI (`--check`, `--list`, `--coverage`, `--json`, `--html`, `--quiet`), demo teams, rendering |
 
-### 6.2 File di `pcfm-debug` (letti)
+**Totale:** 52 file, 86 test (dei 107 totali: 86 + 21 dev/integration).
 
-| File | Riga | Cosa so |
-|------|------|---------|
-| `main.rs` | 170 | Entry point. Dispatch: `--list`, `--coverage`, `--check`, simula match. 3 test. |
-| `args.rs` | 233 | Parser CLI (7 flag + `--help`). `ArgError` enum. 12 test. `#[allow(clippy::struct_excessive_bools)]` su `Args`. |
-| `check.rs` | 77 | Thin wrapper: `TestRegistry`, `features::register_all`, `run_all(seed)`, adatta a `CheckReport`. `pub fn run(seed: u64) -> CheckReport`. |
-| `commands.rs` | 68 | `list()` e `coverage()`. Usa `Feature::all_builtin()`. |
-| `features/mod.rs` | 25 | `register_all(registry)` con `l0_match::register`. TODO per L1/L2/L3/plugin. |
-| `features/l0_match.rs` | 277 | 6 scenari: `DemoTeamScenario`, `SameSeedScenario`, `DifferentSeedScenario`, `SaveLoadScenario`, `EventChainScenario`, `StatsSanityScenario`. |
+### 6.2 Dettaglio per crate
 
-### 6.3 File di `pcfm-testkit` (letti)
+#### `pcfm-core` (7 file, 22 test)
 
-| File | Riga | Cosa so |
-|------|------|---------|
-| `lib.rs` | 24 | `pub mod` dei 5 moduli + `pub use` dei tipi. |
-| `feature.rs` | 158 | `Feature` enum (`#[non_exhaustive]`), `ALL_BUILTIN`, `all_builtin()`, `label() -> Cow`. 26 feature built-in. |
-| `scenario.rs` | 29 | `trait Scenario: Send + Sync` con `name()`, `feature()`, `description()`, `run()`. |
-| `context.rs` | 33 | `TestContext { seed: u64, log: Vec<String> }`, `const fn new(seed)`, `log()`, `logs()`. |
-| `result.rs` | 91 | `Check` (`pass`/`fail`), `ScenarioResult` (`new`, `record`, `pass`, `fail`, `error`, `is_ok`). `#[allow(clippy::missing_const_for_fn)]` su 4 funzioni. |
-| `registry.rs` | 105 | `TestRegistry` (`new`, `register`, `scenarios`, `run_all`), `ScenarioOutcome`, `RunReport` (`outcomes`, `is_ok`, `total_checks`, `passed_checks`, `failed_checks`). |
+**API pubblica:**
+- `rng`: `StreamName`, `RngRegistry` (`new`, `stream`), `next_unit()`, `RngError`
+- `event_bus`: `EventKind` (14 varianti), `Event { seq, kind }`, `Handler`, `EventBus` (`new`, `publish`, `subscribe`, `dispatch_all`, `len`, `is_empty`)
+- `ids`: `EntityTag` trait, `EntityId<T>` (`new`, `slot`, `generation`), 5 tag (`PlayerTag`, `SquadTag`, `MatchTag`, `RefereeTag`, `EventTag`), 5 alias (`PlayerId`, `SquadId`, `MatchId`, `RefereeId`, `EventId`)
+- `hash`: `Hash([u8; 32])`, `Hash::ZERO`, `Hash::of_bytes`, `Hash::as_bytes`
+- `time`: `GameInstant(u64)`, `GameInstant::from_raw`, `GameInstant::raw`
+
+**Punti chiave:**
+- `ChaCha20Rng` derivato con BLAKE3 da `(world_seed, stream_name)`. `BTreeMap` per i stream, idempotente.
+- Event bus: dispatch in ordine di inserimento (`seq`), handler in ordine di registrazione. Limite noto: handler non possono pubblicare durante il dispatch.
+- IDs generazionali (`slot` + `generation`), taggati per tipo.
+
+#### `pcfm-model` (9 file, 21 test)
+
+**API pubblica:**
+- `cause`: `Factor { name, value, weight }`, `CauseTrace { primary_cause, contributing_factors, explanation_template }`
+- `error`: `ModelError` (`#[non_exhaustive]`): `EmptyRoleId`, `EmptyFormationId`, `EmptyPlayerName`, `InvalidHeight`, `InvalidValue`, `InvalidStarterCount`, `InvalidBenchCount`, `InvalidPitchDimensions`
+- `match_`: `MatchSeed`, `MatchRules`, `Match` (`new`, `is_friendly`)
+- `pitch`: `Weather`, `Pitch` (`try_new`, `Default`)
+- `player`: `Foot`, `RoleId`, `PhysicalStateMinimal`, `PsychologicalStateMinimal`, `Player` (`try_new`)
+- `referee`: `Referee` (`try_new`)
+- `squad`: `STARTERS = 11`, `MAX_BENCH = 7`, `FormationId`, `Squad` (`try_new`)
+
+**Punti chiave:**
+- Nessun campo latente. `Player` ha solo stato osservato.
+- Validazione rigorosa: range [0,1], non-NaN, conteggi esatti. `ModelError` (`#[non_exhaustive]`).
+- Serializzazione: tutte le entità sono `Serialize`/`Deserialize`.
+
+#### `pcfm-hidden` (6 file, 4 test)
+
+**API pubblica:**
+- `GroundTruth` (`new`, `world_seed`, `match_id`, 7 `resolve_*`, `drain_observations`)
+- `DuelType`, 7 context structs, 7 outcome structs
+- `ObservationEvent` (7 varianti)
+
+**Punti chiave:**
+- Campi privati, non `Serialize`, `Debug` custom (stampa solo `world_seed` e `match_id`).
+- Latents generati dal RNG (`PlayerLatents::from_rng`), mai esposti.
+- `resolve_*` deterministico (stesso seed → stesso outcome).
+- `drain_observations` idempotente.
+- **Modello attuale molto semplice** (prototipo): `resolve_shot`: `goal_probability = noise * 0.3 + finishing`, goal se > 0.6.
+
+#### `pcfm-stats` (5 file, 11 test)
+
+**API pubblica:**
+- `EventType` (27 varianti), `MatchEvent` (14 campi), `validate()`
+- `EventChain` (`new`, `try_append`, `events`, `len`, `is_empty`, `chain_hash`, `verify`)
+- `StatsError` (`#[non_exhaustive]`)
+
+**Punti chiave:**
+- Hash chain: `hash = BLAKE3(previous_hash || serde_json(event))`. Tamper detection.
+- Append-only rigoroso: `try_append` valida prima di appendere. Se fallisce, la catena non è modificata.
+- Determinismo: stesso set di eventi → stesso hash.
+
+#### `pcfm-match` (9 file, 10 test)
+
+**API pubblica:**
+- `MatchConfig`, `MatchContext`, `MatchEngine`, `TextMatchEngine`, `Importance`, `NarrativeEntry`, `narrate`, `simulate_match`, `MatchResult`, `MatchStatistics`, `Score`, `MatchSave`, `SCHEMA_VERSION`, `SIM_VERSION`, `SaveError`, `replay`, `MatchState`
+
+**Punti chiave:**
+- Separazione simulazione/rendering: `simulate_match` produce `MatchResult` con `narrative: Vec::new()`. Solo `TextMatchEngine` chiama `narrate()`.
+- Save come JSON: `serde_json`. Limitazione nota: `MatchEvent.fields` può perdere 1 ulp. Target futuro: `postcard` (futuro ADR).
+- Identità del save: `state_hash`, non bit-for-bit equality.
+- Tamper detection: `validate()` controlla `schema_version` e `chain_hash`.
+- `can_replay`: `sim_version == SIM_VERSION`.
+- `MatchState::tick()`: modello semplificato (probabilità 0.0005 per tick). Non realistico (prototipo).
+
+#### `pcfm-testkit` (7 file, 0 test)
+
+**API pubblica:**
+- `Feature` (26 built-in + `Plugin(String)`), `ALL_BUILTIN`, `all_builtin()`, `label() -> Cow`
+- `Scenario` trait (`name`, `feature`, `description`, `run`)
+- `TestContext` (`seed`, `log`, `logs`)
+- `Check` (`pass`, `fail`), `ScenarioResult` (`new`, `record`, `pass`, `fail`, `error`, `is_ok`)
+- `TestRegistry` (`new`, `register`, `scenarios`, `run_all`), `ScenarioOutcome`, `RunReport` (`outcomes`, `is_ok`, `total_checks`, `passed_checks`, `failed_checks`)
+
+**Punti chiave:**
+- **Nessuna dipendenza da altri crate `pcfm-*`**. È il contratto che core, plugin e tool condividono.
+- `Feature` è `#[non_exhaustive]`.
+- `label()` ritorna `Cow<'static, str>` (nessuna allocazione per feature built-in).
+
+#### `pcfm-debug` (9 file, 18 test)
+
+**API pubblica (CLI):**
+- `--seed <U64>`, `--json`, `--html <PATH>`, `--quiet`/`-q`, `--check`, `--list`, `--coverage`, `--help`/`-h`
+- `check::run(seed) -> CheckReport`
+- `commands::list()`, `commands::coverage()`
+- `features::register_all(registry)`
+- `demo::demo_match(seed)`, `render::print_text`, `render::print_json`, `render::write_html`
+
+**Punti chiave:**
+- Health check: 6 scenari L0 registrati nel `TestRegistry`.
+- `--list`: elenca gli scenari con feature e descrizione.
+- `--coverage`: mostra feature coperte vs pianificate (2/26).
+- `--html`: self-contained, CSS inline, no asset esterni.
+- `demo.rs`: hardcoded (11 giocatori per squadra, tutti "midfielder", `4-4-2`).
+- `error.rs`: `CliError` tipizzato con `From` impls.
 
 ---
 
 ## 7. Da incollare per completare lo snapshot
 
-Questi file **non sono mai stati letti** (❌) o **letti solo in parte** (🟡). Per ognuno, indica se vuoi che lo legga e lo riassuma.
-
-### Codice (per completare lo snapshot implementativo)
-
-| Crate | File |
-|-------|------|
-| `pcfm-core` | `event_bus.rs`, `hash.rs`, `ids.rs`, `lib.rs`, `rng.rs`, `time.rs` |
-| `pcfm-model` | `cause.rs`, `error.rs`, `lib.rs`, `match_.rs`, `pitch.rs`, `player.rs`, `referee.rs`, `squad.rs` |
-| `pcfm-hidden` | `context.rs`, `latents.rs`, `lib.rs`, `observation.rs`, `outcome.rs` |
-| `pcfm-stats` | `chain.rs`, `error.rs`, `event.rs`, `lib.rs` |
-| `pcfm-match` | `context.rs`, `engine.rs`, `lib.rs`, `narrative.rs`, `orchestrator.rs`, `result.rs`, `save.rs`, `state.rs` |
-| `pcfm-debug` | `demo.rs`, `error.rs`, `render.rs` |
+Questi file **non sono mai stati letti**:
 
 ### Configurazione
-
 - `Cargo.lock` (auto-generato, probabilmente irrilevante)
-- `.gitignore`, `.gitattributes`, `.cargo/config.toml`, `rust-toolchain.toml`
+- `.gitignore`
+- `.cargo/config.toml`
+- `rust-toolchain.toml`
+
+**Nessun file di codice rimane da leggere.** Tutti i 7 crate sono stati letti integralmente (con l'eccezione di `Cargo.toml` minori che sono inclusi nelle sezioni sopra).
 
 ---
 
@@ -235,10 +307,10 @@ Tutte le 16 incongruenze identificate sono state chiuse. Riepilogo:
 | 6 | `CONTRIBUTING.md` stato obsoleto | `CONTRIBUTING.md` | `635bc61` |
 | 7 | `001` cita `01-architecture.md` (rimosso) | `docs/adr/001-language-rust.md` | `d03bd2e` |
 | 8 | Reading guide in `docs/adr/` con `Status: active` | `docs/adr/012-013-reading-guide.md` | `5cff4f8` (mv) + `46180ab` (contenuto) + `749f154` (rename) + `3a8a0d2` (link) |
-| 9 | Terminologia `MatchModule` (dovrebbe essere `MatchPlugin`) | `docs/adr/012-013-reading-guide.md` | incluso in 7a |
-| 10 | Terminologia "module view" (dovrebbe essere "plugin view") | idem | incluso in 7a |
-| 11 | "ADR-012 — Modules" (dovrebbe essere "Plugins") | idem | incluso in 7a |
-| 12 | "same module configuration" (dovrebbe essere "plugin") | idem | incluso in 7a |
+| 9 | Terminologia `MatchModule` | `docs/adr/012-013-reading-guide.md` | incluso in 7a |
+| 10 | Terminologia "module view" | idem | incluso in 7a |
+| 11 | "ADR-012 — Modules" | idem | incluso in 7a |
+| 12 | "same module configuration" | idem | incluso in 7a |
 | 13 | "ADR-012/013 proposed" in vari file | vari | inclusi nei fix 4, 5, 6 |
 | 14 | Data "Current state" obsoleta | vari | inclusi nei fix 4, 5, 6 |
 | 15 | Conteggio "6 crate / 103 test" obsoleto | `_index.md`, `CONTRIBUTING.md` | inclusi nei fix 5, 6 |
@@ -260,15 +332,14 @@ Tutte le 16 incongruenze identificate sono state chiuse. Riepilogo:
 | Moduli L0 | 11, tutti ratified | `git ls-files` |
 | Link rotti | 0 | script di verifica (2026-10-26) |
 | Working tree | clean | `git status` |
-| Ultimo commit | `3a8a0d2` | `git log` |
+| Ultimo commit | `9002f65` | `git log` |
 
 ---
 
 ## 10. Cosa NON so (e non voglio inventare)
 
-1. **Contenuto del codice sorgente** dei 5 crate non letti (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`) + 3 file di `pcfm-debug`. Posso descriverne la responsabilità (da `PLUGIN_DEVELOPER_GUIDE.md` §2 e `STRUCTURE.md` §3), ma non il contenuto riga per riga.
-2. **Contenuto di `.gitignore`, `.cargo/config.toml`, `rust-toolchain.toml`**. So che esistono e la loro dimensione, ma non il contenuto.
-3. **Contenuto di `Cargo.lock`**. Auto-generato, probabilmente irrilevante per lo snapshot.
-4. **Eventuali altre chat o decisioni prese fuori da questa sessione.** Se ce ne sono, non le vedo.
+1. **Contenuto di `.gitignore`, `.cargo/config.toml`, `rust-toolchain.toml`**. So che esistono e la loro dimensione, ma non il contenuto.
+2. **Contenuto di `Cargo.lock`**. Auto-generato, probabilmente irrilevante per lo snapshot.
+3. **Eventuali altre chat o decisioni prese fuori da questa sessione.** Se ce ne sono, non le vedo.
 
-Per colmare questi buchi, mi serve che tu mi incolli i file (o mi dia il via per scrivere "non letto" nel `REPO-SNAPSHOT.md` e completarli dopo — cosa che ho già fatto).
+**Nessun file di codice rimane da leggere.** Tutti i 7 crate sono stati letti integralmente.
