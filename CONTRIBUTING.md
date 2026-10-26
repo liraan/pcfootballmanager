@@ -4,12 +4,13 @@ Thanks for wanting to help. This project is documentation-first, and **good docu
 
 ---
 
-## Current state (as of 2026-10-25)
+## Current state (as of 2026-10-26)
 
-- **L0 is implemented.** 6 crates (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-debug`), 103 tests passing.
-- **10 ADRs exist:** 5 accepted (001, 002, 003, 004, 008), 5 proposed (005, 006, 007, 012, 013), 1 template (000).
-- **2 of the proposed ADRs are 012 and 013.** They define the module system and the world system, and may revise pillar 1 of `00-foundations` (determinism, from global to local). They are **not** ratified: the framework does not implement the module system yet.
-- **`LICENSE.md`** exists but is marked `proposed` pending ADR-006 ratification. The license terms are described in the file and in ADR-006.
+- **L0 is implemented.** 7 crates (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`), 107 tests passing.
+- **14 ADRs exist:** 11 accepted (001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014), 1 proposed (015), 1 template (000), 1 reading guide (012-013-reading-guide).
+- **ADR-012 and ADR-013 are accepted.** They define the plugin system and the world system. ADR-013 revised pillar 1 of `00-foundations` (determinism, from global to local). The framework does not implement the plugin system yet, but the decisions are ratified.
+- **The doctrine is v2.0** (2026-10-26): pillar 1 revised to local determinism.
+- **`LICENSE.md`** exists and is accepted (ADR-006). The dual license is: MIT OR Apache-2.0 for code, CC-BY-NC-SA-4.0 for assets.
 
 If you're new, read the files in the order below before opening a PR.
 
@@ -18,7 +19,7 @@ If you're new, read the files in the order below before opening a PR.
 ## Read in this order
 
 1. [`README.md`](README.md) — what the project is
-2. [`modules/00-foundations.md`](modules/00-foundations.md) — the doctrine. **Non-negotiable.** *(Pillar 1 is under review, see ADR-013.)*
+2. [`modules/00-foundations.md`](modules/00-foundations.md) — the doctrine. **Non-negotiable.** *(v2.0, pillar 1 revised by ADR-013.)*
 3. [`STRUCTURE.md`](STRUCTURE.md) — how the repo works
 4. [`modules/_index.md`](modules/_index.md) — what exists, what's missing
 5. [`docs/GLOSSARY.md`](docs/GLOSSARY.md) — the terms used across the spec
@@ -37,7 +38,7 @@ If you're new, read the files in the order below before opening a PR.
 | **Propose a decision** | Write an ADR in `docs/adr/` | Architects |
 | **Review an ADR** | Comment on the PR, argue with the trade-offs | Everyone |
 | **Write code** | See `docs/PLUGIN_DEVELOPER_GUIDE.md` | Rust developers |
-| **Write a module** | ADR-012 (proposed) defines the contract | Rust developers, once ratified |
+| **Write a module** | ADR-012 (accepted) defines the contract | Rust developers, once the plugin system is implemented |
 | **Translate** | Contact the maintainers — translations go in `locales/` | Bilingual contributors |
 | **Report a contradiction** | Open an issue with the `inconsistency` label | Careful readers |
 
@@ -141,16 +142,13 @@ If an ADR is `proposed` and touches an area, **no code is written in that area u
 
 **For the current list of open ADRs, and what each one blocks, see [`STRUCTURE.md`](STRUCTURE.md) §5 ("Current ADR status").** That table is the single source of truth. It is **not duplicated here**, to avoid drift between the two files.
 
-Two notes that are specific to the current state:
-
-- **ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`012-013-reading-guide.md`](docs/adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
-- **Pillar 1 of `00-foundations` is under review.** ADR-013, if ratified, will supersede it (determinism, from global to local). Until then, the doctrine is unchanged.
+**Current state:** only ADR-015 (v1.0 scope) is `proposed`. ADR-012 and ADR-013 are **accepted** (decisions ratified; framework implementation pending). See [`docs/adr/012-013-reading-guide.md`](docs/adr/012-013-reading-guide.md) for how to read them together.
 
 ---
 
 ## Code
 
-The L0 specification is complete and ratified, and L0 is implemented (6 crates, 103 tests). Code contributions are welcome, but they must follow `docs/PLUGIN_DEVELOPER_GUIDE.md`.
+The L0 specification is complete and ratified, and L0 is implemented (7 crates, 107 tests). Code contributions are welcome, but they must follow `docs/PLUGIN_DEVELOPER_GUIDE.md`.
 
 When you write code:
 
@@ -164,6 +162,7 @@ When you write code:
 - `catch_unwind` at every FFI entry point (ADR-004)
 - No public field on `GroundTruth`, no `Serialize`, custom `Debug` (ADR-003)
 - The simulation/rendering split is respected: `simulate_match` is the only simulation, renderers are thin wrappers (see `docs/PLUGIN_DEVELOPER_GUIDE.md` §3)
+- Test scenarios (`pcfm_testkit::Scenario`) for new features. See `docs/PLUGIN_DEVELOPER_GUIDE.md` §11.
 
 ---
 
@@ -198,6 +197,7 @@ Not: `fixed stuff`, `update`, `wip`.
 - [ ] No `License: Proprietary` string anywhere
 - [ ] No `TBD` left in a field that should have a value
 - [ ] If it is code, `docs/PLUGIN_DEVELOPER_GUIDE.md` is respected (plane separation, simulation/rendering split, no dependency without an ADR)
+- [ ] If it is a test scenario, it is registered via `pcfm-debug/src/features/register_all` (see `docs/PLUGIN_DEVELOPER_GUIDE.md` §11)
 
 ---
 
@@ -208,7 +208,7 @@ By contributing, you agree that:
 - **Code contributions** are licensed under **MIT OR Apache-2.0**.
 - **Asset and documentation contributions** are licensed under **CC-BY-NC-SA-4.0**.
 
-See [`LICENSE.md`](LICENSE.md). The file is currently marked `proposed` pending ADR-006 ratification, but the terms are already the intended ones.
+See [`LICENSE.md`](LICENSE.md). ADR-006 (accepted) defines the rationale.
 
 If you are contributing on behalf of an employer, make sure you have the right to do so under these terms.
 
