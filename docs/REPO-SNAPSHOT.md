@@ -13,17 +13,17 @@
 | Metric | Value | Source |
 |--------|-------|--------|
 | Branch | `main` | `git status` |
-| Last commit | `d7e2e65` — "fix(adr-004): translate maintainer note to English (ADR-007 compliance)" (before the English translation pass) | `git log` |
+| Last commit | `edcbb6f` — "chore: apply cargo fmt to l0_match.rs" | `git log` |
 | Working tree | clean | `git status` |
-| Tracked files | 113 | `git ls-files \| wc -l` |
+| Tracked files | 118 | `git ls-files \| wc -l` |
 | Crates | 7 (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`) | `git ls-files` |
 | Tests | 107 (0 failed) | `cargo test --workspace` |
 | Clippy | clean (`-D warnings`) | `cargo clippy -- -D warnings` |
 | `--check` | 6/6 | `cargo run --bin pcfm-debug -- --check` |
 | `--coverage` | 2/26 (7%) | `cargo run --bin pcfm-debug -- --coverage` |
-| ADRs | 13 ADRs (001-008, 012-015) + 1 template + 1 reading guide | `ls docs/adr/` |
+| ADRs | 14 files in `docs/adr/`: 12 accepted (001-008, 012-015), 1 proposed (016), 1 template (000). Plus 1 reading guide in `docs/` (not an ADR). | `ls docs/adr/` |
 | ADRs accepted | 12 (001-008, 012, 013, 014, 015) | `grep Status` |
-| ADRs proposed | 0 | `grep Status` |
+| ADRs proposed | 1 (016) | `grep Status` |
 | L0 modules | 11, all ratified | `git ls-files` |
 | L1-L3 modules | 0 (all planned) | `git ls-files` |
 
@@ -97,7 +97,7 @@ pcfootballmanager/
 |------|-------|--------|-------------|
 | `README.md` | ~293 | ✅ | Reformatted in this session. Hero with badge, "Why this project exists", Three Planes, determinism, project status, tech stack, repository layout, getting started (`--check`, `--list`, `--coverage`), reading order, contributing, license, AI disclosure, FAQ ("All decisions are now accepted"), contact. |
 | `STRUCTURE.md` | 443 | ✅ | v1.8 (2026-10-26). Documentation model, concentric levels, directory layout, module frontmatter, ADR process (with status table), language policy, how to add/revise a module, what packs can extend, honesty rule. Link to reading guide updated to the new path. |
-| `CONTRIBUTING.md` | ~250 | ✅ | Process, review checklist, ADR workflow, licensing of contributions. Updated status: 7 crates, 107 tests, 14 ADRs (12 accepted, 0 proposed, 1 template, 1 reading guide). Link to reading guide updated. |
+| `CONTRIBUTING.md` | ~210 | ✅ | Process, review checklist, ADR workflow, licensing of contributions. Current state delegates to `REPO-SNAPSHOT.md` §1 (no duplication). Link to reading guide updated. |
 | `LICENSE.md` | 63 | ✅ | Dual license summary: MIT OR Apache-2.0 for code, CC-BY-NC-SA-4.0 for assets, trademark reserved. |
 | `LICENSE-MIT` | 21 | ✅ | Standard MIT text. |
 | `LICENSE-APACHE` | 201 | ✅ | Apache 2.0 text verbatim. |
@@ -287,7 +287,7 @@ pcfootballmanager/
 
 ## 7. To be pasted to complete the snapshot
 
-**No files remain to be pasted.** All 113 tracked files have been read:
+**No files remain to be pasted.** All 118 tracked files have been read:
 - 13 ADRs + 1 template
 - 1 reading guide in `docs/`
 - 2 doctrine modules (`00-foundations.md`, `_index.md`)
@@ -347,13 +347,13 @@ All 16 identified inconsistencies have been closed. Summary:
 | `--check` | 6/6 | command output |
 | `--list` | 6 scenarios | command output |
 | `--coverage` | 2/26 (7%) | command output |
-| ADRs | 13 accepted (001-008, 012-015), 0 proposed, 1 template (000) | `ls docs/adr/` + `grep Status` |
+| ADRs | 14 files in `docs/adr/`: 12 accepted (001-008, 012-015), 1 proposed (016), 1 template (000). Plus 1 reading guide in `docs/`. | `ls docs/adr/` + `grep Status` |
 | Reading guide | 1 in `docs/` (`PLUGINS-WORLDS-READING-GUIDE.md`) | `ls docs/` |
 | L0 modules | 11, all ratified | `git ls-files` |
 | Broken links | 0 | verification script (2026-10-26) |
 | Working tree | clean | `git status` |
-| Last commit | `d7e2e65` (before the English translation pass) | `git log` |
-| Tracked files read | 113/113 (100%) | this snapshot |
+| Last commit | `edcbb6f` (HEAD at snapshot time) | `git log` |
+| Tracked files read | 118/118 (100%) | this snapshot |
 
 ---
 
