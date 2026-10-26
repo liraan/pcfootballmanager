@@ -1,209 +1,196 @@
 # Project Idea Log — PCFM
 
-> **Aggiornamento 2026-10-26:** ADR-012, ADR-013 e ADR-015 sono state ratificate. Vedi `docs/REPO-SNAPSHOT.md` per lo stato attuale. Questo log mantiene le voci originali per tracciabilità.
+> **Update 2026-10-26:** ADR-012, ADR-013, and ADR-015 have been ratified. See `docs/REPO-SNAPSHOT.md` for the current state. This log keeps the original entries for traceability.
 
-**Scopo:** registrare le idee, le decisioni e le domande aperte del progetto,
-con la fonte di ciascuna. Non è un documento di stato del codice (per quello
-vedi `REPO-SNAPSHOT.md`). Non è una specifica (per quella vedi `modules/`).
+**Purpose:** record the ideas, decisions, and open questions of the project, with the source of each. This is not a status document for the code (see `REPO-SNAPSHOT.md`). It is not a specification (see `modules/`).
 
-**Regola di questo documento:** ogni affermazione ha una fonte. Se una
-decisione è stata presa, c'è il commit o il messaggio che la contiene. Se
-un'idea è solo abbozzata, è marcata come "idea". Se non sappiamo qualcosa,
-scriviamo "non so" invece di inventare.
+**Rule of this document:** every statement has a source. If a decision was made, there is a commit or message that contains it. If an idea is only sketched, it is marked as "idea". If we do not know something, we write "I don't know" instead of inventing.
 
-**Fonti:**
-- **D** = conversazione DeepSeek (`chat.deepseek.com/share/ubaqxjcf8loa3jvy9s`)
-- **C** = questa conversazione (GitHub web + Git Bash, dal 2026-10-24 al 2026-10-26)
-- **R** = repository (`git log`, `git ls-files`, file letti)
+**Sources:**
+- **D** = DeepSeek conversation (`chat.deepseek.com/share/ubaqxjcf8loa3jvy9s`)
+- **C** = this conversation (GitHub web + Git Bash, from 2026-10-24 to 2026-10-26)
+- **R** = repository (`git log`, `git ls-files`, files read)
 
 ---
 
-## 1. Origine del progetto
+## 1. Origin of the project
 
-Il progetto nasce dalla volontà di costruire un'alternativa community ai
-gestionali calcistici commerciali, con tre principi non negoziabili
-(enunciati in `README.md` e `modules/00-foundations.md`):
+The project was born from the desire to build a community alternative to commercial football management games, with three non-negotiable principles (stated in `README.md` and `modules/00-foundations.md`):
 
-1. **Trasparenza** — ogni formula, ogni regola, ogni fonte dati è pubblica.
-2. **Privacy** — niente telemetria, niente account, niente rete.
-3. **Profondità tattica** — un motore che premia la comprensione, non i
-   click.
+1. **Transparency** — every formula, every rule, every data source is public.
+2. **Privacy** — no telemetry, no accounts, no network.
+3. **Tactical depth** — an engine that rewards understanding, not clicks.
 
-La dottrina dei **Tre Piani** (Plane A = Ground Truth, Plane B = Observation,
-Plane C = Estimation) è il differenziatore architetturale: scouting non è
-lookup, è *stima di un'osservazione della verità*. (Fonte: `README.md`,
-`modules/00-foundations.md` §3; C)
+The doctrine of the **Three Planes** (Plane A = Ground Truth, Plane B = Observation, Plane C = Estimation) is the architectural differentiator: scouting is not a lookup, it is *an estimate of an observation of the truth*. (Source: `README.md`, `modules/00-foundations.md` §3; C)
 
 ---
 
-## 2. Le raccomandazioni della chat DeepSeek (fonte D)
+## 2. Recommendations from the DeepSeek chat (source D)
 
-La conversazione DeepSeek si chiude con **5 raccomandazioni** e **3 buchi
-tecnici** e **2 documenti mancanti**. Le riporto perché sono la base delle
-decisioni successive.
+The DeepSeek conversation ends with **5 recommendations**, **3 technical gaps**, and **2 missing documents**. I report them because they are the basis for the subsequent decisions.
 
-### 2.1 Raccomandazioni
+### 2.1 Recommendations
 
-| # | Raccomandazione | Stato al 2026-10-26 |
-|---|-----------------|---------------------|
-| 1 | Ridurre lo scope v1.0: 20 ruoli (non 56), 10 formazioni (non 20), 5 nazioni (non 20), 3 assi psicologici attivi (non 6) | ⏳ formalizzata in ADR-015 (`accepted`, 2026-10-26) |
-| 2 | Scrivere codice prima di completare i 25 moduli | ✅ fatto: L0 implementato, 107 test |
-| 3 | Ratificare ADR-003 e ADR-005 prima di scrivere codice che li tocca | ✅ fatto: ADR-003 accepted (con eccezione `pcfm-debug`), ADR-005 accepted |
-| 4 | Allineare le versioni dei documenti e unificare la lingua | ✅ fatto: ADR-007 accepted, `00-foundations.md` v2.0, documentazione in inglese |
-| 5 | I 3 buchi tecnici e i 2 documenti mancanti | ⏳ aperti (vedi §4) |
+| # | Recommendation | Status at 2026-10-26 |
+|---|----------------|----------------------|
+| 1 | Reduce the v1.0 scope: 20 roles (not 56), 10 formations (not 20), 5 nations (not 20), 3 active psychological axes (not 6) | ⏳ formalised in ADR-015 (`accepted`, 2026-10-26) |
+| 2 | Write code before completing the 25 modules | ✅ done: L0 implemented, 107 tests |
+| 3 | Ratify ADR-003 and ADR-005 before writing code that touches them | ✅ done: ADR-003 accepted (with `pcfm-debug` exception), ADR-005 accepted |
+| 4 | Align document versions and unify the language | ✅ done: ADR-007 accepted, `00-foundations.md` v2.0, documentation in English |
+| 5 | The 3 technical gaps and the 2 missing documents | ⏳ open (see §4) |
 
-### 2.2 I tre buchi tecnici (fonte D)
+### 2.2 The three technical gaps (source D)
 
-| # | Buco | Cosa manca | Stato |
-|---|------|-----------|-------|
-| A | Psicologia a 6 assi | La dottrina dice 3 assi in v1.0, ma il modello dati ne ha 6. Serve esplicitare il flag `active: false` sui 3 assi non v1.0. | ⏳ aperto, tracciato in ADR-015 (§Deferred decisions) |
-| B | `ProjectionProfile` | La "banda attesa" non ha metodo di calcolo (bootstrap? bayesiano? quantili empirici?). Senza specifica, la banda è arbitraria. | ⏳ aperto, non ancora indirizzato |
-| C | `ScoutReport.DeclaredBias` | Il bias dichiarato non ha formula di applicazione. È solo un'etichetta o entra nel calcolo? | ⏳ aperto, non ancora indirizzato |
+| # | Gap | What is missing | Status |
+|---|-----|-----------------|--------|
+| A | 6-axis psychology | The doctrine says 3 axes in v1.0, but the data model has 6. The `active: false` flag must be made explicit on the 3 non-v1.0 axes. | ⏳ open, tracked in ADR-015 (§Deferred decisions) |
+| B | `ProjectionProfile` | The "expected band" has no computation method (bootstrap? Bayesian? empirical quantiles?). Without a specification, the band is arbitrary. | ⏳ open, not yet addressed |
+| C | `ScoutReport.DeclaredBias` | The declared bias has no application formula. Is it just a label, or does it enter the calculation? | ⏳ open, not yet addressed |
 
-### 2.3 I due documenti mancanti (fonte D)
+### 2.3 The two missing documents (source D)
 
-| Documento | Cosa dovrebbe contenere | Stato |
-|-----------|-------------------------|-------|
-| `docs/performance.md` | Benchmark attesi (stagione < 60 s su hardware medio), piano di misura, costo computazionale per tick | ❌ non esiste |
-| `docs/save-security.md` (o sezione in `L0-match/07-save-minimal.md`) | Checksum, firma, backup automatico, rollback per salvataggi corrotti | ❌ non esiste |
+| Document | What it should contain | Status |
+|----------|------------------------|--------|
+| `docs/performance.md` | Expected benchmarks (season < 60 s on mid-range hardware), measurement plan, computational cost per tick | ❌ does not exist |
+| `docs/save-security.md` (or a section in `L0-match/07-save-minimal.md`) | Checksum, signature, automatic backup, rollback for corrupted saves | ❌ does not exist |
 
 ---
 
-## 3. Decisioni prese in questa conversazione (fonte C + R)
+## 3. Decisions taken in this conversation (source C + R)
 
-In ordine cronologico. Ogni decisione ha il commit che l'ha registrata (quando disponibile).
+In chronological order. Each decision has the commit that recorded it (when available).
 
-### 3.1 Licenza (ADR-006)
+### 3.1 License (ADR-006)
 
-- **Decisione:** dual license. Codice `MIT OR Apache-2.0`, asset `CC-BY-NC-SA-4.0`.
-- **File creati:** `LICENSE-MIT`, `LICENSE-APACHE`, `LICENSE-ASSETS`, `LICENSE.md`.
-- **ADR-006:** da `proposed` a `accepted` (2026-10-25).
-- **Commit:** `99c8946` (LICENSE-ASSETS), `8871ab4` (LICENSE.md), più i commit di ratifica ADR-006.
+- **Decision:** dual license. Code `MIT OR Apache-2.0`, assets `CC-BY-NC-SA-4.0`.
+- **Files created:** `LICENSE-MIT`, `LICENSE-APACHE`, `LICENSE-ASSETS`, `LICENSE.md`.
+- **ADR-006:** from `proposed` to `accepted` (2026-10-25).
+- **Commit:** `99c8946` (LICENSE-ASSETS), `8871ab4` (LICENSE.md), plus the ADR-006 ratification commits.
 
 ### 3.2 Qt binding (ADR-005)
 
-- **Decisione:** `cxx-qt` (opzione A). Solo binding che copre sia QWidgets (data grid) sia QML (skin).
-- **ADR-005:** da `proposed` a `accepted` (2026-10-25).
-- **Commit:** ratifica insieme al batch ADR.
+- **Decision:** `cxx-qt` (option A). The only binding that covers both QWidgets (data grid) and QML (skins).
+- **ADR-005:** from `proposed` to `accepted` (2026-10-25).
+- **Commit:** ratified together with the ADR batch.
 
-### 3.3 Lingua canonica (ADR-007)
+### 3.3 Canonical language (ADR-007)
 
-- **Decisione:** inglese canonico per codice, commit, ADR, documentazione tecnica. Italiano come traduzione in `locales/it/` (pianificato).
-- **ADR-007:** da `proposed` a `accepted` (2026-10-25).
-- **Commit:** ratifica insieme al batch ADR.
+- **Decision:** English canonical for code, commits, ADRs, technical documentation. Italian as a translation in `locales/it/` (planned).
+- **ADR-007:** from `proposed` to `accepted` (2026-10-25).
+- **Commit:** ratified together with the ADR batch.
 
-### 3.4 Dottrina (00-foundations.md)
+### 3.4 Doctrine (00-foundations.md)
 
-- **Decisione:** rimuovere le note "under review" su ADR-013. La dottrina era v1.4, pillar 1 (determinismo globale) stabile. ADR-013 era citato come `proposed, not ratified` (poi ratificato il 2026-10-26, dottrina aggiornata a **v2.0** con pillar 1 riscritto a determinismo locale).
+- **Decision:** remove the "under review" notes on ADR-013. The doctrine was v1.4, pillar 1 (global determinism) stable. ADR-013 was cited as `proposed, not ratified` (later ratified on 2026-10-26, doctrine updated to **v2.0** with pillar 1 rewritten to local determinism).
 - **File:** `modules/00-foundations.md` v2.0, `status: "ratified"`, `last_updated: 2026-10-26`.
 - **Commit:** `d6c3c8b` + `fd2c298` (v2.0).
 
 ### 3.5 ADR-003 (Plane A enforcement)
 
-- **Decisione:** documentare l'eccezione `pcfm-debug`. Il crate può dipendere da `pcfm-hidden` solo per costruire `GroundTruth` da passare a `pcfm-match`, mai per leggere latenti. L'eccezione è confinata a `demo.rs` e `check.rs`.
-- **File:** `docs/adr/003-plane-a-enforcement.md`, sezione "Exception: pcfm-debug". Corpo completo ricomposto da `571d48f` + `70ee57f`.
-- **Commit:** `b309f23` (ricomposizione completa).
+- **Decision:** document the `pcfm-debug` exception. The crate may depend on `pcfm-hidden` only to build `GroundTruth` to pass to `pcfm-match`, never to read latents. The exception is confined to `demo.rs` and `check.rs`.
+- **File:** `docs/adr/003-plane-a-enforcement.md`, section "Exception: pcfm-debug". Full body recomposed from `571d48f` + `70ee57f`.
+- **Commit:** `b309f23` (full recomposition).
 
-### 3.6 Scope v1.0 (ADR-015)
+### 3.6 v1.0 scope (ADR-015)
 
-- **Decisione:** formalizzare la riduzione di scope (20 ruoli, 10 formazioni, 5 nazioni, 3 assi psicologici attivi, subset L2/L3).
-- **File:** `docs/adr/015-v1-scope.md` (rinominato da `014-v1-scope.md` perché 014 era occupato da `014-mobile-strategy.md`).
-- **Status:** `accepted` (2026-10-26). **Dipendeva da ADR-012 e ADR-013**, entrambi ratificati il 2026-10-25.
-- **Commit:** `1a59b81` (rinomina), `8d8d347` (creazione originale), `4d826dc` (ratifica), `4c93214` (propagazione).
-- **Nota:** l'ADR contiene 7 **Deferred decisions** (quali 3 assi? quali 5 nazioni? ecc.), da risolvere in ADR-016 ("v1.0 content selections").
+- **Decision:** formalise the scope reduction (20 roles, 10 formations, 5 nations, 3 active psychological axes, L2/L3 subset).
+- **File:** `docs/adr/015-v1-scope.md` (renamed from `014-v1-scope.md` because 014 was taken by `014-mobile-strategy.md`).
+- **Status:** `accepted` (2026-10-26). **Depended on ADR-012 and ADR-013**, both ratified on 2026-10-25.
+- **Commit:** `1a59b81` (rename), `8d8d347` (original creation), `4d826dc` (ratification), `4c93214` (propagation).
+- **Note:** the ADR contains 7 **Deferred decisions** (which 3 axes? which 5 nations? etc.), to be resolved in ADR-016 ("v1.0 content selections").
 
-### 3.7 Framework di coretest (`pcfm-testkit`)
+### 3.7 Coretest framework (`pcfm-testkit`)
 
-- **Decisione:** creare un crate pubblico `pcfm-testkit` che definisce il contratto `Scenario` / `Feature` / `TestRegistry`, **senza dipendenze da altri crate `pcfm-*`**. I plugin possono implementare `Scenario` senza dipendere da `pcfm-debug`.
-- **File creati:** `crates/pcfm-testkit/` (7 file), `crates/pcfm-debug/src/features/` (2 file), `crates/pcfm-debug/src/commands.rs`.
-- **File modificati:** `args.rs` (aggiunti `--list`, `--coverage`), `main.rs` (dispatch), `check.rs` (thin wrapper sul registry).
-- **Commit:** serie `928f734`, `aff7a13`, `ff13f2d`, `5bdcb78` e successivi.
-- **Stato:** funzionante. `--check` 6/6, `--list` 6 scenari, `--coverage` 2/26 (7%).
+- **Decision:** create a public crate `pcfm-testkit` that defines the `Scenario` / `Feature` / `TestRegistry` contract, **with no dependencies on other `pcfm-*` crates**. Plugins can implement `Scenario` without depending on `pcfm-debug`.
+- **Files created:** `crates/pcfm-testkit/` (7 files), `crates/pcfm-debug/src/features/` (2 files), `crates/pcfm-debug/src/commands.rs`.
+- **Files modified:** `args.rs` (added `--list`, `--coverage`), `main.rs` (dispatch), `check.rs` (thin wrapper over the registry).
+- **Commit:** series `928f734`, `aff7a13`, `ff13f2d`, `5bdcb78` and subsequent.
+- **Status:** working. `--check` 6/6, `--list` 6 scenarios, `--coverage` 2/26 (7%).
 
-### 3.8 Documentazione aggiornata (2026-10-26)
+### 3.8 Documentation updated (2026-10-26)
 
-- **README.md:** riformattato per fruibilità, aggiunti `--list` / `--coverage`, aggiornato stato L0 ("ratified + implemented + tested"), FAQ aggiornata ("All decisions are now accepted").
-- **STRUCTURE.md:** v1.7 → v1.8. 7 crate, 15 ADR, ADR-005/006/007 accepted, ADR-014/015 aggiunti.
-- **PLUGIN_DEVELOPER_GUIDE.md:** v1.0 → v1.1. Aggiunta §11 "Contributing test scenarios", correzione `fmr-pack` → `pcfm-pack`, tabella crate aggiornata.
-- **`_index.md`:** v2.8 → v2.9. ADR-012/013/014 accepted, doctrine v2.0, 7 crate / 107 test, 12 accepted ADR.
-- **`CONTRIBUTING.md`:** stato aggiornato (7 crate, 107 test, 12 accepted, 0 proposed).
+- **README.md:** reformatted for readability, added `--list` / `--coverage`, updated L0 status ("ratified + implemented + tested"), FAQ updated ("All decisions are now accepted").
+- **STRUCTURE.md:** v1.7 → v1.8. 7 crates, 15 ADRs, ADR-005/006/007 accepted, ADR-014/015 added.
+- **PLUGIN_DEVELOPER_GUIDE.md:** v1.0 → v1.1. Added §11 "Contributing test scenarios", fixed `fmr-pack` → `pcfm-pack`, updated crate table.
+- **`_index.md`:** v2.8 → v2.9. ADR-012/013/014 accepted, doctrine v2.0, 7 crates / 107 tests, 12 accepted ADRs.
+- **`CONTRIBUTING.md`:** status updated (7 crates, 107 tests, 12 accepted, 0 proposed).
 - **Commit:** `7c98612`, `8c67ec8`, `be929c4`, `635bc61`, `f1dc5fe`, `4c93214`.
 
-### 3.9 Documentazione di architettura e code tour (2026-10-26)
+### 3.9 Architecture and code tour documentation (2026-10-26)
 
-- **Decisione:** aggiungere due documenti che mancavano: `ARCHITECTURE.md` (come i crate interagiscono, flusso di un match, simulation/rendering split, testkit contract) e `CODE_TOUR.md` (percorso di lettura in 5 stadi: infrastruttura, entità, piani, motore, testkit). Più 5 commenti mirati nei punti criptici del codice (`action_probability = 0.0005`, split 60/25/12/3 in `MatchState::tick`, `noise * 0.2` in `resolve_duel`, uniformità dei latents, scelta dei 6 scenari L0).
-- **File creati:** `docs/ARCHITECTURE.md` (210 righe), `docs/CODE_TOUR.md` (215 righe).
-- **File modificati:** `context.rs`, `state.rs`, `hidden/lib.rs`, `latents.rs`, `l0_match.rs` (solo commenti, nessun cambiamento di comportamento).
-- **Commit:** `e35d15e` (i 5 file + 2 documenti), `0a329d4` (fix `DoD` in backtick per `clippy::doc_markdown`).
-- **Motivazione:** il codebase aveva `///` ovunque, ma mancava una mappa architetturale e un percorso di lettura. L'idea originale ("tanti commenti in tutti i file") è stata scartata perché i commenti che ripetono il codice invecchiano e duplicano la specifica. Sono stati aggiunti solo dove il codice è genuinamente criptico.
+- **Decision:** add two missing documents: `ARCHITECTURE.md` (how the crates interact, flow of a match, simulation/rendering split, testkit contract) and `CODE_TOUR.md` (reading path in 5 stages: infrastructure, entities, planes, engine, testkit). Plus 5 targeted comments in the cryptic points of the code (`action_probability = 0.0005`, 60/25/12/3 split in `MatchState::tick`, `noise * 0.2` in `resolve_duel`, uniformity of latents, choice of the 6 L0 scenarios).
+- **Files created:** `docs/ARCHITECTURE.md` (210 lines), `docs/CODE_TOUR.md` (215 lines).
+- **Files modified:** `context.rs`, `state.rs`, `hidden/lib.rs`, `latents.rs`, `l0_match.rs` (comments only, no behaviour change).
+- **Commit:** `e35d15e` (the 5 files + 2 documents), `0a329d4` (fix `DoD` in backticks for `clippy::doc_markdown`).
+- **Rationale:** the codebase had `///` everywhere, but lacked an architectural map and a reading path. The original idea ("many comments in all files") was discarded because comments that repeat the code age and duplicate the specification. Only the genuinely cryptic points were commented.
 
 ---
 
-## 4. Decisioni ratificate (al 2026-10-26)
+## 4. Ratified decisions (at 2026-10-26)
 
 ### 4.1 ADR-012 (Plugins: The Brick Contract)
 
 - **Status:** `accepted` (2026-10-25).
-- **Cosa decide:** il contratto dei moduli (plugin): cosa è un modulo, cosa dichiara (`sheet.toml`), come si gestiscono i conflitti.
-- **Blocca:** il sistema di plugin (step 11+), e indirettamente ADR-015 (perché "in a pack" non è una risposta sicura finché il contratto dei moduli non esiste).
-- **Ratificato:** 2026-10-25.
+- **What it decides:** the module (plugin) contract: what a module is, what it declares (`sheet.toml`), how conflicts are handled.
+- **Blocks:** the plugin system (step 11+), and indirectly ADR-015 (because "in a pack" is not a safe answer until the module contract exists).
+- **Ratified:** 2026-10-25.
 
 ### 4.2 ADR-013 (Worlds: LOD, Manifest, and Local Determinism)
 
 - **Status:** `accepted` (2026-10-25).
-- **Cosa decide:** il sistema dei mondi (come i mattoni si compongono in un mondo), il Level of Detail, il manifest del salvataggio, e — se ratificato — sostituisce il pillar 1 della dottrina (determinismo da globale a locale).
-- **Dipende da:** ADR-012.
-- **Blocca:** ADR-015, il sistema dei mondi, il determinismo locale.
-- **Ratificato:** 2026-10-25.
+- **What it decides:** the world system (how the bricks compose into a world), the Level of Detail, the save manifest, and — if ratified — it supersedes pillar 1 of the doctrine (determinism from global to local).
+- **Depends on:** ADR-012.
+- **Blocks:** ADR-015, the world system, local determinism.
+- **Ratified:** 2026-10-25.
 
 ### 4.3 ADR-015 (v1.0 scope)
 
 - **Status:** `accepted` (2026-10-26).
-- **Dipendeva da:** ADR-012 e ADR-013, entrambi ratificati il 2026-10-25.
-- **Da fare:** rispondere alle 7 Deferred decisions (quali 3 assi psicologici? quali 20 ruoli? quali 10 formazioni? quali 5 nazioni? quali L2/L3 in v1.0?). Decisione delegata ad **ADR-016** ("v1.0 content selections"), non ancora scritto.
+- **Depended on:** ADR-012 and ADR-013, both ratified on 2026-10-25.
+- **To do:** resolve the 7 Deferred decisions (which 3 psychological axes? which 20 roles? which 10 formations? which 5 nations? which L2/L3 in v1.0?). Decision delegated to **ADR-016** ("v1.0 content selections"), not yet written.
 
-### 4.4 I tre buchi tecnici (fonte D)
+### 4.4 The three technical gaps (source D)
 
-- **A — Psicologia 6 assi:** aggiornare il modello dati per rendere esplicito il flag `active: false` sui 3 assi non v1.0. Decisione delegata ad ADR-016.
-- **B — `ProjectionProfile`:** scrivere la sezione "Metodo di calcolo delle bande" (bootstrap? bayesiano? quantili empirici?). Non ancora indirizzato.
-- **C — `ScoutReport.DeclaredBias`:** specificare la formula di applicazione del bias, o dichiarare esplicitamente che in v1.0 è solo informativo. Non ancora indirizzato.
+- **A — 6-axis psychology:** update the data model to make explicit the `active: false` flag on the 3 non-v1.0 axes. Decision delegated to ADR-016.
+- **B — `ProjectionProfile`:** write the section "Method for computing the bands" (bootstrap? Bayesian? empirical quantiles?). Not yet addressed.
+- **C — `ScoutReport.DeclaredBias`:** specify the formula for applying the bias, or explicitly state that in v1.0 it is informational only. Not yet addressed.
 
-### 4.5 I due documenti mancanti (fonte D)
+### 4.5 The two missing documents (source D)
 
-- `docs/performance.md`: benchmark attesi, piano di misura, costo computazionale per tick.
-- `docs/save-security.md`: checksum, firma, backup, rollback per salvataggi corrotti.
+- `docs/performance.md`: expected benchmarks, measurement plan, computational cost per tick.
+- `docs/save-security.md`: checksum, signature, backup, rollback for corrupted saves.
 
 ---
 
-## 5. Stato attuale del progetto (fonte R, 2026-10-26)
+## 5. Current state of the project (source R, 2026-10-26)
 
-| Metrica | Valore |
-|---------|--------|
-| Crate | 7 (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-match`, `pcfm-stats`, `pcfm-testkit`, `pcfm-debug`) |
-| Test | 107 (tutti verdi) |
-| Clippy | pulito (`-D warnings`) |
+| Metric | Value |
+|--------|-------|
+| Crates | 7 (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-match`, `pcfm-stats`, `pcfm-testkit`, `pcfm-debug`) |
+| Tests | 107 (all green) |
+| Clippy | clean (`-D warnings`) |
 | `--check` | 6/6 |
-| `--list` | 6 scenari |
-| `--coverage` | 2/26 feature coperte (7%) |
-| ADR | 14 file in `docs/adr/`: 12 accepted (001-008, 012-015), 0 proposed, 1 template (000). Più 1 reading guide in `docs/`. |
-| Moduli L0 | 11 celle, ratified + implemented |
-| Moduli L1–L3 | non ancora scritti |
-| Documenti completi | `PROJECT-IDEA-LOG.md`, `REPO-SNAPSHOT.md`, `ARCHITECTURE.md`, `CODE_TOUR.md` |
-| Ultimo commit | `4c93214` |
+| `--list` | 6 scenarios |
+| `--coverage` | 2/26 features covered (7%) |
+| ADRs | 14 files in `docs/adr/`: 12 accepted (001-008, 012-015), 0 proposed, 1 template (000). Plus 1 reading guide in `docs/`. |
+| L0 modules | 11 cells, ratified + implemented |
+| L1–L3 modules | not yet written |
+| Complete documents | `PROJECT-IDEA-LOG.md`, `REPO-SNAPSHOT.md`, `ARCHITECTURE.md`, `CODE_TOUR.md` |
+| Last commit | `d7e2e65` |
 
 ---
 
-## 6. Cosa NON so (e non voglio inventare)
+## 6. What I do NOT know (and do not want to invent)
 
-Tutti i file tracciati sono stati letti (vedi `REPO-SNAPSHOT.md` §7). Resta fuori solo:
+All tracked files have been read (see `REPO-SNAPSHOT.md` §7). The only thing outside is:
 
-1. **Eventuali altre chat o decisioni prese fuori da questa sessione.** Se ce ne sono, non le vedo.
+1. **Any other chats or decisions taken outside this session.** If there are any, I do not see them.
 
 ---
 
-## 7. Prossimi passi (in ordine di dipendenza)
+## 7. Next steps (in dependency order)
 
-1. **Scrivere ADR-016** ("v1.0 content selections"): rispondere alle 7 Deferred decisions di ADR-015 (quali 3 assi psicologici? quali 20 ruoli? quali 10 formazioni? quali 5 nazioni? quali L2/L3 in v1.0?). Richiede di sapere cosa c'è in `modules/L2-*` e `modules/_index.md` (che esistono solo come planned).
-2. **Indirizzare i 2 buchi tecnici** (`ProjectionProfile`, `ScoutReport.DeclaredBias`). Il terzo (psyche) è dentro ADR-016.
-3. **Scrivere i 2 documenti mancanti** (`performance.md`, `save-security.md`).
-4. **Iniziare a scrivere L1** (primo modulo: `L1-world/01-nation.md`). Sblocca i primi scenari L1 nel coretest.
+1. **Write ADR-016** ("v1.0 content selections"): resolve the 7 Deferred decisions of ADR-015 (which 3 psychological axes? which 20 roles? which 10 formations? which 5 nations? which L2/L3 in v1.0?). Requires knowing what is in `modules/L2-*` and `modules/_index.md` (which exist only as planned).
+2. **Address the 2 technical gaps** (`ProjectionProfile`, `ScoutReport.DeclaredBias`). The third (psyche) is inside ADR-016.
+3. **Write the 2 missing documents** (`performance.md`, `save-security.md`).
+4. **Start writing L1** (first module: `L1-world/01-nation.md`). Unblocks the first L1 scenarios in the coretest.
