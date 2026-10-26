@@ -92,6 +92,23 @@ impl GroundTruth {
     }
 
     /// Resolves a duel.
+    ///
+    /// # The prototype formula
+    ///
+    /// `attacker_wins = noise * 0.2 + attacker_score > defender_score`
+    ///
+    /// - `noise` is uniform in `[0, 1)`, drawn from the `hidden` RNG stream.
+    /// - `0.2` is the **variance weight**: a higher value means the outcome
+    ///   is less predictable from the latents. It is a placeholder, not a
+    ///   calibrated value. A realistic model would derive it from the
+    ///   distribution of duels in real matches (e.g. what fraction of
+    ///   aerial duels the stronger player wins).
+    /// - `attacker_score` and `defender_score` are **latent** values
+    ///   (Plane A). They are read here, inside `pcfm-hidden`, and never
+    ///   leave. The outcome is a `DuelOutcome` (Plane B) with a
+    ///   `CauseTrace` that describes the outcome in observed terms.
+    ///
+    /// See `docs/CODE_TOUR.md` "A note on the current simulation".
     pub fn resolve_duel(&mut self, ctx: &DuelContext) -> DuelOutcome {
         let attacker = self.latents_for(ctx.attacker);
         let defender = self.latents_for(ctx.defender);
