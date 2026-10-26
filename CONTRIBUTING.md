@@ -7,7 +7,7 @@ Thanks for wanting to help. This project is documentation-first, and **good docu
 ## Current state (as of 2026-10-26)
 
 - **L0 is implemented.** 7 crates (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`), 107 tests passing.
-- **14 ADRs exist:** 11 accepted (001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014), 1 proposed (015), 1 template (000), 1 reading guide (PLUGINS-WORLDS-READING-GUIDE).
+- **14 ADRs exist:** 12 accepted (001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015), 0 proposed, 1 template (000), 1 reading guide (PLUGINS-WORLDS-READING-GUIDE).
 - **ADR-012 and ADR-013 are accepted.** They define the plugin system and the world system. ADR-013 revised pillar 1 of `00-foundations` (determinism, from global to local). The framework does not implement the plugin system yet, but the decisions are ratified.
 - **The doctrine is v2.0** (2026-10-26): pillar 1 revised to local determinism.
 - **`LICENSE.md`** exists and is accepted (ADR-006). The dual license is: MIT OR Apache-2.0 for code, CC-BY-NC-SA-4.0 for assets.

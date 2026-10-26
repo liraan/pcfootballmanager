@@ -1,5 +1,7 @@
 # Project Idea Log — PCFM
 
+> **Aggiornamento 2026-10-26:** ADR-012, ADR-013 e ADR-015 sono state ratificate. Vedi `docs/REPO-SNAPSHOT.md` per lo stato attuale. Questo log mantiene le voci originali per tracciabilità.
+
 **Scopo:** registrare le idee, le decisioni e le domande aperte del progetto,
 con la fonte di ciascuna. Non è un documento di stato del codice (per quello
 vedi `REPO-SNAPSHOT.md`). Non è una specifica (per quella vedi `modules/`).
@@ -44,7 +46,7 @@ decisioni successive.
 
 | # | Raccomandazione | Stato al 2026-10-26 |
 |---|-----------------|---------------------|
-| 1 | Ridurre lo scope v1.0: 20 ruoli (non 56), 10 formazioni (non 20), 5 nazioni (non 20), 3 assi psicologici attivi (non 6) | ⏳ formalizzata in ADR-015 (`proposed`), non ancora ratificata |
+| 1 | Ridurre lo scope v1.0: 20 ruoli (non 56), 10 formazioni (non 20), 5 nazioni (non 20), 3 assi psicologici attivi (non 6) | ⏳ formalizzata in ADR-015 (`accepted`, 2026-10-26) |
 | 2 | Scrivere codice prima di completare i 25 moduli | ✅ fatto: L0 implementato, 107 test |
 | 3 | Ratificare ADR-003 e ADR-005 prima di scrivere codice che li tocca | ✅ fatto: ADR-003 accepted (con eccezione `pcfm-debug`), ADR-005 accepted |
 | 4 | Allineare le versioni dei documenti e unificare la lingua | ✅ fatto: ADR-007 accepted, `00-foundations.md` v1.4, documentazione in inglese |
@@ -92,7 +94,7 @@ In ordine cronologico. Ogni decisione ha il commit che l'ha registrata (quando d
 
 ### 3.4 Dottrina (00-foundations.md)
 
-- **Decisione:** rimuovere le note "under review" su ADR-013. La dottrina resta v1.4, pillar 1 (determinismo globale) stabile. ADR-013 è citato come `proposed, not ratified`.
+- **Decisione:** rimuovere le note "under review" su ADR-013. La dottrina resta v1.4, pillar 1 (determinismo globale) stabile. ADR-013 era citato come `proposed, not ratified` (poi ratificato il 2026-10-26, dottrina aggiornata a v2.0).
 - **File:** `modules/00-foundations.md` v1.4, `status: "ratified"`, `last_updated: 2026-10-25`.
 - **Commit:** incluso nel batch di riformattazione.
 
@@ -106,7 +108,7 @@ In ordine cronologico. Ogni decisione ha il commit che l'ha registrata (quando d
 
 - **Decisione:** formalizzare la riduzione di scope (20 ruoli, 10 formazioni, 5 nazioni, 3 assi psicologici attivi, subset L2/L3).
 - **File:** `docs/adr/015-v1-scope.md` (rinominato da `014-v1-scope.md` perché 014 era occupato da `014-mobile-strategy.md`).
-- **Status:** `proposed`. **Dipende da ADR-012 e ADR-013**, che devono essere ratificati prima o insieme.
+- **Status:** `accepted` (2026-10-26). **Dipendeva da ADR-012 e ADR-013**, entrambi ratificati il 2026-10-25.
 - **Commit:** `1a59b81` (rinomina), `8d8d347` (creazione originale).
 - **Nota:** l'ADR contiene 7 Open Questions (quali 3 assi? quali 5 nazioni? ecc.) ancora da rispondere.
 
@@ -127,28 +129,28 @@ In ordine cronologico. Ogni decisione ha il commit che l'ha registrata (quando d
 
 ---
 
-## 4. Decisioni ancora aperte (al 2026-10-26)
+## 4. Decisioni ratificate (al 2026-10-26)
 
 ### 4.1 ADR-012 (Plugins: The Brick Contract)
 
-- **Status:** `proposed`.
+- **Status:** `accepted` (2026-10-25).
 - **Cosa decide:** il contratto dei moduli (plugin): cosa è un modulo, cosa dichiara (`sheet.toml`), come si gestiscono i conflitti.
 - **Blocca:** il sistema di plugin (step 11+), e indirettamente ADR-015 (perché "in a pack" non è una risposta sicura finché il contratto dei moduli non esiste).
-- **Prossimo passo:** leggere il file e decidere se ratificare.
+- **Ratificato:** 2026-10-25.
 
 ### 4.2 ADR-013 (Worlds: LOD, Manifest, and Local Determinism)
 
-- **Status:** `proposed`.
+- **Status:** `accepted` (2026-10-25).
 - **Cosa decide:** il sistema dei mondi (come i mattoni si compongono in un mondo), il Level of Detail, il manifest del salvataggio, e — se ratificato — sostituisce il pillar 1 della dottrina (determinismo da globale a locale).
 - **Dipende da:** ADR-012.
 - **Blocca:** ADR-015, il sistema dei mondi, il determinismo locale.
-- **Prossimo passo:** leggere il file e decidere se ratificare.
+- **Ratificato:** 2026-10-25.
 
 ### 4.3 ADR-015 (v1.0 scope)
 
-- **Status:** `proposed`.
-- **Dipende da:** ADR-012 e ADR-013.
-- **Da fare:** rispondere alle 7 Open Questions (quali 3 assi psicologici? quali 20 ruoli? quali 10 formazioni? quali 5 nazioni? quali L2/L3 in v1.0?).
+- **Status:** `accepted` (2026-10-26).
+- **Dipendeva da:** ADR-012 e ADR-013, entrambi ratificati il 2026-10-25.
+- **Da fare:** rispondere alle 7 Deferred decisions (quali 3 assi psicologici? quali 20 ruoli? quali 10 formazioni? quali 5 nazioni? quali L2/L3 in v1.0?).
 
 ### 4.4 I tre buchi tecnici (fonte D)
 
@@ -173,7 +175,7 @@ In ordine cronologico. Ogni decisione ha il commit che l'ha registrata (quando d
 | `--check` | 6/6 |
 | `--list` | 6 scenari |
 | `--coverage` | 2/26 feature coperte (7%) |
-| ADR | 15 (12 accepted, 3 proposed: 012, 013, 015) |
+| ADR | 13 (12 accepted, 0 proposed, 1 template) |
 | Moduli L0 | 11 celle, ratified + implemented |
 | Moduli L1–L3 | non ancora scritti |
 | Ultimo commit | `be929c4` |
@@ -205,8 +207,8 @@ per scrivere "non letto" nel `REPO-SNAPSHOT.md` e completarli dopo).
 
 ## 7. Prossimi passi (in ordine di dipendenza)
 
-1. **Leggere ADR-012 e ADR-013.** Decidere se ratificarli. (Sblocca ADR-015 e il sistema dei mondi.)
-2. **Rispondere alle 7 Open Questions di ADR-015.** (Richiede di sapere cosa c'è in `modules/L2-*` e `modules/_index.md`.)
+1. **Leggere ADR-012 e ADR-013.** (Ratificati il 2026-10-25; il sistema dei mondi è ora sbloccato.)
+2. **Rispondere alle 7 Deferred decisions di ADR-015** (ora `accepted`) (Richiede di sapere cosa c'è in `modules/L2-*` e `modules/_index.md`.)
 3. **Indirizzare i 3 buchi tecnici** (psyche, ProjectionProfile, ScoutReport).
 4. **Scrivere i 2 documenti mancanti** (performance, save-security).
 5. **Iniziare a scrivere L1** (primo modulo: `L1-world/01-nation.md`). (Sblocca i primi scenari L1 nel coretest.)

@@ -256,6 +256,6 @@ These are components that are referenced across modules but are not crates. They
 | [012](../docs/adr/012-plugins.md) | Plugins: The Brick Contract | ✅ accepted | Defines the plugin sheet, conflicts, narrative, cause traces, debug UI plugin view |
 | [013](../docs/adr/013-worlds.md) | Worlds: LOD, Manifest, and Local Determinism | ✅ accepted | Defines LOD, manifest, local determinism; revised pillar 1 |
 | [014](../docs/adr/014-mobile-strategy.md) | Mobile strategy | ✅ accepted | Native mobile UI, no plugins, data packs only |
-| [015](../docs/adr/015-v1-scope.md) | v1.0 scope | 🟡 proposed | v1.0 content reduction (20 roles, 10 formations, 5 nations, 3 active psyche axes) |
+| [015](../docs/adr/015-v1-scope.md) | v1.0 scope | ✅ accepted | v1.0 content reduction (20 roles, 10 formations, 5 nations, 3 active psyche axes) |
 
-**Open ADRs:** 015 (1). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014 (11).
+**Open ADRs:** none. **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015 (12).
