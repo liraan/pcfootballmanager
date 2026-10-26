@@ -13,8 +13,12 @@ pub struct Check {
 
 impl Check {
     /// Create a passing check.
+    ///
+    /// Not `const`: the struct contains a `String` field (`detail`), which
+    /// cannot be constructed in a const context on stable Rust.
     #[must_use]
-    pub const fn pass(name: &'static str) -> Self {
+    #[allow(clippy::missing_const_for_fn)]
+    pub fn pass(name: &'static str) -> Self {
         Self {
             name,
             passed: true,
@@ -23,6 +27,8 @@ impl Check {
     }
 
     /// Create a failing check with a reason.
+    ///
+    /// Not `const`: `Into<String>` is not const-callable on stable Rust.
     #[must_use]
     #[allow(clippy::missing_const_for_fn)]
     pub fn fail(name: &'static str, reason: impl Into<String>) -> Self {
@@ -56,11 +62,18 @@ impl ScenarioResult {
     }
 
     /// Record a passing check.
-    pub const fn pass(&mut self, name: &'static str) {
+    ///
+    /// Not `const`: calls `record`, which mutates a `Vec` (`Vec::push` is
+    /// not const on stable Rust).
+    #[allow(clippy::missing_const_for_fn)]
+    pub fn pass(&mut self, name: &'static str) {
         self.record(Check::pass(name));
     }
 
     /// Record a failing check.
+    ///
+    /// Not `const`: calls `record`, which mutates a `Vec`.
+    #[allow(clippy::missing_const_for_fn)]
     pub fn fail(&mut self, name: &'static str, reason: impl Into<String>) {
         self.record(Check::fail(name, reason));
     }
