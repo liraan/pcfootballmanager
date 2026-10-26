@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-27 (commit `5713232`)
+**Last updated:** 2026-10-27 (commit `76ae391`)
 
 ---
 
@@ -29,7 +29,7 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 - **Status:** L0 (match engine) is complete and implemented. L1–L3 are planned.
 - **Performance target** (`00-foundations.md` §6): 60 fps UI, full season < 60 s on mid-range hardware. Not measured yet.
 
-## Where we are (commit `5713232`, 2026-10-27)
+## Where we are (commit `76ae391`, 2026-10-27)
 
 - **7 crates:** `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`.
 - **107 tests**, clippy clean (`-D warnings`), `--check` 6/6, `--list` 6 scenarios, `--coverage` 2/26 (7%).
