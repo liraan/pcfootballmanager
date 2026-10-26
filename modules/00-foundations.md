@@ -1,13 +1,19 @@
 ---
 title: "Module 00 — Foundations"
-version: "1.4"
+version: "2.0"
 status: "ratified"
-last_updated: "2026-10-25"
+last_updated: "2026-10-26"
 supersedes: "Prompt Master v7 (archived)"
 depends_on: []
 referenced_by: ["all modules"]
 conforms_to: "self"
 ---
+
+<!--
+  v2.0 (2026-10-26): ADR-013 accepted. Pillar 1 revised from global
+  determinism to local determinism. §4 updated accordingly. §5 and §8
+  references updated. This is a major bump: an invariant changed.
+-->
 
 # Module 00 — Foundations
 
@@ -30,7 +36,7 @@ If a requirement is ambiguous, propose two options. Do not silently pick one.
 
 Ten non-negotiable principles. Every design decision is tested against them.
 
-1. **Traceable determinism.** Same seed + same inputs = same result. Never compromised. See §4. ADR-013 proposes a revision to *local* determinism; it is **not ratified**, so the pillar stands as written.
+1. **Traceable determinism (local).** Same save + same match + same plugin configuration = same result. Never compromised. See §4. Global determinism (same seed across different configurations) is **not** a requirement — ADR-013 (accepted) revised this pillar from global to local.
 2. **Clean data / logic / UI separation.** No game rule lives in the interface. The UI is view-only.
 3. **First-class moddability.** Local packs, in-game UI, validation, rollback. See L3-registry and L3-packs.
 4. **Readability before graphics.** Adjustable information density, tooltips everywhere, zero hardcoded colours.
@@ -125,7 +131,7 @@ The single most important architectural rule. Violating it introduces systemic b
 
 ## 4. Determinism
 
-Same seed → same world, same season, same match. Always.
+Same save + same match + same plugin configuration → same result. Always.
 
 Operational rules:
 
@@ -137,7 +143,7 @@ Operational rules:
 - **Golden tests**: 10 seasons from a known seed → state hash comparison
 - **`SIM_VERSION`**: bumped whenever simulation behaviour changes, with the five-step procedure documented in [`CHANGELOG-SIM.md`](../CHANGELOG-SIM.md)
 
-**ADR-013 (proposed).** ADR-013 proposes *local* determinism, but it is **not ratified**. The rules above are the current contract: determinism is **global** (same seed across all configurations). See [`docs/adr/013-worlds.md`](../docs/adr/013-worlds.md).
+**Scope: local determinism (ADR-013, accepted).** The contract is: same save + same match + same plugin configuration = same result. Two saves with different plugin configurations are different worlds: their results are not comparable. Global determinism (same seed across different configurations) is no longer a requirement. See [`docs/adr/013-worlds.md`](../docs/adr/013-worlds.md).
 
 ## 5. Banned Things
 
@@ -151,7 +157,7 @@ These are not preferences. They are prohibitions.
 - **No invented real data** (squads, prices, regulations) presented as certain.
 - **No bundling, redistributing, or scraping commercial data.**
 - **No unlicensed assets.**
-- **No compromising determinism for convenience.** *(Scope: global, per §4. ADR-013 is proposed, not ratified.)*
+- **No compromising determinism for convenience.** *(Scope: local, per §4. ADR-013 is accepted.)*
 - **No deleting entities from the registry.** Deprecate, never delete.
 - **No save-breaking changes without a migration script.**
 - **No circular dependencies between modules.**
@@ -202,7 +208,7 @@ To keep scope honest, these are **not** in the core, and most are not in v1.0:
 - **Glossary:** [`../docs/GLOSSARY.md`](../docs/GLOSSARY.md) — the terms used across the spec
 - **Module developer guide:** [`../docs/PLUGIN_DEVELOPER_GUIDE.md`](../docs/PLUGIN_DEVELOPER_GUIDE.md) — how to write a module
 - **Crate naming:** crates use the `pcfm-` prefix (`pcfm-core`, `pcfm-hidden`, `pcfm-match`, ...). The historical `fmr-` prefix is deprecated. See `STRUCTURE.md` §3.
-- **Modules and worlds:** [`../docs/adr/012-plugins.md`](../docs/adr/012-plugins.md) and [`../docs/adr/013-worlds.md`](../docs/adr/013-worlds.md) *(proposed, not ratified)* — the module contract and the world system, which may revise pillar 1.
+- **Modules and worlds:** [`../docs/adr/012-plugins.md`](../docs/adr/012-plugins.md) and [`../docs/adr/013-worlds.md`](../docs/adr/013-worlds.md) *(accepted)* — the plugin contract and the world system. ADR-013 revised pillar 1 (determinism, from global to local).
 
 ## 9. Concentric Structure (Nest Model)
 
