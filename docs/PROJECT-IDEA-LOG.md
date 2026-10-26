@@ -37,7 +37,7 @@ The DeepSeek conversation ends with **5 recommendations**, **3 technical gaps**,
 | 2 | Write code before completing the 25 modules | ✅ done: L0 implemented, 107 tests |
 | 3 | Ratify ADR-003 and ADR-005 before writing code that touches them | ✅ done: ADR-003 accepted (with `pcfm-debug` exception), ADR-005 accepted |
 | 4 | Align document versions and unify the language | ✅ done: ADR-007 accepted, `00-foundations.md` v2.0, documentation in English |
-| 5 | The 3 technical gaps and the 2 missing documents | ⏳ open (see §4) |
+| 5 | The 3 technical gaps and the 2 missing documents | ⏳ open (see §2.2 and §2.3) |
 
 ### 2.2 The three technical gaps (source D)
 
@@ -147,40 +147,11 @@ In chronological order. Each decision has the commit that recorded it (when avai
 
 - **Status:** `accepted` (2026-10-26).
 - **Depended on:** ADR-012 and ADR-013, both ratified on 2026-10-25.
-- **To do:** resolve the 7 Deferred decisions (which 3 psychological axes? which 20 roles? which 10 formations? which 5 nations? which L2/L3 in v1.0?). Decision delegated to **ADR-016** ("v1.0 content selections"), not yet written.
-
-### 4.4 The three technical gaps (source D)
-
-- **A — 6-axis psychology:** update the data model to make explicit the `active: false` flag on the 3 non-v1.0 axes. Decision delegated to ADR-016.
-- **B — `ProjectionProfile`:** write the section "Method for computing the bands" (bootstrap? Bayesian? empirical quantiles?). Not yet addressed.
-- **C — `ScoutReport.DeclaredBias`:** specify the formula for applying the bias, or explicitly state that in v1.0 it is informational only. Not yet addressed.
-
-### 4.5 The two missing documents (source D)
-
-- `docs/performance.md`: expected benchmarks, measurement plan, computational cost per tick.
-- `docs/save-security.md`: checksum, signature, backup, rollback for corrupted saves.
+- **To do:** resolve the 7 Deferred decisions (which 3 psychological axes? which 20 roles? which 10 formations? which 5 nations? which L2/L3 in v1.0?). Decision delegated to **ADR-016** ("v1.0 content selections", `proposed` 2026-10-26).
 
 ---
 
-## 5. Current state of the project (source R, 2026-10-26)
-
-| Metric | Value |
-|--------|-------|
-| Crates | 7 (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-match`, `pcfm-stats`, `pcfm-testkit`, `pcfm-debug`) |
-| Tests | 107 (all green) |
-| Clippy | clean (`-D warnings`) |
-| `--check` | 6/6 |
-| `--list` | 6 scenarios |
-| `--coverage` | 2/26 features covered (7%) |
-| ADRs | 14 files in `docs/adr/`: 12 accepted (001-008, 012-015), 0 proposed, 1 template (000). Plus 1 reading guide in `docs/`. |
-| L0 modules | 11 cells, ratified + implemented |
-| L1–L3 modules | not yet written |
-| Complete documents | `PROJECT-IDEA-LOG.md`, `REPO-SNAPSHOT.md`, `ARCHITECTURE.md`, `CODE_TOUR.md` |
-| Last commit | `d7e2e65` |
-
----
-
-## 6. What I do NOT know (and do not want to invent)
+## 5. What I do NOT know (and do not want to invent)
 
 All tracked files have been read (see `REPO-SNAPSHOT.md` §7). The only thing outside is:
 
@@ -188,9 +159,9 @@ All tracked files have been read (see `REPO-SNAPSHOT.md` §7). The only thing ou
 
 ---
 
-## 7. Next steps (in dependency order)
+## 6. Next steps (in dependency order)
 
-1. **Write ADR-016** ("v1.0 content selections"): resolve the 7 Deferred decisions of ADR-015 (which 3 psychological axes? which 20 roles? which 10 formations? which 5 nations? which L2/L3 in v1.0?). Requires knowing what is in `modules/L2-*` and `modules/_index.md` (which exist only as planned).
+1. **Ratify ADR-016** ("v1.0 content selections", `proposed` 2026-10-26): resolve the 7 Deferred decisions of ADR-015 (which 3 psychological axes? which 20 roles? which 10 formations? which 5 nations? which L2/L3 in v1.0?). Requires knowing what is in `modules/L2-*` and `modules/_index.md` (which exist only as planned).
 2. **Address the 2 technical gaps** (`ProjectionProfile`, `ScoutReport.DeclaredBias`). The third (psyche) is inside ADR-016.
 3. **Write the 2 missing documents** (`performance.md`, `save-security.md`).
 4. **Start writing L1** (first module: `L1-world/01-nation.md`). Unblocks the first L1 scenarios in the coretest.
