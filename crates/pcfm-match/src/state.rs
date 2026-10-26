@@ -64,6 +64,28 @@ impl MatchState {
     }
 
     /// Advances the state by one tick.
+    ///
+    /// # The prototype model
+    ///
+    /// Every tick, with probability `action_probability` (default `0.0005`),
+    /// one of four actions happens. The split is a **placeholder**, not a
+    /// design decision:
+    ///
+    /// | Roll range | Action | Why this split |
+    /// |------------|--------|----------------|
+    /// | `[0.00, 0.60)` | Pass | The most common action in football |
+    /// | `[0.60, 0.85)` | Shot | Less common, higher impact |
+    /// | `[0.85, 0.97)` | Duel | Medium frequency |
+    /// | `[0.97, 1.00)` | Foul | Rare |
+    ///
+    /// All players are "midfielder" in the demo, and the formation is
+    /// always `4-4-2`. A realistic engine would model role, formation,
+    /// position on the pitch, and per-player action probabilities.
+    ///
+    /// The `noise` term in `resolve_*` (`pcfm-hidden`) is also a
+    /// placeholder: it adds variance to the outcome, but it is not
+    /// calibrated to real football data. See `docs/CODE_TOUR.md` "A note
+    /// on the current simulation".
     #[allow(clippy::too_many_lines)]
     pub fn tick(&mut self, tick: u64, ctx: &mut MatchContext<'_>) {
         match self.possession {
