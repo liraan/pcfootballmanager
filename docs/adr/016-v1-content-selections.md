@@ -1,7 +1,7 @@
 # ADR-016 — v1.0 Content Selections
 
-- **Status:** proposed
-- **Date:** 2026-10-26
+- **Status:** accepted
+- **Date:** 2026-10-26 (ratified 2026-10-27)
 - **Supersedes:** none
 - **Superseded by:** none
 - **Blocks:** `L1-world/01-nation.md`, `L2-tactics`, `L2-psyche`, `L3-registry`, `L3-packs`, the v1.0 content freeze
@@ -55,7 +55,7 @@ Two facts shape the decision:
 
 ### D2 — Which 20 roles are in v1.0?
 
-**Fact:** the 56-role taxonomy does not exist as a file. `L2-tactics` is planned. Therefore this ADR **creates** the v1.0 role set; it does not select from a catalogue.
+**Fact:** the 56-role taxonomy does not exist as a file. `L1-roster` is planned (ADR-017 places the role catalogue there). Therefore this ADR **creates** the v1.0 role set; it does not select from a catalogue.
 
 **Criterion:** cover every position on the pitch with at least one basic role, plus one or two specialist variants that exercise the engine's differentiating mechanics (width, depth, pressing, finishing style).
 
@@ -87,11 +87,11 @@ Two facts shape the decision:
 **Trade-offs:**
 
 - The set is **FM-flavoured**. An alternative would be a smaller, more abstract set (e.g. 8 roles), but ADR-015 fixes 20. Within 20, FM-flavoured roles maximise recognisability for the target audience.
-- The set is **not final**: `L2-tactics` will refine the definitions. This ADR fixes the **names and codes**; the **mechanical definitions** are deferred to `L2-tactics`.
+- The set is **not final**: `L1-roster` will refine the definitions (ADR-017). This ADR fixes the **names and codes**; the **mechanical definitions** are deferred to `L1-roster`.
 
 **Recommendation:** **the table above.** It is a forward commitment: adding a 21st role requires a new ADR (or an amendment).
 
-**Open question for ratification:** the set is my proposal. If the maintainer has a different 20-role list in mind (e.g. one that matches a specific FM version's role set), this is the moment to replace it. Once ratified, it is binding for `L2-tactics`.
+The set is ratified with the 20 roles above. Adding a 21st role requires a new ADR (or an amendment to this one). The catalogue lives in `L1-roster` (ADR-017).
 
 ### D3 — Which 10 formations are in v1.0?
 
@@ -122,53 +122,49 @@ All ten are expressible with the 20 roles. **Recommendation: confirm the set.**
 
 **Options:**
 
-- **A. Five real nations with generated data.** England, Italy, Spain, Germany, France. Data (clubs, players, cities, stadiums) is generated from a deterministic seed. Names are clearly fictional ("London FC", not "Chelsea"). Complies with `00-foundations.md` §5 ("no invented real data presented as certain": the data is not presented as certain, it is presented as generated).
+- **A. Five real nations, real cities, generated clubs, stadiums, and players.** England, Italy, Spain, Germany, France. Nations and cities are real (facts, not assets). Clubs, stadiums, and players are generated from a deterministic seed, with clearly fictional names ("Milano Nerazzurra", not "Inter"; "Stadio Comunale di Milano", not "San Siro"). Complies with `00-foundations.md` §5 ("no invented real data presented as certain": clubs and players are not presented as real).
 - **B. Five real nations with real open data.** Requires a legal review of what data is actually open and licensable. `data/` is empty; this is not resolvable today.
 - **C. Five fictional nations with generated data.** Maximum freedom, zero legal risk, loses the "soul of PC Calcio".
 - **D. No nations, single fictional world.** Rejected: contradicts the spirit of L1-world (nations, cities, stadiums).
 
 **Trade-offs:**
 
-- Option A is the only one that is both **playable** and **legally safe** today. It uses real nation names (which are facts, not assets) and fictional clubs/players (which are generated).
+- Option A is the only one that is both **playable** and **legally safe** today. It uses real nation and city names (which are facts, not assets) and fictional clubs, stadiums, and players (which are generated).
 - Option B is the "ideal" long-term answer, but it is blocked on a legal review that does not exist. Choosing B without the review would be a commitment to a data source that has not been verified, violating `00-foundations.md` §5.
 - Option C is safe but flavourless.
 - The **choice of which five nations** in Option A is a **flavour** decision, not an architectural one. England, Italy, Spain, Germany, France are the five "top" European leagues, which maximises recognisability for the target audience.
 
-**Recommendation:** **Option A, with England, Italy, Spain, Germany, France.** Flag the choice as a flavour decision that can be changed with an amendment (the architecture does not depend on which five nations are chosen).
+**Recommendation:** **Option A, with England, Italy, Spain, Germany, France.** Nations and cities are real; clubs, stadiums, and players are generated. The choice of which five nations is a **flavour** decision, changeable by amendment (the architecture does not depend on which five).
 
-**Open question for ratification:** the maintainer may prefer a different five (e.g. include Brazil or Argentina for geographic variety). The architecture supports any five; only the generated content changes.
+The five nations are ratified: England, Italy, Spain, Germany, France. Changing them requires an amendment to this ADR (the architecture supports any five; only the generated content changes).
 
 ### D5 — Which L2 modules are in v1.0?
 
 **Fact:** `_index.md` lists nine L2 modules: tactics, market, finance, youth, scouting, psyche, crowd, media, ai.
 
-**ADR-015's proposal:** market, finance, youth (basic), scouting, psyche (3 axes), crowd (basic), media (basic), AI (basic) — **eight modules**. **It omits `tactics`.**
-
-**This omission is a problem.** Tactics is not a "nice to have": without tactics, the player cannot set up the team, and the match engine has no way to differentiate the 20 roles of D2. `L2-tactics` is the module that makes D2 and D3 *do* something.
+**ADR-015's proposal:** market, finance, youth (basic), scouting, psyche (3 axes), crowd (basic), media (basic), AI (basic) — **eight modules**. **It omits `tactics`.** The omission was already a problem in ADR-015: without tactics, the player cannot set up the team, and the match engine has no way to differentiate the 20 roles of D2.
 
 **Options:**
 
-- **A. All nine L2 modules, with reduced scope per module.** `tactics` (full), `market` (full), `finance` (full), `youth` (basic), `scouting` (full), `psyche` (3 axes), `crowd` (basic), `media` (basic), `ai` (basic). This is consistent with "basic X ships, advanced X does not" (ADR-015 "What is explicitly out of v1.0"). The "subset" in ADR-015 then refers to **functionality**, not to **modules**.
-- **B. Eight L2 modules, with `tactics` added and `media` removed.** `tactics`, `market`, `finance`, `youth` (basic), `scouting`, `psyche` (3 axes), `crowd` (basic), `ai` (basic). Media basic is deferred to a pack. This diverges from ADR-015 ("basic media ships"), but keeps the count at eight and fixes the tactics omission.
+- **A. All nine L2 modules, with reduced scope per module.** Nine modules in v1.0, even "basic", is unrealistic: `crowd` and `media` have the highest subjective-balance cost and the lowest gameplay-criticality. Rejected.
+- **B. Seven L2 modules, with `crowd` and `media` deferred to v1.1.** `tactics`, `market`, `finance`, `scouting`, `psyche` (3 axes per D1), `youth` (basic), `ai` (basic). `ai` is not optional: without it, `market` and `finance` have no counterparties. `crowd` and `media` are deferred explicitly (ADR-018). **Chosen.**
 - **C. ADR-015's eight, without tactics.** Rejected: unplayable. The match engine has no tactical input.
 
-**Recommendation:** **Option A.** All nine modules, reduced functionality per module. This is consistent with ADR-015's "basic X ships, advanced X does not" and fixes the tactics omission. The "L2 subset" in ADR-015 is interpreted as "subset of functionality", not "subset of modules".
+**Recommendation:** **Option B.** It fixes the tactics omission, keeps the career loop whole (`tactics`, `market`, `finance`, `scouting`, `psyche`), provides a working market (`ai`), and defers the two modules with the highest subjective cost (`crowd`, `media`). ADR-018 partially supersedes ADR-015 for the two deferred modules.
 
-**If the maintainer prefers Option B:** the ADR must explicitly say that `L2-media` is deferred, contradicting ADR-015's "basic media ships". This would require an amendment to ADR-015. Not recommended.
+**Scope per module (Option B):**
 
-**Scope per module (Option A):**
-
-| Module | v1.0 scope | Deferred to pack |
-|--------|-----------|-------------------|
-| `L2-tactics` | Full: 10 formations, 20 roles, basic instructions | Advanced instructions, opposition instructions |
+| Module | v1.0 scope | Deferred to v1.1 / pack |
+|--------|-----------|--------------------------|
+| `L2-tactics` | Full: 10 formations, 20 roles (catalogue in `L1-roster`, ADR-017), basic instructions | Advanced instructions, opposition instructions |
 | `L2-market` | Full: transfers, loans, contracts | Agent networks, release clauses |
 | `L2-finance` | Full: budgets, wages, FFP-lite | Sponsorship deals, infrastructure |
-| `L2-youth` | Basic: intake, basic development | Full academy economy, youth leagues |
 | `L2-scouting` | Full: reports, bias, confidence bands | Scouting networks, live scouting |
 | `L2-psyche` | 3 active axes (D1) | The other 3 axes |
-| `L2-crowd` | Basic: attendance, atmosphere | Chants, tifos, ultras groups |
-| `L2-media` | Basic: press conferences, news | Weekly show, pundits |
+| `L2-youth` | Basic: intake, basic development | Full academy economy, youth leagues |
 | `L2-ai` | Basic: squad selection, basic transfers | Long-term planning, adaptive AI |
+
+**Deferred to v1.1 (ADR-018):** `L2-crowd` (attendance, atmosphere; later: chants, tifos, ultras groups), `L2-media` (press conferences, news; later: weekly show, pundits).
 
 ### D6 — Which L3 modules are in v1.0?
 
@@ -202,10 +198,10 @@ ADR-012 and ADR-013 are **accepted** (2026-10-25). The "packs" mechanism exists.
 | # | Decision | Outcome |
 |---|----------|---------|
 | D1 | 3 active psychological axes | professionalism, ambition, pressure. The other 3 carry `active: false` (gap A). |
-| D2 | 20 roles | The 20-role table in D2. Forward commitment: binding on `L2-tactics`. |
+| D2 | 20 roles | The 20-role table in D2. Catalogue in `L1-roster` (ADR-017). Binding: adding a 21st role requires an amendment. |
 | D3 | 10 formations | 4-4-2, 4-3-3, 4-2-3-1, 3-5-2, 3-4-3, 4-4-1-1, 4-1-4-1, 5-3-2, 4-3-1-2, 4-2-2-2. |
-| D4 | 5 nations | England, Italy, Spain, Germany, France, with generated data. Flavour decision, changeable by amendment. |
-| D5 | L2 modules in v1.0 | All nine, with reduced functionality per module. **Diverges from ADR-015's eight (which omitted `tactics`).** |
+| D4 | 5 nations | England, Italy, Spain, Germany, France. Nations and cities real; clubs, stadiums, players generated. Flavour decision, changeable by amendment. |
+| D5 | L2 modules in v1.0 | Seven modules (Option B): `tactics`, `market`, `finance`, `scouting`, `psyche`, `youth` (basic), `ai` (basic). `crowd` and `media` deferred to v1.1 (ADR-018). |
 | D6 | L3 modules in v1.0 | All eight, with reduced functionality per module (as in ADR-015). |
 | D7 | Dependency on ADR-012/013 | Resolved (both accepted). |
 
@@ -227,13 +223,9 @@ ADR-012 and ADR-013 are **accepted** (2026-10-25). The "packs" mechanism exists.
 - The 20 roles, 10 formations, 3 axes, and 5 nations are binding. Changing them requires a new ADR (or an amendment to this one).
 - The role codes (GK, CB, ...) are stable identifiers in Plane B events. A role code cannot be renamed without a `SIM_VERSION` bump (it is part of the event schema).
 
-## Open questions (to be resolved before ratification)
+## Open questions (resolved)
 
-1. **D2 (roles):** is the proposed 20-role set acceptable, or does the maintainer have a different list? Once ratified, it is binding on `L2-tactics`.
-2. **D4 (nations):** is the "generated data" approach acceptable? Are the five chosen nations the right flavour? An alternative (e.g. Brazil instead of France) is supported by the architecture.
-3. **D5 (L2):** confirm Option A (all nine modules) over Option B (eight, `media` deferred) and over ADR-015's eight (no `tactics`).
-
-Until these three are resolved, this ADR is `proposed`, not `accepted`.
+All decisions are ratified (D1-D7). No open questions remain. Changes require an amendment to this ADR.
 
 ## References
 
