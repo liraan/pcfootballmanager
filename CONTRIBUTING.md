@@ -78,7 +78,6 @@ A cell that says *what* without *why* is a draft. The `design_note` fields exist
 ### If you spot an error, say so
 
 Including in AI-drafted text. Especially in AI-drafted text. The AI disclosure in the README is not decoration — it's a warning.
-
 ---
 
 ## Revise a cell
@@ -139,7 +138,6 @@ If an ADR is `proposed` and touches an area, **no code is written in that area u
 **For the current list of open ADRs, and what each one blocks, see [`STRUCTURE.md`](STRUCTURE.md) §5 ("Current ADR status").** That table is the single source of truth. It is **not duplicated here**, to avoid drift between the two files.
 
 **Current state:** see [`STRUCTURE.md`](STRUCTURE.md) §5 and [`docs/REPO-SNAPSHOT.md`](docs/REPO-SNAPSHOT.md) §1. ADR-012, ADR-013, and ADR-015 are **accepted**. ADR-016 is **proposed**. See [`docs/PLUGINS-WORLDS-READING-GUIDE.md`](docs/PLUGINS-WORLDS-READING-GUIDE.md) for how to read ADR-012 and ADR-013 together.
-
 ---
 
 ## Code
