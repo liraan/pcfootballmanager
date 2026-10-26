@@ -79,6 +79,46 @@ pub enum Feature {
 }
 
 impl Feature {
+    /// Every built-in feature (excluding [`Feature::Plugin`]).
+    ///
+    /// Used by `--coverage` to enumerate the features that exist. Plugin
+    /// features are discovered dynamically from the registry, not from
+    /// this list.
+    pub const ALL_BUILTIN: &'static [Self] = &[
+        Self::CoreRng,
+        Self::CoreEventBus,
+        Self::CoreIds,
+        Self::CoreHash,
+        Self::L0Match,
+        Self::L0Save,
+        Self::L0GroundTruth,
+        Self::L1World,
+        Self::L1Season,
+        Self::L1Roster,
+        Self::L2Market,
+        Self::L2Finance,
+        Self::L2Youth,
+        Self::L2Scouting,
+        Self::L2Psyche,
+        Self::L2Crowd,
+        Self::L2Media,
+        Self::L2Ai,
+        Self::L3Registry,
+        Self::L3Packs,
+        Self::L3Generator,
+        Self::L3Editor,
+        Self::L3Assets,
+        Self::L3Ui,
+        Self::L3Statistics,
+        Self::L3Quality,
+    ];
+
+    /// Return every built-in feature.
+    #[must_use]
+    pub const fn all_builtin() -> &'static [Self] {
+        Self::ALL_BUILTIN
+    }
+
     /// Human-readable label, used in reports.
     ///
     /// Returns `Cow::Borrowed` for built-in features and `Cow::Owned` only
