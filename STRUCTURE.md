@@ -325,6 +325,8 @@ Easier / harder / locked in.
 
 If an ADR is `proposed` and touches an area, **no code may be written in that area until the ADR is accepted**. This is the rule that prevents the "we'll decide later" trap.
 
+**This is the single source of truth for ADR status.** Other files (including `modules/_index.md`) show a derived view and defer to this table.
+
 ### Current ADR status
 
 | ADR | Title | Status | Blocks |
