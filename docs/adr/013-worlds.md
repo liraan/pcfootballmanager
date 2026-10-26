@@ -1,6 +1,6 @@
 # ADR-013 — Worlds: LOD, Manifest, and Local Determinism
 
-- **Status:** proposed
+- **Status:** accepted
 - **Date:** 2026-10-25
 - **Supersedes:** the global-determinism pillar of `00-foundations` §2 (pillar 1)
 - **Superseded by:** none
