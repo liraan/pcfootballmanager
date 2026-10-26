@@ -29,6 +29,7 @@ mod demo;
 mod check;
 mod error;
 mod render;
+mod features;
 
 use std::process::ExitCode;
 
