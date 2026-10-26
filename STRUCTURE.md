@@ -337,18 +337,19 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 | 006 | License | ✅ accepted | — (unblocked LICENSE.md, every Cargo.toml) |
 | 007 | Canonical language | ✅ accepted | — (unblocked translations, language policy) |
 | 008 | Provider integration is external | ✅ accepted | — (reclassified L2-ingest as external tool) |
-| 012 | Plugins: The Brick Contract | 🟡 proposed | The plugin system (step 11+). Ratified when the framework implements it. |
-| 013 | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | The world system (step 11+). Supersedes pillar 1 of `00-foundations`. Ratified when the framework implements it. |
+| 012 | Plugins: The Brick Contract | ✅ accepted | Defines the plugin sheet, conflicts, narrative, cause traces, debug UI plugin view |
+| 013 | Worlds: LOD, Manifest, and Local Determinism | ✅ accepted | Defines LOD, manifest, local determinism; revised pillar 1 of `00-foundations` |
 | 014 | Mobile strategy | ✅ accepted | — |
-| 015 | v1.0 scope | 🟡 proposed | v1.0 content reduction (20 roles, 10 formations, 5 nations, 3 active psyche axes). Ratified after ADR-012 and ADR-013. |
+| 015 | v1.0 scope | ✅ accepted | v1.0 content reduction (20 roles, 10 formations, 5 nations, 3 active psyche axes) |
+| 016 | v1.0 content selections | 🟡 proposed | Resolves ADR-015 deferred decisions (3 axes, 20 roles, 10 formations, 5 nations, L2/L3 subset). Blocks `L2-tactics`, `L2-psyche`, `L1-world/01-nation.md` |
 
-**Open ADRs:** 012, 013, 015. **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 014.
+**Open ADRs:** 016 (proposed). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015 (12).
 
 **ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`PLUGINS-WORLDS-READING-GUIDE.md`](docs/PLUGINS-WORLDS-READING-GUIDE.md). ADR-013 depends on ADR-012.
 
-**Note on pillar 1.** ADR-013, if ratified, will supersede pillar 1 of `00-foundations` §2 ("Traceable determinism. Same seed + same inputs = same result. Never compromised.") and replace it with a **local** determinism (same save + same match + same plugin configuration = same result). Until ratification, the doctrine is unchanged: the determinism is **global**. `modules/00-foundations.md` v1.4 reflects this: pillar 1 stands as written, and ADR-013 is cited as *proposed, not ratified*.
+**Note on pillar 1.** ADR-013 (accepted, 2026-10-25) superseded pillar 1 of `00-foundations` §2 and replaced the **global** determinism with **local** determinism (same save + same match + same plugin configuration = same result). `modules/00-foundations.md` v2.0 reflects this; pillar 1 now reads "local".
 
-**Note on ADR-015.** ADR-015 formalises the v1.0 scope reduction. It depends on ADR-012 (module system) and ADR-013 (world system): "in a pack" is not a safe answer until the module contract exists. Ratify ADR-012 and ADR-013 first, or ratify all three together.
+**Note on ADR-015.** ADR-015 (accepted 2026-10-26) formalises the v1.0 scope reduction. It depends on ADR-012 and ADR-013, both accepted. The specific selections are deferred to ADR-016 (proposed).
 
 ---
 
