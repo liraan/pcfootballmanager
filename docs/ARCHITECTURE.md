@@ -1,0 +1,210 @@
+# Architecture — PCFM
+
+**Version:** 1.0
+**Status:** active
+**Last updated:** 2026-10-26
+
+This document explains how the seven crates of PCFM interact, how a match
+flows through the system, and what the two architectural patterns
+(simulation/rendering split, testkit contract) are. It is the
+**architectural** counterpart of [`STRUCTURE.md`](../STRUCTURE.md), which
+describes the *rules of the repository*.
+
+It is the document that was missing: a newcomer could read the doctrine
+(`modules/00-foundations.md`) and the code (52 files), but not how they
+fit together.
+
+---
+
+## 1. The seven crates
+
+| Crate | Role | Plane | Depends on |
+|-------|------|-------|------------|
+| `pcfm-core` | Infrastructure: RNG, event bus, IDs, hash, time | — | (none) |
+| `pcfm-model` | Minimal entities: Player (no latents), Squad, Pitch, Referee, Match, CauseTrace | B/C | `pcfm-core` |
+| `pcfm-hidden` | Plane A: GroundTruth, `resolve_*`, `drain_observations` | **A** | `pcfm-core`, `pcfm-model` |
+| `pcfm-stats` | Plane B: MatchEvent, EventChain (append-only, hash chain) | B | `pcfm-core`, `pcfm-model` |
+| `pcfm-match` | Match engine: orchestrator `simulate_match`, `TextMatchEngine`, save/load, narrative | — | `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats` |
+| `pcfm-testkit` | Contract: `Scenario`, `Feature`, `TestRegistry` | — | (none) |
+| `pcfm-debug` | CLI: `--check`, `--list`, `--coverage`, `--json`, `--html`, demo teams, rendering | — | all of the above |
+
+**Dependency rule:** every crate depends only on crates at a level **lower
+or equal** in the list above. No cycles. `pcfm-testkit` is intentionally
+free of `pcfm-*` dependencies: it is the contract that anyone (core,
+plugin, tool) implements.
+
+The crate-level dependency graph:
+
+```
+pcfm-debug
+├── pcfm-core
+├── pcfm-model
+├── pcfm-hidden
+├── pcfm-stats
+├── pcfm-match
+└── pcfm-testkit
+
+pcfm-match
+├── pcfm-core
+├── pcfm-model
+├── pcfm-hidden
+└── pcfm-stats
+
+pcfm-hidden        pcfm-stats
+├── pcfm-core      ├── pcfm-core
+└── pcfm-model     └── pcfm-model
+
+pcfm-model
+└── pcfm-core
+
+pcfm-core          pcfm-testkit
+(none)             (none)
+```
+
+---
+
+## 2. The Three Planes, in code
+
+The doctrine (`modules/00-foundations.md` §3) defines three planes. In the
+code, they are three distinct things:
+
+| Plane | In code | Serialisable? | Who reads it |
+|-------|---------|---------------|--------------|
+| **A — Ground Truth** | `GroundTruth` in `pcfm-hidden` | ❌ No | Only `pcfm-match` (via `resolve_*`) and `pcfm-debug` (via `demo_match`) |
+| **B — Observation** | `MatchEvent` + `EventChain` in `pcfm-stats` | ✅ Yes | `pcfm-match` (write), `pcfm-debug` (read), future L1/L2 |
+| **C — Estimation** | **Not yet implemented** (L2) | — | — |
+
+The boundary is enforced by the compiler, not by review:
+- `GroundTruth` has no public fields, is not `Serialize`, has a custom
+  `Debug` that prints only `world_seed` and `match_id`.
+- `pcfm-stats` does not depend on `pcfm-hidden`. It cannot, even
+  accidentally: there is no `use pcfm_hidden::*` anywhere in the crate.
+
+The **only** crate that talks to both planes is `pcfm-match`. It calls
+`resolve_*` on Plane A, receives outcomes, and emits `MatchEvent`s to
+Plane B. It never sees a latent value.
+
+See [ADR-003](../docs/adr/003-plane-a-enforcement.md) for the full
+rationale.
+
+---
+
+## 3. The flow of a match
+
+A single match goes through the system in 10 steps. This is the sequence
+that `pcfm-debug` follows, and the sequence that a future UI will follow.
+
+```
+1. demo_match(seed) -> Match           (pcfm-debug::demo)
+2. GroundTruth::new(world_seed, id)    (pcfm-hidden)         [Plane A]
+3. RngRegistry::new(world_seed)        (pcfm-core)
+4. EventChain::new()                   (pcfm-stats)          [Plane B, empty]
+5. MatchContext { match_, hidden, rng, chain, config }
+6. simulate_match(&mut ctx)            (pcfm-match::orchestrator)
+     for each tick:
+       a. MatchState::tick(tick, ctx)  (pcfm-match::state)
+       b. pick_players(ctx)            (deterministic, from RNG)
+       c. action kind roll             (pass / shot / duel / foul)
+       d. ctx.hidden.resolve_*(...)    (pcfm-hidden)         [Plane A read]
+       e. emit MatchEvent to ctx.chain (pcfm-stats)          [Plane B write]
+7. MatchState::finish(chain) -> MatchResult
+8. TextMatchEngine::simulate calls narrate() to fill narrative
+9. MatchSave::from_result(result, match_, ...)               [no GroundTruth]
+10. MatchSave::to_bytes() / from_bytes()                      [JSON, for now]
+```
+
+**Key invariant:** step 6d is the only interaction with Plane A. The
+engine constructs a `DuelContext`/`ShotContext`/etc., calls `resolve_*`,
+receives a `DuelOutcome`/`ShotOutcome`/etc., and turns it into a
+`MatchEvent`. It never reads a latent.
+
+**Key invariant:** the `MatchSave` does not contain `GroundTruth`. On
+load, `GroundTruth::new(world_seed, match_id)` reconstructs it, and
+`replay()` re-runs `simulate_match`. The chain hash verifies that the
+replayed events match the saved ones.
+
+---
+
+## 4. The simulation/rendering split
+
+The most important pattern in the codebase:
+
+- **`simulate_match`** (in `pcfm-match::orchestrator`) is the **only**
+  implementation of the tick loop and micro-decisions. It returns a
+  `MatchResult` with an **empty** `narrative` field.
+- **`TextMatchEngine`** (in `pcfm-match::engine`) is a thin wrapper:
+  it calls `simulate_match`, then calls `narrate()` to fill the
+  narrative, then returns the result.
+- **A future `ThreeDEngine`** (e.g. `pcfm-match-3d`) will be a **new
+  crate** that calls the **same** `simulate_match`, then renders the
+  result to 3D. It does not touch `pcfm-match`.
+
+The test `simulation_is_shared_and_renderer_agnostic` in `engine.rs`
+verifies that two calls to `simulate_match` with the same seed produce
+identical `score`, `stats`, `state_hash`, and `events`. Any renderer
+that calls `simulate_match` will get the same data.
+
+**Why this matters:** the project will eventually have a 3D renderer.
+Without this split, adding 3D would require duplicating or modifying the
+simulation. With it, the 3D renderer is additive.
+
+See `docs/PLUGIN_DEVELOPER_GUIDE.md` §3 for the developer-facing view.
+
+---
+
+## 5. The testkit contract
+
+`pcfm-testkit` is a **contract crate**: it defines `Scenario`,
+`Feature`, and `TestRegistry`, and depends on **no other `pcfm-*`
+crate**. This is deliberate.
+
+- A **core module** (`features/l0_match.rs` in `pcfm-debug`) implements
+  `Scenario` and registers itself in `register_all`.
+- A **plugin** can implement `Scenario` in its own crate, register
+  itself via a public `register_tests(registry)` function, and be
+  discovered by `pcfm-debug` (mechanism TBD, see ADR-012).
+- A **tool** (e.g. `pcfm-verify`) can do the same.
+
+`pcfm-debug --check` builds a `TestRegistry`, calls `register_all`, runs
+`run_all(seed)`, and aggregates the results. `--list` and `--coverage`
+inspect the registry without running it.
+
+**Why a separate crate:** if `pcfm-testkit` depended on `pcfm-match`,
+plugins would have to depend on `pcfm-match` to implement `Scenario`,
+and the contract would collapse. Keeping it dependency-free means the
+contract is usable by anyone, in any direction.
+
+See `docs/PLUGIN_DEVELOPER_GUIDE.md` §11 for how to contribute a
+scenario.
+
+---
+
+## 6. What is not yet implemented
+
+| Component | Status | Where it will live |
+|-----------|--------|---------------------|
+| L1 (season, world, roster) | Planned | `modules/L1-*/`, `crates/pcfm-l1-*/` |
+| L2 (career, market, psyche, …) | Planned | `modules/L2-*/`, `crates/pcfm-l2-*/` |
+| L3 (registry, packs, editor, UI, …) | Planned | `modules/L3-*/`, `crates/pcfm-l3-*/` |
+| Plugin system (ADR-012) | Accepted, not implemented | `pcfm-gen`, `pcfm-match-3d`, etc. |
+| World system (ADR-013) | Accepted, not implemented | Save format, LOD, manifest |
+| 3D match engine | Planned | `crates/pcfm-match-3d/` |
+| Qt UI | Planned | `crates/pcfm-bridge/`, `crates/pcfm-ui/` |
+| Deterministic sim model (realistic xG, duels, …) | Prototype | `pcfm-hidden::resolve_*` |
+
+The current simulation (`pcfm-hidden::resolve_*`) is a **prototype**.
+It is deterministic and it satisfies the contracts, but it is not a
+realistic football model. See the module docs for the current
+simplifications.
+
+---
+
+## 7. References
+
+- [`STRUCTURE.md`](../STRUCTURE.md) — repository structure and rules
+- [`modules/00-foundations.md`](../modules/00-foundations.md) — the doctrine (Three Planes, determinism, bans)
+- [`docs/PLUGIN_DEVELOPER_GUIDE.md`](PLUGIN_DEVELOPER_GUIDE.md) — how to write a plugin, plane separation, simulation/rendering split, testkit
+- [`docs/REPO-SNAPSHOT.md`](REPO-SNAPSHOT.md) — factual snapshot of the repository (crate-by-crate)
+- [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md) — capability API, why latents are unreachable
+- [`docs/adr/012-plugins.md`](adr/012-plugins.md) — plugin contract (accepted)
+- [`docs/adr/013-worlds.md`](adr/013-worlds.md) — world system, local determinism (accepted)
