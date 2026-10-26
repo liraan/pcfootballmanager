@@ -71,3 +71,47 @@ pub extern "C" fn pcfm_query_player(id: u64, out: *mut PlayerDto) -> i32 {
         Err(_) => { log_panic(); -2 }   // Panic caught, not propagated
     }
 }
+```
+
+<!-- RICOSTRUITO: le sezioni sotto non sono presenti nella storia git.
+     Sono dedotte dal template ADR (000-template.md) e dagli ADR correlati
+     (ADR-001, ADR-003, ADR-005) e dal PLUGIN_DEVELOPER_GUIDE.md §3.
+     Se il contenuto originale emerge, sostituire questa versione. -->
+
+## Consequences
+
+### Easier
+- A panic in any Rust code reached from Qt (match simulation, market calculation, query handler) is caught and turned into an error code. The user can save and continue.
+- The FFI boundary is safe: no undefined behaviour from a panic crossing into C++.
+- Debugging is easier: backtraces are available in `dev` and `release`.
+- The `release-hardened` profile is available for users who prefer fail-fast (e.g. server deployments, kiosks).
+
+### Harder
+- Every FFI function must be wrapped in `catch_unwind`. A forgotten wrapper is a silent bug.
+- `AssertUnwindSafe` is needed, which means the closure captures must be unwind-safe. This is a discipline cost.
+- `panic = "unwind"` slightly increases binary size and may reduce performance in the hot path (rarely measurable outside tight loops).
+- The `release-hardened` profile must be tested separately (different panic behaviour).
+
+### Locked in
+- `panic = "unwind"` in `release` is the default. `panic = "abort"` only in `release-hardened`.
+- `catch_unwind` is mandatory at every FFI boundary.
+- A panic never crosses the C++ boundary.
+- Error codes are `i32`: `0` success, negative on error.
+- Panics are logged before returning.
+
+## Implementation notes
+
+1. Add `[profile.release] panic = "unwind"` (the default) to the workspace `Cargo.toml`.
+2. Add `[profile.release-hardened] panic = "abort"` to the workspace `Cargo.toml`.
+3. Add `catch_unwind` to every `pcfm-bridge` public function. No exceptions.
+4. Add a `#[cfg(test)]` test that triggers a panic inside a `pcfm-bridge` function and verifies that the error code is `-2` (not a process abort).
+5. Add a CI job that builds with `--profile release-hardened` and verifies the binary is smaller.
+6. Document the pattern in `pcfm-bridge`'s `lib.rs` module doc, with a link to this ADR.
+
+## References
+
+- ADR-001 — Language: Rust (edition, MSRV)
+- ADR-003 — Plane A enforcement (`pcfm-hidden` is pure Rust, no FFI)
+- ADR-005 — Qt binding (`cxx-qt`, `pcfm-bridge` is the only crate that knows Qt)
+- `docs/PLUGIN_DEVELOPER_GUIDE.md` §3 — simulation/rendering split, FFI boundary
+- Rust documentation: `std::panic::catch_unwind`, `AssertUnwindSafe`
