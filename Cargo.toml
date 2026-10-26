@@ -1,6 +1,7 @@
 # Cargo.toml — PCFM workspace root
 
 [workspace]
+resolver = "3"
 members = [
     "crates/pcfm-core",
     "crates/pcfm-model",
