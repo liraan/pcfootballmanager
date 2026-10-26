@@ -97,7 +97,7 @@ In chronological order. Each decision has the commit that recorded it (when avai
 - **File:** `docs/adr/015-v1-scope.md` (renamed from `014-v1-scope.md` because 014 was taken by `014-mobile-strategy.md`).
 - **Status:** `accepted` (2026-10-26). **Depended on ADR-012 and ADR-013**, both ratified on 2026-10-25.
 - **Commit:** `1a59b81` (rename), `8d8d347` (original creation), `4d826dc` (ratification), `4c93214` (propagation).
-- **Note:** the ADR contains 7 **Deferred decisions** (which 3 axes? which 5 nations? etc.), to be resolved in ADR-016 ("v1.0 content selections").
+- **Note:** the ADR contains 7 **Deferred decisions**. They were resolved in ADR-016 ("v1.0 content selections", accepted 2026-10-27).
 
 ### 3.7 Coretest framework (`pcfm-testkit`)
 
@@ -147,7 +147,7 @@ In chronological order. Each decision has the commit that recorded it (when avai
 
 - **Status:** `accepted` (2026-10-26).
 - **Depended on:** ADR-012 and ADR-013, both ratified on 2026-10-25.
-- **To do:** resolve the 7 Deferred decisions (which 3 psychological axes? which 20 roles? which 10 formations? which 5 nations? which L2/L3 in v1.0?). Decision delegated to **ADR-016** ("v1.0 content selections", `proposed` 2026-10-26).
+- **To do:** the 7 Deferred decisions (which 3 psychological axes? which 20 roles? which 10 formations? which 5 nations? which L2/L3 in v1.0?) were resolved in **ADR-016** (accepted 2026-10-27). The role catalogue moved to L1-roster in ADR-017 (proposed); crowd and media deferred to v1.1 in ADR-018 (accepted).
 
 ---
 
@@ -161,7 +161,7 @@ All tracked files have been read (see `REPO-SNAPSHOT.md` §7). The only thing ou
 
 ## 6. Next steps (in dependency order)
 
-1. **Ratify ADR-016** ("v1.0 content selections", `proposed` 2026-10-26): resolve the 7 Deferred decisions of ADR-015 (which 3 psychological axes? which 20 roles? which 10 formations? which 5 nations? which L2/L3 in v1.0?). Requires knowing what is in `modules/L2-*` and `modules/_index.md` (which exist only as planned).
+1. **Ratify ADR-017** ("roles are labels, not modifiers", `proposed`): move the role catalogue to L1-roster and confirm the engine is blind to roles. ADR-016 (v1.0 content selections) and ADR-018 (defer crowd/media) are already accepted.
 2. **Address the 2 technical gaps** (`ProjectionProfile`, `ScoutReport.DeclaredBias`). The third (psyche) is inside ADR-016.
 3. **Write the 2 missing documents** (`performance.md`, `save-security.md`).
 4. **Start writing L1** (first module: `L1-world/01-nation.md`). Unblocks the first L1 scenarios in the coretest.
