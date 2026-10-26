@@ -7,6 +7,9 @@
 //!
 //! ```text
 //! pcfm-debug [--seed <U64>] [--json] [--html <PATH>] [--quiet]
+//! pcfm-debug --check
+//! pcfm-debug --list
+//! pcfm-debug --coverage
 //! ```
 //!
 //! # What it does
@@ -15,21 +18,18 @@
 //! 2. Simulates a match using `TextMatchEngine`.
 //! 3. Prints the result (text or JSON), and optionally writes an HTML file.
 //!
-//! # Extending it
-//!
-//! To load teams from JSON, add a `--home <path>` and `--away <path>` flag
-//! in `args.rs`, a loader in `demo.rs`, and a stable JSON schema for
-//! `Squad`. That is a step 10+ concern. The CLI is designed to be extended
-//! without touching `pcfm-match`.
+//! With `--check`, `--list`, or `--coverage`, no match is simulated: the
+//! tool runs the coretest scenarios or inspects them.
 
 #![deny(missing_docs)]
 
 mod args;
-mod demo;
 mod check;
+mod commands;
+mod demo;
 mod error;
-mod render;
 mod features;
+mod render;
 
 use std::process::ExitCode;
 
@@ -65,6 +65,33 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
+    // Informational commands: no simulation needed.
+    if args.list {
+        commands::list();
+        return Ok(());
+    }
+    if args.coverage {
+        commands::coverage();
+        return Ok(());
+    }
+    if args.check {
+        let report = check::run(args.seed);
+        println!("=== HEALTH CHECK ===");
+        for p in &report.passed {
+            println!("  ✅ {p}");
+        }
+        for (name, reason) in &report.failed {
+            println!("  ❌ {name}: {reason}");
+        }
+        println!();
+        if report.is_ok() {
+            println!("  {}/{} checks passed", report.passed.len(), report.total());
+            return Ok(());
+        }
+        return Err("health check failed".into());
+    }
+
+    // Simulation commands.
     let match_ =
         demo::demo_match(args.seed).map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?;
     let mut hidden = GroundTruth::new(args.seed, match_.id);
@@ -82,23 +109,6 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut engine = TextMatchEngine::new();
     let result = engine.simulate(ctx);
-
-    if args.check {
-        let report = check::run(args.seed);
-        println!("=== HEALTH CHECK ===");
-        for p in &report.passed {
-            println!("  ✅ {p}");
-        }
-        for (name, reason) in &report.failed {
-            println!("  ❌ {name}: {reason}");
-        }
-        println!();
-        if report.is_ok() {
-            println!("  {}/{} checks passed", report.passed.len(), report.total());
-            return Ok(());
-        }
-        return Err("health check failed".into());
-    }
 
     if args.quiet {
         println!("{} - {}", result.score.home, result.score.away);
