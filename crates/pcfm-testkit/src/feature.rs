@@ -1,5 +1,7 @@
 //! Feature identifiers for scenario registration and coverage.
 
+use std::borrow::Cow;
+
 /// A feature of the PCFM framework that a [`Scenario`](crate::Scenario) can
 /// exercise.
 ///
@@ -10,39 +12,65 @@
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Feature {
     // ── Core primitives ─────────────────────────────────────────────
+    /// The RNG registry (`pcfm-core::rng`).
     CoreRng,
+    /// The event bus (`pcfm-core::event_bus`).
     CoreEventBus,
+    /// Entity identifiers (`pcfm-core::ids`).
     CoreIds,
+    /// Hashing primitives (`pcfm-core::hash`).
     CoreHash,
 
     // ── L0 — Match ──────────────────────────────────────────────────
+    /// The match engine (`pcfm-match`).
     L0Match,
+    /// Save/load (`MatchSave`).
     L0Save,
+    /// Ground truth generation (`pcfm-hidden`).
     L0GroundTruth,
 
     // ── L1 — Season / World / Roster ────────────────────────────────
+    /// The world: nations, cities, stadiums.
     L1World,
+    /// The season: competitions, calendar, standings.
     L1Season,
+    /// The roster: full player attributes, staff, contracts.
     L1Roster,
 
     // ── L2 — Career ─────────────────────────────────────────────────
+    /// The transfer market.
     L2Market,
+    /// Club finances.
     L2Finance,
+    /// The youth academy.
     L2Youth,
+    /// Scouting and reports.
     L2Scouting,
+    /// Player psychology.
     L2Psyche,
+    /// Crowd and atmosphere.
     L2Crowd,
+    /// Media and press.
     L2Media,
+    /// AI managers and clubs.
     L2Ai,
 
     // ── L3 — Meta ───────────────────────────────────────────────────
+    /// The module registry.
     L3Registry,
+    /// Pack installation and validation.
     L3Packs,
+    /// World generation.
     L3Generator,
+    /// The in-game editor.
     L3Editor,
+    /// Asset loading.
     L3Assets,
+    /// The user interface.
     L3Ui,
+    /// Statistics and aggregation.
     L3Statistics,
+    /// Quality: performance, determinism, coverage.
     L3Quality,
 
     // ── External plugin ─────────────────────────────────────────────
@@ -52,36 +80,39 @@ pub enum Feature {
 
 impl Feature {
     /// Human-readable label, used in reports.
+    ///
+    /// Returns `Cow::Borrowed` for built-in features and `Cow::Owned` only
+    /// for [`Feature::Plugin`], so the common case does not allocate.
     #[must_use]
-    pub fn label(&self) -> String {
+    pub fn label(&self) -> Cow<'static, str> {
         match self {
-            Self::CoreRng => "core::rng".into(),
-            Self::CoreEventBus => "core::event_bus".into(),
-            Self::CoreIds => "core::ids".into(),
-            Self::CoreHash => "core::hash".into(),
-            Self::L0Match => "L0::match".into(),
-            Self::L0Save => "L0::save".into(),
-            Self::L0GroundTruth => "L0::ground_truth".into(),
-            Self::L1World => "L1::world".into(),
-            Self::L1Season => "L1::season".into(),
-            Self::L1Roster => "L1::roster".into(),
-            Self::L2Market => "L2::market".into(),
-            Self::L2Finance => "L2::finance".into(),
-            Self::L2Youth => "L2::youth".into(),
-            Self::L2Scouting => "L2::scouting".into(),
-            Self::L2Psyche => "L2::psyche".into(),
-            Self::L2Crowd => "L2::crowd".into(),
-            Self::L2Media => "L2::media".into(),
-            Self::L2Ai => "L2::ai".into(),
-            Self::L3Registry => "L3::registry".into(),
-            Self::L3Packs => "L3::packs".into(),
-            Self::L3Generator => "L3::generator".into(),
-            Self::L3Editor => "L3::editor".into(),
-            Self::L3Assets => "L3::assets".into(),
-            Self::L3Ui => "L3::ui".into(),
-            Self::L3Statistics => "L3::statistics".into(),
-            Self::L3Quality => "L3::quality".into(),
-            Self::Plugin(name) => format!("plugin::{name}"),
+            Self::CoreRng => Cow::Borrowed("core::rng"),
+            Self::CoreEventBus => Cow::Borrowed("core::event_bus"),
+            Self::CoreIds => Cow::Borrowed("core::ids"),
+            Self::CoreHash => Cow::Borrowed("core::hash"),
+            Self::L0Match => Cow::Borrowed("L0::match"),
+            Self::L0Save => Cow::Borrowed("L0::save"),
+            Self::L0GroundTruth => Cow::Borrowed("L0::ground_truth"),
+            Self::L1World => Cow::Borrowed("L1::world"),
+            Self::L1Season => Cow::Borrowed("L1::season"),
+            Self::L1Roster => Cow::Borrowed("L1::roster"),
+            Self::L2Market => Cow::Borrowed("L2::market"),
+            Self::L2Finance => Cow::Borrowed("L2::finance"),
+            Self::L2Youth => Cow::Borrowed("L2::youth"),
+            Self::L2Scouting => Cow::Borrowed("L2::scouting"),
+            Self::L2Psyche => Cow::Borrowed("L2::psyche"),
+            Self::L2Crowd => Cow::Borrowed("L2::crowd"),
+            Self::L2Media => Cow::Borrowed("L2::media"),
+            Self::L2Ai => Cow::Borrowed("L2::ai"),
+            Self::L3Registry => Cow::Borrowed("L3::registry"),
+            Self::L3Packs => Cow::Borrowed("L3::packs"),
+            Self::L3Generator => Cow::Borrowed("L3::generator"),
+            Self::L3Editor => Cow::Borrowed("L3::editor"),
+            Self::L3Assets => Cow::Borrowed("L3::assets"),
+            Self::L3Ui => Cow::Borrowed("L3::ui"),
+            Self::L3Statistics => Cow::Borrowed("L3::statistics"),
+            Self::L3Quality => Cow::Borrowed("L3::quality"),
+            Self::Plugin(name) => Cow::Owned(format!("plugin::{name}")),
         }
     }
 }
