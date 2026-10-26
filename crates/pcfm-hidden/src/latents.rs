@@ -19,6 +19,22 @@ pub struct PlayerLatents {
 
 impl PlayerLatents {
     /// Initialises a `PlayerLatents` from the RNG. Deterministic.
+    ///
+    /// # Why uniform in `[0, 1)`
+    ///
+    /// Each latent is drawn uniformly from `[0, 1)`. This is a
+    /// **prototype**: real player attributes are not uniform (they are
+    /// roughly bell-shaped, with a long tail of elite players). A
+    /// realistic model would use a distribution derived from real data,
+    /// or a separate "world generator" (`pcfm-gen`, future) that produces
+    /// correlated attributes (e.g. a striker with high `finishing` also
+    /// tends to have high `aerial`).
+    ///
+    /// The latents are **not** saved: `GroundTruth` is reconstructed from
+    /// `(world_seed, match_id)` on load, so the same seed always produces
+    /// the same latents. This is what makes `replay` possible.
+    ///
+    /// See `docs/CODE_TOUR.md` "A note on the current simulation".
     pub fn from_rng(rng: &mut ChaCha20Rng) -> Self {
         Self {
             finishing: next_unit(rng),
