@@ -61,10 +61,8 @@ pub fn coverage() {
         println!("  [{mark}] {}", f.label());
     }
     println!();
-    let pct = if total == 0 {
-        100
-    } else {
-        (covered_count * 100) / total
-    };
+    // `Feature::all_builtin()` is never empty, but `checked_div` keeps the
+    // intent explicit and satisfies clippy::manual_checked_ops.
+    let pct = (covered_count * 100).checked_div(total).unwrap_or(100);
     println!("{covered_count}/{total} feature coperte ({pct}%).");
 }
