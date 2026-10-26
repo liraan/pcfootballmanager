@@ -63,7 +63,9 @@ Edition 2024, MSRV 1.85, pinned via `rust-toolchain.toml`. The choice is locked:
 
 ## References
 
-- `01-architecture.md` — workspace, editions, dependencies
+- `Cargo.toml` (workspace root) — workspace members, editions, dependency pins
+- `rust-toolchain.toml` — MSRV pin
+- `STRUCTURE.md` §3 — crate naming, dependency rules
 - ADR-004 — panic strategy at FFI boundary
 - ADR-005 — Qt binding (`cxx-qt`)
 - Rust 1.85 release notes (edition 2024 stable)
