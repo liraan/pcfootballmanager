@@ -86,14 +86,14 @@ The rules that make this possible are non-negotiable:
 
 | Level | Specification | Code |
 |:-----:|:-------------:|:----:|
-| **L0** — Match   | 🟢 11 cells, ratified | 🟢 6 crates, 103 tests |
+| **L0** — Match   | 🟢 11 cells, ratified | 🟢 6 crates, 103 tests, 6 test scenarios |
 | **L1** — Season  | ⚪ 12 cells planned   | ⚪ not started |
 | **L2** — Career  | ⚪ 9 cells planned    | ⚪ not started |
 | **L3** — Meta    | ⚪ 8 cells planned    | ⚪ not started |
 
 </div>
 
-**Where we are:** L0 is **complete, ratified, and implemented**. The framework compiles, the health check is green, the determinism contract is enforced. L1 (the season) is the next specification milestone. **No playable build exists yet** — the docs have to be solid before the engine is.
+**Where we are:** L0 is **complete, ratified, implemented, and tested**. The framework compiles, the health check is green, the determinism contract is enforced, and the test harness (`pcfm-testkit`) is in place. L1 (the season) is the next specification milestone. **No playable build exists yet** — the docs have to be solid before the engine is.
 
 **Roadmap (indicative, not commitments):**
 
@@ -128,7 +128,7 @@ The rules that make this possible are non-negotiable:
 | Language | **Rust 1.85+** | Type safety, zero-cost abstractions, guaranteed determinism |
 | Numerics | `fixed`, `libm` | Fixed-point money; portable transcendentals |
 | UI | `cxx-qt` + QWidgets + QML | Only binding covering data grids *and* skins → [ADR-005](docs/adr/005-qt-binding.md) |
-| Testing | `proptest`, `criterion`, Miri, ASan | Property-based, benchmarks, UB detection |
+| Testing | `proptest`, `criterion`, Miri, ASan, **`pcfm-testkit`** | Property-based, benchmarks, UB detection, extensible coretest |
 | Audit | `cargo-deny` | Dependency hygiene |
 
 Dependencies are pinned and justified in ADRs. No `*` versions in `Cargo.toml`. Every upgrade goes through a deliberate process.
@@ -148,9 +148,10 @@ pcfootballmanager/
 │   ├── pcfm-hidden/  # Plane A — accessible only to pcfm-match and pcfm-gen
 │   ├── pcfm-match/   # match engine
 │   ├── pcfm-stats/   # event chain, aggregations
-│   └── pcfm-debug/   # CLI: health checks, demo rendering
+│   ├── pcfm-testkit/ # public test harness contract (no pcfm-* deps)
+│   └── pcfm-debug/   # CLI: health checks, --list, --coverage, demo rendering
 ├── docs/
-│   ├── adr/          # architectural decisions, 000 → 013
+│   ├── adr/          # architectural decisions, 000 → 015
 │   └── GLOSSARY.md
 └── archive/          # historical Prompt Masters, legacy modules
 ```
@@ -172,6 +173,18 @@ cargo run --release --bin pcfm-debug -- --check --seed 42
 
 If `--check` prints `6/6 checks passed`, the framework is healthy. If it doesn't, something in the simulation contract is broken — please [open an issue](https://github.com/liraan/pcfootballmanager/issues).
 
+**Inspect the test harness:**
+
+```bash
+# List the registered test scenarios
+cargo run --release --bin pcfm-debug -- --list
+
+# Show which features have at least one scenario, and which do not
+cargo run --release --bin pcfm-debug -- --coverage
+```
+
+`--coverage` is the map of what the framework can do today. At the moment it shows `2/26 features covered (7%)` — L0 is complete, L1–L3 are still empty. When a module is implemented and its scenarios are registered, the percentage goes up.
+
 ---
 
 ## Reading order (for newcomers)
@@ -185,7 +198,7 @@ The specification is **concentric**. Read in this order:
 | 3 | [`modules/_index.md`](modules/_index.md) | *What exists at each level, and in what state?* |
 | 4 | [`docs/adr/`](docs/adr/) | *Which decisions have been made, and why?* |
 | 5 | [`docs/GLOSSARY.md`](docs/GLOSSARY.md) | *What does each term mean?* |
-| 6 | [`docs/PLUGIN_DEVELOPER_GUIDE.md`](docs/PLUGIN_DEVELOPER_GUIDE.md) | *How do I write a module?* |
+| 6 | [`docs/PLUGIN_DEVELOPER_GUIDE.md`](docs/PLUGIN_DEVELOPER_GUIDE.md) | *How do I write a module? How do I test it?* |
 
 ---
 
@@ -199,6 +212,12 @@ Contributions are welcome — code, docs, data, bug reports, honest criticism.
 - Every factual claim needs a source. Every decision needs an ADR if it changes an invariant.
 - Every contribution is **reviewed by a human**. AI may draft; humans decide.
 - Determinism is not negotiable: PRs that break the seed → hash invariant require an ADR.
+
+**Contributing tests to the coretest:**
+- Implement `pcfm_testkit::Scenario` for your feature.
+- Register it in `pcfm-debug/src/features/register_all` (or a plugin-specific registration function).
+- Run `--coverage` and confirm your feature shows `[✅]`.
+- See [`docs/PLUGIN_DEVELOPER_GUIDE.md`](docs/PLUGIN_DEVELOPER_GUIDE.md) §"Contributing test scenarios" for the full walkthrough.
 
 Full process → [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
@@ -245,7 +264,10 @@ When L0 and L1 are stable and a minimal kernel runs. Indicatively **Q1 2027**. N
 
 **Which decisions are actually settled?**
 Settled: the doctrine, the Three Planes, Plane A enforcement (ADR-003), FFI panic strategy (ADR-004), Qt binding (ADR-005), license (ADR-006), canonical language (ADR-007), provider integration policy (ADR-008).
-Still open: module system ([ADR-012](docs/adr/012-plugins.md)), world system ([ADR-013](docs/adr/013-worlds.md)).
+Still open: module system ([ADR-012](docs/adr/012-plugins.md)), world system ([ADR-013](docs/adr/013-worlds.md)), v1.0 scope ([ADR-015](docs/adr/015-v1-scope.md)).
+
+**What is `pcfm-testkit`?**
+A small crate that defines the `Scenario` trait and the `TestRegistry`. It has **no dependency on any other `pcfm-*` crate**, so core modules, plugins, and tools can all contribute test scenarios without coupling. `pcfm-debug --check` runs them; `--list` and `--coverage` inspect them.
 
 **How much was written by AI?**
 See [AI disclosure](#-ai-disclosure). Short version: drafted by AI, reviewed by a human. Every technical claim should be verified before you depend on it.
