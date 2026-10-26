@@ -73,10 +73,10 @@ pub extern "C" fn pcfm_query_player(id: u64, out: *mut PlayerDto) -> i32 {
 }
 ```
 
-<!-- RICOSTRUITO: le sezioni sotto non sono presenti nella storia git.
-     Sono dedotte dal template ADR (000-template.md) e dagli ADR correlati
-     (ADR-001, ADR-003, ADR-005) e dal PLUGIN_DEVELOPER_GUIDE.md §3.
-     Se il contenuto originale emerge, sostituire questa versione. -->
+<!-- RECONSTRUCTED: the sections below are not present in git history.
+     They are inferred from the ADR template (000-template.md) and the related ADRs
+     (ADR-001, ADR-003, ADR-005) and from PLUGIN_DEVELOPER_GUIDE.md §3.
+     If the original content emerges, replace this version. -->
 
 ## Consequences
 
