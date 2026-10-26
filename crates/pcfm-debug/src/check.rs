@@ -10,7 +10,6 @@
 
 use pcfm_testkit::TestRegistry;
 
-use crate::error::CliError;
 use crate::features;
 
 /// The report of a health check.
@@ -39,39 +38,38 @@ impl CheckReport {
 
 /// Runs the health check.
 ///
-/// # Errors
+/// # Panics
 ///
-/// Returns a [`CliError`] if the registry cannot be built or a scenario
-/// panics. A check that fails is reported in the returned [`CheckReport`],
-/// not as an error.
-pub fn run(seed: u64) -> Result<CheckReport, CliError> {
+/// Does not panic. Scenarios that panic are caught by the runtime and
+/// reported as a failing check named `"scenario"`.
+#[must_use]
+pub fn run(seed: u64) -> CheckReport {
     let mut registry = TestRegistry::new();
     features::register_all(&mut registry);
     let report = registry.run_all(seed);
-    Ok(adapt(report))
+    adapt(&report)
 }
 
 /// Flatten a `RunReport` into the `CheckReport` shape expected by the CLI.
 ///
 /// One check = one line of output. Scenario-level errors are surfaced as
 /// a failing check named `"scenario"`.
-fn adapt(report: pcfm_testkit::RunReport) -> CheckReport {
+fn adapt(report: &pcfm_testkit::RunReport) -> CheckReport {
     let mut out = CheckReport {
         passed: Vec::new(),
         failed: Vec::new(),
     };
     for outcome in report.outcomes() {
         if let Some(err) = &outcome.result.error {
-            out.failed.push(("scenario", format!("{}: {}", outcome.name, err)));
+            out.failed
+                .push(("scenario", format!("{}: {}", outcome.name, err)));
         }
         for check in &outcome.result.checks {
             if check.passed {
                 out.passed.push(check.name);
             } else {
-                out.failed.push((
-                    check.name,
-                    check.detail.clone().unwrap_or_default(),
-                ));
+                out.failed
+                    .push((check.name, check.detail.clone().unwrap_or_default()));
             }
         }
     }
