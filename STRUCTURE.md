@@ -344,7 +344,7 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 
 **Open ADRs:** 012, 013, 015. **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 014.
 
-**ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`012-013-reading-guide.md`](docs/adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
+**ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`PLUGINS-WORLDS-READING-GUIDE.md`](docs/PLUGINS-WORLDS-READING-GUIDE.md). ADR-013 depends on ADR-012.
 
 **Note on pillar 1.** ADR-013, if ratified, will supersede pillar 1 of `00-foundations` §2 ("Traceable determinism. Same seed + same inputs = same result. Never compromised.") and replace it with a **local** determinism (same save + same match + same plugin configuration = same result). Until ratification, the doctrine is unchanged: the determinism is **global**. `modules/00-foundations.md` v1.4 reflects this: pillar 1 stands as written, and ADR-013 is cited as *proposed, not ratified*.
 

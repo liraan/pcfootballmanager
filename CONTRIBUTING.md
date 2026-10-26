@@ -7,7 +7,7 @@ Thanks for wanting to help. This project is documentation-first, and **good docu
 ## Current state (as of 2026-10-26)
 
 - **L0 is implemented.** 7 crates (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`), 107 tests passing.
-- **14 ADRs exist:** 11 accepted (001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014), 1 proposed (015), 1 template (000), 1 reading guide (012-013-reading-guide).
+- **14 ADRs exist:** 11 accepted (001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014), 1 proposed (015), 1 template (000), 1 reading guide (PLUGINS-WORLDS-READING-GUIDE).
 - **ADR-012 and ADR-013 are accepted.** They define the plugin system and the world system. ADR-013 revised pillar 1 of `00-foundations` (determinism, from global to local). The framework does not implement the plugin system yet, but the decisions are ratified.
 - **The doctrine is v2.0** (2026-10-26): pillar 1 revised to local determinism.
 - **`LICENSE.md`** exists and is accepted (ADR-006). The dual license is: MIT OR Apache-2.0 for code, CC-BY-NC-SA-4.0 for assets.
@@ -142,7 +142,7 @@ If an ADR is `proposed` and touches an area, **no code is written in that area u
 
 **For the current list of open ADRs, and what each one blocks, see [`STRUCTURE.md`](STRUCTURE.md) §5 ("Current ADR status").** That table is the single source of truth. It is **not duplicated here**, to avoid drift between the two files.
 
-**Current state:** only ADR-015 (v1.0 scope) is `proposed`. ADR-012 and ADR-013 are **accepted** (decisions ratified; framework implementation pending). See [`docs/adr/012-013-reading-guide.md`](docs/adr/012-013-reading-guide.md) for how to read them together.
+**Current state:** only ADR-015 (v1.0 scope) is `proposed`. ADR-012 and ADR-013 are **accepted** (decisions ratified; framework implementation pending). See [`docs/PLUGINS-WORLDS-READING-GUIDE.md`](docs/PLUGINS-WORLDS-READING-GUIDE.md) for how to read them together.
 
 ---
 

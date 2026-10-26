@@ -151,7 +151,7 @@ ADR-012 defines the brick contract (sheet, conflicts, narrative, cause traces, d
 
 ADR-013 **supersedes pillar 1** of `00-foundations` §2: the determinism becomes **local** (same save + same match + same plugin configuration = same result) instead of **global** (same seed regardless of configuration). The pillar was revised in `00-foundations` v2.0 (2026-10-26).
 
-Read the two ADRs together, in order: [`012-013-reading-guide.md`](../docs/adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
+Read the two ADRs together, in order: [`PLUGINS-WORLDS-READING-GUIDE.md`](../docs/PLUGINS-WORLDS-READING-GUIDE.md). ADR-013 depends on ADR-012.
 
 For the current status of the two ADRs, see the **ADR status** table below.
 
