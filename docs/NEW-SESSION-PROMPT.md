@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-26 (commit `314f598`)
+**Last updated:** 2026-10-27 (commit `5713232`)
 
 ---
 
@@ -29,11 +29,11 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 - **Status:** L0 (match engine) is complete and implemented. L1–L3 are planned.
 - **Performance target** (`00-foundations.md` §6): 60 fps UI, full season < 60 s on mid-range hardware. Not measured yet.
 
-## Where we are (commit `314f598`, 2026-10-26)
+## Where we are (commit `5713232`, 2026-10-27)
 
 - **7 crates:** `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`.
 - **107 tests**, clippy clean (`-D warnings`), `--check` 6/6, `--list` 6 scenarios, `--coverage` 2/26 (7%).
-- **12 ADRs accepted** (001-008, 012-015), **1 proposed** (016, v1.0 content selections), 1 template (000), 1 reading guide (`docs/PLUGINS-WORLDS-READING-GUIDE.md`, outside `docs/adr/`).
+- **14 ADRs accepted** (001-008, 012-016, 018), **1 proposed** (017, roles are labels), 1 template (000), 1 reading guide (`docs/PLUGINS-WORLDS-READING-GUIDE.md`, outside `docs/adr/`).
 - **11 L0 modules** ratified + implemented.
 - **16 inconsistencies** identified and resolved (all with commits).
 - **Working tree clean.**
@@ -52,7 +52,7 @@ Then the doctrine: **`modules/00-foundations.md`** (v2.0, pillar 1 = local deter
 
 In dependency order:
 
-1. **Ratify ADR-016** — "v1.0 content selections" (`proposed`). It resolves the **7 Deferred decisions** of ADR-015 (which 3 psychological axes? which 20 roles? which 10 formations? which 5 nations? which L2/L3 modules in v1.0?). This is the natural next step.
+1. **Ratify ADR-017** — "roles are labels, not modifiers" (`proposed`). It moves the role catalogue to `L1-roster` and confirms the engine (L0) is blind to roles. This unblocks `L1-roster/01-player-attributes.md`.
 2. **`ProjectionProfile`** — method for computing the confidence bands (bootstrap? Bayesian? empirical quantiles?).
 3. **`ScoutReport.DeclaredBias`** — formula for applying the declared bias.
 4. **`docs/performance.md`** — expected benchmarks, measurement plan.
@@ -89,9 +89,9 @@ In dependency order:
 ## What NOT to do
 
 - Do not give me "lots of comments" scattered through the code: the codebase is already documented (`///`, `//!`, `# Errors`, `# Panics`, `# Example`), plus `ARCHITECTURE.md` and `CODE_TOUR.md`. If you want to add documentation, propose **where** and **why**, not "across the board".
-- Do not assume that ADR-012, ADR-013, ADR-015 are "proposed". They are **accepted** (2026-10-25/26).
+- Do not assume that ADR-012, ADR-013, ADR-015, ADR-016, ADR-018 are "proposed". They are **accepted** (2026-10-25/26/27).
 - Do not assume that `00-foundations.md` is v1.4. It is **v2.0** (pillar 1 rewritten: local determinism).
-- Do not assume there are "13 ADRs". There are **12 accepted ADRs + 1 proposed (016) + 1 template (000) + 1 reading guide** (outside `docs/adr/`).
+- Do not assume there are "13 ADRs". There are **14 accepted ADRs + 1 proposed (017) + 1 template (000) + 1 reading guide** (outside `docs/adr/`).
 - Do not invent commit hashes or file contents you have not read.
 - Do not propose Python scripts (Python is not installed). Use Bash/Git Bash.
 - Do not assume CI exists: there is no `.github/workflows/`. Clippy/test/build/fmt/check are **manual**, and must be run after every change.
@@ -99,7 +99,7 @@ In dependency order:
 
 ## First step I want to take
 
-**Ratify ADR-016** ("v1.0 content selections", already `proposed`), which resolves the 7 Deferred decisions of ADR-015. But first:
+**Ratify ADR-017** ("roles are labels", `proposed`), which moves the role catalogue to `L1-roster`. But first:
 
 1. Read the 3 key documents.
 2. Verify the current state with `git pull` + `git log --oneline -5`.
