@@ -1,6 +1,6 @@
 # Cargo.toml — PCFM workspace root
 
-[workspace.members]
+[workspace]
 members = [
     "crates/pcfm-core",
     "crates/pcfm-model",
