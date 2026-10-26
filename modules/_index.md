@@ -1,8 +1,8 @@
 ---
 title: "Modules Index"
-version: "2.8"
+version: "2.9"
 status: "active"
-last_updated: "2026-10-25"
+last_updated: "2026-10-26"
 ---
 
 # Modules Index
@@ -20,14 +20,14 @@ Dependencies flow **inward**: L2 may depend on L1 and L0, never on L3. L0 depend
 
 **Reading order:**
 
-1. [`00-foundations.md`](00-foundations.md) — the doctrine *(v1.4, pillar 1 under review)*
+1. [`00-foundations.md`](00-foundations.md) — the doctrine *(v2.0, pillar 1 revised by ADR-013)*
 2. The level that matches your task (L0 → L3)
 3. [`../STRUCTURE.md`](../STRUCTURE.md) — the rules of the repo (see §3 for the terminology: **module** = specification directory, **plugin** = Rust crate with a `sheet.toml`, **cell** is deprecated)
 4. [`../docs/adr/`](../docs/adr/) — the decisions
 
 ---
 
-## Current state (as of 2026-10-25)
+## Current state (as of 2026-10-26)
 
 - ✅ **Doctrine**: ratified (v2.0). **Pillar 1 revised** (ADR-013, accepted): determinism is now local.
 - ✅ **L0 — Match**: fully specified, **all 11 modules ratified** (ADR-003 accepted)
@@ -67,7 +67,7 @@ Modules marked *(planned)* below do not have a file yet. Their links are intenti
 | L0.09 | [`L0-match/09-context-modifiers.md`](L0-match/09-context-modifiers.md) | ✅ ratified | 00, L0.03 |
 | L0.10 | [`L0-match/10-ground-truth.md`](L0-match/10-ground-truth.md) | ✅ ratified | 00, L0.01, L0.03 |
 
-**L0 is done when:** a friendly match is playable, savable, reloadable, deterministic, and every event has a cause trace. The **specification** is complete; the **code** is complete (6 crates, 103 tests). See `STRUCTURE.md` §3.
+**L0 is done when:** a friendly match is playable, savable, reloadable, deterministic, and every event has a cause trace. The **specification** is complete; the **code** is complete (7 crates, 107 tests). See `STRUCTURE.md` §3.
 
 ---
 
@@ -143,7 +143,7 @@ The core does not talk to providers. A tool (team, community, or third party) ta
 
 ---
 
-## Plugins and worlds (proposed)
+## Plugins and worlds (accepted)
 
 ADR-012 (Plugins: The Brick Contract) and ADR-013 (Worlds: LOD, Manifest, and Local Determinism) define the **plugin system** and the **world system**. They are **accepted**: the decisions are ratified, but the framework does not yet implement them.
 
