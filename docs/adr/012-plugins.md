@@ -1,6 +1,6 @@
 # ADR-012 — Plugins: The Brick Contract
 
-- **Status:** proposed
+- **Status:** accepted
 - **Date:** 2026-10-25
 - **Supersedes:** none
 - **Superseded by:** none
