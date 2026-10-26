@@ -18,6 +18,29 @@ use pcfm_testkit::{Feature, Scenario, ScenarioResult, TestContext, TestRegistry}
 use crate::demo;
 
 /// Register every L0 scenario.
+///
+/// # Why these six
+///
+/// The six scenarios are the **acceptance tests** for L0. They cover:
+///
+/// | Scenario | What it verifies | Why it is here |
+/// |----------|------------------|----------------|
+/// | `DemoTeamScenario` | The demo squads are valid (11 starters, etc.) | If this fails, every other scenario fails for the wrong reason |
+/// | `SameSeedScenario` | Same seed → same state hash | The determinism contract (pillar 1) |
+/// | `DifferentSeedScenario` | Different seed → different hash | The seed is actually used, not ignored |
+/// | `SaveLoadScenario` | Save → load → same hash | The persistence contract (reconstruction from seed + command log) |
+/// | `EventChainScenario` | Every event has a cause, every timestamp ≤ 120' | The transparency contract (every event is explainable) |
+/// | `StatsSanityScenario` | Possession sums to 1, xG ≥ 0, at least one event | The statistics are not garbage |
+///
+/// A seventh scenario would be added when L0's DoD grows. For example,
+/// a "replay produces the same result" scenario is covered by `SaveLoadScenario`
+/// (it calls `simulate` twice); a "golden test" scenario (1000 matches,
+/// same hash) is in `pcfm-match`'s own test suite, not here, because it
+/// is too slow for a `--check` run.
+///
+/// When L1, L2, L3 are implemented, their scenarios go in
+/// `features/l1_*.rs`, `features/l2_*.rs`, `features/l3_*.rs`, and are
+/// registered in `features/mod.rs::register_all`.
 pub fn register(registry: &mut TestRegistry) {
     registry.register(DemoTeamScenario);
     registry.register(SameSeedScenario);
