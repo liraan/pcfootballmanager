@@ -243,6 +243,8 @@ These are components that are referenced across modules but are not crates. They
 
 ## ADR status
 
+**Derived view.** The single source of truth for ADR status is [`STRUCTURE.md`](../STRUCTURE.md) §5. This table is kept for convenience.
+
 | ADR | Title | Status | Effect |
 |---|---|---|---|
 | [001](../docs/adr/001-language-rust.md) | Language: Rust | ✅ accepted | — |
