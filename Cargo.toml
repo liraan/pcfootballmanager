@@ -29,6 +29,7 @@ pcfm-hidden = { path = "crates/pcfm-hidden", version = "0.1.0" }
 pcfm-stats = { path = "crates/pcfm-stats", version = "0.1.0" }
 pcfm-match = { path = "crates/pcfm-match", version = "0.1.0" }
 pcfm-debug = { path = "crates/pcfm-debug", version = "0.1.0" }
+pcfm-testkit = { path = "crates/pcfm-testkit", version = "0.1.0" }
 # RNG
 rand_chacha = "0.9"
 rand_core = "0.9"
