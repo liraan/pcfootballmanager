@@ -1,6 +1,6 @@
 # Repository Snapshot — PCFM
 
-**Purpose:** factual snapshot of the repository at **2026-10-26**. Lists the files, their reading status, and what they contain. It is not a specification (see `modules/`), not a decision log (see `PROJECT-IDEA-LOG.md`).
+**Purpose:** factual snapshot of the repository. **This is the single source of truth for the live state** (crates, tests, ADR count, last commit, tracked files). Other files defer to §1. It is not a specification (see `modules/`), not a decision log (see `PROJECT-IDEA-LOG.md`). Last updated: 2026-10-27.
 
 **Rule:** if a file has been read in full, I say so and summarise its content. If it has been read only in part, I say so. If it has never been read, I write **"not read"** and list it in §7. No invented sizes: only those seen in real output (`git ls-files`).
 
