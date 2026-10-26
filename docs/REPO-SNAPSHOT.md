@@ -21,9 +21,9 @@
 | Clippy | clean (`-D warnings`) | `cargo clippy -- -D warnings` |
 | `--check` | 6/6 | `cargo run --bin pcfm-debug -- --check` |
 | `--coverage` | 2/26 (7%) | `cargo run --bin pcfm-debug -- --coverage` |
-| ADRs | 14 files in `docs/adr/`: 12 accepted (001-008, 012-015), 1 proposed (016), 1 template (000). Plus 1 reading guide in `docs/` (not an ADR). | `ls docs/adr/` |
-| ADRs accepted | 12 (001-008, 012, 013, 014, 015) | `grep Status` |
-| ADRs proposed | 1 (016) | `grep Status` |
+| ADRs | 16 files in `docs/adr/`: 14 accepted (001-008, 012-016, 018), 1 proposed (017), 1 template (000). Plus 1 reading guide in `docs/` (not an ADR). | `ls docs/adr/` |
+| ADRs accepted | 14 (001-008, 012, 013, 014, 015, 016, 018) | `grep Status` |
+| ADRs proposed | 1 (017) | `grep Status` |
 | L0 modules | 11, all ratified | `git ls-files` |
 | L1-L3 modules | 0 (all planned) | `git ls-files` |
 
@@ -53,7 +53,7 @@ pcfootballmanager/
 │   └── pcfm-debug/          (9 files: Cargo.toml + 8 src)
 ├── data/.gitkeep
 ├── docs/
-│   ├── adr/                 (14 files: 000-008, 012-015)
+│   ├── adr/                 (16 files: 000-008, 012-018)
 │   ├── calibration/.gitkeep
 │   ├── legal/.gitkeep
 │   ├── ARCHITECTURE.md
@@ -141,7 +141,10 @@ pcfootballmanager/
 | `012-plugins.md` | 139 | ✅ | `Status: accepted` (commit `ec29aba`). Brick contract: sheet mandatory, behaviour open/metadata closed, conflicts critical/minor, narrative modder's responsibility, cause traces 2 levels, debug UI plugin view. |
 | `013-worlds.md` | 165 | ✅ | `Status: accepted` (commit `73f51aa`). LOD = sum of plugin weights, fixed per save, manifest in save, local determinism, community plural. |
 | `014-mobile-strategy.md` | 167 | ✅ | `Status: accepted`. Native mobile UI, no plugins, data packs only. Mobile = Phase 3+. |
-| `015-v1-scope.md` | 145 | ✅ | `Status: accepted` (2026-10-26, commit `4d826dc`). v1.0 scope reduction: 20 roles, 10 formations, 5 nations, 3 active psychological axes, L2/L3 subset. 7 Deferred decisions delegated to ADR-016. DeepSeek citation kept in Italian with English translation. |
+| `015-v1-scope.md` | 145 | ✅ | `Status: accepted` (2026-10-26, commit `4d826dc`). v1.0 scope reduction: 20 roles, 10 formations, 5 nations, 3 active psychological axes, L2/L3 subset. 7 Deferred decisions resolved in ADR-016 (accepted 2026-10-27); crowd/media partially superseded by ADR-018 (accepted). |
+| `016-v1-content-selections.md` | 238 | ✅ | `Status: accepted` (2026-10-27). v1.0 content selections: 3 axes (professionalism, ambition, pressure), 20 roles (catalogue in L1-roster), 10 formations, 5 nations (real cities; generated clubs/stadiums/players), 7 L2 modules (crowd/media to v1.1). Resolves ADR-015 deferred decisions. |
+| `017-roles-are-labels.md` | 92 | 🟡 | `Status: proposed`. Roles are labels, not modifiers. Role catalogue in L1-roster; the engine (L0) is blind to roles. No SIM_VERSION bump. |
+| `018-defer-crowd-media.md` | 59 | ✅ | `Status: accepted` (2026-10-27). Defer crowd and media to v1.1. Partially supersedes ADR-015. |
 
 ---
 
@@ -150,7 +153,7 @@ pcfootballmanager/
 | File | Lines | Status | What I know |
 |------|-------|--------|-------------|
 | `modules/00-foundations.md` | ~245 | ✅ | v2.0 (2026-10-26). Pillar 1 revised (ADR-013): local determinism. §1 Role, §2 Design Pillars (10), §3 Three Planes, §4 Determinism (local), §5 Banned Things, §6 Product Goal, §7 Non-Goals, §8 References, §9 Concentric Structure. |
-| `modules/_index.md` | ~265 | ✅ | v2.9. Current state (2026-10-26), Doctrine, L0 (11 ratified), L1-L3 (planned), Provider integrations, Plugins and worlds (accepted), How to read, Doctrine compliance, Level graph, Status legend, Components, ADR status (12 accepted, 1 proposed (016), 1 template, 1 reading guide). |
+| `modules/_index.md` | ~265 | ✅ | v2.9. Current state (2026-10-26), Doctrine, L0 (11 ratified), L1-L3 (planned), Provider integrations, Plugins and worlds (accepted), How to read, Doctrine compliance, Level graph, Status legend, Components, ADR status (14 accepted, 1 proposed (017), 1 template, 1 reading guide). |
 | `modules/L0-match/00-overview.md` | 203 | ✅ | `Status: ratified`. 11 cells, 7-point checklist, dependency rules. |
 | `modules/L0-match/01-rng.md` | 150 | ✅ | `Status: ratified`. ChaCha20Rng, named streams, seed derivation, SIM_VERSION. |
 | `modules/L0-match/02-event-bus.md` | 138 | ✅ | `Status: ratified`. EventBus, ordering by `seq`, single-thread per match, replay compatibility. |
@@ -347,7 +350,7 @@ All 16 identified inconsistencies have been closed. Summary:
 | `--check` | 6/6 | command output |
 | `--list` | 6 scenarios | command output |
 | `--coverage` | 2/26 (7%) | command output |
-| ADRs | 14 files in `docs/adr/`: 12 accepted (001-008, 012-015), 1 proposed (016), 1 template (000). Plus 1 reading guide in `docs/`. | `ls docs/adr/` + `grep Status` |
+| ADRs | 16 files in `docs/adr/`: 14 accepted (001-008, 012-016, 018), 1 proposed (017), 1 template (000). Plus 1 reading guide in `docs/`. | `ls docs/adr/` + `grep Status` |
 | Reading guide | 1 in `docs/` (`PLUGINS-WORLDS-READING-GUIDE.md`) | `ls docs/` |
 | L0 modules | 11, all ratified | `git ls-files` |
 | Broken links | 0 | verification script (2026-10-26) |
