@@ -13,7 +13,7 @@
 | Metrica | Valore | Fonte |
 |---------|--------|-------|
 | Branch | `main` | `git status` |
-| Ultimo commit | `96c8f59` — "Revise REPO-SNAPSHOT.md for latest updates" | `git log` |
+| Ultimo commit | `4c93214` — "docs: propagate ADR-015 ratification (accepted 2026-10-26)" | `git log` |
 | Working tree | clean | `git status` |
 | File tracciati | 113 | `git ls-files \| wc -l` |
 | Crate | 7 (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`) | `git ls-files` |
@@ -21,9 +21,9 @@
 | Clippy | pulito (`-D warnings`) | `cargo clippy -- -D warnings` |
 | `--check` | 6/6 | `cargo run --bin pcfm-debug -- --check` |
 | `--coverage` | 2/26 (7%) | `cargo run --bin pcfm-debug -- --coverage` |
-| ADR | 12 ADR (001-008, 012-015) + 1 template + 1 reading guide | `ls docs/adr/` |
-| ADR accepted | 11 (001-008, 012, 013, 014) | `grep Status` |
-| ADR proposed | 1 (015) | `grep Status` |
+| ADR | 13 ADR (001-008, 012-015) + 1 template + 1 reading guide | `ls docs/adr/` |
+| ADR accepted | 12 (001-008, 012, 013, 014, 015) | `grep Status` |
+| ADR proposed | 0 | `grep Status` |
 | Moduli L0 | 11, tutti ratified | `git ls-files` |
 | Moduli L1-L3 | 0 (tutti planned) | `git ls-files` |
 
@@ -56,10 +56,13 @@ pcfootballmanager/
 │   ├── adr/                 (14 file: 000-008, 012-015)
 │   ├── calibration/.gitkeep
 │   ├── legal/.gitkeep
+│   ├── ARCHITECTURE.md      ← nuovo (2026-10-26)
+│   ├── CODE_TOUR.md         ← nuovo (2026-10-26)
 │   ├── GLOSSARY.md
 │   ├── MIGRATION-01-04.md
 │   ├── PLUGIN_DEVELOPER_GUIDE.md
 │   ├── PLUGINS-WORLDS-READING-GUIDE.md
+│   ├── PROJECT-IDEA-LOG.md
 │   └── REPO-SNAPSHOT.md      ← questo file
 ├── mods/.gitkeep
 ├── modules/
@@ -91,9 +94,9 @@ pcfootballmanager/
 
 | File | Riga | Stato | Cosa so |
 |------|------|-------|---------|
-| `README.md` | ~293 | ✅ | Riformattato in questa sessione. Hero con badge, "Why this project exists", Three Planes, determinism, project status, tech stack, repository layout, getting started (`--check`, `--list`, `--coverage`), reading order, contributing, license, AI disclosure, FAQ, contact. |
+| `README.md` | ~293 | ✅ | Riformattato in questa sessione. Hero con badge, "Why this project exists", Three Planes, determinism, project status, tech stack, repository layout, getting started (`--check`, `--list`, `--coverage`), reading order, contributing, license, AI disclosure, FAQ ("All decisions are now accepted"), contact. |
 | `STRUCTURE.md` | 443 | ✅ | v1.8 (2026-10-26). Documentation model, concentric levels, directory layout, module frontmatter, ADR process (con tabella status), language policy, how to add/revise a module, what packs can extend, honesty rule. Link al reading guide aggiornato al nuovo path. |
-| `CONTRIBUTING.md` | ~250 | ✅ | Process, review checklist, ADR workflow, licensing of contributions. Stato aggiornato: 7 crate, 107 test, 14 ADR (11 accepted, 1 proposed, 1 template, 1 reading guide). Link al reading guide aggiornato. |
+| `CONTRIBUTING.md` | ~250 | ✅ | Process, review checklist, ADR workflow, licensing of contributions. Stato aggiornato: 7 crate, 107 test, 14 ADR (12 accepted, 0 proposed, 1 template, 1 reading guide). Link al reading guide aggiornato. |
 | `LICENSE.md` | 63 | ✅ | Riepilogo dual license: MIT OR Apache-2.0 per il codice, CC-BY-NC-SA-4.0 per gli asset, trademark riservato. |
 | `LICENSE-MIT` | 21 | ✅ | Testo MIT standard. |
 | `LICENSE-APACHE` | 201 | ✅ | Testo Apache 2.0 verbatim. |
@@ -104,9 +107,9 @@ pcfootballmanager/
 | `Cargo.toml` | 54 | ✅ | `[workspace]` con `resolver = "3"`, 7 membri, `[workspace.package]`, `[workspace.dependencies]`, `[workspace.lints.*]`. |
 | `Cargo.lock` | 357 | ✅ | **Letto.** `version = 4`. 35 package totali: 7 `pcfm-*` (workspace members) + 28 dipendenze esterne (blake3, rand_chacha, serde, thiserror, syn, ecc.). Tutti pinnati con checksum. `pcfm-testkit` non ha dipendenze. `pcfm-debug` dipende da 6 crate del workspace + `serde_json`, `thiserror`. |
 | `.gitattributes` | 36 | ✅ | Normalizzazione LF, esclusioni per `.bat`/`.cmd`/`.ps1` (CRLF) e binari. |
-| `.gitignore` | 167 | ✅ | **Letto.** Sezioni: Rust build artifacts (`/target/`, `**/target/`, `*.rs.bk`, `*.pdb`), profiling (`*.profraw`, `perf.data*`, `*.dSYM/`, `*.mir`), IDE (`.vscode/`, `.idea/`, `*.swp`, ecc.), OS (`.DS_Store`, `Thumbs.db`, `desktop.ini`), log, user data (`saves/`, `*.save`, `*.pcfm`, `*.sav`), secrets (`.env`, `*.pem`, `*.key`, `credentials.toml`), pack cache (`mods/_cache/`, `mods/quarantined/`), generated worlds (`data/generated/`), temporary, test fixtures (`tests/fixtures/generated/`), coverage, local cache (`.cache/`). **Cargo.lock esplicitamente NON ignorato** (binary application, build riproducibili). |
-| `.cargo/config.toml` | 13 | ✅ | **Letto.** Intenzionalmente minimale. Solo commenti: alias futuri (`check-all`, `test-all`, `clippy-all`) e `rustflags = ["-D", "warnings"]` per CI, tutti commentati. **Nessuna configurazione attiva.** |
-| `rust-toolchain.toml` | 15 | ✅ | **Letto.** `channel = "stable"`, `components = ["rustfmt", "clippy", "rust-src"]`, `profile = "minimal"`. `miri` e `llvm-tools-preview` esclusi (Windows-only limitation). Da pinnare a versione specifica (es. "1.90.0") al momento del rilascio. |
+| `.gitignore` | 167 | ✅ | **Letto.** Sezioni: Rust build artifacts, profiling, IDE, OS, log, user data, secrets, pack cache, generated worlds, temporary, test fixtures, coverage, local cache. **Cargo.lock esplicitamente NON ignorato.** |
+| `.cargo/config.toml` | 13 | ✅ | **Letto.** Intenzionalmente minimale. Solo commenti: alias futuri e `rustflags` per CI, tutti commentati. **Nessuna configurazione attiva.** |
+| `rust-toolchain.toml` | 15 | ✅ | **Letto.** `channel = "stable"`, `components = ["rustfmt", "clippy", "rust-src"]`, `profile = "minimal"`. |
 
 ---
 
@@ -114,6 +117,8 @@ pcfootballmanager/
 
 | File | Riga | Stato | Cosa so |
 |------|------|-------|---------|
+| `docs/ARCHITECTURE.md` | ~210 | ✅ | **Nuovo (2026-10-26).** Come i 7 crate interagiscono, flusso di un match (10 step), simulation/rendering split, testkit contract, cosa non è ancora implementato. |
+| `docs/CODE_TOUR.md` | ~215 | ✅ | **Nuovo (2026-10-26).** Percorso di lettura in 5 stadi: infrastruttura, entità, piani, motore, testkit. Con "dove iniziare a contribuire" e "una nota sulla simulazione attuale". |
 | `docs/GLOSSARY.md` | 313 | ✅ | v1.1. Termini, acronimi, concetti. Sezioni: Core, Data model, Determinism, Architecture, Process, Banned, External, Abbreviations, Historical. |
 | `docs/MIGRATION-01-04.md` | 186 | ✅ | Piano di migrazione dei 4 moduli legacy italiani (01-04), mai committati in git. Mapping target verso moduli concentrici. |
 | `docs/PLUGIN_DEVELOPER_GUIDE.md` | 436 | ✅ | v1.1 (2026-10-26). Contiene: two kinds of extension, crate layout (7 crate), simulation/rendering split, adding EventType, adding `resolve_*`, dependencies, conventions, plane separation, checklist PR, examples, §11 Contributing test scenarios, references. |
@@ -127,7 +132,7 @@ pcfootballmanager/
 | `001-language-rust.md` | ~69 | ✅ | `Status: accepted`. Option A (Rust), B (C++), C (C#), D (Go). Decision: Rust. References aggiornati (Cargo.toml workspace root, rust-toolchain.toml, STRUCTURE.md §3). |
 | `002-project-name-and-scope.md` | 79 | ✅ | `Status: accepted`. Nome: PC Football Manager / PCFM. Single-player first. Non-goals v1.0. |
 | `003-plane-a-enforcement.md` | 235 | ✅ | `Status: accepted`. Option A (process) vs B (capability API). Decision: B. Corpo completo + Exception `pcfm-debug`. Ricomposto da `571d48f` + `70ee57f` nel commit `b309f23`. |
-| `004-panic-strategy-ffi.md` | ~117 | ✅ | `Status: accepted`. Option D: `panic = "unwind"` in dev/release, `abort` in release-hardened. `catch_unwind` obbligatorio a ogni FFI. Completato nel commit `c4c775b` (Consequences, Implementation notes, References, marcate come ricostruite). |
+| `004-panic-strategy-ffi.md` | ~117 | ✅ | `Status: accepted`. Option D: `panic = "unwind"` in dev/release, `abort` in release-hardened. `catch_unwind` obbligatorio a ogni FFI. Completato nel commit `c4c775b`. |
 | `005-qt-binding.md` | 96 | ✅ | `Status: accepted`. Decision: Option A (`cxx-qt`). |
 | `006-license.md` | 69 | ✅ | `Status: accepted`. Decision: Option C (dual license). |
 | `007-canonical-language.md` | 68 | ✅ | `Status: accepted`. Decision: Option A (inglese canonico). |
@@ -135,7 +140,7 @@ pcfootballmanager/
 | `012-plugins.md` | 139 | ✅ | `Status: accepted` (commit `ec29aba`). Brick contract: sheet mandatory, behaviour open/metadata closed, conflicts critical/minor, narrative modder's responsibility, cause traces 2 livelli, debug UI plugin view. |
 | `013-worlds.md` | 165 | ✅ | `Status: accepted` (commit `73f51aa`). LOD = sum of plugin weights, fixed per save, manifest nel save, local determinism, community plural. |
 | `014-mobile-strategy.md` | 167 | ✅ | `Status: accepted`. Native mobile UI, no plugin, data packs only. Mobile = Phase 3+. |
-| `015-v1-scope.md` | 145 | ✅ | `Status: proposed`. Riduzione scope v1.0: 20 ruoli, 10 formazioni, 5 nazioni, 3 assi psicologici attivi, subset L2/L3. Dipende da ADR-012/013 (ora accepted). |
+| `015-v1-scope.md` | 145 | ✅ | `Status: accepted` (2026-10-26, commit `4d826dc`). Riduzione scope v1.0: 20 ruoli, 10 formazioni, 5 nazioni, 3 assi psicologici attivi, subset L2/L3. 7 Deferred decisions delegate ad ADR-016. |
 
 ---
 
@@ -144,7 +149,7 @@ pcfootballmanager/
 | File | Riga | Stato | Cosa so |
 |------|------|-------|---------|
 | `modules/00-foundations.md` | ~245 | ✅ | v2.0 (2026-10-26). Pillar 1 revised (ADR-013): determinismo locale. §1 Role, §2 Design Pillars (10), §3 Three Planes, §4 Determinism (locale), §5 Banned Things, §6 Product Goal, §7 Non-Goals, §8 References, §9 Concentric Structure. |
-| `modules/_index.md` | ~265 | ✅ | v2.9. Current state (2026-10-26), Doctrine, L0 (11 ratified), L1-L3 (planned), Provider integrations, Plugins and worlds (accepted), How to read, Doctrine compliance, Level graph, Status legend, Components, ADR status (12 ADR + template + reading guide). |
+| `modules/_index.md` | ~265 | ✅ | v2.9. Current state (2026-10-26), Doctrine, L0 (11 ratified), L1-L3 (planned), Provider integrations, Plugins and worlds (accepted), How to read, Doctrine compliance, Level graph, Status legend, Components, ADR status (12 accepted, 0 proposed, 1 template, 1 reading guide). |
 | `modules/L0-match/00-overview.md` | 203 | ✅ | `Status: ratified`. 11 celle, 7-point checklist, dependency rules. |
 | `modules/L0-match/01-rng.md` | 150 | ✅ | `Status: ratified`. ChaCha20Rng, stream nominati, seed derivation, SIM_VERSION. |
 | `modules/L0-match/02-event-bus.md` | 138 | ✅ | `Status: ratified`. EventBus, ordering per `seq`, single-thread per match, replay compatibility. |
@@ -219,7 +224,7 @@ pcfootballmanager/
 - Latents generati dal RNG (`PlayerLatents::from_rng`), mai esposti.
 - `resolve_*` deterministico (stesso seed → stesso outcome).
 - `drain_observations` idempotente.
-- **Modello attuale molto semplice** (prototipo): `resolve_shot`: `goal_probability = noise * 0.3 + finishing`, goal se > 0.6.
+- **Modello attuale molto semplice** (prototipo, documentato nel codice): `resolve_shot`: `goal_probability = noise * 0.3 + finishing`, goal se > 0.6; `resolve_duel`: `noise * 0.2 + attacker_score > defender_score`.
 
 #### `pcfm-stats` (5 file, 11 test)
 
@@ -244,7 +249,7 @@ pcfootballmanager/
 - Identità del save: `state_hash`, non bit-for-bit equality.
 - Tamper detection: `validate()` controlla `schema_version` e `chain_hash`.
 - `can_replay`: `sim_version == SIM_VERSION`.
-- `MatchState::tick()`: modello semplificato (probabilità 0.0005 per tick). Non realistico (prototipo).
+- `MatchState::tick()`: modello semplificato (probabilità 0.0005 per tick, split 60/25/12/3 pass/shot/duel/foul). Documentato nel codice come prototipo.
 
 #### `pcfm-testkit` (7 file, 0 test)
 
@@ -282,16 +287,19 @@ pcfootballmanager/
 ## 7. Da incollare per completare lo snapshot
 
 **Nessun file rimane da incollare.** Tutti i 113 file tracciati sono stati letti:
-- 14 ADR + 1 reading guide
+- 13 ADR + 1 template
+- 1 reading guide in `docs/`
 - 2 moduli di dottrina (`00-foundations.md`, `_index.md`)
 - 11 moduli L0
+- 2 documenti di architettura (`ARCHITECTURE.md`, `CODE_TOUR.md`)
 - 7 crate (52 file di codice)
 - 4 file di licenza
 - 3 CHANGELOG
-- 3 file di configurazione (`.gitattributes`, `.gitignore`, `.cargo/config.toml`, `rust-toolchain.toml`)
+- 4 file di configurazione (`.gitattributes`, `.gitignore`, `.cargo/config.toml`, `rust-toolchain.toml`)
 - `Cargo.toml`, `Cargo.lock`
 - `README.md`, `STRUCTURE.md`, `CONTRIBUTING.md`
 - `GLOSSARY.md`, `MIGRATION-01-04.md`, `PLUGIN_DEVELOPER_GUIDE.md`
+- `PROJECT-IDEA-LOG.md`, `REPO-SNAPSHOT.md`
 - `.github/` template
 - `.gitkeep` (file vuoti)
 
@@ -320,6 +328,10 @@ Tutte le 16 incongruenze identificate sono state chiuse. Riepilogo:
 | 15 | Conteggio "6 crate / 103 test" obsoleto | `_index.md`, `CONTRIBUTING.md` | inclusi nei fix 5, 6 |
 | 16 | Conteggio "10 ADR" obsoleto | `CONTRIBUTING.md` | incluso in fix 6 |
 
+**Propagazione ADR-015** (commit `4d826dc` + `4c93214`): `_index.md`, `CONTRIBUTING.md`, `README.md`, `PROJECT-IDEA-LOG.md` aggiornati per riflettere `accepted`, 0 proposed.
+
+**Documentazione di architettura** (commit `e35d15e` + `0a329d4`): `ARCHITECTURE.md` e `CODE_TOUR.md` aggiunti; 5 commenti mirati nei punti criptici (fix `DoD` in backtick per clippy).
+
 ---
 
 ## 9. Metriche verificate (output reali, 2026-10-26)
@@ -332,11 +344,12 @@ Tutte le 16 incongruenze identificate sono state chiuse. Riepilogo:
 | `--check` | 6/6 | output del comando |
 | `--list` | 6 scenari | output del comando |
 | `--coverage` | 2/26 (7%) | output del comando |
-| ADR | 14 (12 accepted, 1 proposed, 1 template, 1 reading guide) | `ls docs/adr/` + `grep Status` |
+| ADR | 13 accepted (001-008, 012-015), 0 proposed, 1 template (000) | `ls docs/adr/` + `grep Status` |
+| Reading guide | 1 in `docs/` (`PLUGINS-WORLDS-READING-GUIDE.md`) | `ls docs/` |
 | Moduli L0 | 11, tutti ratified | `git ls-files` |
 | Link rotti | 0 | script di verifica (2026-10-26) |
 | Working tree | clean | `git status` |
-| Ultimo commit | `96c8f59` | `git log` |
+| Ultimo commit | `4c93214` | `git log` |
 | File tracciati letti | 113/113 (100%) | questo snapshot |
 
 ---
