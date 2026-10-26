@@ -14,7 +14,7 @@ pub struct Check {
 impl Check {
     /// Create a passing check.
     #[must_use]
-    pub fn pass(name: &'static str) -> Self {
+    pub const fn pass(name: &'static str) -> Self {
         Self {
             name,
             passed: true,
@@ -24,6 +24,7 @@ impl Check {
 
     /// Create a failing check with a reason.
     #[must_use]
+    #[allow(clippy::missing_const_for_fn)]
     pub fn fail(name: &'static str, reason: impl Into<String>) -> Self {
         Self {
             name,
@@ -55,7 +56,7 @@ impl ScenarioResult {
     }
 
     /// Record a passing check.
-    pub fn pass(&mut self, name: &'static str) {
+    pub const fn pass(&mut self, name: &'static str) {
         self.record(Check::pass(name));
     }
 
