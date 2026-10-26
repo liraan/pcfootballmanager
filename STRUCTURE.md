@@ -1,8 +1,8 @@
 # Repository Structure
 
-**Version:** 1.7
+**Version:** 1.8
 **Status:** active
-**Last updated:** 2026-10-25
+**Last updated:** 2026-10-26
 
 This document explains how the repository is organised, and the rules that keep it coherent as it grows. Read it before adding a file, revising a module, or proposing a change.
 
@@ -98,7 +98,7 @@ Before the layout, the terminology. Three words, three things:
 
 **A module is a document. A plugin is code.** The two are different things, and the terms are not interchangeable. The historical term **cell** is **deprecated**: it meant what is now called "module", and its use is discouraged in new text. The field `cell` in the frontmatter is a historical name: its value is the module directory name.
 
-### Current state (as of 2026-10-25)
+### Current state (as of 2026-10-26)
 
 The repository contains **documentation and code**.
 
@@ -113,7 +113,7 @@ docs/
 ├── GLOSSARY.md
 ├── MIGRATION-01-04.md
 ├── PLUGIN_DEVELOPER_GUIDE.md
-├── adr/              (11 files, 000 → 013)
+├── adr/              (15 files, 000 → 015)
 ├── legal/            (.gitkeep)
 └── calibration/      (.gitkeep)
 archive/
@@ -132,8 +132,11 @@ crates/
 ├── pcfm-hidden/      (Plane A: GroundTruth, resolve_*)
 ├── pcfm-stats/       (Plane B: MatchEvent, EventChain)
 ├── pcfm-match/       (engine, narrative, save)
-└── pcfm-debug/       (CLI debug tool)
+├── pcfm-testkit/     (public test harness: Scenario, Feature, TestRegistry)
+└── pcfm-debug/       (CLI: --check, --list, --coverage, demo rendering)
 ```
+
+`pcfm-testkit` has **no dependency on any other `pcfm-*` crate**. It is the contract that core modules, plugins, and tools all implement.
 
 **Root files:**
 
@@ -144,7 +147,7 @@ CONTRIBUTING.md
 LICENSE.md, LICENSE-MIT, LICENSE-APACHE, LICENSE-ASSETS
 CHANGELOG.md, CHANGELOG-SIM.md, CHANGELOG-REGISTRY.md
 Cargo.toml, Cargo.lock, rust-toolchain.toml
-.gitignore, .cargo/config.toml
+.gitignore, .gitattributes, .cargo/config.toml
 .github/PULL_REQUEST_TEMPLATE.md, .github/ISSUE_TEMPLATE/
 ```
 
@@ -189,7 +192,7 @@ pc-football-manager/
 
 **File naming:** `NN-kebab-case-name.md`, two-digit prefix, no Italian, no version in the filename. `04-match-engine.md`, not `Modulo 04 — Motore Partita (rev 1.1).md`. The filename is stable; the revision lives in the frontmatter.
 
-**Crate naming:** the crates in `crates/` use the `pcfm-` prefix (e.g. `pcfm-core`, `pcfm-hidden`, `pcfm-match`, `pcfm-stats`, `pcfm-model`, `pcfm-packs`, `pcfm-assets`, `pcfm-debug`, `pcfm-pack`). The historical prefix `fmr-` (from the original "FMR project" name) is deprecated and must not be used in new files. Rust module paths follow the same convention with an underscore: `pcfm_core::rng`, `pcfm_match::simulate`, etc.
+**Crate naming:** the crates in `crates/` use the `pcfm-` prefix. Current: `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-match`, `pcfm-stats`, `pcfm-testkit`, `pcfm-debug`. Planned (post-v1.0): `pcfm-packs`, `pcfm-assets`, `pcfm-pack`. `pcfm-testkit` is the public test harness contract: it has **no dependency on any other `pcfm-*` crate**, so core modules, plugins, and tools can all implement `pcfm_testkit::Scenario` without coupling. The historical prefix `fmr-` (from the original "FMR project" name) is deprecated and must not be used in new files. Rust module paths follow the same convention with an underscore: `pcfm_core::rng`, `pcfm_match::simulate`, `pcfm_testkit::Scenario`, etc.
 
 **Modules vs sub-modules:** A **module** is a directory (`L0-match`, `L2-psyche`). A **sub-module** is a file inside a module (`04-match-engine.md`). A sub-sub-module is a section (`##`) inside a file. There is no third level of directories. If a sub-module needs its own children, it becomes a new module at the same level, not a deeper directory.
 
@@ -215,7 +218,7 @@ When the project ships, this folder holds the dashboards that compare internal m
 
 ### `/crates`, `/registry`, `/mods`, `/data`
 
-`crates/` contains code (6 crates as of 2026-10-25). `registry/`, `mods/`, `data/` are empty until code or user packs exist. **Rule:** `data/` contains *examples only*. Never real licensed data. If you need to test with real data, keep it outside the repo.
+`crates/` contains code (7 crates as of 2026-10-26). `registry/`, `mods/`, `data/` are empty until code or user packs exist. **Rule:** `data/` contains *examples only*. Never real licensed data. If you need to test with real data, keep it outside the repo.
 
 ---
 
@@ -330,18 +333,22 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 | 002 | Project name and scope | ✅ accepted | — |
 | 003 | Plane A enforcement | ✅ accepted | — (unblocked L0.04, L0.08, L0.10) |
 | 004 | Panic strategy at FFI | ✅ accepted | — |
-| 005 | Qt binding | 🟡 proposed | `L3-ui`, `pcfm-bridge` |
-| 006 | License | 🟡 proposed | `LICENSE.md`, every `Cargo.toml` example |
-| 007 | Canonical language | 🟡 proposed | translations, language policy |
-| 008 | Provider integration is external | ✅ accepted | — (reclassified `L2-ingest` as external tool) |
+| 005 | Qt binding | ✅ accepted | — (unblocked L3-ui, pcfm-bridge) |
+| 006 | License | ✅ accepted | — (unblocked LICENSE.md, every Cargo.toml) |
+| 007 | Canonical language | ✅ accepted | — (unblocked translations, language policy) |
+| 008 | Provider integration is external | ✅ accepted | — (reclassified L2-ingest as external tool) |
 | 012 | Plugins: The Brick Contract | 🟡 proposed | The plugin system (step 11+). Ratified when the framework implements it. |
-| 013 | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | The world system (step 11+). Supersedes pillar 1 of `00-foundations` (currently under review). Ratified when the framework implements it. |
+| 013 | Worlds: LOD, Manifest, and Local Determinism | 🟡 proposed | The world system (step 11+). Supersedes pillar 1 of `00-foundations`. Ratified when the framework implements it. |
+| 014 | Mobile strategy | ✅ accepted | — |
+| 015 | v1.0 scope | 🟡 proposed | v1.0 content reduction (20 roles, 10 formations, 5 nations, 3 active psyche axes). Ratified after ADR-012 and ADR-013. |
 
-**Open ADRs:** 005, 006, 007, 012, 013. **Accepted:** 001, 002, 003, 004, 008.
+**Open ADRs:** 012, 013, 015. **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 014.
 
 **ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`012-013-reading-guide.md`](docs/adr/012-013-reading-guide.md). ADR-013 depends on ADR-012.
 
-**Note on pillar 1.** ADR-013, if ratified, will supersede pillar 1 of `00-foundations` §2 ("Traceable determinism. Same seed + same inputs = same result. Never compromised.") and replace it with a **local** determinism (same save + same match + same plugin configuration = same result). The pillar is currently marked **under review** in the doctrine. Until ratification, the doctrine is unchanged: the determinism is **global**.
+**Note on pillar 1.** ADR-013, if ratified, will supersede pillar 1 of `00-foundations` §2 ("Traceable determinism. Same seed + same inputs = same result. Never compromised.") and replace it with a **local** determinism (same save + same match + same plugin configuration = same result). Until ratification, the doctrine is unchanged: the determinism is **global**. `modules/00-foundations.md` v1.4 reflects this: pillar 1 stands as written, and ADR-013 is cited as *proposed, not ratified*.
+
+**Note on ADR-015.** ADR-015 formalises the v1.0 scope reduction. It depends on ADR-012 (module system) and ADR-013 (world system): "in a pack" is not a safe answer until the module contract exists. Ratify ADR-012 and ADR-013 first, or ratify all three together.
 
 ---
 
