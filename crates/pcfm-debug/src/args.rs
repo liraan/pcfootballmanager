@@ -1,8 +1,8 @@
 //! CLI argument parsing.
 //!
-//! No external dependency: the CLI has four flags, and a parser in 100 lines
-//! is clearer than a dependency. `clap` is deliberately avoided for now; if
-//! the CLI grows, it will be adopted with an ADR.
+//! No external dependency: the CLI has a handful of flags, and a parser in
+//! 100 lines is clearer than a dependency. `clap` is deliberately avoided
+//! for now; if the CLI grows, it will be adopted with an ADR.
 
 use std::error::Error;
 use std::fmt;
@@ -20,6 +20,10 @@ pub struct Args {
     pub quiet: bool,
     /// If true, run the health check instead of simulating a match.
     pub check: bool,
+    /// If true, list the registered scenarios and exit.
+    pub list: bool,
+    /// If true, print feature coverage and exit.
+    pub coverage: bool,
 }
 
 impl Default for Args {
@@ -30,6 +34,8 @@ impl Default for Args {
             html: None,
             quiet: false,
             check: false,
+            list: false,
+            coverage: false,
         }
     }
 }
@@ -90,6 +96,8 @@ where
             "--json" => args.json = true,
             "--quiet" | "-q" => args.quiet = true,
             "--check" => args.check = true,
+            "--list" => args.list = true,
+            "--coverage" => args.coverage = true,
             "--seed" => {
                 let v = iter
                     .next()
@@ -124,6 +132,8 @@ OPTIONS:
     --html <PATH>      Write a self-contained HTML file to PATH
     --quiet, -q        Print only the final score
     --check            Run the health check instead of simulating a match
+    --list             List the registered test scenarios and exit
+    --coverage         Print feature coverage of the test scenarios
     --help, -h         Print this help
 ";
 
@@ -166,6 +176,24 @@ mod tests {
     fn quiet_flag_is_set() {
         let a = parse(argv(&["--quiet"])).unwrap();
         assert!(a.quiet);
+    }
+
+    #[test]
+    fn check_flag_is_set() {
+        let a = parse(argv(&["--check"])).unwrap();
+        assert!(a.check);
+    }
+
+    #[test]
+    fn list_flag_is_set() {
+        let a = parse(argv(&["--list"])).unwrap();
+        assert!(a.list);
+    }
+
+    #[test]
+    fn coverage_flag_is_set() {
+        let a = parse(argv(&["--coverage"])).unwrap();
+        assert!(a.coverage);
     }
 
     #[test]
