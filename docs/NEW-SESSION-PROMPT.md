@@ -61,14 +61,16 @@ In dependency order:
 
 ## Operating rules (important — we established them together)
 
-1. **Complete files, always.** When a change concerns a file < 500 lines, give me the **complete file** to paste into the GitHub web interface. No `perl`/`sed` for small files. For files > 500 lines, ask me whether I prefer `perl` or the complete file. **Exception:** 1-line fixes in files > 500 lines may use `perl -i -pe` with a `grep -n` verification.
-2. **I work on GitHub web + Git Bash on Windows.** I modify files by pasting into the web interface. I run commands (`git pull`, `cargo`, `git mv`) in Git Bash. When you give me a command, it must work on Git Bash (Windows). **No Python scripts** (Python is not installed). No Linux-only commands (`apt`, `systemctl`, etc.).
-3. **Pull before every verification.** After every web change, I must run `git pull --rebase` before running `cargo`. If I forget, remind me. If the pull stops because of uncommitted local changes, stop and ask me.
-4. **Mutual honesty, zero inventions.** If you have not read a file, say so. If a piece of information is not certain, say so. Do not invent numbers, commit hashes, or file contents to "fill a gap". The rule is: "I don't know" > invention.
-5. **Small, atomic commits.** One commit per file (or per logical group). Clear messages in English, imperative mood.
-6. **Verify after every code change:** `cargo build --release` + `cargo clippy --workspace --all-targets -- -D warnings` + `cargo test --workspace` + `cargo fmt --check` + `cargo run --release --bin pcfm-debug -- --check --seed 42`. If anything is red, **stop and we fix it**. Do not "fix" a test to make it pass: the test is the contract.
-7. **No `unwrap`/`expect`/`panic!` in simulation paths.** No `HashMap` in simulation paths. No `unsafe` outside `pcfm-bridge` (future). These rules are already in the code, but it is worth remembering them.
-8. **If I ask you to read a file, give me the `cat` command from Git Bash** (e.g. `for f in ...; do echo "FILE: $f"; cat "$f"; done`), do not invent the content.
+0. **Work in the local repo, commit in Git Bash, push. The GitHub web interface is for emergencies only** (e.g. the local repo is broken, or a quick fix while travelling). Every change: edit locally → `git add` → `git commit` → `git push`. If you use the web, `git pull --rebase` immediately after, before touching anything else.
+1. **Small, targeted edits in Git Bash.** Use `sed`/`awk` for targeted modifications. **Do not send the full file in chat when it exceeds ~120 lines**: the chat truncates the block and the paste becomes wrong. For files under ~120 lines, a single fenced block is fine. For longer files, give the exact `sed`/`awk` commands, one section at a time.
+2. **`sed`/`awk` delimiters.** The replacement text must not contain the delimiter. Use `@` or `~` by default; use `|` only if the text contains neither. If in doubt, write the replacement to a temp file and splice with `awk`.
+3. **Verify after every edit.** `sed -n 'Np' file` (or `sed -n 'A,Bp' file`) to confirm the change. `git diff file` before `git add`. If the diff shows unrelated changes, stop.
+4. **One file at a time.** Wait for "ok" before moving to the next file. Do not queue multiple files in one message.
+5. **Mutual honesty, zero inventions.** If you have not read a file, say so. If a piece of information is not certain, say so. Do not invent numbers, commit hashes, or file contents to "fill a gap". The rule is: "I don't know" > invention.
+6. **Small, atomic commits.** One commit per file (or per logical group). Clear messages in English, imperative mood.
+7. **Verify after every code change:** `cargo build --release` + `cargo clippy --workspace --all-targets -- -D warnings` + `cargo test --workspace` + `cargo fmt --check` + `cargo run --release --bin pcfm-debug -- --check --seed 42`. If anything is red, **stop and we fix it**. Do not "fix" a test to make it pass: the test is the contract.
+8. **No `unwrap`/`expect`/`panic!` in simulation paths.** No `HashMap` in simulation paths. No `unsafe` outside `pcfm-bridge` (future). These rules are already in the code, but it is worth remembering them.
+9. **If I ask you to read a file, give me the `cat` or `sed -n` command from Git Bash**, do not invent the content. For long files, read in chunks of ~80 lines.
 
 ## Codebase-specific rules (do not violate)
 
