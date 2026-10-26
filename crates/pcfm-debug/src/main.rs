@@ -84,7 +84,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     let result = engine.simulate(ctx);
 
     if args.check {
-        let report = check::run(args.seed)?;
+        let report = check::run(args.seed);
         println!("=== HEALTH CHECK ===");
         for p in &report.passed {
             println!("  ✅ {p}");
