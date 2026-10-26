@@ -13,7 +13,7 @@
 | Metrica | Valore | Fonte |
 |---------|--------|-------|
 | Branch | `main` | `git status` |
-| Ultimo commit | `9002f65` — "Create repository snapshot documentation" | `git log` |
+| Ultimo commit | `96c8f59` — "Revise REPO-SNAPSHOT.md for latest updates" | `git log` |
 | Working tree | clean | `git status` |
 | File tracciati | 113 | `git ls-files \| wc -l` |
 | Crate | 7 (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`) | `git ls-files` |
@@ -102,11 +102,11 @@ pcfootballmanager/
 | `CHANGELOG-SIM.md` | 111 | ✅ | SIM_VERSION = 1 (baseline). Procedura di bump in 5 step, template entry, history (vuota). |
 | `CHANGELOG-REGISTRY.md` | 126 | ✅ | Registry = baseline, nessuna entità. Regole di deprecazione, template entry, planned deprecations. |
 | `Cargo.toml` | 54 | ✅ | `[workspace]` con `resolver = "3"`, 7 membri, `[workspace.package]`, `[workspace.dependencies]`, `[workspace.lints.*]`. |
-| `Cargo.lock` | 357 | ❌ | **Non letto** (auto-generato). |
+| `Cargo.lock` | 357 | ✅ | **Letto.** `version = 4`. 35 package totali: 7 `pcfm-*` (workspace members) + 28 dipendenze esterne (blake3, rand_chacha, serde, thiserror, syn, ecc.). Tutti pinnati con checksum. `pcfm-testkit` non ha dipendenze. `pcfm-debug` dipende da 6 crate del workspace + `serde_json`, `thiserror`. |
 | `.gitattributes` | 36 | ✅ | Normalizzazione LF, esclusioni per `.bat`/`.cmd`/`.ps1` (CRLF) e binari. |
-| `.gitignore` | 167 | ❌ | **Non letto.** |
-| `.cargo/config.toml` | 13 | ❌ | **Non letto.** |
-| `rust-toolchain.toml` | 15 | ❌ | **Non letto.** |
+| `.gitignore` | 167 | ✅ | **Letto.** Sezioni: Rust build artifacts (`/target/`, `**/target/`, `*.rs.bk`, `*.pdb`), profiling (`*.profraw`, `perf.data*`, `*.dSYM/`, `*.mir`), IDE (`.vscode/`, `.idea/`, `*.swp`, ecc.), OS (`.DS_Store`, `Thumbs.db`, `desktop.ini`), log, user data (`saves/`, `*.save`, `*.pcfm`, `*.sav`), secrets (`.env`, `*.pem`, `*.key`, `credentials.toml`), pack cache (`mods/_cache/`, `mods/quarantined/`), generated worlds (`data/generated/`), temporary, test fixtures (`tests/fixtures/generated/`), coverage, local cache (`.cache/`). **Cargo.lock esplicitamente NON ignorato** (binary application, build riproducibili). |
+| `.cargo/config.toml` | 13 | ✅ | **Letto.** Intenzionalmente minimale. Solo commenti: alias futuri (`check-all`, `test-all`, `clippy-all`) e `rustflags = ["-D", "warnings"]` per CI, tutti commentati. **Nessuna configurazione attiva.** |
+| `rust-toolchain.toml` | 15 | ✅ | **Letto.** `channel = "stable"`, `components = ["rustfmt", "clippy", "rust-src"]`, `profile = "minimal"`. `miri` e `llvm-tools-preview` esclusi (Windows-only limitation). Da pinnare a versione specifica (es. "1.90.0") al momento del rilascio. |
 
 ---
 
@@ -281,15 +281,19 @@ pcfootballmanager/
 
 ## 7. Da incollare per completare lo snapshot
 
-Questi file **non sono mai stati letti**:
-
-### Configurazione
-- `Cargo.lock` (auto-generato, probabilmente irrilevante)
-- `.gitignore`
-- `.cargo/config.toml`
-- `rust-toolchain.toml`
-
-**Nessun file di codice rimane da leggere.** Tutti i 7 crate sono stati letti integralmente (con l'eccezione di `Cargo.toml` minori che sono inclusi nelle sezioni sopra).
+**Nessun file rimane da incollare.** Tutti i 113 file tracciati sono stati letti:
+- 14 ADR + 1 reading guide
+- 2 moduli di dottrina (`00-foundations.md`, `_index.md`)
+- 11 moduli L0
+- 7 crate (52 file di codice)
+- 4 file di licenza
+- 3 CHANGELOG
+- 3 file di configurazione (`.gitattributes`, `.gitignore`, `.cargo/config.toml`, `rust-toolchain.toml`)
+- `Cargo.toml`, `Cargo.lock`
+- `README.md`, `STRUCTURE.md`, `CONTRIBUTING.md`
+- `GLOSSARY.md`, `MIGRATION-01-04.md`, `PLUGIN_DEVELOPER_GUIDE.md`
+- `.github/` template
+- `.gitkeep` (file vuoti)
 
 ---
 
@@ -332,14 +336,13 @@ Tutte le 16 incongruenze identificate sono state chiuse. Riepilogo:
 | Moduli L0 | 11, tutti ratified | `git ls-files` |
 | Link rotti | 0 | script di verifica (2026-10-26) |
 | Working tree | clean | `git status` |
-| Ultimo commit | `9002f65` | `git log` |
+| Ultimo commit | `96c8f59` | `git log` |
+| File tracciati letti | 113/113 (100%) | questo snapshot |
 
 ---
 
 ## 10. Cosa NON so (e non voglio inventare)
 
-1. **Contenuto di `.gitignore`, `.cargo/config.toml`, `rust-toolchain.toml`**. So che esistono e la loro dimensione, ma non il contenuto.
-2. **Contenuto di `Cargo.lock`**. Auto-generato, probabilmente irrilevante per lo snapshot.
-3. **Eventuali altre chat o decisioni prese fuori da questa sessione.** Se ce ne sono, non le vedo.
+1. **Eventuali altre chat o decisioni prese fuori da questa sessione.** Se ce ne sono, non le vedo.
 
-**Nessun file di codice rimane da leggere.** Tutti i 7 crate sono stati letti integralmente.
+Tutto il resto è stato letto e documentato. Questo snapshot è completo al 100% dei file tracciati.
