@@ -8,9 +8,7 @@
 use pcfm_core::rng::RngRegistry;
 use pcfm_core::time::GameInstant;
 use pcfm_hidden::GroundTruth;
-use pcfm_match::{
-    MatchConfig, MatchContext, MatchEngine, MatchResult, MatchSave, TextMatchEngine,
-};
+use pcfm_match::{MatchConfig, MatchContext, MatchEngine, MatchResult, MatchSave, TextMatchEngine};
 use pcfm_model::Match;
 use pcfm_stats::EventChain;
 use pcfm_testkit::{Feature, Scenario, ScenarioResult, TestContext, TestRegistry};
