@@ -264,7 +264,7 @@ When L0 and L1 are stable and a minimal kernel runs. Indicatively **Q1 2027**. N
 
 **Which decisions are actually settled?**
 Settled: the doctrine, the Three Planes, Plane A enforcement (ADR-003), FFI panic strategy (ADR-004), Qt binding (ADR-005), license (ADR-006), canonical language (ADR-007), provider integration policy (ADR-008).
-All decisions except ADR-016 are now accepted. ADR-016 (v1.0 content selections) is `proposed`. See [`docs/adr/`](docs/adr/) for the full list.
+All decisions except ADR-017 are now accepted. ADR-017 (roles are labels) is `proposed`. See [`docs/adr/`](docs/adr/) for the full list.
 
 **What is `pcfm-testkit`?**
 A small crate that defines the `Scenario` trait and the `TestRegistry`. It has **no dependency on any other `pcfm-*` crate**, so core modules, plugins, and tools can all contribute test scenarios without coupling. `pcfm-debug --check` runs them; `--list` and `--coverage` inspect them.
