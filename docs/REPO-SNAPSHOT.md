@@ -150,7 +150,7 @@ pcfootballmanager/
 | File | Lines | Status | What I know |
 |------|-------|--------|-------------|
 | `modules/00-foundations.md` | ~245 | ✅ | v2.0 (2026-10-26). Pillar 1 revised (ADR-013): local determinism. §1 Role, §2 Design Pillars (10), §3 Three Planes, §4 Determinism (local), §5 Banned Things, §6 Product Goal, §7 Non-Goals, §8 References, §9 Concentric Structure. |
-| `modules/_index.md` | ~265 | ✅ | v2.9. Current state (2026-10-26), Doctrine, L0 (11 ratified), L1-L3 (planned), Provider integrations, Plugins and worlds (accepted), How to read, Doctrine compliance, Level graph, Status legend, Components, ADR status (12 accepted, 0 proposed, 1 template, 1 reading guide). |
+| `modules/_index.md` | ~265 | ✅ | v2.9. Current state (2026-10-26), Doctrine, L0 (11 ratified), L1-L3 (planned), Provider integrations, Plugins and worlds (accepted), How to read, Doctrine compliance, Level graph, Status legend, Components, ADR status (12 accepted, 1 proposed (016), 1 template, 1 reading guide). |
 | `modules/L0-match/00-overview.md` | 203 | ✅ | `Status: ratified`. 11 cells, 7-point checklist, dependency rules. |
 | `modules/L0-match/01-rng.md` | 150 | ✅ | `Status: ratified`. ChaCha20Rng, named streams, seed derivation, SIM_VERSION. |
 | `modules/L0-match/02-event-bus.md` | 138 | ✅ | `Status: ratified`. EventBus, ordering by `seq`, single-thread per match, replay compatibility. |
