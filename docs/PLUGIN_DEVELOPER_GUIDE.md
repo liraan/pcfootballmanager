@@ -1,8 +1,8 @@
 # Plugin Developer Guide
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** active
-**Last updated:** 2026-10-25
+**Last updated:** 2026-10-26
 **Audience:** developers who write Rust code that extends PCFM
 
 This guide is for **plugin developers**: people who write Rust code that extends PCFM. It is **not** for **modders**, who write packs (registry files, themes, assets) without writing Rust. See `STRUCTURE.md` §9 for the difference.
@@ -33,7 +33,7 @@ This guide is for the second kind.
 
 PCFM is a Cargo workspace. Every crate is in `crates/`, and every crate name starts with `pcfm-`.
 
-Current crates (as of 2026-10-25):
+Current crates (as of 2026-10-26):
 
 | Crate | Responsibility | Plane | Tests |
 |---|---|---|---|
@@ -42,8 +42,12 @@ Current crates (as of 2026-10-25):
 | `pcfm-hidden` | `GroundTruth`, `resolve_*`, `drain_observations` | **A** | 4 |
 | `pcfm-stats` | `MatchEvent`, `EventType`, `EventChain` | B | 11 |
 | `pcfm-match` | The match engine (orchestrator + shared simulation) | — | 10 |
+| `pcfm-testkit` | Public test harness: `Scenario`, `Feature`, `TestRegistry` | — | 0 (contract only) |
+| `pcfm-debug` | CLI: `--check`, `--list`, `--coverage`, demo rendering | — | 18 |
 
 The dependency graph is **inward-only**: a crate at level N depends on crates at level `< N`, never on `> N`. See `STRUCTURE.md` §2.
+
+`pcfm-testkit` is special: it has **no dependency on any other `pcfm-*` crate**. It is the contract that core modules, plugins, and tools all implement. See §11 for how to contribute scenarios.
 
 ### Adding a new crate
 
@@ -71,6 +75,7 @@ The dependency graph is **inward-only**: a crate at level N depends on crates at
 3. **Add it to the root `Cargo.toml`**:
    ```toml
    [workspace]
+   resolver = "3"
    members = [
        # ... existing
        "crates/pcfm-<name>",
@@ -201,7 +206,7 @@ A new dependency is a **supply-chain risk** and a **maintenance cost**. The rule
 
 The workspace already pins the dependencies we use. To add one, add it to `[workspace.dependencies]` in the root `Cargo.toml`, and use `*.workspace = true` in the crate's `Cargo.toml`.
 
-Current dependencies (as of 2026-10-25):
+Current dependencies (as of 2026-10-26):
 
 | Crate | Why | License |
 |---|---|---|
@@ -291,6 +296,7 @@ If you find yourself wanting to read a latent value outside `pcfm-hidden`, you a
 - [ ] If the change adds an `EventType`, there is an ADR in `docs/adr/`.
 - [ ] If the change adds a `resolve_*`, there is an ADR in `docs/adr/`.
 - [ ] If the change touches a plane, the plane separation is respected.
+- [ ] If the change adds a test scenario, it is registered in `pcfm-debug/src/features/register_all` (see §11).
 - [ ] The module in `modules/` is updated (if the change is a spec change).
 - [ ] `CHANGELOG.md` has an entry (if the change is user-visible).
 
@@ -322,7 +328,88 @@ See §5. Short version: write an ADR, add the context/outcome types, add the met
 
 ---
 
-## 11. References
+## 11. Contributing test scenarios
+
+The project ships a public test harness, `pcfm-testkit`, that lets any crate — core module, plugin, or tool — contribute test scenarios without depending on `pcfm-debug` or on the rest of the framework.
+
+### The contract
+
+`pcfm-testkit` exposes two traits and one registry:
+
+| Type | Role |
+|------|------|
+| `Scenario` | A self-contained test: a name, a `Feature`, a `run(&mut TestContext) -> ScenarioResult` |
+| `Feature` | An identifier for the framework area under test (`L0Match`, `L2Market`, `Plugin("gui")`, …) |
+| `TestRegistry` | The aggregation point. `register(scenario)` adds one; `run_all(seed)` executes them all |
+
+`pcfm-testkit` has **no dependency on any other `pcfm-*` crate**. This is deliberate: it is the contract that core, plugins, and tools all share. If it depended on `pcfm-match`, plugins would have to depend on `pcfm-match` too, and the contract would collapse.
+
+### A minimal scenario
+
+```rust
+use pcfm_testkit::{Feature, Scenario, ScenarioResult, TestContext};
+
+pub struct MyFeatureSmokeTest;
+
+impl Scenario for MyFeatureSmokeTest {
+    fn name(&self) -> &'static str { "my_feature_smoke" }
+    fn feature(&self) -> Feature { Feature::Plugin("my-plugin".into()) }
+    fn description(&self) -> &'static str { "Smoke test for my plugin" }
+
+    fn run(&self, ctx: &mut TestContext) -> ScenarioResult {
+        let mut result = ScenarioResult::new();
+        // ... exercise your feature with ctx.seed ...
+        if ok {
+            result.pass("my feature works");
+        } else {
+            result.fail("my feature works", "reason");
+        }
+        result
+    }
+}
+```
+
+### Registering it
+
+For core modules, add one line to `crates/pcfm-debug/src/features/mod.rs`:
+
+```rust
+pub fn register_all(registry: &mut TestRegistry) {
+    l0_match::register(registry);
+    my_feature::register(registry);   // ← new
+    // ...
+}
+```
+
+For external plugins, expose a public function and call it from `register_all` (or from a plugin-specific registration function that `pcfm-debug` invokes):
+
+```rust
+// in your plugin crate
+pub fn register_tests(registry: &mut pcfm_testkit::TestRegistry) {
+    registry.register(MyFeatureSmokeTest);
+}
+```
+
+### Checking coverage
+
+Run:
+
+```bash
+cargo run --release --bin pcfm-debug -- --coverage
+```
+
+Your feature should now show `[✅]`. If it shows `[⬜]`, the scenario is not registered, or `feature()` returns the wrong variant.
+
+### Rules
+
+- **Deterministic.** Derive every RNG from `ctx.seed`. No `SystemTime`, no `rand::thread_rng`, no environment access.
+- **No panics.** Return a failed `ScenarioResult` instead. Panics are caught by the runner but produce unhelpful output.
+- **One feature per scenario.** A scenario that exercises two features makes `--coverage` lie.
+- **Stable name.** `name()` is the public identifier; renaming it breaks `--scenario NAME` filtering (planned).
+
+---
+
+## 12. References
 
 - [`STRUCTURE.md`](../STRUCTURE.md) — repository structure and rules
 - [`modules/00-foundations.md`](../modules/00-foundations.md) — the doctrine (Three Planes, determinism, bans)
@@ -330,6 +417,7 @@ See §5. Short version: write an ADR, add the context/outcome types, add the met
 - [`modules/L0-match/04-match-engine.md`](../modules/L0-match/04-match-engine.md) — the match engine module
 - [`modules/L0-match/10-ground-truth.md`](../modules/L0-match/10-ground-truth.md) — the `GroundTruth` API
 - [`docs/GLOSSARY.md`](GLOSSARY.md) — terms used in this guide
+- [`crates/pcfm-testkit/`](../crates/pcfm-testkit/) — the test harness contract
 
 ---
 
@@ -340,7 +428,7 @@ See §5. Short version: write an ADR, add the context/outcome types, add the met
     (e.g. the shared simulation in step 7), add a section here.
   - When a new crate is added to the workspace, add it to the table in §2.
   - When a dependency is added, add it to the table in §6.
-  - When an ADR is accepted that affects plugin developers, link it from §11.
+  - When an ADR is accepted that affects plugin developers, link it from §12.
   - This file is linked from:
       - CONTRIBUTING.md (reading order)
       - README.md (documentation map)
