@@ -81,6 +81,7 @@ In dependency order:
 8. **Verify after every code change:** `cargo build --release` + `cargo clippy --workspace --all-targets -- -D warnings` + `cargo test --workspace` + `cargo fmt --check` + `cargo run --release --bin pcfm-debug -- --check --seed 42`. If anything is red, **stop and we fix it**.
 9. **No `unwrap`/`expect`/`panic!` in simulation paths.** No `HashMap` in simulation paths. No `unsafe` outside `pcfm-bridge` (future).
 10. **Pre-commit hook** (`.githooks/pre-commit`): runs fmt, clippy, test only if Rust files are staged. Install with `git config core.hooksPath .githooks` (one-off, per clone).
+11. **Checkpoint on every interruption.** Before stopping (end of session, or a mid-session break), update `SESSION-STATE.md` with the last commit, the ordered next steps, and the files touched. Commit it and push. This is non-negotiable: a stale bookmark means the next session starts from invented priorities.
 
 ## Codebase-specific rules (do not violate)
 
