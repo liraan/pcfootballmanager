@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `7c52784` — "docs(adr): extend ADR-019 (N agents, D9-D11, ball as entity, two-phase events)"
+**Last commit verified:** `8498ca0` — "docs(snapshot): add WORLD-MODEL to documentation table"
 
 **Next agreed step:** revise `L0.05` (MatchEvent as observable, not concluded; add `PassAttempted`; two-phase rule plugins).
 
