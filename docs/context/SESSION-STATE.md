@@ -2,7 +2,9 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `2005d72` — "docs(adr): fix stale reference to ADR-016 (proposed -> accepted)"
+**Last commit verified:** `a2ac907` — "docs(context): add IDEAS.md (open and rejected ideas backlog)"
+
+**Ideas backlog:** `docs/context/IDEAS.md` — open and rejected ideas. Read it at session start to see what is not yet decided; do not implement from it.
 
 **Next steps (in dependency order):**
 1. **Finish Grade A/B stale sweep** — remaining: "22 players" in `docs/WORLD-MODEL.md` (lines 29, 44), `modules/L0-match/04-match-engine.md` (line 20), `docs/context/NEW-SESSION-PROMPT.md` (line 38); "done (proposed)" in `docs/MIGRATION-01-04.md` (line 64).
@@ -16,4 +18,4 @@
 9. **`L1-world/01-nation.md`**.
 10. **Warp setup (Phase 2)** — reactivate the ruleset on `main`, then grant a write token.
 
-**Files touched this session:** `docs/adr/017-roles-are-labels.md`, `docs/adr/018-defer-crowd-media.md`, `docs/context/NEW-SESSION-PROMPT.md`, `docs/context/SESSION-STATE.md`, `docs/WORLD-MODEL.md`, `docs/context/REPO-SNAPSHOT.md`.
+**Files touched this session:** `docs/adr/017-roles-are-labels.md`, `docs/adr/018-defer-crowd-media.md`, `docs/context/NEW-SESSION-PROMPT.md`, `docs/context/SESSION-STATE.md`, `docs/WORLD-MODEL.md`, `docs/context/REPO-SNAPSHOT.md`, `docs/context/IDEAS.md`.
