@@ -125,6 +125,7 @@ pcfootballmanager/
 | `docs/MIGRATION-01-04.md` | 186 | ✅ | Migration plan for the 4 legacy Italian modules (01-04), never committed to git. Target mapping to concentric modules. |
 | `docs/PLUGIN_DEVELOPER_GUIDE.md` | 436 | ✅ | v1.1 (2026-10-26). Contains: two kinds of extension, crate layout (7 crates), simulation/rendering split, adding EventType, adding `resolve_*`, dependencies, conventions, plane separation, PR checklist, examples, §11 Contributing test scenarios, references. |
 | `docs/PLUGINS-WORLDS-READING-GUIDE.md` | ~95 | ✅ | New content (2026-10-26): `Status: accepted`, `Type: reading guide (non-ADR)`, `plugin` terminology (not `module`), `MatchPlugin` (not `MatchModule`), reference to `00-foundations` v2.0. |
+| `docs/WORLD-MODEL.md` | 103 | ✅ | **New (2026-10-27).** Vision document: concentric levels (L0–L3), taxonomy of seven categories (competitive agents, normative agents, physical objects, modifiers, processes, scenic entities), simulation vs presentation, horizons (v1.0 / 2D / post-v1.0). Not a contract, not a spec. |
 
 ### 4.1 ADRs (`docs/adr/`)
 
