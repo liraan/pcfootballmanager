@@ -1,0 +1,103 @@
+# World Model — PCFM
+
+**Purpose:** a map of everything that can exist in a match, organised by level and by category. It is a **vision document**, not a contract. It gives every element a place, so that future decisions do not have to invent one.
+
+**Status:** living document (update when the vision changes).
+
+**See also:** `docs/ARCHITECTURE.md` (how the crates interact), `docs/adr/019-match-engine-contract.md` (the contract), `modules/00-foundations.md` §9 (concentric levels).
+
+---
+
+## 1. Scope
+
+This document answers three questions:
+
+1. **What levels exist?** (L0 match, L1 season, L2 career, L3 presentation)
+2. **What categories of things exist?** (agents, physical objects, modifiers, processes)
+3. **What belongs to v1.0, to 2D, to post-v1.0?**
+
+It does **not** specify how any of it is implemented. That is the job of `modules/` and `docs/adr/`.
+
+---
+
+## 2. Concentric levels (L0–L3)
+
+The project is organised as **concentric levels** (see `00-foundations.md` §9). Each level expands the previous one without replacing it. Dependencies flow **inward**: a level N may depend on levels `< N`, never on `> N`, never laterally.
+
+| Level | What it is | Contains | Depends on |
+|---|---|---|---|
+| **L0 — Match** | One match. Deterministic, savable. | Engine, 22 players, ball, referee, synchronous rules (offside, fouls) | — |
+| **L1 — Season** | A league, a calendar, a world. | Standings, fixtures, nations, cities, stadiums (generated) | L0 |
+| **L2 — Career** | The management game. | Market, finance, youth, scouting, psyche, **crowd** (ADR-018), media (v1.1) | L0, L1 |
+| **L3 — Presentation** | How the game is shown. | UI, **3D rendering**, sound, replay, **visual weather**, **crowd rendering**, commentary | L0, L1, L2 (read-only) |
+
+**Rule:** L3 reads L0–L2. L0–L2 never read L3. No game rule lives in the interface (doctrine, pillar 2).
+
+---
+
+## 3. Taxonomy (seven categories)
+
+Everything that can exist in a match falls into one of these categories. The category determines **what it can do** and **where it lives**.
+
+| Category | Physical presence? | Decides? | Examples | Horizon |
+|---|---|---|---|---|
+| **Competitive agents** | Yes (in the pitch) | Yes (play) | 22 players | v1.0 |
+| **Normative agents (in-pitch)** | Yes (in the pitch) | Yes (rules) | Referee | v1.0 (position) / 2D (full physics) |
+| **Normative agents (peripheral)** | No (along touchlines) | Yes (rules) | Assistant referees | v1.0 (abstract) / 2D (position) |
+| **Normative processes** | No | Yes (rules, delayed) | VAR / review | post-v1.0 |
+| **Physical objects** | Yes | No | Ball, goal (posts + crossbar + net), pitch lines, corner flags | v1.0 (ball, goal line) / 2D (posts, net, flags) |
+| **Global modifiers** | No | No (parameters) | Gameplay weather (rain, wind), pitch condition, temperature | v1.0 (basic) / post (advanced) |
+| **Scenic entities** | Yes (aesthetic) | No | Benches, technical area, corner flags (visual) | 2D |
+
+**Excluded by decision:** drones (they clutter the view of the pitch), sensor-in-the-ball (unnecessary: the event timestamp is already the moment of contact).
+
+---
+
+## 4. Simulation vs presentation
+
+The most important distinction in this document. **Everything that influences the result is simulation. Everything that only shows the result is presentation.**
+
+| Aspect | Simulation (L0–L2) | Presentation (L3) |
+|---|---|---|
+| **Where it lives** | `pcfm-match`, `pcfm-stats`, `pcfm-hidden` | UI, renderer, sound engine |
+| **Can read Plane A?** | Yes (via `resolve_*` only) | **Never** |
+| **Affects the result?** | Yes | No |
+| **Deterministic?** | Yes (local determinism, ADR-013) | No requirement (frame rate varies) |
+| **Examples** | Player positions, ball state, events, crowd atmosphere value | 3D meshes, textures, camera, HUD, sound |
+
+### Two "weather" concepts
+
+- **Gameplay weather** (L0/L1, a modifier): rain makes the pitch slippery, wind curves the ball, heat drains stamina. It **changes the simulation**.
+- **Visual weather** (L3, rendering): raindrops on screen, grey sky, puddles on the 3D pitch. It **shows** the gameplay weather but does not affect the result.
+
+The two are **separate**. The renderer reads the gameplay weather and renders it; it cannot invent weather that the simulation does not have.
+
+### Two "crowd" concepts
+
+- **Crowd content** (L2, `L2-crowd` per ADR-018): attendance, atmosphere value, impact on players (when implemented). It **changes the simulation** (or at least the context).
+- **Crowd rendering** (L3): 45,000 animated people in the stands, chants, flags. It **shows** the crowd content but does not affect the result.
+
+The two are **separate**. A 3D stadium with 45,000 people is rendering; the crowd's atmosphere value is `L2-crowd`.
+
+---
+
+## 5. Horizons (v1.0 / 2D / post-v1.0)
+
+| Horizon | What it includes | What it does not include |
+|---|---|---|
+| **v1.0** (L0 positional) | 22 competitive agents, ball as entity, referee with position (synchronous rules), abstract assistants, basic gameplay weather, goal line as boundary, synchronous offside | VAR, sensor, physical ball dynamics, net as constraint, pitch condition, full referee physics, assistant positions, 3D rendering |
+| **2D** | Ball with physics, posts and crossbar as obstacles, net as constraint, referee with full physics, assistant positions along lines, pitch condition (wet/dry), visual weather, 3D rendering prototype | VAR process, advanced weather (wind curves ball with physics), full crowd simulation |
+| **post-v1.0** | VAR (`VARReview` event delaying the decision when uncertain), advanced weather, crowd simulation (ADR-018, v1.1), full 3D, commentary, replay, spectator mode | — |
+
+**Rule:** a horizon is not a promise. It is a place to put things so that the contract does not have to grow to accommodate them prematurely.
+
+---
+
+## 6. What this document is not
+
+- It is **not** a contract. The contract is `docs/adr/019-match-engine-contract.md`.
+- It is **not** a specification. The specification is `modules/`.
+- It is **not** a promise of implementation. Some of it may never be implemented.
+- It is **not** a briefing. Briefings live in `docs/context/`.
+
+It is a **map**. If something new appears, it gets a place here first, then (if it needs a contract) an ADR, then (if it needs a spec) a module.
