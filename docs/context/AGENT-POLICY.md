@@ -55,6 +55,10 @@
 
 The ruleset is the **primary** defence. The hook is a local safety net. The branch naming is traceability, not security.
 
+**Current status (2026-10-27):** the ruleset is **disabled**. Only the
+maintainer pushes. It must be reactivated **before** granting a write token
+to any agent. The pre-commit hook remains active.
+
 ## 7. Revocation
 
 If the agent misbehaves, or if its access must be withdrawn:
