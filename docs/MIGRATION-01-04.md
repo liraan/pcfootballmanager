@@ -61,7 +61,7 @@ The content of each legacy module is re-integrated into the concentric structure
 | Determinism rules (RNG, BTreeMap, fixed-point) | `L0-match/01-rng.md` + `00-foundations.md` §4 | ✅ done |
 | Dependency rules between crates | `L0-match/00-overview.md` §4 + a new **`L3-quality/02-dependency-rules.md`** *(planned)* | partial |
 | Panic strategy at FFI | `docs/adr/004-panic-strategy-ffi.md` | ✅ done |
-| Qt binding | `docs/adr/005-qt-binding.md` | ✅ done (proposed) |
+| Qt binding | `docs/adr/005-qt-binding.md` | ✅ done |
 | Testing strategy, Miri, ASan, golden tests | `00-foundations.md` §4 + a new **`L3-quality/01-testing.md`** *(planned)* | partial |
 | `SIM_VERSION` bump procedure | `CHANGELOG-SIM.md` | ✅ done |
 
