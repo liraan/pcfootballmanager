@@ -86,8 +86,12 @@ or dedicated notes before implementation:
    integer distance from the ball), with `EntityId` as tie-break. All 22
    players are iterated each tick. The set of "active" players (radius,
    zone) is deferred to deferred 2.
-2. **Off-ball pre-emption** (preventive foul, defensive block): priority rule,
-   to be specified.
+2. **Off-ball pre-emption** (preventive foul, defensive block): an off-ball
+   action may pre-empt an on-ball action if its tick cost is strictly lower
+   and the defender is within a radius R. Equal cost: spatial order (deferred
+   1) decides. Preventive foul pre-empts passes and dribbles, not shots
+   inside the box (that would be a penalty). Costs, R, and the pre-emption
+   matrix live in `docs/calibration/` (currently empty).
 3. **Possession representation** (only "who has the carrier", no separate team
    flag).
 4. **Granular UX**: separate choice of LOD and resolution, readable presets,
