@@ -6,7 +6,7 @@ Thanks for wanting to help. This project is documentation-first, and **good docu
 
 ## Current state
 
-The live state of the project — crates, tests, ADRs, L0 modules, last commit — is maintained in **one place only**: [`docs/context/REPO-SNAPSHOT.md`](docs/context/REPO-SNAPSHOT.md) §1. It is not duplicated here, to avoid drift.
+The live state of the project — crates, tests, ADRs, L0 modules, last commit — is the repository itself: `git log`, `git ls-files`, `cargo test`. [`docs/context/REPO-SNAPSHOT.md`](docs/context/REPO-SNAPSHOT.md) is a **briefing**, not authority; it may lag behind. For ADR status, see [`STRUCTURE.md`](STRUCTURE.md) §5.
 
 If you are new, read the files in the order below before opening a PR.
 
@@ -137,7 +137,7 @@ If an ADR is `proposed` and touches an area, **no code is written in that area u
 
 **For the current list of open ADRs, and what each one blocks, see [`STRUCTURE.md`](STRUCTURE.md) §5 ("Current ADR status").** That table is the single source of truth. It is **not duplicated here**, to avoid drift between the two files.
 
-**Current state:** see [`STRUCTURE.md`](STRUCTURE.md) §5 and [`docs/context/REPO-SNAPSHOT.md`](docs/context/REPO-SNAPSHOT.md) §1. ADR-012, ADR-013, and ADR-015 are **accepted**. ADR-016 is **proposed**. See [`docs/PLUGINS-WORLDS-READING-GUIDE.md`](docs/PLUGINS-WORLDS-READING-GUIDE.md) for how to read ADR-012 and ADR-013 together.
+**Current state:** for ADR status, see [`STRUCTURE.md`](STRUCTURE.md) §5 (the single source of truth). For a briefing on the repository, see [`docs/context/REPO-SNAPSHOT.md`](docs/context/REPO-SNAPSHOT.md) (not authority). The reading guide for ADR-012 and ADR-013 is [`docs/PLUGINS-WORLDS-READING-GUIDE.md`](docs/PLUGINS-WORLDS-READING-GUIDE.md).
 ---
 
 ## Code
