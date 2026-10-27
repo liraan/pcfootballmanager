@@ -16,6 +16,9 @@ conforms_to: "00-foundations (v1.1)"
   MAINTAINER NOTE: ADR-003 is accepted (option B). This cell is now `ratified`.
   The `GroundTruth` API is defined in L0.10, not here. This cell consumes it.
   If you change the API, change L0.10, not this cell.
+  UPDATE (2026-10-27): ADR-019 (accepted) defines the target contract
+  (agent-first, positional, 22 players). This module describes the current
+  prototype (probability-per-tick). Revision expected after ADR-019.
 -->
 
 # L0.04 — Match Engine
@@ -25,6 +28,10 @@ conforms_to: "00-foundations (v1.1)"
 Define the `MatchEngine` trait and specify its text implementation. The match engine is the **orchestrator** of L0: it drives the tick loop, calls `GroundTruth::resolve_*` for every resolution, publishes events, and produces a `MatchResult`.
 
 **Status: `ratified`.** ADR-003 (Plane A enforcement, option B) is accepted. The implementation can proceed.
+
+**Target contract:** ADR-019 (accepted, 2026-10-27) defines the positional,
+agent-first engine that will replace this prototype. The current module
+describes the prototype; the revision is expected and tracked.
 
 ## 1. Context and dependencies
 
