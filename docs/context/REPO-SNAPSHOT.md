@@ -355,7 +355,7 @@ All 16 identified inconsistencies have been closed. Summary:
 | ADRs | 17 files in `docs/adr/`: 15 accepted (001-008, 012-016, 018, 019), 1 proposed (017), 1 template (000). Plus 1 reading guide in `docs/`. | `ls docs/adr/` + `grep Status` |
 | Reading guide | 1 in `docs/` (`PLUGINS-WORLDS-READING-GUIDE.md`) | `ls docs/` |
 | L0 modules | 11, all ratified | `git ls-files` |
-| Broken links | 0 | verification script (2026-10-26) |
+| Broken links | 0 | manual grep verification (2026-10-27), 1 broken link found and fixed |
 | Working tree | clean | `git status` |
 | Last commit | `de208bd` (HEAD at snapshot time) | `git log` |
 | Tracked files read | 121/121 (100%) — ADR-019 authored this session | this snapshot |
