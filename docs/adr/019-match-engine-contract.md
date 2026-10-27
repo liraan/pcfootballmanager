@@ -1,6 +1,6 @@
 # ADR-019 — Match engine contract
 
-**Status:** proposed
+**Status:** accepted
 **Date:** 2026-10-27
 **Supersedes:** none (clarifies, does not replace, ADR-013)
 **Superseded by:** —
