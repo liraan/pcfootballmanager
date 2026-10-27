@@ -13,9 +13,9 @@
 | Metric | Value | Source |
 |--------|-------|--------|
 | Branch | `main` | `git status` |
-| Last commit | `de208bd` — "docs(adr): ratify ADR-019 (proposed → accepted)" | `git log` |
+| Last commit | `66e3351` — "docs(context): refresh session state (last commit, stale sweep progress, deferred 3 resolved)" | `git log` |
 | Working tree | clean | `git status` |
-| Tracked files | 121 | `git ls-files \| wc -l` |
+| Tracked files | 126 | `git ls-files \| wc -l` |
 | Crates | 7 (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`) | `git ls-files` |
 | Tests | 107 (0 failed) | `cargo test --workspace` |
 | Clippy | clean (`-D warnings`) | `cargo clippy -- -D warnings` |
@@ -293,7 +293,7 @@ pcfootballmanager/
 
 ## 7. To be pasted to complete the snapshot
 
-**No files remain to be pasted.** All 118 tracked files have been read:
+**No files remain to be pasted.** All 126 tracked files have been read:
 - 13 ADRs + 1 template
 - 1 reading guide in `docs/`
 - 2 doctrine modules (`00-foundations.md`, `_index.md`)
@@ -358,8 +358,8 @@ All 16 identified inconsistencies have been closed. Summary:
 | L0 modules | 11, all ratified | `git ls-files` |
 | Broken links | 0 | manual grep verification (2026-10-27), 1 broken link found and fixed |
 | Working tree | clean | `git status` |
-| Last commit | `de208bd` (HEAD at snapshot time) | `git log` |
-| Tracked files read | 121/121 (100%) — ADR-019 authored this session | this snapshot |
+| Last commit | `66e3351` (last commit before this snapshot update) | `git log` |
+| Tracked files read | 126/126 (100%) — all tracked files read | this snapshot |
 
 ---
 
