@@ -3,13 +3,13 @@ title: "L0.05 — Match Events (observation layer)"
 level: 0
 cell: "L0-match"
 module_id: "L0.05"
-version: "1.0"
+version: "1.1"
 status: "ratified"
-last_updated: "2026-10-25"
+last_updated: "2026-10-27"
 supersedes: null
 depends_on: ["00-foundations", "L0.01", "L0.03"]
 referenced_by: ["L0.04", "L0.06", "L0.07", "L0.08", "L1-statistics", "L2-scouting"]
-conforms_to: "00-foundations (v1.1)"
+conforms_to: "00-foundations (v2.0)"
 ---
 
 <!--
@@ -60,6 +60,10 @@ pub struct MatchEvent {
     pub event_type: EventType,
     pub fields: serde_json::Value,          // variant-dependent
 
+    // Phase 1 (attempt) / phase 2 (outcome) linkage, per ADR-019 D11
+    position_snapshot: Option<PositionSnapshot>,  // positions at the moment of the attempt
+    attempt_event_id: Option<EventId>,            // for outcome events: the attempt that produced them
+
     // Audit — never contains a latent value
     pub observed_attrs_snapshot_hash: Option<Hash>,
     pub cause_trace: CauseTrace,            // why this event happened
@@ -73,6 +77,9 @@ pub struct MatchEvent {
 
 ```rust
 pub enum EventType {
+    // Attempts (phase 1, per ADR-019 D11)
+    PassAttempted, ShotAttempted, DuelStarted, FoulCommitted,
+
     // Offensive
     Shot, Pass, Cross, Dribble, KeyPass,
     // Defensive
@@ -135,9 +142,28 @@ pub struct EventChain {
 
 `career_minutes_cumulative` at L0 is derived from the save, not from a global career. At L0 (friendly match), it equals `minutes_played_cumulative`. At L1+, it accumulates across matches.
 
+### 2.6 Two synchronous phases
+
+Per ADR-019 D11, temporal events follow a **two-phase** pattern:
+
+1. **Phase 1 — attempt.** The engine emits an *attempt* event
+   (`PassAttempted`, `ShotAttempted`, `DuelStarted`, `FoulCommitted`)
+   carrying a `position_snapshot` of the relevant positions at the moment
+   it occurs. The attempt is written once and never modified (§2.4).
+2. **Phase 2 — outcome.** Rule plugins read the snapshot and produce the
+   outcome as a **second** event, linked back to the attempt via
+   `attempt_event_id`. The outcome is emitted synchronously, within the
+   same tick; there is no deferred resolution in v1.0.
+
+The only **normative** mapping in v1.0 is `PassAttempted -> Pass` or
+`PassAttempted -> Offside`. The full mapping for `ShotAttempted`,
+`DuelStarted`, and `FoulCommitted` is **deferred** to a later ADR. No VAR
+in v1.0: a future `VARReview` event may delay the decision when uncertain
+(see `WORLD-MODEL.md`).
+
 ## 3. Data model
 
-`MatchEvent`, `EventType`, `CauseTrace`, `Factor`, `EventChain`, `EventId`.
+`MatchEvent`, `EventType`, `CauseTrace`, `Factor`, `EventChain`, `EventId`, `PositionSnapshot`.
 
 All fields are `Serialize`/`Deserialize` for the save (see `L0.07`). None of them is a latent value.
 
@@ -150,6 +176,8 @@ All fields are `Serialize`/`Deserialize` for the save (see `L0.07`). None of the
 - **Event chain broken**: load fails, save is quarantined
 - **Duplicate `event_id`**: rejected, this is a generational ID collision (bug)
 - **`observed_attrs_snapshot_hash` is `None`**: allowed (the observed attributes were not snapshotted at this event; used for low-importance events)
+- **Attempt event with no outcome**: allowed (the action was interrupted before resolution; the attempt is kept for audit)
+- **Outcome event with no attempt**: rejected at construction for attempt-derived event types (e.g. `Pass`, `Offside` require `attempt_event_id`)
 
 ## 5. Definition of Done
 
@@ -162,6 +190,8 @@ All fields are `Serialize`/`Deserialize` for the save (see `L0.07`). None of the
 - [ ] Test: event without cause trace → error
 - [ ] Test: no `MatchEvent` field contains a latent value (compile-time check on types)
 - [ ] Test: `observed_attrs_snapshot_hash` is a hash of Plane C data, not Plane A
+- [ ] Test: `PassAttempted` carries a `position_snapshot`; the resulting `Pass` or `Offside` references it via `attempt_event_id`
+- [ ] Test: attempt with no outcome leaves `attempt_event_id` = `None` and does not break the chain
 
 ## 6. Risks and Mitigations
 
@@ -170,6 +200,7 @@ All fields are `Serialize`/`Deserialize` for the save (see `L0.07`). None of the
 | Event without cause | High | Constructor requires it |
 | Cause trace leaks a latent | Critical | `Factor.value` is observed; type system prevents latent access |
 | Chain tampering | High | Hash chain + verification on load |
+| Position snapshot size | Medium | Snapshot bounded to the agents relevant to the event; sized once per event, not per tick |
 | Event explosion (too many) | Medium | Tick budget; low-impact events aggregated at L2, not at L0 |
 | `fields` as `serde_json::Value` | Medium | Validated by event type; typed variants in L1 |
 
@@ -182,4 +213,5 @@ All fields are `Serialize`/`Deserialize` for the save (see `L0.07`). None of the
 - [`06-match-output.md`](06-match-output.md) — consumer
 - [`07-save-minimal.md`](07-save-minimal.md) — persistence
 - [`../../docs/adr/003-plane-a-enforcement.md`](../../docs/adr/003-plane-a-enforcement.md) — no latent access
+- [`../../docs/adr/019-match-engine-contract.md`](../../docs/adr/019-match-engine-contract.md) — two-phase temporal events (D11)
 - `../../archive/Prompt_Master_v7.md` §23.2 — original spec *(planned — the archive/ directory does not exist yet)*

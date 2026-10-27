@@ -128,7 +128,7 @@ In chronological order. Each decision has the commit that recorded it (when avai
 
 ### 3.10 Session 2026-10-27 (ADR-019, agent policy, docs/context)
 
-- **ADR-019 (match engine contract)** — `accepted` (2026-10-27). 8 decisions (D1–D8) + 9 deferred. Deferred 1 (spatial iteration order) and deferred 2 (tick-cost pre-emption, selective foul) resolved the same day. Deferred 3–9 remain open.
+- **ADR-019 (match engine contract)** — `accepted` (2026-10-27). 11 decisions (D1–D11) + 9 deferred. Deferred 1 (spatial iteration order), deferred 2 (tick-cost pre-emption, selective foul), and deferred 3 (possession representation) resolved. Deferred 4–9 remain open.
 - **`AGENT-POLICY.md`** — created in `docs/context/`. Defines what an agent may do autonomously, what requires confirmation, what it must never do, and how to revoke. Phase 1 (ruleset disabled, single maintainer) vs Phase 2 (ruleset active, PR mandatory).
 - **Pre-commit hook** — `.githooks/pre-commit` (versioned). Runs fmt, clippy, test only if Rust files are staged. Installation: `git config core.hooksPath .githooks` (one-off, per clone).
 - **`docs/context/`** — `REPO-SNAPSHOT.md`, `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`. Briefing material, not normative. `STRUCTURE.md` §5 remains the ADR status source of truth.
@@ -164,8 +164,8 @@ In chronological order. Each decision has the commit that recorded it (when avai
 ### 4.4 ADR-019 (Match engine contract)
 
 - **Status:** `accepted` (2026-10-27).
-- **What it decides:** agent-first state in players; grid as quantisation + adjacency graph (not an entity); integer position (metres); resolution as a saved engine parameter; zone of influence as a derived relation. Defines the target contract for the positional engine.
-- **Deferred:** 9 items. Deferred 1 (spatial iteration order) and deferred 2 (tick-cost pre-emption) resolved the same day. Deferred 3–9 remain open (possession, UX, resolution per platform, adaptive resolution, LOD override, zone formula, role→mechanic).
+- **What it decides:** agent-first state in players; grid as quantisation + adjacency graph (not an entity); integer position (metres); resolution as a saved engine parameter; zone of influence as a derived relation; referee as normative agent (D9); assistant referees as peripheral normative agents (D10); two-phase temporal events (D11). Defines the target contract for the positional engine.
+- **Deferred:** 9 items. Deferred 1 (spatial iteration order), deferred 2 (tick-cost pre-emption), and deferred 3 (possession representation) resolved. Deferred 4–9 remain open (UX, resolution per platform, adaptive resolution, LOD override, zone formula, role→mechanic).
 - **Blocks:** the positional engine implementation (replaces the current probability-per-tick prototype).
 - **Commits:** `64c9b91` (creation), `de208bd` (ratification), `67c2098` (clarifications), `eb71bda` (deferred 2), and subsequent.
 
