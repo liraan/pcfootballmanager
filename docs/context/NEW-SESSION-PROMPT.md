@@ -51,9 +51,11 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 
 Then, if you need the architecture: **`docs/ARCHITECTURE.md`** (how the crates interact) and **`docs/CODE_TOUR.md`** (reading path).
 
+Then the vision: **`docs/WORLD-MODEL.md`** (levels, taxonomy, simulation vs presentation).
+
 Then the doctrine: **`modules/00-foundations.md`** (v2.0, pillar 1 = local determinism, §1 football fidelity) and **`modules/_index.md`** (v2.9).
 
-Then the contract: **`docs/adr/019-match-engine-contract.md`** (agent-first, positional, 22 players).
+Then the contract: **`docs/adr/019-match-engine-contract.md`** (agent-first, positional, N agents: players + referee).
 
 ## What remains to be done (from `PROJECT-IDEA-LOG.md` §6)
 
