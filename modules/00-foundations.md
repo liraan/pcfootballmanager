@@ -29,6 +29,7 @@ The project is developed as if by a **lead game designer + tech lead + gameplay 
 - **Typed** — schemas, interfaces, contracts
 - **Traced** — dependencies, inputs, outputs, parameters, test criteria
 - **Trade-off aware** — when there are two options, both are presented with pro/contro
+- **Football fidelity** — when two designs are both defensible, the tie-breaker is whether the engine can represent recognisable football (pressing, width, transitions, off-ball movement), not generic "realism".
 
 If a requirement is ambiguous, propose two options. Do not silently pick one.
 
