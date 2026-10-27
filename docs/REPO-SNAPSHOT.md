@@ -8,22 +8,22 @@
 
 ---
 
-## 1. Project state (at 2026-10-26)
+## 1. Project state (at 2026-10-27)
 
 | Metric | Value | Source |
 |--------|-------|--------|
 | Branch | `main` | `git status` |
-| Last commit | `76ae391` — "docs: update README for ADR-016/018 accepted, ADR-017 proposed" | `git log` |
+| Last commit | `64c9b91` — "docs(adr): add ADR-019 match engine contract (proposed)" | `git log` |
 | Working tree | clean | `git status` |
-| Tracked files | 120 | `git ls-files \| wc -l` |
+| Tracked files | 121 | `git ls-files \| wc -l` |
 | Crates | 7 (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`) | `git ls-files` |
 | Tests | 107 (0 failed) | `cargo test --workspace` |
 | Clippy | clean (`-D warnings`) | `cargo clippy -- -D warnings` |
 | `--check` | 6/6 | `cargo run --bin pcfm-debug -- --check` |
 | `--coverage` | 2/26 (7%) | `cargo run --bin pcfm-debug -- --coverage` |
-| ADRs | 16 files in `docs/adr/`: 14 accepted (001-008, 012-016, 018), 1 proposed (017), 1 template (000). Plus 1 reading guide in `docs/` (not an ADR). | `ls docs/adr/` |
+| ADRs | 17 files in `docs/adr/`: 14 accepted (001-008, 012-016, 018), 2 proposed (017, 019), 1 template (000). Plus 1 reading guide in `docs/` (not an ADR). | `ls docs/adr/` |
 | ADRs accepted | 14 (001-008, 012, 013, 014, 015, 016, 018) | `grep Status` |
-| ADRs proposed | 1 (017) | `grep Status` |
+| ADRs proposed | 2 (017, 019) | `grep Status` |
 | L0 modules | 11, all ratified | `git ls-files` |
 | L1-L3 modules | 0 (all planned) | `git ls-files` |
 
@@ -53,7 +53,7 @@ pcfootballmanager/
 │   └── pcfm-debug/          (9 files: Cargo.toml + 8 src)
 ├── data/.gitkeep
 ├── docs/
-│   ├── adr/                 (16 files: 000-008, 012-018)
+│   ├── adr/                 (17 files: 000-008, 012-019)
 │   ├── calibration/.gitkeep
 │   ├── legal/.gitkeep
 │   ├── ARCHITECTURE.md
@@ -145,6 +145,7 @@ pcfootballmanager/
 | `016-v1-content-selections.md` | 238 | ✅ | `Status: accepted` (2026-10-27). v1.0 content selections: 3 axes (professionalism, ambition, pressure), 20 roles (catalogue in L1-roster), 10 formations, 5 nations (real cities; generated clubs/stadiums/players), 7 L2 modules (crowd/media to v1.1). Resolves ADR-015 deferred decisions. |
 | `017-roles-are-labels.md` | 92 | 🟡 | `Status: proposed`. Roles are labels, not modifiers. Role catalogue in L1-roster; the engine (L0) is blind to roles. No SIM_VERSION bump. |
 | `018-defer-crowd-media.md` | 59 | ✅ | `Status: accepted` (2026-10-27). Defer crowd and media to v1.1. Partially supersedes ADR-015. |
+| `019-match-engine-contract.md` | 123 | 🟡 | `Status: proposed`. Match engine contract: agent-first state in players, integer position (metres), resolution as engine parameter, zone of influence as derived relation. |
 
 ---
 
@@ -340,7 +341,7 @@ All 16 identified inconsistencies have been closed. Summary:
 
 ---
 
-## 9. Verified metrics (real output, 2026-10-26)
+## 9. Verified metrics (real output, 2026-10-27)
 
 | Metric | Value | Source |
 |--------|-------|--------|
@@ -350,13 +351,13 @@ All 16 identified inconsistencies have been closed. Summary:
 | `--check` | 6/6 | command output |
 | `--list` | 6 scenarios | command output |
 | `--coverage` | 2/26 (7%) | command output |
-| ADRs | 16 files in `docs/adr/`: 14 accepted (001-008, 012-016, 018), 1 proposed (017), 1 template (000). Plus 1 reading guide in `docs/`. | `ls docs/adr/` + `grep Status` |
+| ADRs | 17 files in `docs/adr/`: 14 accepted (001-008, 012-016, 018), 2 proposed (017, 019), 1 template (000). Plus 1 reading guide in `docs/`. | `ls docs/adr/` + `grep Status` |
 | Reading guide | 1 in `docs/` (`PLUGINS-WORLDS-READING-GUIDE.md`) | `ls docs/` |
 | L0 modules | 11, all ratified | `git ls-files` |
 | Broken links | 0 | verification script (2026-10-26) |
 | Working tree | clean | `git status` |
-| Last commit | `76ae391` (HEAD at snapshot time) | `git log` |
-| Tracked files read | 120/120 (100%) | this snapshot |
+| Last commit | `64c9b91` (HEAD at snapshot time) | `git log` |
+| Tracked files read | 121/121 (100%) — ADR-019 authored this session | this snapshot |
 
 ---
 
