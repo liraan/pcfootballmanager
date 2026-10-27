@@ -2,15 +2,15 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `23add74` — "docs(snapshot): update broken-links verification date and method"
+**Last commit verified:** `25cb73c` — "docs(context): clarify Phase 1 (no PR) vs Phase 2 (PR mandatory) in agent policy"
 
-**Next agreed step:** Step B-1b — pre-commit hook (`.githooks/pre-commit`) that runs `cargo test --workspace` and `cargo clippy -- -D warnings`.
+**Next agreed step:** C-3 — possession representation (ADR-019 deferred 3).
 
 **Open items (Fase B and C/D/E):**
-- B-1b: pre-commit hook
-- B-3: `docs/context/AGENT-POLICY.md` (bozza)
-- C: deferred 1 di ADR-019 (ordine di iterazione dei giocatori)
-- D: ratifica ADR-017
+- C-3: possession representation (deferred 3)
+- C-4 to C-9: remaining ADR-019 deferred (UX, resolution per platform, adaptive, LOD override, zone formula, role→mechanic)
+- D: ratify ADR-017
 - E: `L1-world/01-nation.md`
+- Warp: agent setup (Phase 2, after C/D/E)
 
-**Files touched last session:** `modules/00-foundations.md`, `docs/adr/019-match-engine-contract.md`, `modules/L0-match/04-match-engine.md`, `CONTRIBUTING.md`, `docs/context/REPO-SNAPSHOT.md`.
+**Files touched last session:** `docs/adr/019-match-engine-contract.md`, `docs/context/AGENT-POLICY.md`, `.githooks/pre-commit`, `docs/context/SESSION-STATE.md`.
