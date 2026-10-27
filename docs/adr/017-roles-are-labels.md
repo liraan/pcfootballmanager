@@ -5,7 +5,7 @@
 - **Supersedes:** none
 - **Superseded by:** none
 - **Blocks:** `L1-roster` (role catalogue), `L2-tactics` (formation validation)
-- **Depends on:** ADR-015 (accepted), ADR-016 (proposed), `00-foundations.md` §3 and §5
+- **Depends on:** ADR-015 (accepted), ADR-016 (accepted), `00-foundations.md` §3 and §5
 
 ## Context
 
@@ -86,7 +86,7 @@ The current code is already compliant: `pcfm-hidden` does not import `RoleId`, a
 ## References
 
 - ADR-015 — v1.0 scope (accepted)
-- ADR-016 — v1.0 content selections (proposed)
+- ADR-016 — v1.0 content selections (accepted)
 - `modules/00-foundations.md` §3 (Three Planes), §5 (banned things), §9 (concentric structure)
 - `modules/_index.md` — `L1-roster`, `L2-tactics`
 - Code: `crates/pcfm-model/src/player.rs` (`RoleId`), `crates/pcfm-hidden/src/*.rs` (no occurrence of `RoleId`)

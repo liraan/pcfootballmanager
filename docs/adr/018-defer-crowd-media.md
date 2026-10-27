@@ -5,7 +5,7 @@
 - **Supersedes:** ADR-015 (partial — only the "basic crowd ships" and "basic media ships" clauses)
 - **Superseded by:** none
 - **Blocks:** ADR-016 D5 ratification
-- **Depends on:** ADR-015 (accepted), ADR-016 (proposed)
+- **Depends on:** ADR-015 (accepted), ADR-016 (accepted)
 
 ## Context
 
@@ -54,6 +54,6 @@ The v1.0 L2 set is: `tactics` (full), `market` (full), `finance` (full), `scouti
 ## References
 
 - ADR-015 — v1.0 scope (accepted; partially superseded here)
-- ADR-016 — v1.0 content selections (proposed; D5 depends on this ADR)
+- ADR-016 — v1.0 content selections (accepted; D5 depends on this ADR)
 - `modules/_index.md` — L2 module list
 - `modules/00-foundations.md` §5 (no invented data presented as certain), §7 (non-goals)
