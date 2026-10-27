@@ -2,16 +2,14 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `8498ca0` — "docs(snapshot): add WORLD-MODEL to documentation table"
+**Last commit verified:** `ead0bdf` — "docs(context): track PROJECT-IDEA-LOG update alongside L0.05 revision"
 
-**Next agreed step:** revise `L0.05` (MatchEvent as observable, not concluded; add `PassAttempted`; two-phase rule plugins).
+**Next steps (in dependency order):**
+1. **Revise `L0.05`** — observable events + `PassAttempted`, two synchronous phases. Aligns the spec with ADR-019 D11.
+2. **Update `PROJECT-IDEA-LOG.md`** §3.10/§4.4 — ADR-019 extension (D9–D11, deferred 3, `WORLD-MODEL.md`). Same commit as 1.
+3. **C-4…C-9** — remaining ADR-019 deferred: UX, resolution per platform, adaptive resolution, LOD override, zone-of-influence formula, role→mechanic chain.
+4. **Ratify ADR-017** — roles are labels. Unblocks `L1-roster`.
+5. **`L1-world/01-nation.md`** — unblocks the first L1 scenarios.
+6. **Warp setup (Phase 2)** — reactivate the ruleset on `main`, then grant a write token. After 3–5.
 
-**Open items (Fase B and C/D/E):**
-- L0.05 revision: observable events + `PassAttempted` (aligns with ADR-019 D11)
-- **Also (same session as L0.05):** update `docs/context/PROJECT-IDEA-LOG.md` §3.10/§4.4 with the 2026-10-27 ADR-019 extension (D9 referee, D10 assistants, D11 self-contained events + two phases, deferred 3 resolved, `docs/WORLD-MODEL.md` created).
-- C-4 to C-9: remaining ADR-019 deferred (UX, resolution per platform, adaptive, LOD override, zone formula, role→mechanic)
-- D: ratify ADR-017
-- E: `L1-world/01-nation.md`
-- Warp: agent setup (Phase 2, after C/D/E)
-
-**Files touched last session:** `docs/adr/019-match-engine-contract.md`, `docs/WORLD-MODEL.md`, `docs/context/AGENT-POLICY.md`, `.githooks/pre-commit`, `docs/context/SESSION-STATE.md`, `docs/context/PROJECT-IDEA-LOG.md`, `docs/context/NEW-SESSION-PROMPT.md`.
+**Files touched this session:** `docs/adr/019-match-engine-contract.md`, `docs/WORLD-MODEL.md`, `docs/context/SESSION-STATE.md`, `docs/context/NEW-SESSION-PROMPT.md`, `docs/context/REPO-SNAPSHOT.md`.
