@@ -181,7 +181,7 @@ All tracked files have been read (see `REPO-SNAPSHOT.md` §7). The only thing ou
 
 ## 6. Next steps (in dependency order)
 
-1. **Resolve the remaining ADR-019 deferred decisions** (3–9): possession representation (3), granular UX (4), resolution per platform (5), adaptive resolution (6), LOD override (7), zone-of-influence formula (8), role→mechanic chain (9). Deferred 1 (spatial order) and deferred 2 (pre-emption) are resolved.
+1. **Resolve the remaining ADR-019 deferred decisions** (4–9): granular UX (4), resolution per platform (5), adaptive resolution (6), LOD override (7), zone-of-influence formula (8), role→mechanic chain (9). Deferred 1 (spatial order), deferred 2 (pre-emption), and deferred 3 (possession) are resolved.
 2. **Ratify ADR-017** ("roles are labels, not modifiers", `proposed`): move the role catalogue to L1-roster and confirm the engine is blind to roles.
 3. **Address the 2 technical gaps** (`ProjectionProfile`, `ScoutReport.DeclaredBias`). The third (psyche) is inside ADR-016.
 4. **Write the 2 missing documents** (`performance.md`, `save-security.md`).
