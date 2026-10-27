@@ -39,8 +39,13 @@ contract. The engine interprets only built-in variants.
 
 **D3. Shared rules + per-player parameters.** A single rule set; individual
 behaviour emerges from parameters (observable attributes, functional state,
-tactics, preferences). Not independent per-player rules: evaluation order would
-become semantics, with testing cost and determinism risk.
+tactical instructions, and psychological axes, passed as named parameters). The
+set of active axes is configuration-defined; the set the engine understands is
+implementation-defined. The interaction between tactical instructions and
+psychological axes (e.g. how psychological state modulates adherence to
+instructions) is deferred to L2-tactics and L2-psyche. Not independent
+per-player rules: evaluation order would become semantics, with testing cost and
+determinism risk.
 
 **D4. Position: integer coordinates.** `Position { x: u16, y: u16 }` in integer
 metres on a reference pitch of 105×68 (real standard dimensions). The grid is a
