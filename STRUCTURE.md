@@ -346,8 +346,9 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 | 016 | v1.0 content selections | ✅ accepted | Resolves ADR-015: 3 axes, 20 roles (catalogue in L1-roster), 10 formations, 5 nations (real cities), 7 L2 modules (crowd/media to v1.1). |
 | 017 | Roles are labels, not modifiers | 🟡 proposed | Role catalogue in L1-roster; the engine is blind to roles |
 | 018 | Defer crowd and media to v1.1 | ✅ accepted | Partially supersedes ADR-015: crowd and media ship in v1.1 |
+| 019 | Match engine contract | 🟡 proposed | Agent-first state in players, integer position, resolution as engine parameter, zone of influence as derived relation |
 
-**Open ADRs:** 017 (proposed). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015, 016, 018 (14).
+**Open ADRs:** 017, 019 (proposed). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015, 016, 018 (14).
 
 **ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`PLUGINS-WORLDS-READING-GUIDE.md`](docs/PLUGINS-WORLDS-READING-GUIDE.md). ADR-013 depends on ADR-012.
 
