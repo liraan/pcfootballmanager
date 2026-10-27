@@ -115,6 +115,6 @@ In dependency order:
 ## First step I want to take
 
 **Finish the Grade A/B stale sweep** (see `docs/context/SESSION-STATE.md`
-§"Next steps" step 1; `PROJECT-IDEA-LOG.md` is done, four files remain).
+§"Next steps" step 1; `PROJECT-IDEA-LOG.md` is done, the remaining files are tracked in the session state).
 Then **C-4 — granular UX (ADR-019 deferred 4)**.
 ````
