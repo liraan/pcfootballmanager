@@ -37,6 +37,10 @@ with its own state.
 `InAttesa`). Extension is decided by the plugin contract (ADR-012), not by this
 contract. The engine interprets only built-in variants.
 
+The distinction from D3 is deliberate: functional state is **structural**
+(its built-in repertoire), while psychological axes are **parameters**
+(the supported set is implementation-defined, see D3).
+
 **D3. Shared rules + per-player parameters.** A single rule set; individual
 behaviour emerges from parameters (observable attributes, functional state,
 tactical instructions, and psychological axes, passed as named parameters). The
@@ -69,7 +73,8 @@ granular interface (separate choice of LOD and resolution) is **deferred**.
 is a **derived relation** (player + observable attributes + functional state +
 context), computed with integers or fixed-point, **not stored** as state. The
 engine uses it to determine who can intervene on a position; it is not an entity
-with its own state, like the grid. The specific attributes and formula are
+with its own state, like the grid. The observable attributes referenced here are
+the same as those in D3. The specific attributes and formula are
 deferred (see deferred 8).
 
 ## Deferred decisions
@@ -93,7 +98,10 @@ or dedicated notes before implementation:
    ADR-013.
 8. **Zone of influence formula and attributes.** Exact formula, required
    attributes, and their definition in `pcfm-model`. Deferred to a later ADR or
-   a revision of `03-entities-minimal`.
+   a revision of `03-entities-minimal`. Formula calibration lives in
+   `docs/calibration/`.
+9. **Role → tactic → parameter chain.** How ADR-016 role mechanics become
+   engine parameters. Deferred to `L2-tactics`.
 
 ## Consequences
 
@@ -104,8 +112,8 @@ or dedicated notes before implementation:
   default and round-trip of `resolution`.
 - **No conflict with ADR-013**: LOD remains defined as the sum of weights;
   resolution is an additional, orthogonal parameter.
-- **No code changes in this phase**: the ADR is `proposed`; implementation
-  follows ratification.
+- **No code changes in this phase**: this ADR is `accepted`; implementation
+  follows ratification and is tracked in deferred 1–9.
 
 ## Implementation notes
 
@@ -117,6 +125,9 @@ or dedicated notes before implementation:
   unified.
 - The grid, when it arrives, will be a type derived from `Position` +
   `Resolution`, not a primary type of the contract.
+- **Current status**: the code does not yet implement D4/D5; the gap is
+  intentional and tracked in deferred 1–9. Implementation follows
+  ratification.
 
 ## References
 
