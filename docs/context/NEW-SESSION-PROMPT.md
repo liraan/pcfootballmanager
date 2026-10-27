@@ -114,10 +114,7 @@ In dependency order:
 
 ## First step I want to take
 
-**C-3 — possession representation (ADR-019 deferred 3).** But first:
-
-1. Read `docs/context/SESSION-STATE.md` and the 3 key documents.
-2. Verify the current state with `git pull` + `git log --oneline -5`.
-3. Give me the `sed -n` command to read the exact block of ADR-019 deferred 3.
-4. Then propose a decision: is possession only "who has the carrier", or does it need more state?
+**Finish the Grade A/B stale sweep** (see `docs/context/SESSION-STATE.md`
+§"Next steps" step 1; `PROJECT-IDEA-LOG.md` is done, four files remain).
+Then **C-4 — granular UX (ADR-019 deferred 4)**.
 ````
