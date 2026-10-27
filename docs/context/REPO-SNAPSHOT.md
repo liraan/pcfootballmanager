@@ -55,16 +55,17 @@ pcfootballmanager/
 ├── docs/
 │   ├── adr/                 (17 files: 000-008, 012-019)
 │   ├── calibration/.gitkeep
+│   ├── context/
+│   │   ├── NEW-SESSION-PROMPT.md
+│   │   ├── PROJECT-IDEA-LOG.md
+│   │   └── REPO-SNAPSHOT.md  ← this file
 │   ├── legal/.gitkeep
 │   ├── ARCHITECTURE.md
 │   ├── CODE_TOUR.md
 │   ├── GLOSSARY.md
 │   ├── MIGRATION-01-04.md
 │   ├── PLUGIN_DEVELOPER_GUIDE.md
-│   ├── PLUGINS-WORLDS-READING-GUIDE.md
-│   ├── PROJECT-IDEA-LOG.md
-│   ├── REPO-SNAPSHOT.md      ← this file
-│   └── NEW-SESSION-PROMPT.md
+│   └── PLUGINS-WORLDS-READING-GUIDE.md
 ├── mods/.gitkeep
 ├── modules/
 │   ├── 00-foundations.md

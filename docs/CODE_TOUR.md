@@ -12,7 +12,7 @@ doc comments (`///` and `//!`) on every public item. This file says
 *which files to read, in which order, and why*.
 
 - For *how the crates interact*: see [`ARCHITECTURE.md`](ARCHITECTURE.md).
-- For *what each file contains*: see [`REPO-SNAPSHOT.md`](REPO-SNAPSHOT.md).
+- For *what each file contains*: see [`REPO-SNAPSHOT.md`](context/REPO-SNAPSHOT.md).
 - For *how to contribute*: see [`../CONTRIBUTING.md`](../CONTRIBUTING.md).
 - For *the rules of the repo*: see [`../STRUCTURE.md`](../STRUCTURE.md).
 
@@ -189,7 +189,7 @@ third is safe if the scenario passes. The last two require an ADR, as per
 If you want to go deeper, in this order:
 
 1. [`docs/ARCHITECTURE.md`](ARCHITECTURE.md) — how the crates interact.
-2. [`docs/REPO-SNAPSHOT.md`](REPO-SNAPSHOT.md) — what each file contains.
+2. [`docs/context/REPO-SNAPSHOT.md`](context/REPO-SNAPSHOT.md) — what each file contains.
 3. [`docs/PLUGIN_DEVELOPER_GUIDE.md`](PLUGIN_DEVELOPER_GUIDE.md) — how to write a plugin.
 4. [`docs/adr/`](adr/) — every decision the project has made, and why.
 5. [`modules/L0-match/`](../modules/L0-match/) — the full specification of L0, cell by cell.

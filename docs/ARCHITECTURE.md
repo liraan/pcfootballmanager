@@ -204,7 +204,7 @@ simplifications.
 - [`STRUCTURE.md`](../STRUCTURE.md) — repository structure and rules
 - [`modules/00-foundations.md`](../modules/00-foundations.md) — the doctrine (Three Planes, determinism, bans)
 - [`docs/PLUGIN_DEVELOPER_GUIDE.md`](PLUGIN_DEVELOPER_GUIDE.md) — how to write a plugin, plane separation, simulation/rendering split, testkit
-- [`docs/REPO-SNAPSHOT.md`](REPO-SNAPSHOT.md) — factual snapshot of the repository (crate-by-crate)
+- [`docs/context/REPO-SNAPSHOT.md`](context/REPO-SNAPSHOT.md) — factual snapshot of the repository (crate-by-crate)
 - [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md) — capability API, why latents are unreachable
 - [`docs/adr/012-plugins.md`](adr/012-plugins.md) — plugin contract (accepted)
 - [`docs/adr/013-worlds.md`](adr/013-worlds.md) — world system, local determinism (accepted)

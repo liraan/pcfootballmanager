@@ -51,7 +51,7 @@ Two facts shape the decision:
 
 **Recommendation:** **Option A (professionalism, ambition, pressure).**
 
-**Implementation requirement (gap A, from `PROJECT-IDEA-LOG.md` §4.4):** the data model has six fields. The three inactive axes (loyalty, consistency, temperament) MUST carry an explicit `active: false` flag. This is a requirement for `L2-psyche`, not for this ADR's ratification. Without the flag, the model implies six active axes, contradicting ADR-015.
+**Implementation requirement (gap A, from `docs/context/PROJECT-IDEA-LOG.md` §4.4):** the data model has six fields. The three inactive axes (loyalty, consistency, temperament) MUST carry an explicit `active: false` flag. This is a requirement for `L2-psyche`, not for this ADR's ratification. Without the flag, the model implies six active axes, contradicting ADR-015.
 
 ### D2 — Which 20 roles are in v1.0?
 
@@ -235,4 +235,4 @@ All decisions are ratified (D1-D7). No open questions remain. Changes require an
 - ADR-007 — Canonical language (English; this ADR is in English)
 - `modules/00-foundations.md` §5 (banned things), §7 (non-goals)
 - `modules/_index.md` — the L1/L2/L3 module inventory
-- `docs/PROJECT-IDEA-LOG.md` §4.4 — the three technical gaps (gap A is resolved in D1)
+- `docs/context/PROJECT-IDEA-LOG.md` §4.4 — the three technical gaps (gap A is resolved in D1)

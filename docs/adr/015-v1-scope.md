@@ -15,7 +15,7 @@ The specification covers 25 modules across four concentric levels (L0–L3). The
 
 The doctrine already contains a precedent for scope reduction: `00-foundations.md` §7 says *"Full 6-axis psychology (3 axes in v1.0, the other 3 in a pack)"*. This ADR generalises that precedent to the entire v1.0 scope, so that every module knows, explicitly, whether it ships in v1.0 or in a post-v1.0 pack.
 
-The original review of this project (the DeepSeek conversation of 2026-10-24, summarised in `docs/PROJECT-IDEA-LOG.md`) recommended:
+The original review of this project (the DeepSeek conversation of 2026-10-24, summarised in `docs/context/PROJECT-IDEA-LOG.md`) recommended:
 
 > *"Reduce the v1.0 scope. v7 says '3 active psychological axes'. Do the same for the rest: 20 roles instead of 56, 10 formations instead of 20, 5 nations instead of 20. v1.0 must be playable, not complete. Expansions exist for this."*
 >
@@ -147,4 +147,4 @@ These decisions are **not** blocking for the ratification of this ADR. They are 
 - ADR-012 (module system) — the mechanism that makes "in a pack" safe. **Accepted 2026-10-25.**
 - ADR-013 (world system) — the mechanism that makes multi-world editing safe post-v1.0. **Accepted 2026-10-25.**
 - `docs/adr/002-project-name-and-scope.md` — the original scope decision.
-- `docs/PROJECT-IDEA-LOG.md` — the DeepSeek review that originated this ADR's recommendation.
+- `docs/context/PROJECT-IDEA-LOG.md` — the DeepSeek review that originated this ADR's recommendation.

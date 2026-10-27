@@ -1,6 +1,6 @@
 # Project Idea Log — PCFM
 
-> **Update 2026-10-26:** ADR-012, ADR-013, and ADR-015 have been ratified. See `docs/REPO-SNAPSHOT.md` for the current state. This log keeps the original entries for traceability.
+> **Update 2026-10-26:** ADR-012, ADR-013, and ADR-015 have been ratified. See `docs/context/REPO-SNAPSHOT.md` for the current state. This log keeps the original entries for traceability.
 
 **Purpose:** record the ideas, decisions, and open questions of the project, with the source of each. This is not a status document for the code (see `REPO-SNAPSHOT.md`). It is not a specification (see `modules/`).
 

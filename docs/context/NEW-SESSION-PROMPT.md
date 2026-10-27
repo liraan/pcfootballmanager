@@ -40,8 +40,8 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 
 ## The 3 files you MUST read first (in this order)
 
-1. **`docs/PROJECT-IDEA-LOG.md`** (212 lines) — history, decisions, sources (DeepSeek + this conversation), what remains open. If you read only one file, read this one.
-2. **`docs/REPO-SNAPSHOT.md`** (348 lines) — factual snapshot: tree, files, 7 crates with API/tests, metrics, 16 resolved inconsistencies. It also contains the complete list of files read: if a piece of content is not here, it has not been read.
+1. **`docs/context/PROJECT-IDEA-LOG.md`** (212 lines) — history, decisions, sources (DeepSeek + this conversation), what remains open. If you read only one file, read this one.
+2. **`docs/context/REPO-SNAPSHOT.md`** (348 lines) — factual snapshot: tree, files, 7 crates with API/tests, metrics, 16 resolved inconsistencies. It also contains the complete list of files read: if a piece of content is not here, it has not been read.
 3. **`docs/ARCHITECTURE.md`** (210 lines) — how the crates interact, the flow of a match, the simulation/rendering split, the testkit contract.
 
 Then, if you need to touch the code: **`docs/CODE_TOUR.md`** (215 lines) — a reading path in 5 stages (infrastructure → entities → planes → engine → testkit).
@@ -82,7 +82,7 @@ In dependency order:
 
 ## What I expect from you in this new chat
 
-1. **Read the 3 key documents** (`PROJECT-IDEA-LOG.md`, `REPO-SNAPSHOT.md`, `ARCHITECTURE.md`) before proposing anything.
+1. **Read the 3 key documents** (`PROJECT-IDEA-LOG.md`, `REPO-SNAPSHOT.md`, `docs/ARCHITECTURE.md`) before proposing anything.
 2. **Confirm the state** with the commands I ask you for (`git pull`, `git log`, `cargo test`, etc.), without assuming it is what I describe.
 3. **Propose the next concrete step** (whatever I prefer) and, if needed, give me the exact `sed`/`awk` command. Do not send the full file in chat if it exceeds ~120 lines: it truncates.
 4. **Do not invent anything.** If you don't know, ask. If you haven't read a file, say so.
