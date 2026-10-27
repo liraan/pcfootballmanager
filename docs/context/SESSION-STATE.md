@@ -7,7 +7,10 @@
 **Ideas backlog:** `docs/context/IDEAS.md` — open and rejected ideas. Read it at session start to see what is not yet decided; do not implement from it.
 
 **Next steps (in dependency order):**
-1. **Finish Grade A/B stale sweep** — remaining: "22 players" in `docs/WORLD-MODEL.md` (lines 29, 44), `modules/L0-match/04-match-engine.md` (line 20), `docs/context/NEW-SESSION-PROMPT.md` (line 38); "done (proposed)" in `docs/MIGRATION-01-04.md` (line 64).
+1. **Finish Grade A/B stale sweep** — run:
+   - `grep -n "22 players" docs/WORLD-MODEL.md modules/L0-match/04-match-engine.md docs/context/NEW-SESSION-PROMPT.md`
+   - `grep -n "done (proposed)" docs/MIGRATION-01-04.md`
+   Classification: Grade A = contradicts an accepted decision (fix soon); Grade B = stale number/status (fix in batch); Grade C = missing mention (after L0.05); Grade D = legitimate historical mention (leave).
 2. **Revise `L0.05`** — observable events + `PassAttempted`, two synchronous phases. Aligns the spec with ADR-019 D11. Bump version 1.0 → 1.1.
 3. **Grade C** (after L0.05) — `docs/GLOSSARY.md`, `docs/CODE_TOUR.md`, `docs/ARCHITECTURE.md`, `docs/PLUGIN_DEVELOPER_GUIDE.md`.
 4. **Add "Documentation consistency" check** to `NEW-SESSION-PROMPT.md` (the grep + classification).
