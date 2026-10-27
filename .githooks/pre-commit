@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Pre-commit hook: runs cargo fmt, clippy, test only if Rust files are staged.
+# Install once with: git config core.hooksPath .githooks
+
+set -e
+
+staged_rust=$(git diff --cached --name-only --diff-filter=ACM | grep -E '(\.rs$|^Cargo\.toml$|^Cargo\.lock$|^rust-toolchain\.toml$)' || true)
+
+if [ -z "$staged_rust" ]; then
+  echo "pre-commit: no Rust files staged, skipping cargo checks."
+  exit 0
+fi
+
+if ! command -v cargo >/dev/null 2>&1; then
+  echo "pre-commit: Rust files are staged but 'cargo' is not in PATH. Aborting." >&2
+  exit 1
+fi
+
+echo "pre-commit: Rust files staged:"
+echo "$staged_rust" | sed 's/^/  /'
+
+echo "pre-commit: running cargo fmt --check..."
+cargo fmt --all -- --check
+
+echo "pre-commit: running cargo clippy --workspace -- -D warnings..."
+cargo clippy --workspace -- -D warnings
+
+echo "pre-commit: running cargo test --workspace..."
+cargo test --workspace
+
+echo "pre-commit: all checks passed."
