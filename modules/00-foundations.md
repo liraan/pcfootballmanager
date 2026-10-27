@@ -2,7 +2,7 @@
 title: "Module 00 — Foundations"
 version: "2.0"
 status: "ratified"
-last_updated: "2026-10-26"
+last_updated: "2026-10-27"
 supersedes: "Prompt Master v7 (archived)"
 depends_on: []
 referenced_by: ["all modules"]
@@ -234,5 +234,7 @@ L3 — META               Registry, packs, generator, editor, assets, UI, statis
 - A level N cell may **not** depend on a level `> N` cell.
 - The `00-foundations` doctrine applies at all levels.
 - The Three Planes apply at all levels.
+
+**Terminology.** In this project, "L0" denotes the **base**: the match engine and its contract. It is not a module or a plugin. "Module" (or "plugin") denotes an extension at **L1 and above**, subject to the contract in ADR-012. Consequently: `L0-match/` is the specification of the base; `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug` are the implementation of the base; modules/plugins live above.
 
 **The full map is in [`_index.md`](_index.md).**
