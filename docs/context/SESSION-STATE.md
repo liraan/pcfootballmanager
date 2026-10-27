@@ -8,6 +8,7 @@
 
 **Open items (Fase B and C/D/E):**
 - L0.05 revision: observable events + `PassAttempted` (aligns with ADR-019 D11)
+- **Also (same session as L0.05):** update `docs/context/PROJECT-IDEA-LOG.md` §3.10/§4.4 with the 2026-10-27 ADR-019 extension (D9 referee, D10 assistants, D11 self-contained events + two phases, deferred 3 resolved, `docs/WORLD-MODEL.md` created).
 - C-4 to C-9: remaining ADR-019 deferred (UX, resolution per platform, adaptive, LOD override, zone formula, role→mechanic)
 - D: ratify ADR-017
 - E: `L1-world/01-nation.md`
