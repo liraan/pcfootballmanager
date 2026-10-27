@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `a2ac907` — "docs(context): add IDEAS.md (open and rejected ideas backlog)"
+**Last commit verified:** `469db59` — "docs(context): reorder SESSION-STATE (last commit before ideas backlog)"
 
 **Ideas backlog:** `docs/context/IDEAS.md` — open and rejected ideas. Read it at session start to see what is not yet decided; do not implement from it.
 
