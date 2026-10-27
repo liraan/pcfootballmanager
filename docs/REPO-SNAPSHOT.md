@@ -1,6 +1,6 @@
 # Repository Snapshot — PCFM
 
-**Purpose:** factual snapshot of the repository. **This is the single source of truth for the live state** (crates, tests, ADR count, last commit, tracked files). Other files defer to §1. It is not a specification (see `modules/`), not a decision log (see `PROJECT-IDEA-LOG.md`). Last updated: 2026-10-27.
+**Purpose:** briefing snapshot of the repository for new sessions. It summarises the live state (crates, tests, ADR count, last commit, tracked files) to help a new contributor or an assistant get oriented quickly. **It is not normative.** For the live state, the source is the repository itself (`git log`, `git ls-files`, `cargo test`); for ADR status, the normative source is [STRUCTURE.md](../STRUCTURE.md) §5. Other files may reference this snapshot as context, but must not defer to it as authority. Last updated: 2026-10-27.
 
 **Rule:** if a file has been read in full, I say so and summarise its content. If it has been read only in part, I say so. If it has never been read, I write **"not read"** and list it in §7. No invented sizes: only those seen in real output (`git ls-files`).
 
