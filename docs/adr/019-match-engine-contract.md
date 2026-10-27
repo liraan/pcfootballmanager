@@ -32,6 +32,10 @@ the prototype, but does not represent retreats or blocks.
 quantisation function of `Position` and an adjacency graph; it is not an entity
 with its own state.
 
+The engine simulates **N agents** (22 players + referee + peripheral agents
+when active), not a fixed set of 22. Entities with their own state (ball,
+referee) are allowed: D1 forbids state in the grid, not in entities.
+
 **D2. Player functional state: closed enum.** Built-in variants only for now
 (`InPossesso`, `InPressione`, `InCopertura`, `InRipiegamento`, `InCorsa`,
 `InAttesa`). Extension is decided by the plugin contract (ADR-012), not by this
@@ -55,6 +59,9 @@ determinism risk.
 metres on a reference pitch of 105×68 (real standard dimensions). The grid is a
 quantisation of `Position`, not the primary type.
 
+`Position` applies to players, the ball, and the referee. Assistant
+referees have no in-pitch position in v1.0 (see D10).
+
 **D5. Resolution: engine parameter, fixed per match, saved.**
 `Resolution { width: u16, height: u16 }`, mandatory in `MatchSave`, included in
 `state_hash`, verified on load and replay. Default: 105×68. The engine does not
@@ -77,6 +84,23 @@ with its own state, like the grid. The observable attributes referenced here are
 the same as those in D3. The specific attributes and formula are
 deferred (see deferred 8).
 
+**D9. Referee is a normative agent.** In-pitch, with `Position` and
+functional state, but not competitive: it does not play for the ball. Its
+behaviour (positioning, avoidance, whistling) is deferred to the 2D
+implementation. In v1.0: position and whistling, no full physics.
+
+**D10. Assistant referees are peripheral normative agents.** No in-pitch
+position in v1.0: they signal offside and out-of-play abstractly. Their
+position along the touchlines is deferred to the 2D implementation.
+
+**D11. Self-contained temporal events, two synchronous phases.** Temporal
+events (`PassAttempted`, `ShotAttempted`, `DuelStarted`, `FoulCommitted`)
+are **self-contained**: each carries a snapshot of the relevant positions
+at the moment it occurs. Rule plugins read the snapshot. Rules produce the
+outcome in a second, synchronous phase (e.g. `PassAttempted` -> `Pass` or
+`Offside`). No VAR in v1.0: a future `VARReview` event may delay the
+decision when uncertain (see `WORLD-MODEL.md`).
+
 ## Deferred decisions
 
 The following are explicitly outside this ADR and must be closed by later ADRs
@@ -92,8 +116,12 @@ or dedicated notes before implementation:
    1) decides. Preventive foul pre-empts passes and dribbles, not shots
    inside the box (that would be a penalty). Costs, R, and the pre-emption
    matrix live in `docs/calibration/` (currently empty).
-3. **Possession representation** (only "who has the carrier", no separate team
-   flag).
+3. **Possession representation (resolved).** `possession: Option<PlayerId>`
+   (the carrier, or none) plus `ball_state: Possessed | InFlight | Contested |
+   Free`. The ball is an entity with its own state (compatible with D1: the
+   grid is not an entity, the ball is). The state machine must prevent invalid
+   combinations (e.g. `InFlight` requires `possession = None`). The ball's
+   `Position` is deferred to the 2D implementation.
 4. **Granular UX**: separate choice of LOD and resolution, readable presets,
    per-platform defaults.
 5. **Resolution values per platform** (mobile, ADR-014): not before mobile is
