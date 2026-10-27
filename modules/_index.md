@@ -262,5 +262,6 @@ These are components that are referenced across modules but are not crates. They
 | [016](../docs/adr/016-v1-content-selections.md) | v1.0 content selections | ✅ accepted | 20 roles (catalogue in L1-roster), 10 formations, 5 nations (real cities), 7 L2 modules (crowd/media to v1.1). Resolves ADR-015. |
 | [017](../docs/adr/017-roles-are-labels.md) | Roles are labels, not modifiers | 🟡 proposed | Role catalogue in L1-roster; the engine is blind to roles |
 | [018](../docs/adr/018-defer-crowd-media.md) | Defer crowd and media to v1.1 | ✅ accepted | Partially supersedes ADR-015: crowd and media ship in v1.1 |
+| [019](../docs/adr/019-match-engine-contract.md) | Match engine contract | 🟡 proposed | Agent-first state in players, integer position, resolution as engine parameter, zone of influence as derived relation |
 
-**Open ADRs:** 017 (proposed). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015, 016, 018 (14).
+**Open ADRs:** 017, 019 (proposed). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015, 016, 018 (14).
