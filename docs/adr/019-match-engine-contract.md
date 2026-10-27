@@ -82,8 +82,10 @@ deferred (see deferred 8).
 The following are explicitly outside this ADR and must be closed by later ADRs
 or dedicated notes before implementation:
 
-1. **Player iteration order** (determinism): proposed `EntityId`, to be
-   confirmed.
+1. **Player iteration order** (determinism): **spatial order** (squared
+   integer distance from the ball), with `EntityId` as tie-break. All 22
+   players are iterated each tick. The set of "active" players (radius,
+   zone) is deferred to deferred 2.
 2. **Off-ball pre-emption** (preventive foul, defensive block): priority rule,
    to be specified.
 3. **Possession representation** (only "who has the carrier", no separate team
