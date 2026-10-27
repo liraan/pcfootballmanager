@@ -5,10 +5,10 @@
 ## 1. Principles
 
 - The agent **proposes**, the human **approves**. No action on the remote repo happens without explicit confirmation.
-- Every change goes through a **branch and a pull request**. No direct push to `main`.
+- **Phase 2 (ruleset active):** every change goes through a **branch and a pull request**. No direct push to `main` by anyone. **Phase 1 (ruleset disabled, single maintainer):** direct push to `main` is allowed; PR is optional.
 - The agent **does not merge** pull requests. Only the human merges.
 - The agent **does not force-push** `main`, **does not delete** `main`, **does not create tags** without explicit confirmation.
-- The agent works on `agent/<task>-<date>` branches. These branches are intentionally **not protected**: they are the agent's workspace. `main` is protected by a GitHub ruleset (see §6).
+- The agent works on `agent/<task>-<date>` branches. These branches are intentionally **not protected**: they are the agent's workspace. `main` is protected by a GitHub ruleset **when active** (see §6).
 
 ## 2. What the agent may do autonomously
 
