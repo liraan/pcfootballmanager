@@ -13,7 +13,7 @@
 | Metric | Value | Source |
 |--------|-------|--------|
 | Branch | `main` | `git status` |
-| Last commit | `64c9b91` — "docs(adr): add ADR-019 match engine contract (proposed)" | `git log` |
+| Last commit | `de208bd` — "docs(adr): ratify ADR-019 (proposed → accepted)" | `git log` |
 | Working tree | clean | `git status` |
 | Tracked files | 121 | `git ls-files \| wc -l` |
 | Crates | 7 (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`) | `git ls-files` |
@@ -21,9 +21,9 @@
 | Clippy | clean (`-D warnings`) | `cargo clippy -- -D warnings` |
 | `--check` | 6/6 | `cargo run --bin pcfm-debug -- --check` |
 | `--coverage` | 2/26 (7%) | `cargo run --bin pcfm-debug -- --coverage` |
-| ADRs | 17 files in `docs/adr/`: 14 accepted (001-008, 012-016, 018), 2 proposed (017, 019), 1 template (000). Plus 1 reading guide in `docs/` (not an ADR). | `ls docs/adr/` |
-| ADRs accepted | 14 (001-008, 012, 013, 014, 015, 016, 018) | `grep Status` |
-| ADRs proposed | 2 (017, 019) | `grep Status` |
+| ADRs | 17 files in `docs/adr/`: 15 accepted (001-008, 012-016, 018, 019), 1 proposed (017), 1 template (000). Plus 1 reading guide in `docs/` (not an ADR). | `ls docs/adr/` |
+| ADRs accepted | 15 (001-008, 012, 013, 014, 015, 016, 018, 019) | `grep Status` |
+| ADRs proposed | 1 (017) | `grep Status` |
 | L0 modules | 11, all ratified | `git ls-files` |
 | L1-L3 modules | 0 (all planned) | `git ls-files` |
 
@@ -145,7 +145,7 @@ pcfootballmanager/
 | `016-v1-content-selections.md` | 238 | ✅ | `Status: accepted` (2026-10-27). v1.0 content selections: 3 axes (professionalism, ambition, pressure), 20 roles (catalogue in L1-roster), 10 formations, 5 nations (real cities; generated clubs/stadiums/players), 7 L2 modules (crowd/media to v1.1). Resolves ADR-015 deferred decisions. |
 | `017-roles-are-labels.md` | 92 | 🟡 | `Status: proposed`. Roles are labels, not modifiers. Role catalogue in L1-roster; the engine (L0) is blind to roles. No SIM_VERSION bump. |
 | `018-defer-crowd-media.md` | 59 | ✅ | `Status: accepted` (2026-10-27). Defer crowd and media to v1.1. Partially supersedes ADR-015. |
-| `019-match-engine-contract.md` | 123 | 🟡 | `Status: proposed`. Match engine contract: agent-first state in players, integer position (metres), resolution as engine parameter, zone of influence as derived relation. |
+| `019-match-engine-contract.md` | 123 | ✅ | `Status: accepted`. Match engine contract: agent-first state in players, integer position (metres), resolution as engine parameter, zone of influence as derived relation. |
 
 ---
 
@@ -351,12 +351,12 @@ All 16 identified inconsistencies have been closed. Summary:
 | `--check` | 6/6 | command output |
 | `--list` | 6 scenarios | command output |
 | `--coverage` | 2/26 (7%) | command output |
-| ADRs | 17 files in `docs/adr/`: 14 accepted (001-008, 012-016, 018), 2 proposed (017, 019), 1 template (000). Plus 1 reading guide in `docs/`. | `ls docs/adr/` + `grep Status` |
+| ADRs | 17 files in `docs/adr/`: 15 accepted (001-008, 012-016, 018, 019), 1 proposed (017), 1 template (000). Plus 1 reading guide in `docs/`. | `ls docs/adr/` + `grep Status` |
 | Reading guide | 1 in `docs/` (`PLUGINS-WORLDS-READING-GUIDE.md`) | `ls docs/` |
 | L0 modules | 11, all ratified | `git ls-files` |
 | Broken links | 0 | verification script (2026-10-26) |
 | Working tree | clean | `git status` |
-| Last commit | `64c9b91` (HEAD at snapshot time) | `git log` |
+| Last commit | `de208bd` (HEAD at snapshot time) | `git log` |
 | Tracked files read | 121/121 (100%) — ADR-019 authored this session | this snapshot |
 
 ---
