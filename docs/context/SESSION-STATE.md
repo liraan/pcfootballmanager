@@ -12,7 +12,7 @@ the rest of the bookmark in the same commit.
 **Ideas backlog:** `docs/context/IDEAS.md` — open and rejected ideas. Read it at session start to see what is not yet decided; do not implement from it.
 
 **Next steps (in dependency order):**
-0. **User priority for next session:** IDEA-INFRA-004 — extend `pcfm-debug` to cover installed modules and plugins (see `IDEAS.md`). Grade C remains at step 3.
+0. **User priority for next session:** IDEA-INFRA-004 — extend `pcfm-debug` to cover installed modules and plugins (see `IDEAS.md`).
 1. ~~**Finish Grade A/B stale sweep**~~ — done (5/5 files: `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `REPO-SNAPSHOT.md`, `MIGRATION-01-04.md`).
 2. ~~**Revise `L0.05`**~~ — done (v1.1, two-phase temporal events, `PositionSnapshot`, `attempt_event_id`; see commit `e06d8cd`).
 3. ~~**Grade C**~~ — done (4 files: `GLOSSARY.md`, `CODE_TOUR.md`, `ARCHITECTURE.md`, `PLUGIN_DEVELOPER_GUIDE.md`; commits `58c0ae9`, `5fa2b82`, `cb54ba5`, `9476456`, `b40fa0c`, `e2d69d8`).
