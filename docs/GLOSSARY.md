@@ -76,6 +76,10 @@ The public API of `pcfm-hidden`: `resolve_duel`, `resolve_shot`, `resolve_pass`,
 
 A windowed observed measurement over time. Replaces the banned CA/PA scalar. Lives in Plane C. See [`modules/00-foundations.md`](../modules/00-foundations.md) §3.
 
+### `PositionSnapshot`
+
+The positions of the agents relevant to an event, captured at the moment of an *attempt* event (phase 1 of the two-phase temporal pattern, ADR-019 D11). Bounded to the agents relevant to the event. See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md) §2.6.
+
 ### `ProjectionProfile`
 
 A forecast expressed as a **confidence band**, never a single number. Replaces the banned PA. Contains `expected_band`, `confidence_curve`, `positive_drivers`, `risk_factors`. See [`modules/00-foundations.md`](../modules/00-foundations.md) §3.
