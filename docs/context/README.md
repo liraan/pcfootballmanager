@@ -5,6 +5,7 @@ This directory is an **agent workspace**, not human documentation. The documenta
 ## Rule
 
 The repository itself remains the source of truth. The files in `docs/context/` are session memory, snapshots, policies, and review notes. Before treating any item here as live fact, validate it against the current repo state (`git status`, `git log`, `git ls-files`, `cargo test`).
+Review notes under `analysis/` are evaluative material, not source-of-truth repository state: they are not the project specification and not a substitute for the live code and live git state.
 
 ## Files in this directory
 
