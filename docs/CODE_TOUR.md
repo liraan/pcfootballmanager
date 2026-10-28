@@ -155,9 +155,9 @@ reconstructed? Why is `MatchSave` JSON and not `postcard` yet?
 | 3 | `crates/pcfm-testkit/src/feature.rs` | The `Feature` enum. 26 built-in + `Plugin`. |
 | 4 | `crates/pcfm-testkit/src/registry.rs` | `TestRegistry::run_all`. |
 | 5 | `crates/pcfm-testkit/src/result.rs` | `Check` and `ScenarioResult`. |
-| 6 | `crates/pcfm-debug/src/features/l0_match.rs` | The 6 registered L0 scenarios. A concrete example. |
-| 7 | `crates/pcfm-debug/src/features/mod.rs` | `register_all`. One line per feature. |
-| 8 | `crates/pcfm-debug/src/commands.rs` | `list()` and `coverage()`. How to inspect the registry. |
+| 6 | `crates/pcfm-test-runner/src/features/l0_match.rs` | The 6 registered L0 scenarios. A concrete example. |
+| 7 | `crates/pcfm-test-runner/src/features/mod.rs` | `register_all`. One line per feature. |
+| 8 | `crates/pcfm-test-runner/src/commands.rs` | `list()` and `coverage()`. How to inspect the registry. |
 
 **After this stage you can answer:** how do I add a scenario for L1 when
 L1 exists? Why is `pcfm-testkit` free of `pcfm-*` dependencies? What does
@@ -176,7 +176,7 @@ After the tour, pick one of these (in order of impact for a newcomer):
 |------|-------|-----------|
 | Add a missing `# Example` to a public `resolve_*` | `crates/pcfm-hidden/src/lib.rs` | ~10 lines each |
 | Explain a model constant in a doc comment | `crates/pcfm-match/src/state.rs`, `crates/pcfm-hidden/src/lib.rs` | ~5 lines each |
-| Add a scenario for a corner case you found | `crates/pcfm-debug/src/features/l0_match.rs` | ~30 lines |
+| Add a scenario for a corner case you found | `crates/pcfm-test-runner/src/features/l0_match.rs` | ~30 lines |
 | Improve the prototype model (realistic xG, duels) | `crates/pcfm-hidden/src/lib.rs` | open an ADR first |
 | Write a first L1 cell | `modules/L1-world/01-nation.md` (does not exist yet) | open an ADR first |
 
