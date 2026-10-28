@@ -215,6 +215,41 @@
   determinism, `pcfm-testkit` as contract). The doctrine wins. No code
   until the ADR is accepted.
 
+### IDEA-INFRA-006 — TUI renderer (event-driven ASCII) for `pcfm-demo`
+- **Status:** sketch
+- **Category:** Infrastructure (rendering / validation)
+- **Source:** conversation 2026-10-28 (user)
+- **Idea:** a terminal UI that renders a match as ASCII: pitch, 22 players,
+  ball, goals, score, updated on match events. A **validation renderer**,
+  not L3-ui: it proves that the simulation/rendering split works with a
+  second renderer, and it makes the match visible without leaving the
+  terminal.
+- **Where it lives:** `pcfm-demo` (name = function, per ADR-020). No new
+  crate. `ratatui` + `crossterm`, or raw ANSI if we want zero dependencies.
+- **What the data allows today:** the event chain has ~19 events per match,
+  each with a minute (not a second). `PositionSnapshot` exists only on
+  *attempt* events (ADR-019 D11), not every tick. So the TUI would show
+  **discrete frames**, not smooth motion. The ball would jump, not roll.
+  This is honest but limited. **Do not fake interpolation**: it would show
+  movement the engine did not simulate, against pillar 5 (radical
+  transparency).
+- **Decision deferred to a short ADR:** whether the coarse granularity is
+  acceptable for a prototype (likely yes), and — only if smooth motion is
+  wanted — whether `MatchState::tick` should expose per-tick positions
+  (which requires `SIM_VERSION` bump, a dedicated ADR, and a performance
+  measurement, none of which exist today).
+- **Open questions:**
+  1. `ratatui`/`crossterm` or raw ANSI? (Dependency vs control.)
+  2. Frame cadence: one frame per event, or a fixed tick?
+  3. What is shown: pitch only, or pitch + score + event log?
+  4. Is it a one-off prototype, or a maintained tool?
+- **Critical note:** an ADR is required before code, because a second
+  renderer touches the renderer contract
+  (`simulation_is_shared_and_renderer_agnostic`). The ADR must say
+  explicitly that this is a **validation prototype in `pcfm-demo`**, not
+  the L3-ui (ADR-005 chose Qt for that), and that no engine change is
+  planned.
+
 ---
 
 ## Rejected ideas (for traceability)
