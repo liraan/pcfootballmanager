@@ -4,7 +4,7 @@ This folder contains review outputs and analytical notes used for AI handoff and
 
 ## Canonical file
 
-- `../REVIEW-FINDINGS.md` — review summary and assessment notes
+- `REVIEW-FINDINGS.md` — review summary and assessment notes
 
 ## Purpose
 
