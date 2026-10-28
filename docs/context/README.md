@@ -1,40 +1,50 @@
-# Context directory — canonical layout
+# Context directory — agent workspace
 
-This directory is organised for AI handoff and continuity, not as normative project documentation.
+This directory is an **agent workspace**, not human documentation. The documentation for collaborators is `PROJECT-STATUS.md` at the repo root (planned).
 
 ## Rule
 
-The repository itself remains the source of truth. The files in `docs/context/` are session memory, snapshots, policies, and review notes. Before treating any item here as live fact, validate it against the current repo state (`git status`, `git log`, `git ls-files`, and the code itself).
+The repository itself remains the source of truth. The files in `docs/context/` are session memory, snapshots, policies, and review notes. Before treating any item here as live fact, validate it against the current repo state (`git status`, `git log`, `git ls-files`, `cargo test`).
 
-## Logical structure
+## Files in this directory
 
-The directory is intentionally grouped by purpose:
+**Entry points (read in this order):**
 
-- `session/` — current session bookmark and task state
-- `briefing/` — repo snapshots, launch prompts, startup context
-- `policy/` — agent policy and operational constraints
-- `backlog/` — idea logs and pending or rejected directions
-- `analysis/` — review findings and AI handoff notes
+1. `SESSION-STATE.md` — current session bookmark: last commit, next steps, files touched. Read this first when resuming after a pause.
+2. `NEW-SESSION-PROMPT.md` — prompt for the chat agent. Contains the operating rules and the codebase-specific rules.
+3. `AGENT-POLICY.md` — policy for any agent (chat or GitHub). What it may do, what requires confirmation, what it must never do, how approval works, how revocation works.
 
-## Canonical files
+**Supporting material (not normative):**
 
-- `session/README.md` — current session backbone
-- `briefing/README.md` — repo snapshot and prompt bootstrap
-- `policy/README.md` — agent and write policy
-- `backlog/README.md` — ideas and non-finalized directions
-- `analysis/README.md` — review notes and assessments
+- `REPO-SNAPSHOT.md` — factual snapshot of the repository (crate-by-crate). May lag behind; treat as a briefing.
+- `PROJECT-IDEA-LOG.md` — history, decisions, sources, what remains open.
+- `IDEAS.md` — open and rejected ideas. Do not implement from it.
 
-## Backward compatibility
+**Subfolders:**
 
-The original files at the top level remain available for compatibility and contain the full session data. The subfolders are the organized canonical view for an AI resuming work.
+- `analysis/` — review outputs and AI handoff assessments. `REVIEW-FINDINGS.md` is the current review. Written by the GitHub agent, never by the chat agent.
+- `github-agent/` — prompt for the GitHub agent (`PROMPT.md`). Stable; change only when the workflow changes.
+
+## Two agents, two prompts, one policy
+
+- **Chat agent** (interactive): reads `NEW-SESSION-PROMPT.md`, follows the operating rules, edits files, commits, and pushes on approval.
+- **GitHub agent** (asynchronous): reads `github-agent/PROMPT.md`, produces one Markdown report in `analysis/`, does not modify code. Role and limits are in `AGENT-POLICY.md` §8.
+- **Both** follow the same `AGENT-POLICY.md`. The two prompts cite it; they do not duplicate it.
+
+## Workflow
+
+1. The GitHub agent produces `analysis/YYYY-MM-DD-HHMM-review.md` (findings table: ID, severity, file:line, issue, recommendation).
+2. The chat agent triages: for each finding, propose **apply** (with commit + verification), **reject** (with reason), or **backlog** (add to `IDEAS.md`).
+3. The maintainer approves or rejects. Nothing is applied because a report says so.
+4. The maintainer may authorize the GitHub agent to apply a scoped modification as an exception (see `AGENT-POLICY.md` §8). For synchronous emergencies, use the chat agent or the maintainer directly.
 
 ## Read order for a new chat
 
-1. `session/README.md`
-2. `briefing/README.md`
-3. `new-session prompt` or startup brief in `briefing/`
-4. only then the normative docs (`STRUCTURE.md`, `docs/ARCHITECTURE.md`, `docs/CODE_TOUR.md`, `modules/...`)
+1. `SESSION-STATE.md`
+2. `NEW-SESSION-PROMPT.md`
+3. `AGENT-POLICY.md`
+4. Only then the normative docs (`STRUCTURE.md`, `docs/ARCHITECTURE.md`, `docs/CODE_TOUR.md`, `modules/...`).
 
 ## In short
 
-`docs/context/` is a continuity layer. It helps with context retention, not with defining the project’s authoritative state.
+`docs/context/` is a continuity layer for agents. It helps with context retention, not with defining the project's authoritative state.
