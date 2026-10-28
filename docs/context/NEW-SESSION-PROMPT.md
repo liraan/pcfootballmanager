@@ -70,7 +70,7 @@ In dependency order:
 
 ## Operating rules (important — we established them together)
 
-0. **Work in the local repo, commit in Git Bash, push.** The GitHub web interface is for emergencies only. Every change: edit locally → `git add` → `git commit` → `git push`.
+0. **Work in the local repo, commit in Git Bash, push.** The GitHub web interface is for emergencies only. Every change: edit locally → `git add` → `git commit`. Commit per file (or per logical group); **push at the end of the session or at a checkpoint (rule 10), not after every commit.** Phase 1 (now): direct push to `main` allowed. Phase 2 (ruleset active): branch + PR, no direct push — see rule 1.
 1. **Phase 1 vs Phase 2.** *Phase 1 (now):* ruleset disabled, single maintainer, direct push to `main` allowed, PR optional. *Phase 2 (when an agent gets a write token):* ruleset active, branch + PR mandatory, no direct push. See `docs/context/AGENT-POLICY.md`.
 2. **Small, targeted edits in Git Bash.** Use `sed`/`awk` for targeted modifications. Do not send the full file in chat when it exceeds ~120 lines: it truncates. For longer files, give the exact `sed`/`awk` commands, one section at a time.
 3. **`sed`/`awk` delimiters.** The replacement text must not contain the delimiter. Use `@` or `~` by default. If the text contains apostrophes, use a heredoc (`<< 'EOF'`) to avoid shell quoting issues.
@@ -82,18 +82,13 @@ multi-line replacements with backticks, em-dash, or arrows, use a
 one-liner. Mojibake in terminal output is a *display* artefact, not file
 corruption: confirm with `grep -c` before assuming the worst.
 4. **Verify after every edit.** `sed -n 'Np' file` to confirm the change. `git diff file` before `git add`. If the diff shows unrelated changes, stop.
-5. **One file at a time.** Wait for "ok" before moving to the next file.
+5. **One file at a time, one command at a time, with countdown.** In the current file: edit, verify (`sed -n`, `git diff`), next step. The pasted output of each command is the implicit "ok" to proceed **if the verification is clean**; if it shows a problem, stop and fix before moving on. At the start of each multi-step plan, declare the total number of tasks; each response states `Task i/N`.
 6. **Mutual honesty, zero inventions.** If you have not read a file, say so. Do not invent numbers, commit hashes, or file contents. "I don't know" > invention.
 7. **Small, atomic commits.** One commit per file (or per logical group). Clear messages in English, imperative mood.
-8. **Verify after every code change:** `cargo build --release` + `cargo clippy --workspace --all-targets -- -D warnings` + `cargo test --workspace` + `cargo fmt --check` + `cargo run --release --bin pcfm-debug -- --check --seed 42`. If anything is red, **stop and we fix it**.
+8. **Verify after every code change.** The pre-commit hook (`.githooks/pre-commit`, one-off install: `git config core.hooksPath .githooks`) runs fmt + clippy + test only if Rust files are staged. The hook does **not** replace the full check: also run `cargo build --release`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `cargo fmt --check`, `cargo run --release --bin pcfm-debug -- --check --seed 42`. If anything is red, stop and we fix it.
 9. **No `unwrap`/`expect`/`panic!` in simulation paths.** No `HashMap` in simulation paths. No `unsafe` outside `pcfm-bridge` (future).
-10. **Pre-commit hook** (`.githooks/pre-commit`): runs fmt, clippy, test only if Rust files are staged. Install with `git config core.hooksPath .githooks` (one-off, per clone).
-11. **Checkpoint on every interruption.** Before stopping (end of session, or a mid-session break), update `SESSION-STATE.md` with the last commit, the ordered next steps, and the files touched. Commit it and push. This is non-negotiable: a stale bookmark means the next session starts from invented priorities.
-11bis. **Bookmark semantics (S1).** `Last commit verified` in
-`SESSION-STATE.md` and `Last commit` in `REPO-SNAPSHOT.md` point to the
-last commit *before* the bookmark/snapshot update, not to HEAD. They
-will look stale compared to HEAD; that is expected. Do not "fix" them by
-pointing to HEAD unless the semantics is changed explicitly.
+10. **Bookmark and checkpoint.** Checkpoint at the end of the session (or at a multi-step plan completion): update `SESSION-STATE.md` with last commit, ordered next steps, files touched. Commit and push. **Bookmark S1:** `Last commit verified` in `SESSION-STATE.md` and `Last commit` in `REPO-SNAPSHOT.md` point to the last commit *before* the bookmark/snapshot update, not to HEAD; they will look stale — that is expected, do not "fix" them. "Pausa" does not trigger the checkpoint (see rule 11).
+11. **"Pausa" — discursive mode.** When the maintainer writes "pausa", switch to discursive mode: prose answers, no commands, no file edits. Use it to amend, rectify, or remove parts of the workflow discursively. Resume when the maintainer says so.
 
 ## Codebase-specific rules (do not violate)
 
