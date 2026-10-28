@@ -6,7 +6,7 @@
 *Transparent by design. Deterministic by construction. Yours by default.*
 
 [![Status](https://img.shields.io/badge/status-L0_ratified-yellow)](https://github.com/liraan/pcfootballmanager)
-[![Tests](https://img.shields.io/badge/tests-103_passing-brightgreen)](https://github.com/liraan/pcfootballmanager)
+[![Tests](https://img.shields.io/badge/tests-107_passing-brightgreen)](https://github.com/liraan/pcfootballmanager)
 [![License](https://img.shields.io/badge/license-MIT_OR_Apache--2.0-blue)](LICENSE-MIT)
 [![Built with](https://img.shields.io/badge/docs-AI--assisted-purple)](#-ai-disclosure)
 
@@ -151,7 +151,7 @@ pcfootballmanager/
 │   ├── pcfm-testkit/ # public test harness contract (no pcfm-* deps)
 │   └── pcfm-debug/   # CLI: health checks, --list, --coverage, demo rendering
 ├── docs/
-│   ├── adr/          # architectural decisions, 000 → 015
+│   ├── adr/          # architectural decisions, 000, 001–008, 012–019
 │   └── GLOSSARY.md
 └── archive/          # historical Prompt Masters, legacy modules
 ```
