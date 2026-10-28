@@ -264,6 +264,7 @@ When L0 and L1 are stable and a minimal kernel runs. Indicatively **Q1 2027**. N
 
 **Which decisions are actually settled?**
 Settled: the doctrine, the Three Planes, Plane A enforcement (ADR-003), FFI panic strategy (ADR-004), Qt binding (ADR-005), license (ADR-006), canonical language (ADR-007), provider integration policy (ADR-008).
+For a human-readable summary of the current state, see [`PROJECT-STATUS.md`](PROJECT-STATUS.md).
 See [`docs/context/REPO-SNAPSHOT.md`](docs/context/REPO-SNAPSHOT.md) §1 for the live state and [`STRUCTURE.md`](STRUCTURE.md) §5 for ADR status.
 
 **What is `pcfm-testkit`?**
