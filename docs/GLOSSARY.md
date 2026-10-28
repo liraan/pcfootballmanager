@@ -48,6 +48,10 @@ A directory under `modules/`, containing a `00-overview.md` and one or more sub-
 
 The "border" of a module. It declares the module's contracts, dependencies, Definition of Done, and risks. Every module has one.
 
+### Two-phase temporal pattern
+
+A temporal event is emitted in two synchronous phases: phase 1 is an *attempt* event carrying a `PositionSnapshot`; phase 2 is the *outcome* event, linked back to the attempt via `attempt_event_id`. Both phases occur within the same tick; there is no deferred resolution in v1.0. See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md) §2.6 and ADR-019 D11.
+
 ---
 
 ## 2. Data model
