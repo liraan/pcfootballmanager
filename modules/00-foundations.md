@@ -236,6 +236,6 @@ L3 — META               Registry, packs, generator, editor, assets, UI, statis
 - The `00-foundations` doctrine applies at all levels.
 - The Three Planes apply at all levels.
 
-**Terminology.** In this project, "L0" denotes the **base**: the match engine and its contract. It is not a module or a plugin. "Module" (or "plugin") denotes an extension at **L1 and above**, subject to the contract in ADR-012. Consequently: `L0-match/` is the specification of the base; `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug` are the implementation of the base; modules/plugins live above.
+**Terminology.** In this project, "L0" denotes the **base**: the match engine and its contract. It is not a module or a plugin. "Module" (or "plugin") denotes an extension at **L1 and above**, subject to the contract in ADR-012. Consequently: `L0-match/` is the specification of the base; `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner` are the implementation of the base; modules/plugins live above.
 
 **The full map is in [`_index.md`](_index.md).**
