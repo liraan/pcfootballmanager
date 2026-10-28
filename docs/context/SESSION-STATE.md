@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `15f72f5` — "docs(readme): align test count and ADR range with verified state"
+**Last commit verified:** `369c4f3` — "docs(adr): ratify ADR-020 after feasibility check"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -23,6 +23,7 @@ the rest of the bookmark in the same commit.
 7. **C-4…C-9** — remaining ADR-019 deferred (deferred 3, possession, resolved).
 8. **Ratify ADR-017**.
 9. **`L1-world/01-nation.md`**.
-10. **GitHub agent workflow (Phase 2)** — first test run on 2026-10-28: Copilot Coding Agent produced a valid report (2 findings, both verified and applied) but created an empty branch and delivered the report in chat instead of committing. Next run: assign an issue, not a chat prompt. Report archived at `docs/context/analysis/2026-10-28-14-14-review.md`. Reactivate the ruleset on `main` only if the agent gets a write token (not the default — see `AGENT-POLICY.md` §8).
+10. **GitHub agent workflow (Phase 2)** — first test run on 2026-10-28: Copilot Coding Agent produced a valid report (2 findings, both verified and applied) but created an empty branch and delivered the report in chat instead of committing. Next run: assign an issue, not a chat prompt. Reports archived in `docs/context/analysis/`. Reactivate the ruleset on `main` only if the agent gets a write token (not the default — see `AGENT-POLICY.md` §8).
+10bis. **Rename `pcfm-debug` to `pcfm-test-runner`** — per ADR-020 (accepted). `pcfm-demo` is created and tested (commit `ac27b6a`); the demo is still duplicated in `pcfm-debug`. Remaining: rename crate, remove `demo.rs`/`render.rs` from the old crate, update ~34 live references, full verification cascade.
 
-**Files touched this session:** `docs/context/README.md`, `docs/context/NEW-SESSION-PROMPT.md`, `docs/context/AGENT-POLICY.md`, `docs/context/SESSION-STATE.md`, `docs/context/GITHUB-AGENT-PROMPT.md`, `docs/context/analysis/2026-10-28-09-42-review.md`, `docs/context/analysis/2026-10-28-14-14-review.md`, `PROJECT-STATUS.md`, `README.md`.
+**Files touched this session:** `docs/context/README.md`, `docs/context/NEW-SESSION-PROMPT.md`, `docs/context/AGENT-POLICY.md`, `docs/context/SESSION-STATE.md`, `docs/context/GITHUB-AGENT-PROMPT.md`, `docs/context/IDEAS.md`, `docs/context/analysis/2026-10-28-09-42-review.md`, `docs/context/analysis/2026-10-28-14-14-review.md`, `docs/adr/020-split-test-runner-from-demo.md`, `PROJECT-STATUS.md`, `README.md`, `Cargo.toml`, `crates/pcfm-demo/`.
