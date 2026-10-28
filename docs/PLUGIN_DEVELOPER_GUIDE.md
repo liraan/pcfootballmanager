@@ -164,6 +164,8 @@ The pattern is tested by `pcfm-match`'s test `simulation_is_shared_and_renderer_
 5. **Update the module `modules/L0-match/05-match-events.md`** with the new variant.
 6. **Open a PR** with **one ADR and one crate change**, in two commits.
 
+**Two-phase temporal events:** if the new event is a temporal event, decide whether it is an *attempt* event (carries a `PositionSnapshot`) or an *outcome* event (links back via `attempt_event_id`). See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md) §2.6 and ADR-019 D11.
+
 The ADR is the gate. Without it, the PR is not reviewed.
 
 ---
