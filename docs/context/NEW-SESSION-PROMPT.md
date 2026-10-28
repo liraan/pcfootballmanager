@@ -30,11 +30,11 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 - **Status:** L0 (match engine) is complete and implemented. L1–L3 are planned.
 - **Performance target** (`00-foundations.md` §6): 60 fps UI, full season < 60 s on mid-range hardware. Not measured yet.
 
-## Where we are (commit `3c4673b`, 2026-10-27)
+## Where we are (commit `37a9315`, 2026-10-28)
 
-- **7 crates:** `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`.
-- **107 tests**, clippy clean (`-D warnings`), `--check` 6/6, `--list` 6 scenarios, `--coverage` 2/26 (7%).
-- **15 ADRs accepted** (001-008, 012-016, 018, 019), **1 proposed** (017, roles are labels), 1 template (000), 1 reading guide (`docs/PLUGINS-WORLDS-READING-GUIDE.md`, outside `docs/adr/`). **17 files** in `docs/adr/` total.
+- **9 crates:** `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures`.
+- **103 tests**, clippy clean (`-D warnings`), `--check` 6/6, `--list` 6 scenarios, `--coverage` 2/26 (7%).
+- **16 ADRs accepted** (001-008, 012-016, 018, 019, 020), **1 proposed** (017, roles are labels), 1 template (000), 1 reading guide (`docs/PLUGINS-WORLDS-READING-GUIDE.md`, outside `docs/adr/`). **18 files** in `docs/adr/` total.
 - **ADR-019 (match engine contract)** is `accepted`: agent-first, positional, N agents (players + referee). Deferred 1 (spatial iteration order), 2 (tick-cost pre-emption, selective foul), and 3 (possession representation) resolved. Deferred 4–9 open.
 - **11 L0 modules** ratified + implemented.
 - **`docs/context/`** holds briefing material (not normative): `REPO-SNAPSHOT.md`, `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`.
@@ -85,7 +85,7 @@ corruption: confirm with `grep -c` before assuming the worst.
 5. **One file at a time, one command at a time, with countdown.** In the current file: edit, verify (`sed -n`, `git diff`), next step. The pasted output of each command is the implicit "ok" to proceed **if the verification is clean**; if it shows a problem, stop and fix before moving on. At the start of each multi-step plan, declare the total number of tasks; each response states `Task i/N`.
 6. **Mutual honesty, zero inventions.** If you have not read a file, say so. Do not invent numbers, commit hashes, or file contents. "I don't know" > invention.
 7. **Small, atomic commits.** One commit per file (or per logical group). Clear messages in English, imperative mood.
-8. **Verify after every code change.** The pre-commit hook (`.githooks/pre-commit`, one-off install: `git config core.hooksPath .githooks`) runs fmt + clippy + test only if Rust files are staged. The hook does **not** replace the full check: also run `cargo build --release`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `cargo fmt --check`, `cargo run --release --bin pcfm-debug -- --check --seed 42`. If anything is red, stop and we fix it.
+8. **Verify after every code change.** The pre-commit hook (`.githooks/pre-commit`, one-off install: `git config core.hooksPath .githooks`) runs fmt + clippy + test only if Rust files are staged. The hook does **not** replace the full check: also run `cargo build --release`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `cargo fmt --check`, `cargo run --release --bin pcfm-test-runner -- --check --seed 42`. If anything is red, stop and we fix it.
 9. **No `unwrap`/`expect`/`panic!` in simulation paths.** No `HashMap` in simulation paths. No `unsafe` outside `pcfm-bridge` (future).
 10. **Bookmark and checkpoint.** Checkpoint at the end of the session (or at a multi-step plan completion): update `SESSION-STATE.md` with last commit, ordered next steps, files touched. Commit and push. **Bookmark S1:** `Last commit verified` in `SESSION-STATE.md` and `Last commit` in `REPO-SNAPSHOT.md` point to the last commit *before* the bookmark/snapshot update, not to HEAD; they will look stale — that is expected, do not "fix" them. "Pausa" does not trigger the checkpoint (see rule 11).
 11. **"Pausa" — discursive mode.** When the maintainer writes "pausa", switch to discursive mode: prose answers, no commands, no file edits. Use it to amend, rectify, or remove parts of the workflow discursively. Resume when the maintainer says so.
@@ -110,7 +110,7 @@ corruption: confirm with `grep -c` before assuming the worst.
 
 - Do not give me "lots of comments" scattered through the code: the codebase is already documented.
 - Do not assume that ADR-012, ADR-013, ADR-015, ADR-016, ADR-018, ADR-019 are "proposed". They are **accepted**.
-- Do not assume there are "16 ADRs". There are **17 files in `docs/adr/`**: 15 accepted (001-008, 012-016, 018, 019), 1 proposed (017), 1 template (000). Plus 1 reading guide outside `docs/adr/`.
+- Do not assume there are "17 ADRs". There are **18 files in `docs/adr/`**: 16 accepted (001-008, 012-016, 018, 019, 020), 1 proposed (017), 1 template (000). Plus 1 reading guide outside `docs/adr/`.
 - Do not paste a full file > 120 lines in chat: it truncates. Use `sed`/`awk` commands, or split into consecutive parts with no text in between.
 - Do not invent commit hashes or file contents you have not read.
 - Do not propose Python scripts (Python is not installed). Use Bash/Git Bash.
