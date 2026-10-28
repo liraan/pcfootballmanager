@@ -34,8 +34,8 @@ Cost of not deciding: IDEA-INFRA-004 (plugin discovery in the runner) and IDEA-I
 
 ### Option B′ — Split, with the demo as a workspace example (`examples/demo/`)
 
-- **Pro:** satisfies the "name = function" criterion with lower cost than B: no new crate, no new `Cargo.toml`, tests migrate to `cargo test`. The demo is an internal smoke test, not a distributed binary.
-- **Con:** `cargo install` does not install examples (irrelevant today: nothing is distributed); feasibility with the demo's real dependencies (`pcfm-match`, `pcfm-hidden`, `pcfm-stats`) must be verified before committing.
+- **Pro:** would satisfy the "name = function" criterion with lower cost than B: no new crate, no new `Cargo.toml`, tests migrate to `cargo test`.
+- **Con (fatal):** **not implementable as written.** Cargo places examples inside a *package*, not the workspace root. `examples/demo/` at the root is not seen by Cargo; the valid path is `crates/pcfm-debug/examples/demo/`, which keeps the demo physically inside the runner crate. The "name = function" criterion would hold for the binary, not for the filesystem. Rejected: it hides the ambiguity instead of removing it.
 
 ### Option C — Merge under a single CLI (`pcfm-tools run|list|coverage|demo`)
 
@@ -44,11 +44,11 @@ Cost of not deciding: IDEA-INFRA-004 (plugin discovery in the runner) and IDEA-I
 
 ## Decision
 
-**Option B′ is proposed, subject to ratification.** Motivation:
+**Option B is chosen.** Motivation:
 
-- It satisfies the criterion: `pcfm-test-runner` runs scenarios; `examples/demo/` simulates a match for manual inspection. One function per name.
-- It costs less than B (no new crate) and is more correct than A and C (which keep or hide the ambiguity).
-- **B′ is conditional:** if the demo's dependencies cannot live cleanly in `examples/demo/`, the fallback is **B** (a `pcfm-demo` crate). The feasibility check comes before implementation.
+- It satisfies the criterion: `pcfm-test-runner` runs scenarios; `pcfm-demo` simulates a match for manual inspection. One function per name, one crate per function, no residual ambiguity.
+- It is more correct than A (which keeps two functions under one name) and C (which hides them under a generic drawer).
+- B′ is rejected on technical grounds: Cargo places examples inside a package, so `examples/demo/` at the workspace root would not compile; the only working variant (`crates/pcfm-debug/examples/demo/`) keeps the demo inside the runner crate, which defeats the purpose.
 
 This ADR is **proposed**, not accepted. No code changes until it is ratified.
 
@@ -65,13 +65,13 @@ This ADR is **proposed**, not accepted. No code changes until it is ratified.
 - The workspace `Cargo.toml` and `STRUCTURE.md` §3 (crate list) must be updated.
 
 ### Locked in
-- `pcfm-demo` as an example is **not** installable via `cargo install`. Acceptable while no binary is distributed. If a distributed demo binary is needed later, B becomes the right choice and this ADR is superseded.
+- `pcfm-demo` is a separate crate with its own binary. It is installable via `cargo install -p pcfm-demo`, but it is not part of the default workspace build (only the crates listed in `members` are). Adding it to `members` is part of the implementation.
 
 ## Implementation notes
 
-1. **Feasibility check for B′ first:** create `examples/demo/main.rs` with the current `demo.rs` + `render.rs` logic and the real dependencies (`pcfm-match`, `pcfm-hidden`, `pcfm-stats`). Run `cargo test` and `cargo run --example demo -- --seed 42`. If it works, B′ holds; if not, fall back to B.
+1. **Create `crates/pcfm-demo/`**: new package with `Cargo.toml` (deps: `pcfm-match`, `pcfm-hidden`, `pcfm-stats`, `serde_json`, `thiserror`), `src/main.rs` with the current `demo.rs` + `render.rs` logic and the simulation part of `main.rs`. Add it to workspace `members` and `workspace.dependencies`. Run `cargo run -p pcfm-demo -- --seed 42`. If it works, B holds.
 2. Rename `pcfm-debug` to `pcfm-test-runner` (`Cargo.toml`, workspace members, `src/`).
-3. Keep in `pcfm-test-runner`: `check.rs`, `commands.rs`, `features/`, and the runner-only part of `args.rs`. Move to `examples/demo/`: `demo.rs`, `render.rs`, and the simulation part of `main.rs`.
+3. Keep in `pcfm-test-runner`: `check.rs`, `commands.rs`, `features/`, and the runner-only part of `args.rs`. Remove from it: `demo.rs`, `render.rs`, the simulation part of `main.rs`.
 4. Update the ~53 live references: `ARCHITECTURE.md`, `README.md`, `PLUGIN_DEVELOPER_GUIDE.md`, `CODE_TOUR.md`, `STRUCTURE.md`, `PROJECT-STATUS.md`, `CONTRIBUTING.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `REPO-SNAPSHOT.md`.
 5. **Do not touch:** `docs/adr/003-plane-a-enforcement.md` (immutable ADR), `IDEAS.md` / `PROJECT-IDEA-LOG.md` / `2026-10-28-09-42-review.md` (historical), except for an append that cites this ADR.
 6. `modules/00-foundations.md` (1 reference): verify whether it is doctrine or an example. If doctrine, update it with this ADR as the reference.
