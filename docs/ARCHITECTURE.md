@@ -113,6 +113,8 @@ that `pcfm-debug` follows, and the sequence that a future UI will follow.
 10. MatchSave::to_bytes() / from_bytes()                      [JSON, for now]
 ```
 
+**Two-phase events:** step 6e emits temporal events in two synchronous phases (ADR-019 D11): an *attempt* event carrying a `PositionSnapshot`, followed by the *outcome* event linked back via `attempt_event_id`. Both phases occur in the same tick. See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md) §2.6.
+
 **Key invariant:** step 6d is the only interaction with Plane A. The
 engine constructs a `DuelContext`/`ShotContext`/etc., calls `resolve_*`,
 receives a `DuelOutcome`/`ShotOutcome`/etc., and turns it into a
