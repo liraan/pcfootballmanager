@@ -23,7 +23,7 @@ Review notes under `analysis/` are evaluative material, not source-of-truth repo
 
 **Subfolders:**
 
-- `analysis/` — review outputs and AI handoff assessments. `REVIEW-FINDINGS.md` is the current review. Written by the GitHub agent, never by the chat agent.
+- `analysis/` — review outputs and AI handoff assessments. Reviews are dated files (`YYYY-MM-DD-review.md`); the latest date is the current review. Written by the GitHub agent, never by the chat agent.
 - `github-agent/` — prompt for the GitHub agent (`PROMPT.md`). Stable; change only when the workflow changes.
 
 ## Two agents, two prompts, one policy
