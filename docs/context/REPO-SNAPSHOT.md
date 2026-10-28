@@ -13,7 +13,7 @@
 | Metric | Value | Source |
 |--------|-------|--------|
 | Branch | `main` | `git status` |
-| Last commit | `66e3351` — "docs(context): refresh session state (last commit, stale sweep progress, deferred 3 resolved)" | `git log` |
+| Last commit | `98f7df7` — "docs(context): checkpoint after L0.05 revision" | `git log` |
 | Working tree | clean | `git status` |
 | Tracked files | 126 | `git ls-files \| wc -l` |
 | Crates | 7 (`pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`) | `git ls-files` |
@@ -358,7 +358,7 @@ All 16 identified inconsistencies have been closed. Summary:
 | L0 modules | 11, all ratified | `git ls-files` |
 | Broken links | 0 | manual grep verification (2026-10-27), 1 broken link found and fixed |
 | Working tree | clean | `git status` |
-| Last commit | `66e3351` (last commit before this snapshot update) | `git log` |
+| Last commit | `98f7df7` (last commit before this snapshot update) | `git log` |
 | Tracked files read | 126/126 (100%) — all tracked files read | this snapshot |
 
 ---
