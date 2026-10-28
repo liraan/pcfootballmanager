@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `e06d8cd` — "docs: revise L0.05 (v1.1, two-phase temporal events) and update idea log"
+**Last commit verified:** `acf24ca` — "docs(context): refresh new-session prompt after L0.05 revision"
 
 **Ideas backlog:** `docs/context/IDEAS.md` — open and rejected ideas. Read it at session start to see what is not yet decided; do not implement from it.
 
