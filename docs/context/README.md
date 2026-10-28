@@ -27,7 +27,7 @@ Review notes under `analysis/` are evaluative material, not source-of-truth repo
 
 **Subfolders:**
 
-- `analysis/` — review outputs and AI handoff assessments. Reviews are dated files (`YYYY-MM-DD-review.md`); the latest date is the current review. Written by the GitHub agent, never by the chat agent.
+- `analysis/` — review outputs and AI handoff assessments. Reviews are dated files (`YYYY-MM-DD-HH-MM-review.md`); the latest date is the current review. Written by the GitHub agent, never by the chat agent.
 
 ## Two agents, two prompts, one policy
 
@@ -37,7 +37,7 @@ Review notes under `analysis/` are evaluative material, not source-of-truth repo
 
 ## Workflow
 
-1. The GitHub agent produces `analysis/YYYY-MM-DD-HHMM-review.md` (findings table: ID, severity, file:line, issue, recommendation).
+1. The GitHub agent produces `analysis/YYYY-MM-DD-HH-MM-review.md` (findings table: ID, severity, file:line, issue, recommendation).
 2. The chat agent triages: for each finding, propose **apply** (with commit + verification), **reject** (with reason), or **backlog** (add to `IDEAS.md`).
 3. The maintainer approves or rejects. Nothing is applied because a report says so.
 4. The maintainer may authorize the GitHub agent to apply a scoped modification as an exception (see `AGENT-POLICY.md` §8). For synchronous emergencies, use the chat agent or the maintainer directly.
