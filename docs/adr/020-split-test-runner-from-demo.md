@@ -34,7 +34,7 @@ Cost of not deciding: IDEA-INFRA-004 (plugin discovery in the runner) and IDEA-I
 - **Pro:** each crate does one thing; the name describes it. Future-proof: diagnostics and benchmark will be separate crates, not subcommands of a catch-all.
 - **Con:** higher cost — new crate, workspace `Cargo.toml`, ~450 lines moved, ~53 references updated, the demo's 3 tests migrated.
 
-### Option B′ — Split, with the demo as a workspace example (`examples/demo/`)
+### Option B1 — Split, with the demo as a workspace example (`examples/demo/`)
 
 - **Pro:** would satisfy the "name = function" criterion with lower cost than B: no new crate, no new `Cargo.toml`, tests migrate to `cargo test`.
 - **Con (fatal):** **not implementable as written.** Cargo places examples inside a *package*, not the workspace root. `examples/demo/` at the root is not seen by Cargo; the valid path is `crates/pcfm-debug/examples/demo/`, which keeps the demo physically inside the runner crate. The "name = function" criterion would hold for the binary, not for the filesystem. Rejected: it hides the ambiguity instead of removing it.
@@ -50,7 +50,7 @@ Cost of not deciding: IDEA-INFRA-004 (plugin discovery in the runner) and IDEA-I
 
 - It satisfies the criterion: `pcfm-test-runner` runs scenarios; `pcfm-demo` simulates a match for manual inspection. One function per name, one crate per function, no residual ambiguity.
 - It is more correct than A (which keeps two functions under one name) and C (which hides them under a generic drawer).
-- B′ is rejected on technical grounds: Cargo places examples inside a package, so `examples/demo/` at the workspace root would not compile; the only working variant (`crates/pcfm-debug/examples/demo/`) keeps the demo inside the runner crate, which defeats the purpose.
+- B1 is rejected on technical grounds: Cargo places examples inside a package, so `examples/demo/` at the workspace root would not compile; the only working variant (`crates/pcfm-debug/examples/demo/`) keeps the demo inside the runner crate, which defeats the purpose.
 
 This ADR is **proposed**, not accepted. No code changes until it is ratified.
 
