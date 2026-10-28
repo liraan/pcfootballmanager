@@ -1,0 +1,16 @@
+[package]
+name = "pcfm-fixtures"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Test fixtures for PCFM: hardcoded squads and match for scenarios and demos"
+
+[dependencies]
+pcfm-core.workspace = true
+pcfm-model.workspace = true
+
+[lints]
+workspace = true

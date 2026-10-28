@@ -1,16 +1,16 @@
 [package]
-name = "pcfm-debug"
+name = "pcfm-test-runner"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 authors.workspace = true
 license.workspace = true
 repository.workspace = true
-description = "CLI debug tool for PCFM: simulate a match and print the result"
+description = "CLI test runner for PCFM: run and inspect test scenarios"
 documentation = "https://github.com/liraan/pcfootballmanager/tree/main/docs/MODULE_DEVELOPER_GUIDE.md"
 
 [[bin]]
-name = "pcfm-debug"
+name = "pcfm-test-runner"
 path = "src/main.rs"
 
 [dependencies]
@@ -22,6 +22,7 @@ pcfm-match.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
 pcfm-testkit.workspace = true
+pcfm-fixtures.workspace = true
 
 [lints]
 workspace = true

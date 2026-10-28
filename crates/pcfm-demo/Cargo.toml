@@ -18,6 +18,7 @@ pcfm-model.workspace = true
 pcfm-hidden.workspace = true
 pcfm-stats.workspace = true
 pcfm-match.workspace = true
+pcfm-fixtures.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
 

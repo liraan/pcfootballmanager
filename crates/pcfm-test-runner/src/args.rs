@@ -9,22 +9,15 @@ use std::fmt;
 
 /// The parsed command-line options.
 ///
-/// The flags are independent: `--json --quiet` is valid, and so is
-/// `--check --list` (the first command wins in `main::run`). Clippy's
-/// `struct_excessive_bools` lint assumes mutually exclusive flags, which
-/// is not the case here, so the lint is explicitly allowed.
+/// The flags are independent: `--check --list` is valid, and the first
+/// command wins in `main::run`. The `struct_excessive_bools` lint assumes
+/// mutually exclusive flags, which is not the case here.
 #[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Args {
-    /// The seed for the match. Default: 42.
+    /// The seed for the scenarios. Default: 42.
     pub seed: u64,
-    /// If true, output the match result as JSON instead of text.
-    pub json: bool,
-    /// If `Some(path)`, write a self-contained HTML file to that path.
-    pub html: Option<String>,
-    /// If true, print only the final score.
-    pub quiet: bool,
-    /// If true, run the health check instead of simulating a match.
+    /// If true, run the health check.
     pub check: bool,
     /// If true, list the registered scenarios and exit.
     pub list: bool,
@@ -36,9 +29,6 @@ impl Default for Args {
     fn default() -> Self {
         Self {
             seed: 42,
-            json: false,
-            html: None,
-            quiet: false,
             check: false,
             list: false,
             coverage: false,
@@ -99,8 +89,6 @@ where
     while let Some(arg) = iter.next() {
         match arg.as_str() {
             "--help" | "-h" => return Err(ArgError::HelpRequested),
-            "--json" => args.json = true,
-            "--quiet" | "-q" => args.quiet = true,
             "--check" => args.check = true,
             "--list" => args.list = true,
             "--coverage" => args.coverage = true,
@@ -113,12 +101,6 @@ where
                     value: v,
                 })?;
             }
-            "--html" => {
-                let v = iter
-                    .next()
-                    .ok_or_else(|| ArgError::MissingValue(arg.clone()))?;
-                args.html = Some(v);
-            }
             other => return Err(ArgError::Unknown(other.to_string())),
         }
     }
@@ -127,17 +109,14 @@ where
 
 /// The help text.
 pub const HELP: &str = "\
-pcfm-debug — simulate a PCFM match
+pcfm-test-runner — run PCFM test scenarios
 
 USAGE:
-    pcfm-debug [OPTIONS]
+    pcfm-test-runner [OPTIONS]
 
 OPTIONS:
-    --seed <U64>       Seed for the match (default: 42)
-    --json             Output the match result as JSON
-    --html <PATH>      Write a self-contained HTML file to PATH
-    --quiet, -q        Print only the final score
-    --check            Run the health check instead of simulating a match
+    --seed <U64>       Seed for the scenarios (default: 42)
+    --check            Run the health check (default when no command is given)
     --list             List the registered test scenarios and exit
     --coverage         Print feature coverage of the test scenarios
     --help, -h         Print this help
@@ -148,7 +127,7 @@ mod tests {
     use super::*;
 
     fn argv(items: &[&str]) -> Vec<String> {
-        std::iter::once("pcfm-debug")
+        std::iter::once("pcfm-test-runner")
             .chain(items.iter().copied())
             .map(String::from)
             .collect()
@@ -164,24 +143,6 @@ mod tests {
     fn seed_is_parsed() {
         let a = parse(argv(&["--seed", "123"])).unwrap();
         assert_eq!(a.seed, 123);
-    }
-
-    #[test]
-    fn json_flag_is_set() {
-        let a = parse(argv(&["--json"])).unwrap();
-        assert!(a.json);
-    }
-
-    #[test]
-    fn html_path_is_set() {
-        let a = parse(argv(&["--html", "out/match.html"])).unwrap();
-        assert_eq!(a.html.as_deref(), Some("out/match.html"));
-    }
-
-    #[test]
-    fn quiet_flag_is_set() {
-        let a = parse(argv(&["--quiet"])).unwrap();
-        assert!(a.quiet);
     }
 
     #[test]

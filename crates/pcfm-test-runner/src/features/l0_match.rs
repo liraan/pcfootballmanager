@@ -13,7 +13,7 @@ use pcfm_model::Match;
 use pcfm_stats::EventChain;
 use pcfm_testkit::{Feature, Scenario, ScenarioResult, TestContext, TestRegistry};
 
-use crate::demo;
+use pcfm_fixtures::match_fixture;
 
 /// Register every L0 scenario.
 ///
@@ -81,9 +81,9 @@ impl Scenario for DemoTeamScenario {
 
     fn run(&self, ctx: &mut TestContext) -> ScenarioResult {
         let mut result = ScenarioResult::new();
-        match demo::demo_match(ctx.seed) {
+        match match_fixture(ctx.seed) {
             Ok(_) => result.pass("demo teams are valid"),
-            Err(e) => result.fail("demo teams are valid", e.to_string()),
+            Err(e) => result.fail("demo teams are valid", e),
         }
         result
     }
@@ -104,10 +104,10 @@ impl Scenario for SameSeedScenario {
 
     fn run(&self, ctx: &mut TestContext) -> ScenarioResult {
         let mut result = ScenarioResult::new();
-        let match_ = match demo::demo_match(ctx.seed) {
+        let match_ = match match_fixture(ctx.seed) {
             Ok(m) => m,
             Err(e) => {
-                result.error(e.to_string());
+                result.error(e);
                 return result;
             }
         };
@@ -140,18 +140,18 @@ impl Scenario for DifferentSeedScenario {
 
     fn run(&self, ctx: &mut TestContext) -> ScenarioResult {
         let mut result = ScenarioResult::new();
-        let match1 = match demo::demo_match(ctx.seed) {
+        let match1 = match match_fixture(ctx.seed) {
             Ok(m) => m,
             Err(e) => {
-                result.error(e.to_string());
+                result.error(e);
                 return result;
             }
         };
         let other_seed = ctx.seed.wrapping_add(1);
-        let match2 = match demo::demo_match(other_seed) {
+        let match2 = match match_fixture(other_seed) {
             Ok(m) => m,
             Err(e) => {
-                result.error(e.to_string());
+                result.error(e);
                 return result;
             }
         };
@@ -184,10 +184,10 @@ impl Scenario for SaveLoadScenario {
 
     fn run(&self, ctx: &mut TestContext) -> ScenarioResult {
         let mut result = ScenarioResult::new();
-        let match_ = match demo::demo_match(ctx.seed) {
+        let match_ = match match_fixture(ctx.seed) {
             Ok(m) => m,
             Err(e) => {
-                result.error(e.to_string());
+                result.error(e);
                 return result;
             }
         };
@@ -227,10 +227,10 @@ impl Scenario for EventChainScenario {
 
     fn run(&self, ctx: &mut TestContext) -> ScenarioResult {
         let mut result = ScenarioResult::new();
-        let match_ = match demo::demo_match(ctx.seed) {
+        let match_ = match match_fixture(ctx.seed) {
             Ok(m) => m,
             Err(e) => {
-                result.error(e.to_string());
+                result.error(e);
                 return result;
             }
         };
@@ -272,10 +272,10 @@ impl Scenario for StatsSanityScenario {
 
     fn run(&self, ctx: &mut TestContext) -> ScenarioResult {
         let mut result = ScenarioResult::new();
-        let match_ = match demo::demo_match(ctx.seed) {
+        let match_ = match match_fixture(ctx.seed) {
             Ok(m) => m,
             Err(e) => {
-                result.error(e.to_string());
+                result.error(e);
                 return result;
             }
         };

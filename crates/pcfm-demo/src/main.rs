@@ -10,8 +10,6 @@
 //! pcfm-demo [--seed <U64>] [--json] [--html <PATH>] [--quiet] [--help]
 //! ```
 
-mod demo;
-mod error;
 mod render;
 
 use std::process::ExitCode;
@@ -96,7 +94,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     };
 
-    let match_ = demo::demo_match(args.seed)?;
+    let match_ = pcfm_fixtures::match_fixture(args.seed)?;
     let mut hidden = GroundTruth::new(args.seed, match_.id);
     let mut rng = RngRegistry::new(args.seed);
     let mut chain = EventChain::new();
@@ -135,18 +133,17 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::error::DemoError;
 
     #[test]
     fn demo_match_is_valid() {
-        let m = demo::demo_match(42).unwrap();
+        let m = pcfm_fixtures::match_fixture(42).unwrap();
         assert_eq!(m.home.players.len(), 11);
         assert_eq!(m.away.players.len(), 11);
     }
 
     #[test]
     fn rendering_a_result_does_not_panic() {
-        let match_ = demo::demo_match(42).unwrap();
+        let match_ = pcfm_fixtures::match_fixture(42).unwrap();
         let mut hidden = GroundTruth::new(42, match_.id);
         let mut rng = RngRegistry::new(42);
         let mut chain = EventChain::new();
@@ -162,11 +159,5 @@ mod tests {
         let result = engine.simulate(ctx);
         let _ = render::print_text(&result);
         let _ = render::print_json(&result);
-    }
-
-    #[test]
-    fn demo_error_displays() {
-        let e = DemoError::DemoTeam("test".to_string());
-        assert!(e.to_string().contains("test"));
     }
 }
