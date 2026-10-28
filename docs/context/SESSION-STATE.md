@@ -19,6 +19,7 @@ the rest of the bookmark in the same commit.
 3bis. ~~Riorganizzazione docs/context~~ — done (README onesto, review datate in `analysis/`, `GITHUB-AGENT-PROMPT.md` in radice, `PROJECT-STATUS.md` in root; commits `5498395`…`15f72f5`).
 4. **Add "Documentation consistency" check** to `NEW-SESSION-PROMPT.md` (the grep + classification).
 5. **Verification cascade** — re-read top-down (README → STRUCTURE → docs → ADR → modules) to confirm no logical blind spots remain.
+5bis. **Functional doc-vs-repo verification** — use the GitHub agent (via an *issue*, not a chat prompt) to scan docs against the live repository: test counts, ADR ranges, paths, version numbers, stale claims. The agent produces `docs/context/analysis/YYYY-MM-DD-HH-MM-review.md`; the chat agent verifies every finding with `grep`/`sed` before applying. The agent finds, we verify.
 6. ~~**Update `PROJECT-IDEA-LOG.md`** §3.10/§4.4~~ — done (same commit as L0.05, `e06d8cd`).
 7. **C-4…C-9** — remaining ADR-019 deferred (deferred 3, possession, resolved).
 8. **Ratify ADR-017**.
