@@ -66,7 +66,7 @@ In dependency order:
 3. **Address the 2 technical gaps** (`ProjectionProfile`, `ScoutReport.DeclaredBias`).
 4. **Write the 2 missing documents** (`performance.md`, `save-security.md`).
 5. **Start writing L1** (first module: `L1-world/01-nation.md`).
-6. **GitHub agent workflow (Phase 2)** — set up the GitHub agent per `docs/context/github-agent/PROMPT.md`; it produces analysis reports, not code changes. Reactivate the ruleset on `main` only if the agent gets a write token (not the default — see `AGENT-POLICY.md` §8).
+6. **GitHub agent workflow (Phase 2)** — set up the GitHub agent per `docs/context/GITHUB-AGENT-PROMPT.md`; it produces analysis reports, not code changes. Reactivate the ruleset on `main` only if the agent gets a write token (not the default — see `AGENT-POLICY.md` §8).
 
 ## Operating rules (important — we established them together)
 

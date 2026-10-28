@@ -15,6 +15,10 @@ Review notes under `analysis/` are evaluative material, not source-of-truth repo
 2. `NEW-SESSION-PROMPT.md` — prompt for the chat agent. Contains the operating rules and the codebase-specific rules.
 3. `AGENT-POLICY.md` — policy for any agent (chat or GitHub). What it may do, what requires confirmation, what it must never do, how approval works, how revocation works.
 
+**GitHub agent entry point:**
+
+- `GITHUB-AGENT-PROMPT.md` — prompt for the GitHub agent (analysis reports, not code changes).
+
 **Supporting material (not normative):**
 
 - `REPO-SNAPSHOT.md` — factual snapshot of the repository (crate-by-crate). May lag behind; treat as a briefing.
@@ -24,12 +28,11 @@ Review notes under `analysis/` are evaluative material, not source-of-truth repo
 **Subfolders:**
 
 - `analysis/` — review outputs and AI handoff assessments. Reviews are dated files (`YYYY-MM-DD-review.md`); the latest date is the current review. Written by the GitHub agent, never by the chat agent.
-- `github-agent/` — prompt for the GitHub agent (`PROMPT.md`). Stable; change only when the workflow changes.
 
 ## Two agents, two prompts, one policy
 
 - **Chat agent** (interactive): reads `NEW-SESSION-PROMPT.md`, follows the operating rules, edits files, commits, and pushes on approval.
-- **GitHub agent** (asynchronous): reads `github-agent/PROMPT.md`, produces one Markdown report in `analysis/`, does not modify code. Role and limits are in `AGENT-POLICY.md` §8.
+- **GitHub agent** (asynchronous): reads `GITHUB-AGENT-PROMPT.md`, produces one Markdown report in `analysis/`, does not modify code. Role and limits are in `AGENT-POLICY.md` §8.
 - **Both** follow the same `AGENT-POLICY.md`. The two prompts cite it; they do not duplicate it.
 
 ## Workflow

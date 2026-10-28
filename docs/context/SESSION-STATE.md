@@ -22,6 +22,6 @@ the rest of the bookmark in the same commit.
 7. **C-4…C-9** — remaining ADR-019 deferred (deferred 3, possession, resolved).
 8. **Ratify ADR-017**.
 9. **`L1-world/01-nation.md`**.
-10. **GitHub agent workflow (Phase 2)** — set up the GitHub agent per `docs/context/github-agent/PROMPT.md`; it produces analysis reports, not code changes. Reactivate the ruleset on `main` only if the agent gets a write token (not the default — see `AGENT-POLICY.md` §8).
+10. **GitHub agent workflow (Phase 2)** — set up the GitHub agent per `docs/context/GITHUB-AGENT-PROMPT.md`; it produces analysis reports, not code changes. Reactivate the ruleset on `main` only if the agent gets a write token (not the default — see `AGENT-POLICY.md` §8).
 
 **Files touched this session:** `docs/context/PROJECT-IDEA-LOG.md`, `docs/context/NEW-SESSION-PROMPT.md`, `docs/context/SESSION-STATE.md`, `docs/context/REPO-SNAPSHOT.md`, `docs/MIGRATION-01-04.md`, `modules/L0-match/05-match-events.md`, `docs/context/IDEAS.md`.
