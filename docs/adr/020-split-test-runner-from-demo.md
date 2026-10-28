@@ -70,6 +70,7 @@ This ADR is **proposed**, not accepted. No code changes until it is ratified.
 ## Implementation notes
 
 1. **Create `crates/pcfm-demo/`**: new package with `Cargo.toml` (deps: `pcfm-match`, `pcfm-hidden`, `pcfm-stats`, `serde_json`, `thiserror`), `src/main.rs` with the current `demo.rs` + `render.rs` logic and the simulation part of `main.rs`. Add it to workspace `members` and `workspace.dependencies`. Run `cargo run -p pcfm-demo -- --seed 42`. If it works, B holds.
+1bis. **Error type for `pcfm-demo`:** `demo.rs` currently uses `CliError` from `crates/pcfm-debug/src/error.rs`. Before moving it, define a local `DemoError` in `pcfm-demo` (preferred) or use `Box<dyn Error>`. `pcfm-test-runner` keeps `CliError` for its own use (I/O, arg parsing). Do not duplicate `CliError`; do not share it across crates.
 2. Rename `pcfm-debug` to `pcfm-test-runner` (`Cargo.toml`, workspace members, `src/`).
 3. Keep in `pcfm-test-runner`: `check.rs`, `commands.rs`, `features/`, and the runner-only part of `args.rs`. Remove from it: `demo.rs`, `render.rs`, the simulation part of `main.rs`.
 4. Update the ~53 live references: `ARCHITECTURE.md`, `README.md`, `PLUGIN_DEVELOPER_GUIDE.md`, `CODE_TOUR.md`, `STRUCTURE.md`, `PROJECT-STATUS.md`, `CONTRIBUTING.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `REPO-SNAPSHOT.md`.
