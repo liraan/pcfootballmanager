@@ -43,11 +43,12 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 - **Ruleset on `main`:** configured (PR required, force-push and deletion blocked, 0 approvals) but **currently disabled** (Phase 1). Reactivate before granting a write token to any agent.
 - **Working tree clean.**
 
-## The 3 files you MUST read first (in this order)
+## The 4 files you MUST read first (in this order)
 
 1. **`docs/context/SESSION-STATE.md`** — the bookmark: last commit, next agreed step, open items. Read this first if the chat is resumed after a pause.
 2. **`docs/context/PROJECT-IDEA-LOG.md`** — history, decisions, sources, what remains open.
 3. **`docs/context/REPO-SNAPSHOT.md`** — briefing snapshot: tree, files, crates, metrics. **Not normative** (see its own premise).
+4. **`docs/context/IDEAS.md`** — open and rejected ideas. Read it to know what is not yet decided; do not implement from it.
 
 Then, if you need the architecture: **`docs/ARCHITECTURE.md`** (how the crates interact) and **`docs/CODE_TOUR.md`** (reading path).
 
@@ -100,7 +101,7 @@ corruption: confirm with `grep -c` before assuming the worst.
 
 ## What I expect from you in this new chat
 
-1. **Read `docs/context/SESSION-STATE.md` first**, then the 3 key documents. Do not propose anything before you have the context.
+1. **Read `docs/context/SESSION-STATE.md` first**, then the 4 key documents. Do not propose anything before you have the context.
 2. **Confirm the state** with the commands I ask you for (`git pull`, `git log`, `cargo test`, etc.), without assuming it is what I describe.
 3. **Propose the next concrete step** (whatever I prefer) and, if needed, give me the exact `sed`/`awk` command. Do not send the full file in chat if it exceeds ~120 lines: it truncates.
 4. **Do not invent anything.** If you don't know, ask. If you haven't read a file, say so.
