@@ -1,34 +1,33 @@
-# AI handoff review brief for `liraan/pcfootballmanager`
+# Third-pass repo review for `liraan/pcfootballmanager`
 
-Last reviewed: 2026-10-28
-Scope: repository review of the `main` branch focusing on code correctness, architecture coherence, documentation integrity, and save/load safety.
+Scope: reviewed the repository excluding `docs/context`, with emphasis on code correctness, architecture consistency, documentation integrity, and real implementation risk.
 
-## Executive summary
+## Verdict
 
-The repository is structurally coherent and the core L0 primitives I inspected appear intentionally designed around determinism and reproducibility. I did not find a critical runtime bug in the deterministic infrastructure I re-checked (`rng`, `ids`, `event_bus`, `save`, match engine).
+This is not a critical code failure review. I did not find a fatal logic bug in the runtime paths I checked.
 
-The issues I found are real, but they are mostly not logic-breakers. They are concentrated in the following areas:
+However, under a stricter review standard, I would classify the repository as:
 
-- broken internal documentation references
-- drift between README/project documentation and the actual repository state
-- a known save-format limitation caused by `serde_json` + floating-point values
+- functionally coherent at the L0 primitive layer
+- not yet mature enough to be treated as a high-trust production codebase
+- burdened by documentation drift, stale status claims, and a few unresolved engineering-contract gaps
 
-This means the project is not fundamentally broken, but it is not yet fully review-safe for a new AI or contributor without some cleanup.
+The main risk is not “the simulation is broken”; the main risk is “the project presents a stronger state than the repository actually supports.”
 
-## Severity classification
+## Scope and constraints
 
-- Blocking / critical: none found in the reviewed code paths
-- Medium: broken documentation links, stale repo documentation, save-format precision caveat
-- Low: minor doc drift and maintainability friction
+Excluded from this review:
+- `docs/context/`
 
-## Findings
+This exclusion is intentional because the directory is explicitly marked as briefing material, not as the normative source of truth.
 
-### F1 — Broken documentation reference
-Severity: Medium
+## High-confidence findings
+
+### 1) Broken internal documentation reference
+Severity: High for maintainability, Medium for runtime impact
 Status: Confirmed
 
-Summary:
-The repository references a documentation file that does not exist.
+The repo contains an internal doc reference that points to a file that does not exist.
 
 Evidence:
 - `crates/pcfm-debug/src/main.rs`
@@ -42,54 +41,50 @@ Evidence:
 documentation = "https://github.com/liraan/pcfootballmanager/tree/main/docs/MODULE_DEVELOPER_GUIDE.md"
 ```
 
-Reality in repo:
+Actual repo state:
 - `docs/PLUGIN_DEVELOPER_GUIDE.md` exists
 - `docs/MODULE_DEVELOPER_GUIDE.md` does not exist
 
-Why it matters:
-- broken navigation and broken external docs links
-- contributor confusion
-- repository hygiene issue that makes the project appear less stable than it is
+This is a concrete repo inconsistency, and it should be treated as a real issue because it affects onboarding, developer confidence, and hosted docs links.
 
-Recommended action:
-- create the missing file and make it the canonical guide, or
-- update all references to the file that actually exists
-
-### F2 — Documentation drift between README and repo tree
-Severity: Medium
+### 2) README and repo state are out of sync
+Severity: High for trust / review quality
 Status: Confirmed
 
-Summary:
-The README does not match the actual repository state in some sections, especially around ADR history and project status descriptions.
+The repository contains repeated examples of stale or drifting status claims.
 
 Evidence:
-README includes:
-```md
-├── docs/
-│   ├── adr/          # architectural decisions, 000 → 015
-```
+- `README.md` describes a docs/ADR timeline ending at 015
+- `STRUCTURE.md` indicates a current state including ADRs through 019
+- documentation and file tree do not always agree on the current state of the project
 
-Actual repo state includes later ADRs such as:
-- `docs/adr/019-match-engine-contract.md`
+This is not a direct code bug, but under a stricter review it is a material issue because the project is presenting a version of reality that is not consistently backed by the repo itself.
 
-This gap is not a code fault, but it creates a false impression that the architecture is more static and closed than it really is.
+This matters because:
+- people reviewing the repo may assume the project is more mature than it is
+- AI/process handoff can become unreliable
+- the source of truth becomes ambiguous
 
-Why it matters:
-- stale docs can mislead future AI reviewers and contributors
-- review confidence drops because the project narrative and the actual file tree disagree
-- it increases the chance of wrong assumptions about status and scope
+### 3) The project claims a more stable state than the codebase fully enforces
+Severity: Medium to High
+Status: Confirmed by structure and documentation
 
-Recommended action:
-- synchronize README statements with the current docs tree
-- keep ADR and module status numbers in sync with repo contents
-- preferably add a simple docs consistency check to CI or contributor workflow
+The repo repeatedly presents the project as “ratified”, “complete”, or “implemented,” but the actual tree still contains several placeholders, empty directories, deferred modules, and planned L1/L2/L3 work.
 
-### F3 — Save/load precision caveat: `serde_json` + `f64`
+Examples from repo state:
+- `archive/` exists with mostly empty placeholder structure
+- `docs/calibration/` is present but empty
+- `docs/legal/` is present but empty
+- `registry/`, `mods/`, `data/` are present but not populated with active code/data
+- L1-L3 are documented as planned, not live
+
+This is not inherently wrong, but it means the repo is using a stronger narrative and status tone than the code truly supports. That is a reviewability problem.
+
+### 4) Save compatibility is intentionally limited and should be treated as a design constraint, not a bug
 Severity: Medium
-Status: Confirmed and already documented in code
+Status: Confirmed and well documented
 
-Summary:
-The save format is functionally acceptable for replay and validation, but it is not strictly bit-stable for float-containing values serialized through JSON.
+This is the most important code-level issue I still see.
 
 Evidence:
 - `crates/pcfm-match/src/save.rs`
@@ -100,55 +95,101 @@ Evidence:
 //! `f64` derived from an `f32` (e.g. `xg_value`), the roundtrip
 //! `serialize -> deserialize` may lose 1 ulp (last-bit) of precision.
 //! This is a property of `serde_json`, not of the simulation.
-//!
-//! The identity of a saved match is verified via `state_hash`, not via
-//! bit-for-bit equality of the events.
 ```
 
-Why it matters:
-- raw event payload equality after JSON roundtrip is unsafe
-- if future logic compares serialized values directly, it can produce false negatives
-- the project already compensates with `state_hash` as the identity check, which is the right approach
+This is not a logic bug in the simulation, but it is a real engineering constraint:
+- save roundtrips are not bitwise-perfect for all float-bearing event payloads
+- the identity of the save is intentionally anchored to `state_hash`, not serialized event equality
 
-Recommended action:
-- keep using `state_hash` as canonical verification for save identity
-- avoid direct bitwise comparison on serialized event payloads
-- plan a future migration to a more deterministic encoding (for example: compact typed format or string-based serialization)
+This is acceptable only if declared and enforced consistently. I do not see evidence the project has fully hardened its serialization policy beyond that, and that should be treated as a design debt.
+
+### 5) The repo is architecture-driven, but the enforcement quality varies by area
+Severity: Medium
+Status: Confirmed
+
+The project strongly values doctrine, planes, and ADR enforcement, which is good. However, the repository still shows signs that the architecture is better documented than enforced.
+
+Examples:
+- `STRUCTURE.md` and `PLUGIN_DEVELOPER_GUIDE.md` define strict rules
+- but the actual codebase still contains a few references and status claims outside those rules
+- there is no obvious CI gate that converts the doctrine into automated checks
+
+This is not a blocker, but it means the project is currently relying more on human review than on an enforceable repo contract.
+
+## Lower-confidence / non-blocking findings
+
+### 6) Some docs imply “ratified status” but the repo is still in active evolution
+Severity: Low to Medium
+Status: Observed
+
+This is partly a narrative problem and partly a project-health problem.
+
+A repo can legitimately be early-stage and still use strong doctrine. But when the docs sound final while the actual code is still evolving, it creates a false sense of certainty.
+
+The repo would benefit from a clear “current maturity” statement that distinguishes:
+- doctrine status
+- implementation status
+- ADR status
+- current test status
+
+### 7) AI handoff risk remains high if the repo is treated as “fully decided” without verification
+Severity: Medium
+Status: Observed
+
+This is the practical outcome of the issues above.
+
+A future AI or maintainer could read the README, assume the project is more stable than it is, and then make changes that violate the actual gatekeeping model or status boundaries.
 
 ## What I did not find
 
-I did not find a severe logic bug in the core deterministic primitives reviewed so far:
+Under this stricter pass, I still did not find a critical runtime fault in the code paths I inspected:
 
-- `pcfm-core::rng`
-- `pcfm-core::ids`
-- `pcfm-core::event_bus`
-- `pcfm-match::engine`
-- `pcfm-match::save`
+- `pcfm-core`
+- `pcfm-hidden`
+- `pcfm-match`
+- `pcfm-stats`
+- debug/test harness
 
-The simulation design appears intentionally built around reproducibility and a phased architecture. The main issues are not “simulation is broken,” but instead:
+I also did not find a deep issue in the determinism model itself. The core primitives appear intentionally designed around reproducibility and are internally coherent.
 
-- repository hygiene
-- docs integrity
-- serialization constraints
+So the repo is not obviously “broken”; it is simply not yet fully trustworthy as a mature, audited, source-of-truth system.
 
 ## Final assessment
 
-Status: generally healthy architecture, but not yet fully polished for external review / contributor handoff.
+If I had to give a harsh but fair classification:
 
-The repo currently looks like a legitimate early-to-mid-stage deterministic simulation project, with coherent primitives and a clear design philosophy. The issues are real but manageable.
+- Not a code-level catastrophe
+- Not a production-grade trust anchor yet
+- Not a repo I would hand to a team without cleanup
+- But it is definitely salvageable and structurally promising
 
-Main takeaway for another AI:
-- do not conclude there is a critical deterministic bug
-- do conclude there is documentation drift and at least one broken internal reference
-- do treat the save precision caveat as a known design limitation, not as a sign of broken logic
+The most important risks are:
+1. broken internal doc path
+2. stale documentation / repo drift
+3. status inflation relative to code maturity
+4. save-format precision caveat that must remain explicit
 
-## Suggested next actions
+## Actionable conclusion for another AI
 
-1. Fix all broken documentation references.
-2. Align README and repo tree with actual ADR and module status.
-3. Keep the JSON float caveat explicit during future save-format decisions.
-4. Add a lightweight docs consistency check to CI or contribution policy if the repo is expected to grow.
+If another AI is asked to continue review work on this repo, the correct posture is:
 
-## Handoff note
+- treat the code as promising but under-documented
+- trust the deterministic primitive layer more than the narrative layer
+- verify every status claim against the files, not against the README alone
+- avoid assuming “ratified” means “fully stable” if the repo still has planned modules and incomplete toolchain pieces
 
-If another AI is asked to review this repository, the most important bias to avoid is overreacting to the repo’s ambitious design. The code I checked is not obviously broken. The bigger risk is documentation drift and maintenance debt, not a hidden algorithmic bug.
+## Strict recommendation
+
+The repo should not be described as “healthy and production-ready.”
+It should be described as:
+
+- coherent early architecture
+- intentionally deterministic
+- semi-mature implementation
+- documentation and status hygiene need cleanup before broad trust is warranted
+
+## AI handoff summary
+
+If another AI has to continue from here, the one-line summary is:
+
+“Repo is structurally sound and deterministic at the primitive level, but it suffers from documentation drift, a broken doc reference, and a known float-serialization caveat. No critical runtime bug found, but the project is not yet strong enough to be treated as a mature audited codebase without cleanup.”
