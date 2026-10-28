@@ -60,6 +60,64 @@
 - **Open questions:** which option is mature enough; how to enforce the policy (branch, PR, no force-push) at the tool level; token scope and revocation; interaction with the ruleset on `main`.
 - **Critical note:** no agent gets a write token until the ruleset on `main` is reactivated. The policy is already written (`AGENT-POLICY.md` §2–§4).
 
+### IDEA-INFRA-004 — `pcfm-debug` covers installed modules and plugins
+- **Status:** discussing
+- **Category:** Infrastructure (testing / tooling)
+- **Source:** conversation 2026-10-27 (user, next-session goal)
+- **Idea:** extend `pcfm-debug` so that `--check` / `--list` / `--coverage`
+  also account for scenarios and features contributed by installed modules
+  and plugins, not only the 6 built-in L0 scenarios.
+- **What exists today (verified in code, 2026-10-27):**
+  - `pcfm-testkit::Feature` is `#[non_exhaustive]` and already has a
+    `Plugin(String)` variant alongside the 26 built-in features
+    (`crates/pcfm-testkit/src/feature.rs:13,87,118`).
+  - `TestRegistry::register()` accepts any `impl Scenario`
+    (`crates/pcfm-testkit/src/registry.rs:26`); the contract is open.
+  - `pcfm-debug` hardcodes the discovery path: `check.rs:47-49`,
+    `commands.rs:16-17`, `commands.rs:49-50` all call
+    `features::register_all(&mut registry)`, and `features/mod.rs:15`
+    documents that this is "the only entry point the rest of the binary
+    uses".
+  - `--coverage` denominator is `Feature::all_builtin()` only
+    (`commands.rs:54`); `Plugin(_)` features are never counted.
+- **What is missing (the actual gap):**
+  1. A discovery step for installed plugin scenarios ("what is installed?").
+  2. A way to feed them into the same `TestRegistry` that `pcfm-debug` builds.
+  3. A report format that distinguishes built-in from plugin scenarios
+     (`Feature::Plugin(_)` exists but is not surfaced).
+  4. A decision on the coverage denominator: built-in only, or union.
+- **Ambiguity to resolve before designing:** "cover installed plugins" can
+  mean (a) run plugin-contributed test scenarios alongside L0's, or (b)
+  verify that a plugin is loaded and functional (smoke test of the plugin
+  system itself). They are different features. Pick one.
+- **Constraints from existing decisions:**
+  - ADR-012 §1: the plugin sheet is mandatory and validated. Discovery
+    should read the sheet, not scan arbitrary directories.
+  - ADR-013 §3: the manifest is part of the save and validated. The save is
+    a natural discovery source, but only for an in-progress save; a fresh
+    workspace has none.
+  - "`pcfm-testkit` has no `pcfm-*` dependencies" (codebase rule). Any
+    metadata type added to the testkit must respect this. `Feature::Plugin(String)`
+    is already a minimal representation that does.
+  - The plugin system itself is not implemented yet (no loader, no
+    `pcfm-pack`). This idea can be **designed** now but **implemented** only
+    after ADR-012's runtime contract exists.
+- **Open questions:**
+  1. Discovery: `sheet.toml` scan, save manifest, or explicit list passed to
+     `pcfm-debug`? Each has different determinism and UX implications.
+  2. Aggregation in the report: per-plugin rows, per-feature rows, or both?
+     What is the stable machine-readable format?
+  3. Coverage denominator: built-in only, union, or two separate lines?
+  4. Does `Feature::Plugin(String)` suffice, or does the testkit need a
+     plugin metadata struct (name + version + feature)?
+  5. Does `--check` fail (non-zero exit) when a plugin scenario fails, or
+     does it warn?
+- **Critical note:** before designing, read (a) the 6 scenarios in
+  `crates/pcfm-debug/src/features/l0_match.rs` to see what a good `Scenario`
+  looks like, (b) `docs/adr/012-plugins.md` §1–§3 for the sheet contract,
+  (c) `docs/adr/013-worlds.md` §3 for the manifest. `REPO-SNAPSHOT.md` §6.2
+  is not sufficient.
+
 ---
 
 ## Rejected ideas (for traceability)
