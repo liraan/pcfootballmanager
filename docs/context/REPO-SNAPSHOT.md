@@ -4,6 +4,8 @@
 
 **Rule:** if a file has been read in full, I say so and summarise its content. If it has been read only in part, I say so. If it has never been read, I write **"not read"** and list it in §7. No invented sizes: only those seen in real output (`git ls-files`).
 
+**Stale since ADR-020 (commit `ca7537c`):** the repository now has 9 crates (`pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures` added; `pcfm-debug` renamed), 103 tests, and the paths in §2 and §6 are partly outdated. A full regeneration is deferred to a dedicated session. Until then, use this file only as a historical briefing, not as current state.
+
 **Sources:** output of `git ls-files`, `ls -la`, `head`, `grep`, and the files pasted in chat on 2026-10-25/26.
 
 ---
