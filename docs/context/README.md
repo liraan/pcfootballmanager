@@ -1,62 +1,40 @@
-# Context directory — usage and status
+# Context directory — canonical layout
 
-This directory holds session memory and project briefings for PCFM.
+This directory is organised for AI handoff and continuity, not as normative project documentation.
 
-## Status
+## Rule
 
-These files are intentionally not normative documentation. They are working notes for continuity between chats and session handoffs.
+The repository itself remains the source of truth. The files in `docs/context/` are session memory, snapshots, policies, and review notes. Before treating any item here as live fact, validate it against the current repo state (`git status`, `git log`, `git ls-files`, and the code itself).
 
-The real source of truth for the repository is:
-- the current git state (`git status`, `git log`, `git branch`)
-- the current files in the repo
-- the active code and tests in the workspace
+## Logical structure
 
-## Purpose
+The directory is intentionally grouped by purpose:
 
-`docs/context/` exists to help a new chat or a new agent resume work without losing the recent session context. It is useful for:
-- current task state
-- recent architecture decisions
-- recent session constraints
-- repo snapshot summaries
-- agent operating policy
+- `session/` — current session bookmark and task state
+- `briefing/` — repo snapshots, launch prompts, startup context
+- `policy/` — agent policy and operational constraints
+- `backlog/` — idea logs and pending or rejected directions
+- `analysis/` — review findings and AI handoff notes
 
-## Important rule
+## Canonical files
 
-Before treating any file in this directory as current fact, validate it against the live repo.
+- `session/README.md` — current session backbone
+- `briefing/README.md` — repo snapshot and prompt bootstrap
+- `policy/README.md` — agent and write policy
+- `backlog/README.md` — ideas and non-finalized directions
+- `analysis/README.md` — review notes and assessments
 
-The following are not authoritative unless they match the current repository state:
-- metrics and counts
-- last commit values
-- status summaries
-- “working tree clean” notes
-- “all files read” claims
-- coverage or test totals
+## Backward compatibility
 
-## Recommended reading order
+The original files at the top level remain available for compatibility and contain the full session data. The subfolders are the organized canonical view for an AI resuming work.
 
-For a resumed session:
-1. `SESSION-STATE.md`
-2. `REPO-SNAPSHOT.md`
-3. `NEW-SESSION-PROMPT.md`
+## Read order for a new chat
+
+1. `session/README.md`
+2. `briefing/README.md`
+3. `new-session prompt` or startup brief in `briefing/`
 4. only then the normative docs (`STRUCTURE.md`, `docs/ARCHITECTURE.md`, `docs/CODE_TOUR.md`, `modules/...`)
 
-## File roles
+## In short
 
-- `SESSION-STATE.md` — short bookmark for the current session
-- `REPO-SNAPSHOT.md` — historical snapshot of the repo structure and counts
-- `NEW-SESSION-PROMPT.md` — bootstrap prompt for a resumed chat
-- `AGENT-POLICY.md` — operating policy for agents and write permissions
-- `REVIEW-FINDINGS.md` — review notes, not source-of-truth repo status
-- `PROJECT-IDEA-LOG.md` and `IDEAS.md` — backlog/context, not current requirements
-
-## Rule for future edits
-
-When editing anything in this directory:
-- write dates and commit references only as historical references
-- do not present a snapshot as the current truth unless it has been freshly revalidated
-- prefer short, specific, action-oriented notes over long narrative summaries
-- keep the distinction between “historical context” and “live source of truth” explicit
-
-## Final principle
-
-`docs/context/` is a convenience layer, not a replacement for the real repository.
+`docs/context/` is a continuity layer. It helps with context retention, not with defining the project’s authoritative state.
