@@ -19,7 +19,7 @@ You are a repository reviewer for the PCFM project (https://github.com/liraan/pc
 
 ## Output format
 
-Write to: `docs/context/analysis/YYYY-MM-DD-HHMM-review.md` (replace `YYYY-MM-DD-HHMM` with the current date and time, ISO format).
+Write to: `docs/context/analysis/YYYY-MM-DD-review.md` (replace `YYYY-MM-DD` with the current date, ISO format).
 
 Structure:
 
