@@ -120,11 +120,11 @@
 - **Open questions:** which option is mature enough; how to enforce the policy (branch, PR, no force-push) at the tool level; token scope and revocation; interaction with the ruleset on `main`.
 - **Critical note:** no agent gets a write token until the ruleset on `main` is reactivated. The policy is already written (`AGENT-POLICY.md` §2–§4).
 
-### IDEA-INFRA-004 — `pcfm-debug` covers installed modules and plugins
+### IDEA-INFRA-004 — `pcfm-test-runner` covers installed modules and plugins
 - **Status:** discussing
 - **Category:** Infrastructure (testing / tooling)
 - **Source:** conversation 2026-10-27 (user, next-session goal)
-- **Idea:** extend `pcfm-debug` so that `--check` / `--list` / `--coverage`
+- **Idea:** extend `pcfm-test-runner` so that `--check` / `--list` / `--coverage`
   also account for scenarios and features contributed by installed modules
   and plugins, not only the 6 built-in L0 scenarios.
 - **What exists today (verified in code, 2026-10-27):**
@@ -133,7 +133,7 @@
     (`crates/pcfm-testkit/src/feature.rs:13,87,118`).
   - `TestRegistry::register()` accepts any `impl Scenario`
     (`crates/pcfm-testkit/src/registry.rs:26`); the contract is open.
-  - `pcfm-debug` hardcodes the discovery path: `check.rs:47-49`,
+  - `pcfm-test-runner` hardcodes the discovery path: `check.rs:47-49`,
     `commands.rs:16-17`, `commands.rs:49-50` all call
     `features::register_all(&mut registry)`, and `features/mod.rs:15`
     documents that this is "the only entry point the rest of the binary
@@ -142,7 +142,7 @@
     (`commands.rs:54`); `Plugin(_)` features are never counted.
 - **What is missing (the actual gap):**
   1. A discovery step for installed plugin scenarios ("what is installed?").
-  2. A way to feed them into the same `TestRegistry` that `pcfm-debug` builds.
+  2. A way to feed them into the same `TestRegistry` that `pcfm-test-runner` builds.
   3. A report format that distinguishes built-in from plugin scenarios
      (`Feature::Plugin(_)` exists but is not surfaced).
   4. A decision on the coverage denominator: built-in only, or union.
@@ -164,7 +164,7 @@
     after ADR-012's runtime contract exists.
 - **Open questions:**
   1. Discovery: `sheet.toml` scan, save manifest, or explicit list passed to
-     `pcfm-debug`? Each has different determinism and UX implications.
+     `pcfm-test-runner`? Each has different determinism and UX implications.
   2. Aggregation in the report: per-plugin rows, per-feature rows, or both?
      What is the stable machine-readable format?
   3. Coverage denominator: built-in only, union, or two separate lines?
@@ -173,7 +173,7 @@
   5. Does `--check` fail (non-zero exit) when a plugin scenario fails, or
      does it warn?
 - **Critical note:** before designing, read (a) the 6 scenarios in
-  `crates/pcfm-debug/src/features/l0_match.rs` to see what a good `Scenario`
+  `crates/pcfm-test-runner/src/features/l0_match.rs` to see what a good `Scenario`
   looks like, (b) `docs/adr/012-plugins.md` §1–§3 for the sheet contract,
   (c) `docs/adr/013-worlds.md` §3 for the manifest. `REPO-SNAPSHOT.md` §6.2
   is not sufficient.
@@ -182,9 +182,10 @@
 - **Status:** discussing
 - **Category:** Infrastructure (tooling / observability)
 - **Source:** conversation 2026-10-28 (user)
-- **Idea:** today `pcfm-debug` is effectively a **test runner** (`--check`,
-  `--list`, `--coverage`, `--seed`). The name suggests a debugger, the
-  function is scenario execution. Two distinct directions:
+- **Idea:** the test runner (`pcfm-test-runner`, `--check`, `--list`,
+  `--coverage`, `--seed`) is now correctly named after ADR-020. Originally
+  the crate was `pcfm-debug`, whose name suggested a debugger. Remaining
+  scope after ADR-020 — two distinct directions:
   1. **Diagnostics** (log / trace of startup and runtime). Name must
      describe the function; candidates: `pcfm-log`, `pcfm-trace`,
      `pcfm-diagnostics` (plural, coherent with `pcfm-stats`). Final name
@@ -194,20 +195,21 @@
      targets are not measurable today (no UI, no L1). Revisit when the
      targets become measurable.
 - **What is missing before any code:** a local reading of
-  `crates/pcfm-debug/src/main.rs` and `crates/pcfm-testkit/src/lib.rs` to
-  establish (a) what `pcfm-debug` actually does today beyond `--check`,
-  `--list`, `--coverage`, (b) what the `Scenario` trait exposes, (c) the
-  real cost of renaming.
+  `crates/pcfm-test-runner/src/main.rs` and `crates/pcfm-testkit/src/lib.rs` to
+  establish (a) what `pcfm-test-runner` actually does today beyond `--check`,
+  `--list`, `--coverage`, (b) what the `Scenario` trait exposes, (c) what
+  surfaces (if any) should move to a separate diagnostics crate.
 - **Relationship with IDEA-INFRA-004:** that idea is about the **runner**
   (covering installed plugins and scenarios). It stays valid regardless of
-  the runner's crate name; if `pcfm-debug` is renamed, IDEA-INFRA-004
-  follows the new name.
+  the runner crate name. The rename to `pcfm-test-runner` has already
+  happened (ADR-020, 2026-10-28), and IDEA-INFRA-004 has been updated to
+  match.
 - **Open questions:**
   1. Does the diagnostics crate share the `Scenario` contract with the
      runner, or does it need a different one?
-  2. Does `pcfm-debug` become a wrapper CLI with subcommands (`run`,
-     `list`, `coverage`, `replay`, `inspect`), or do we split into two
-     crates now?
+  2. Does `pcfm-test-runner` become a wrapper CLI with subcommands (`run`,
+     `list`, `coverage`, `replay`, `inspect`), or stay a single-purpose
+     binary? The `pcfm-demo` split is already done (ADR-020).
   3. Hooks: how many, for which concrete use case? (Discussion 2026-10-28:
      minimal, no generic hooks "for the future".)
 - **Critical note:** an ADR is required before any crate is created or
