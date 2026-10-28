@@ -9,6 +9,7 @@ members = [
     "crates/pcfm-match",
     "crates/pcfm-stats",
     "crates/pcfm-debug",
+    "crates/pcfm-demo",
     "crates/pcfm-testkit",   # ← NUOVO
 ]
 
