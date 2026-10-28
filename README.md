@@ -57,7 +57,7 @@ Full doctrine → [`modules/00-foundations.md`](modules/00-foundations.md) · En
 
 ## Determinism, taken seriously
 
-Same seed → same match, same season, same career. **Always.** This is verified on every CI run by `pcfm-debug --check`:
+Same seed → same match, same season, same career. **Always.** This is verified on every commit by `pcfm-test-runner --check`:
 
 ```
   ✅ demo teams are valid
@@ -149,9 +149,11 @@ pcfootballmanager/
 │   ├── pcfm-match/   # match engine
 │   ├── pcfm-stats/   # event chain, aggregations
 │   ├── pcfm-testkit/ # public test harness contract (no pcfm-* deps)
-│   └── pcfm-debug/   # CLI: health checks, --list, --coverage, demo rendering
+│   ├── pcfm-test-runner/ # CLI: --check, --list, --coverage
+│   ├── pcfm-demo/    # CLI: simulate a match, render text/JSON/HTML
+│   └── pcfm-fixtures/ # hardcoded squads and match fixture
 ├── docs/
-│   ├── adr/          # architectural decisions, 000, 001–008, 012–019
+│   ├── adr/          # architectural decisions, 000, 001–008, 012–020
 │   └── GLOSSARY.md
 └── archive/          # historical Prompt Masters, legacy modules
 ```
@@ -168,7 +170,7 @@ Requires **Rust 1.85+ (stable)**.
 git clone https://github.com/liraan/pcfootballmanager.git
 cd pcfootballmanager
 cargo build --release
-cargo run --release --bin pcfm-debug -- --check --seed 42
+cargo run --release --bin pcfm-test-runner -- --check --seed 42
 ```
 
 If `--check` prints `6/6 checks passed`, the framework is healthy. If it doesn't, something in the simulation contract is broken — please [open an issue](https://github.com/liraan/pcfootballmanager/issues).
@@ -177,10 +179,10 @@ If `--check` prints `6/6 checks passed`, the framework is healthy. If it doesn't
 
 ```bash
 # List the registered test scenarios
-cargo run --release --bin pcfm-debug -- --list
+cargo run --release --bin pcfm-test-runner -- --list
 
 # Show which features have at least one scenario, and which do not
-cargo run --release --bin pcfm-debug -- --coverage
+cargo run --release --bin pcfm-test-runner -- --coverage
 ```
 
 `--coverage` is the map of what the framework can do today. At the moment it shows `2/26 features covered (7%)` — L0 is complete, L1–L3 are still empty. When a module is implemented and its scenarios are registered, the percentage goes up.
@@ -215,7 +217,7 @@ Contributions are welcome — code, docs, data, bug reports, honest criticism.
 
 **Contributing tests to the coretest:**
 - Implement `pcfm_testkit::Scenario` for your feature.
-- Register it in `pcfm-debug/src/features/register_all` (or a plugin-specific registration function).
+- Register it in `pcfm-test-runner/src/features/register_all` (or a plugin-specific registration function).
 - Run `--coverage` and confirm your feature shows `[✅]`.
 - See [`docs/PLUGIN_DEVELOPER_GUIDE.md`](docs/PLUGIN_DEVELOPER_GUIDE.md) §"Contributing test scenarios" for the full walkthrough.
 
@@ -268,7 +270,7 @@ For a human-readable summary of the current state, see [`PROJECT-STATUS.md`](PRO
 See [`docs/context/REPO-SNAPSHOT.md`](docs/context/REPO-SNAPSHOT.md) §1 for the live state and [`STRUCTURE.md`](STRUCTURE.md) §5 for ADR status.
 
 **What is `pcfm-testkit`?**
-A small crate that defines the `Scenario` trait and the `TestRegistry`. It has **no dependency on any other `pcfm-*` crate**, so core modules, plugins, and tools can all contribute test scenarios without coupling. `pcfm-debug --check` runs them; `--list` and `--coverage` inspect them.
+A small crate that defines the `Scenario` trait and the `TestRegistry`. It has **no dependency on any other `pcfm-*` crate**, so core modules, plugins, and tools can all contribute test scenarios without coupling. `pcfm-test-runner --check` runs them; `--list` and `--coverage` inspect them.
 
 **How much was written by AI?**
 See [AI disclosure](#-ai-disclosure). Short version: drafted by AI, reviewed by a human. Every technical claim should be verified before you depend on it.
