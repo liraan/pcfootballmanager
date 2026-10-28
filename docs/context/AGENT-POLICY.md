@@ -70,7 +70,16 @@ If the agent misbehaves, or if its access must be withdrawn:
 
 No agent action is irreversible: `main` is protected, and `agent/*` branches can be deleted.
 
-## 8. What this policy is not
+## 8. GitHub agent (analysis-only role)
+
+The GitHub agent is a **separate role** from the chat agent (Warp, DeepSeek-TUI, or a future custom bot). Its default output is a single Markdown analysis file, not code changes.
+
+- **Default:** produces `docs/context/analysis/YYYY-MM-DD-review.md` from a prompt (see `docs/context/github-agent/PROMPT.md`). It does not modify code, configuration, or any other file.
+- **Exception:** the maintainer may explicitly authorize a scoped modification (which files, what kind of change) in the same session. Authorization is written, not inferred. The agent never decides on its own to modify; "emergency" is not a status the agent can claim.
+- **Asynchronous by design.** The GitHub agent is not a synchronous channel: for time-critical fixes, use the chat agent or the maintainer directly.
+- **Even when authorized**, the change follows the standard flow: verify (`NEW-SESSION-PROMPT.md` rule 8), atomic commit, and — in Phase 2 — branch + PR (rule 1).
+
+## 9. What this policy is not
 
 - It is not a substitute for `CONTRIBUTING.md` (process for humans).
 - It is not a specification of the agent's implementation.
