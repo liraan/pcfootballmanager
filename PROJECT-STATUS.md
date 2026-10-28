@@ -11,10 +11,10 @@ PC Football Manager: a community alternative to commercial football management g
 | | |
 |---|---|
 | **Levels** | L0 (match engine) complete. L1 (season), L2 (career), L3 (meta) planned. |
-| **Crates** | 7: `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`. |
-| **Tests** | 107 passing, 0 failing. |
+| **Crates** | 9: `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures`. |
+| **Tests** | 103 passing, 0 failing. |
 | **L0 modules** | 11 (L0.00–L0.10), all ratified and implemented. |
-| **ADRs** | 15 accepted (001-008, 012-016, 018, 019), 1 proposed (017), 1 template (000). |
+| **ADRs** | 16 accepted (001-008, 012-016, 018, 019, 020), 1 proposed (017), 1 template (000). |
 | **Performance target** | 60 fps UI, full season < 60 s on mid-range hardware. **Not yet measured.** |
 
 ## What is open (high level)
@@ -31,7 +31,7 @@ PC Football Manager: a community alternative to commercial football management g
 ```bash
 git status && git log -1 --oneline
 cargo test --workspace
-cargo run --release --bin pcfm-debug -- --check --seed 42
+cargo run --release --bin pcfm-test-runner -- --check --seed 42
 ```
 
 For ADR status, see `STRUCTURE.md` §5 (single source of truth). For the detailed snapshot, see `docs/context/REPO-SNAPSHOT.md` (briefing, not authority).
