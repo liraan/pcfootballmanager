@@ -224,7 +224,7 @@ When the project ships, this folder holds the dashboards that compare internal m
 
 ### `/crates`, `/registry`, `/mods`, `/data`
 
-`crates/` contains code (7 crates as of 2026-10-26). `registry/`, `mods/`, `data/` are empty until code or user packs exist. **Rule:** `data/` contains *examples only*. Never real licensed data. If you need to test with real data, keep it outside the repo.
+`crates/` contains code (9 crates as of 2026-10-28). `registry/`, `mods/`, `data/` are empty until code or user packs exist. **Rule:** `data/` contains *examples only*. Never real licensed data. If you need to test with real data, keep it outside the repo.
 
 ---
 
