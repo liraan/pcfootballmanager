@@ -1,10 +1,12 @@
 # ADR-020 — Split the test runner from the demo tool
 
-- **Status:** proposed
+- **Status:** accepted
 - **Date:** 2026-10-28
 - **Supersedes:** —
 - **Superseded by:** —
 - **Blocks:** IDEA-INFRA-004 (`pcfm-debug` covers installed modules and plugins), IDEA-INFRA-005 (separate diagnostics and benchmark from the test runner), and any future rename of `pcfm-debug`.
+
+**Verified:** `pcfm-demo` created and tested (commit `ac27b6a`); `cargo build -p pcfm-demo`, `cargo test -p pcfm-demo` (6/6), `cargo run -p pcfm-demo -- --seed 42` all pass. B is feasible. The rename of `pcfm-debug` to `pcfm-test-runner` and the removal of `demo.rs`/`render.rs` from the old crate are the remaining implementation steps.
 
 ## Context
 
