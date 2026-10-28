@@ -36,6 +36,66 @@
 - **Open questions:** is confidence a stable axis (like professionalism) or a dynamic state (like form)? How does it interact with pressure? Does it belong to ADR-016 (content) or to the match engine (parameter)?
 - **Critical note:** ADR-016 fixed three axes as a binding decision. Adding a fourth requires an amendment (or a new ADR). Do not treat this as a minor addition.
 
+### IDEA-PM-004 — Concentration as a consumable cognitive resource
+- **Status:** sketch (deferred — depends on prerequisites not yet in place)
+- **Category:** Player model (L2 psyche) / match engine (L0 consumption)
+- **Source:** conversation 2026-10-28 (user)
+- **Idea:** a player has a **concentration** resource that is consumed during
+  a match. An action that is not instinctive (a function not fully learned)
+  costs more concentration, and more physical fatigue. Familiarity with a
+  function changes the player's effective attributes; a function not fully
+  learned forces the player to "think" each action instead of executing it
+  instinctively.
+- **Relationship with existing decisions:**
+  - **Not pressure.** ADR-016 D1 defines `pressure` as the axis that drives
+    performance in high-stakes matches. Concentration, as described here,
+    is a *consumable resource*, not a stable trait. The observable effect
+    must be **distinct** from pressure (e.g. choice errors, lost time,
+    positional mistakes), otherwise pillar 5 (radical transparency) is
+    violated: "he underperformed" could not be attributed to pressure or
+    to concentration. This is the same reason `consistency` was rejected
+    in ADR-016 D1.
+  - **ADR-016 is binding.** It fixes three active axes
+    (professionalism, ambition, pressure) and three inactive
+    (loyalty, consistency, temperament, with `active: false`).
+    Concentration is not in the six candidates: adding it as a seventh
+    axis, or replacing one, requires an amendment or a new ADR.
+  - **Not confidence.** `IDEA-PM-003` covers *confidence* (a modulator
+    driven by form and wins). Concentration is a different concept:
+    a resource consumed by cognitive load. Do not merge the two.
+- **Prerequisites (why this is deferred):**
+  1. **Dynamic physical fatigue in L0.** The idea says concentration is
+     consumed *together with* physical fatigue. If L0 has no fatigue that
+     decays during the tick, concentration would be the second floor of
+     a house without the first. Verify whether `PhysicalStateMinimal`
+     decays during a match or is static.
+  2. **ADR-017 ratified** (roles are labels, not modifiers). The idea
+     "positioning changes functions, not attributes" rests on it; today
+     ADR-017 is `proposed`.
+  3. **Attribute taxonomy (L2-psyche)**: a written list of attributes,
+     each classified across the Three Planes (latent / observable / event),
+     each with a distinct observable effect. Concentration is one entry in
+     that taxonomy, not an isolated addition.
+  4. **L0 vs L2 decided.** L2 defines *what* concentration is (an
+     attribute, with familiarity and learning). L0 defines *how* it is
+     consumed during a match. These are two ADRs, in that order. L0
+     consumption requires an L0 hook that does not exist today.
+- **Open questions:**
+  1. Is concentration a **latent** (Plane A, via `resolve_*`), an
+     **observable** (Plane C, via `IndexSnapshot`/`ProjectionProfile`),
+     or an **event** ("lost concentration at minute X")? The three have
+     different contracts.
+  2. Does it share a pool with physical fatigue, or is it a separate pool?
+     If they interact, how?
+  3. Is the consumption deterministic and reproducible from the seed?
+     (It must be: `MatchState::tick` is in the simulation path.)
+  4. Does "familiarity with a function" grow over time (L1/L2 learning),
+     or is it static per player? If it grows, it is not an L0 concern.
+- **Critical note:** touching `MatchState::tick` or `resolve_*` requires a
+  `SIM_VERSION` bump (see `CHANGELOG-SIM.md`) and a performance
+  measurement, which today does not exist (`PROJECT-STATUS.md`:
+  "Not yet measured"). Do not implement before the prerequisites above.
+
 ### IDEA-RULE-001 — Contract for rule modules
 - **Status:** discussing
 - **Category:** Match engine (L0 rules)
