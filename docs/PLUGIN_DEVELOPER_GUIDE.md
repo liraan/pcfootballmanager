@@ -41,9 +41,11 @@ Current crates (as of 2026-10-26):
 | `pcfm-model` | Minimal entities (`Player`, `Squad`, `Match`, …) + `CauseTrace` | B/C | 21 |
 | `pcfm-hidden` | `GroundTruth`, `resolve_*`, `drain_observations` | **A** | 4 |
 | `pcfm-stats` | `MatchEvent`, `EventType`, `EventChain` | B | 11 |
-| `pcfm-match` | The match engine (orchestrator + shared simulation) | — | 10 |
+| `pcfm-match` | The match engine (orchestrator + shared simulation) | — | 30 |
 | `pcfm-testkit` | Public test harness: `Scenario`, `Feature`, `TestRegistry` | — | 0 (contract only) |
-| `pcfm-debug` | CLI: `--check`, `--list`, `--coverage`, demo rendering | — | 18 |
+| `pcfm-test-runner` | CLI: `--check`, `--list`, `--coverage` | — | 9 |
+| `pcfm-demo` | Demo CLI: simulate a match, render text/JSON/HTML | — | 5 |
+| `pcfm-fixtures` | Hardcoded squads and match fixture for scenarios and demos | — | 0 |
 
 The dependency graph is **inward-only**: a crate at level N depends on crates at level `< N`, never on `> N`. See `STRUCTURE.md` §2.
 
@@ -298,7 +300,7 @@ If you find yourself wanting to read a latent value outside `pcfm-hidden`, you a
 - [ ] If the change adds an `EventType`, there is an ADR in `docs/adr/`.
 - [ ] If the change adds a `resolve_*`, there is an ADR in `docs/adr/`.
 - [ ] If the change touches a plane, the plane separation is respected.
-- [ ] If the change adds a test scenario, it is registered in `pcfm-debug/src/features/register_all` (see §11).
+- [ ] If the change adds a test scenario, it is registered in `pcfm-test-runner/src/features/register_all` (see §11).
 - [ ] The module in `modules/` is updated (if the change is a spec change).
 - [ ] `CHANGELOG.md` has an entry (if the change is user-visible).
 
@@ -332,7 +334,7 @@ See §5. Short version: write an ADR, add the context/outcome types, add the met
 
 ## 11. Contributing test scenarios
 
-The project ships a public test harness, `pcfm-testkit`, that lets any crate — core module, plugin, or tool — contribute test scenarios without depending on `pcfm-debug` or on the rest of the framework.
+The project ships a public test harness, `pcfm-testkit`, that lets any crate — core module, plugin, or tool — contribute test scenarios without depending on `pcfm-test-runner` or on the rest of the framework.
 
 ### The contract
 
@@ -373,7 +375,7 @@ impl Scenario for MyFeatureSmokeTest {
 
 ### Registering it
 
-For core modules, add one line to `crates/pcfm-debug/src/features/mod.rs`:
+For core modules, add one line to `crates/pcfm-test-runner/src/features/mod.rs`:
 
 ```rust
 pub fn register_all(registry: &mut TestRegistry) {
@@ -383,7 +385,7 @@ pub fn register_all(registry: &mut TestRegistry) {
 }
 ```
 
-For external plugins, expose a public function and call it from `register_all` (or from a plugin-specific registration function that `pcfm-debug` invokes):
+For external plugins, expose a public function and call it from `register_all` (or from a plugin-specific registration function that `pcfm-test-runner` invokes):
 
 ```rust
 // in your plugin crate
@@ -397,7 +399,7 @@ pub fn register_tests(registry: &mut pcfm_testkit::TestRegistry) {
 Run:
 
 ```bash
-cargo run --release --bin pcfm-debug -- --coverage
+cargo run --release --bin pcfm-test-runner -- --coverage
 ```
 
 Your feature should now show `[✅]`. If it shows `[⬜]`, the scenario is not registered, or `feature()` returns the wrong variant.
