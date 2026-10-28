@@ -58,16 +58,11 @@ Then the doctrine: **`modules/00-foundations.md`** (v2.0, pillar 1 = local deter
 
 Then the contract: **`docs/adr/019-match-engine-contract.md`** (agent-first, positional, N agents: players + referee).
 
-## What remains to be done (from `PROJECT-IDEA-LOG.md` §6)
+## What remains to be done
 
-In dependency order:
-
-1. **Resolve the remaining ADR-019 deferred decisions** (4–9): granular UX (4), resolution per platform (5), adaptive resolution (6), LOD override (7), zone-of-influence formula (8), role→mechanic chain (9). Deferred 1, 2, and 3 (possession) are resolved.
-2. **Ratify ADR-017** ("roles are labels, not modifiers", `proposed`).
-3. **Address the 2 technical gaps** (`ProjectionProfile`, `ScoutReport.DeclaredBias`).
-4. **Write the 2 missing documents** (`performance.md`, `save-security.md`).
-5. **Start writing L1** (first module: `L1-world/01-nation.md`).
-6. **GitHub agent workflow (Phase 2)** — set up the GitHub agent per `docs/context/GITHUB-AGENT-PROMPT.md`; it produces analysis reports, not code changes. Reactivate the ruleset on `main` only if the agent gets a write token (not the default — see `AGENT-POLICY.md` §8).
+**The live plan is in `docs/context/SESSION-STATE.md` §"Next steps".** Do not
+maintain a second list here: it diverges. Read the bookmark for the ordered
+next steps, the current priority, and the files touched.
 
 ## Operating rules (important — we established them together)
 
@@ -90,6 +85,7 @@ corruption: confirm with `grep -c` before assuming the worst.
 9. **No `unwrap`/`expect`/`panic!` in simulation paths.** No `HashMap` in simulation paths. No `unsafe` outside `pcfm-bridge` (future).
 10. **Bookmark and checkpoint.** Checkpoint at the end of the session (or at a multi-step plan completion): update `SESSION-STATE.md` with last commit, ordered next steps, files touched. Commit and push. **Bookmark S1:** `Last commit verified` in `SESSION-STATE.md` and `Last commit` in `REPO-SNAPSHOT.md` point to the last commit *before* the bookmark/snapshot update, not to HEAD; they will look stale — that is expected, do not "fix" them. "Pausa" does not trigger the checkpoint (see rule 11).
 11. **"Pausa" — discursive mode.** When the maintainer writes "pausa", switch to discursive mode: prose answers, no commands, no file edits. Use it to amend, rectify, or remove parts of the workflow discursively. Resume when the maintainer says so.
+12. **New ideas go to `IDEAS.md` before discussion, not after.** When a proposal is not yet decided, write it in `docs/context/IDEAS.md` (status `sketch`, with prerequisites and open questions), then discuss. Do not implement from an idea until it has an ADR (if it touches doctrine) or a step in `SESSION-STATE.md` (if it is a task).
 
 ## Codebase-specific rules (do not violate)
 
@@ -122,7 +118,7 @@ corruption: confirm with `grep -c` before assuming the worst.
 
 ## First step I want to take
 
-**Grade C** (see `docs/context/SESSION-STATE.md` §"Next steps" step 3) —
-missing mentions in `GLOSSARY.md`, `CODE_TOUR.md`, `ARCHITECTURE.md`, `PLUGIN_DEVELOPER_GUIDE.md`.
-Then C-4…C-9 (deferred 4–9).
+**Whatever `docs/context/SESSION-STATE.md` says at step 0.** Read the bookmark
+before proposing anything. Do not assume a step is still open because it was
+open in a previous session: verify with `git log` and the bookmark.
 ````
