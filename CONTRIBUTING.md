@@ -182,7 +182,7 @@ Imperative mood, one line ≤ 72 chars, then a body if needed.
 - [ ] No `License: Proprietary` string anywhere
 - [ ] No `TBD` left in a field that should have a value
 - [ ] If it is code, `docs/PLUGIN_DEVELOPER_GUIDE.md` is respected (plane separation, simulation/rendering split, no dependency without an ADR)
-- [ ] If it is a test scenario, it is registered via `pcfm-debug/src/features/register_all` (see `docs/PLUGIN_DEVELOPER_GUIDE.md` §11)
+- [ ] If it is a test scenario, it is registered via `pcfm-test-runner/src/features/register_all` (see `docs/PLUGIN_DEVELOPER_GUIDE.md` §11)
 
 ---
 
