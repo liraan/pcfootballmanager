@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-27 (commit `0012099`)
+**Last updated:** 2026-10-27 (commit `3c4673b`)
 
 ---
 
@@ -30,12 +30,12 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 - **Status:** L0 (match engine) is complete and implemented. L1–L3 are planned.
 - **Performance target** (`00-foundations.md` §6): 60 fps UI, full season < 60 s on mid-range hardware. Not measured yet.
 
-## Where we are (commit `0012099`, 2026-10-27)
+## Where we are (commit `3c4673b`, 2026-10-27)
 
 - **7 crates:** `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-debug`.
 - **107 tests**, clippy clean (`-D warnings`), `--check` 6/6, `--list` 6 scenarios, `--coverage` 2/26 (7%).
 - **15 ADRs accepted** (001-008, 012-016, 018, 019), **1 proposed** (017, roles are labels), 1 template (000), 1 reading guide (`docs/PLUGINS-WORLDS-READING-GUIDE.md`, outside `docs/adr/`). **17 files** in `docs/adr/` total.
-- **ADR-019 (match engine contract)** is `accepted`: agent-first, positional, 22 players. Deferred 1 (spatial iteration order) and 2 (tick-cost pre-emption, selective foul) resolved. Deferred 3–9 open.
+- **ADR-019 (match engine contract)** is `accepted`: agent-first, positional, N agents (players + referee). Deferred 1 (spatial iteration order), 2 (tick-cost pre-emption, selective foul), and 3 (possession representation) resolved. Deferred 4–9 open.
 - **11 L0 modules** ratified + implemented.
 - **`docs/context/`** holds briefing material (not normative): `REPO-SNAPSHOT.md`, `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`.
 - **`STRUCTURE.md` §5** is the single source of truth for ADR status. `modules/_index.md` shows a derived view.
@@ -61,7 +61,7 @@ Then the contract: **`docs/adr/019-match-engine-contract.md`** (agent-first, pos
 
 In dependency order:
 
-1. **Resolve the remaining ADR-019 deferred decisions** (3–9): possession (3), granular UX (4), resolution per platform (5), adaptive resolution (6), LOD override (7), zone-of-influence formula (8), role→mechanic chain (9). Deferred 1 and 2 are resolved.
+1. **Resolve the remaining ADR-019 deferred decisions** (4–9): granular UX (4), resolution per platform (5), adaptive resolution (6), LOD override (7), zone-of-influence formula (8), role→mechanic chain (9). Deferred 1, 2, and 3 (possession) are resolved.
 2. **Ratify ADR-017** ("roles are labels, not modifiers", `proposed`).
 3. **Address the 2 technical gaps** (`ProjectionProfile`, `ScoutReport.DeclaredBias`).
 4. **Write the 2 missing documents** (`performance.md`, `save-security.md`).
@@ -114,7 +114,7 @@ In dependency order:
 
 ## First step I want to take
 
-**Finish the Grade A/B stale sweep** (see `docs/context/SESSION-STATE.md`
-§"Next steps" step 1; `PROJECT-IDEA-LOG.md` is done, the remaining files are tracked in the session state).
-Then **C-4 — granular UX (ADR-019 deferred 4)**.
+**Grade C** (see `docs/context/SESSION-STATE.md` §"Next steps" step 3) —
+missing mentions in `GLOSSARY.md`, `CODE_TOUR.md`, `ARCHITECTURE.md`, `PLUGIN_DEVELOPER_GUIDE.md`.
+Then C-4…C-9 (deferred 4–9).
 ````
