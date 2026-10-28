@@ -80,6 +80,10 @@ A windowed observed measurement over time. Replaces the banned CA/PA scalar. Liv
 
 The positions of the agents relevant to an event, captured at the moment of an *attempt* event (phase 1 of the two-phase temporal pattern, ADR-019 D11). Bounded to the agents relevant to the event. See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md) §2.6.
 
+### `attempt_event_id`
+
+On an outcome event (phase 2 of the two-phase temporal pattern, ADR-019 D11), the `EventId` of the *attempt* event that produced it. `None` on attempt events, and on outcome events with no attempt.
+
 ### `ProjectionProfile`
 
 A forecast expressed as a **confidence band**, never a single number. Replaces the banned PA. Contains `expected_band`, `confidence_curve`, `positive_drivers`, `risk_factors`. See [`modules/00-foundations.md`](../modules/00-foundations.md) §3.
