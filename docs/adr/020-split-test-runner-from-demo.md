@@ -80,6 +80,14 @@ This ADR is **proposed**, not accepted. No code changes until it is ratified.
 6. `modules/00-foundations.md` (1 reference): verify whether it is doctrine or an example. If doctrine, update it with this ADR as the reference.
 7. Full verification cascade after the change: `cargo build --release`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `cargo fmt --check`, `cargo run --release --bin pcfm-test-runner -- --check --seed 42`.
 
+## Post-implementation note
+
+**Commit `ca7537c`.** Implementation revealed a gap that this ADR did not anticipate: `demo.rs` was not only the demo logic, it also contained the *fixtures* (`demo_match`, `home_squad`, `away_squad`, `make_squad`) used by the test scenarios in `features/l0_match.rs`. Moving `demo.rs` to `pcfm-demo` alone would have left `pcfm-test-runner` without its test data, and duplicating the fixture in both crates would have created two sources of truth.
+
+Resolution: a third crate, **`pcfm-fixtures`**, holds the hardcoded squads and `match_fixture(seed)`. Both `pcfm-demo` and `pcfm-test-runner` depend on it. This was not in the original plan, but it is consistent with the ADR's criterion ("name = function"): a fixture is not a demo, and it is not a runner. The final crate set is nine: `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures`.
+
+The lesson for future ADRs: **read the code that will move, not just the code that names the crate.** `demo.rs` looked like demo logic from `main.rs`; its fixture role only emerged from `features/l0_match.rs`.
+
 ## References
 
 - `IDEA-INFRA-004` — `pcfm-debug` covers installed modules and plugins (`docs/context/IDEAS.md`).
