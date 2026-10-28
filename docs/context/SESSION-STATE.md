@@ -24,4 +24,4 @@ the rest of the bookmark in the same commit.
 9. **`L1-world/01-nation.md`**.
 10. **Warp setup (Phase 2)** — reactivate the ruleset on `main`, then grant a write token.
 
-**Files touched this session:** `docs/context/PROJECT-IDEA-LOG.md`, `docs/context/NEW-SESSION-PROMPT.md`, `docs/context/SESSION-STATE.md`, `docs/context/REPO-SNAPSHOT.md`, `docs/MIGRATION-01-04.md`, `modules/L0-match/05-match-events.md`.
+**Files touched this session:** `docs/context/PROJECT-IDEA-LOG.md`, `docs/context/NEW-SESSION-PROMPT.md`, `docs/context/SESSION-STATE.md`, `docs/context/REPO-SNAPSHOT.md`, `docs/MIGRATION-01-04.md`, `modules/L0-match/05-match-events.md`, `docs/context/IDEAS.md`.
