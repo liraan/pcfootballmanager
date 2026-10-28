@@ -118,6 +118,43 @@
   (c) `docs/adr/013-worlds.md` §3 for the manifest. `REPO-SNAPSHOT.md` §6.2
   is not sufficient.
 
+### IDEA-INFRA-005 — Separate diagnostics and benchmark from the test runner
+- **Status:** discussing
+- **Category:** Infrastructure (tooling / observability)
+- **Source:** conversation 2026-10-28 (user)
+- **Idea:** today `pcfm-debug` is effectively a **test runner** (`--check`,
+  `--list`, `--coverage`, `--seed`). The name suggests a debugger, the
+  function is scenario execution. Two distinct directions:
+  1. **Diagnostics** (log / trace of startup and runtime). Name must
+     describe the function; candidates: `pcfm-log`, `pcfm-trace`,
+     `pcfm-diagnostics` (plural, coherent with `pcfm-stats`). Final name
+     decided in the ADR, after local analysis.
+  2. **Benchmark** (performance measurement on user hardware, target
+     `00-foundations.md` §6: 60 fps UI, season < 60 s). **Deferred** — the
+     targets are not measurable today (no UI, no L1). Revisit when the
+     targets become measurable.
+- **What is missing before any code:** a local reading of
+  `crates/pcfm-debug/src/main.rs` and `crates/pcfm-testkit/src/lib.rs` to
+  establish (a) what `pcfm-debug` actually does today beyond `--check`,
+  `--list`, `--coverage`, (b) what the `Scenario` trait exposes, (c) the
+  real cost of renaming.
+- **Relationship with IDEA-INFRA-004:** that idea is about the **runner**
+  (covering installed plugins and scenarios). It stays valid regardless of
+  the runner's crate name; if `pcfm-debug` is renamed, IDEA-INFRA-004
+  follows the new name.
+- **Open questions:**
+  1. Does the diagnostics crate share the `Scenario` contract with the
+     runner, or does it need a different one?
+  2. Does `pcfm-debug` become a wrapper CLI with subcommands (`run`,
+     `list`, `coverage`, `replay`, `inspect`), or do we split into two
+     crates now?
+  3. Hooks: how many, for which concrete use case? (Discussion 2026-10-28:
+     minimal, no generic hooks "for the future".)
+- **Critical note:** an ADR is required before any crate is created or
+  renamed, because the change touches the doctrine (dependencies,
+  determinism, `pcfm-testkit` as contract). The doctrine wins. No code
+  until the ADR is accepted.
+
 ---
 
 ## Rejected ideas (for traceability)
