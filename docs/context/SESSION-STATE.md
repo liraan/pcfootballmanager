@@ -4,6 +4,11 @@
 
 **Last commit verified:** `acf24ca` — "docs(context): refresh new-session prompt after L0.05 revision"
 
+**Note on the field above:** it points to the last commit *before* this
+bookmark update (semantics S1). It will look "stale" compared to HEAD; that
+is expected. Do not "fix" it by pointing to a newer commit without updating
+the rest of the bookmark in the same commit.
+
 **Ideas backlog:** `docs/context/IDEAS.md` — open and rejected ideas. Read it at session start to see what is not yet decided; do not implement from it.
 
 **Next steps (in dependency order):**
