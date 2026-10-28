@@ -74,6 +74,13 @@ In dependency order:
 1. **Phase 1 vs Phase 2.** *Phase 1 (now):* ruleset disabled, single maintainer, direct push to `main` allowed, PR optional. *Phase 2 (when an agent gets a write token):* ruleset active, branch + PR mandatory, no direct push. See `docs/context/AGENT-POLICY.md`.
 2. **Small, targeted edits in Git Bash.** Use `sed`/`awk` for targeted modifications. Do not send the full file in chat when it exceeds ~120 lines: it truncates. For longer files, give the exact `sed`/`awk` commands, one section at a time.
 3. **`sed`/`awk` delimiters.** The replacement text must not contain the delimiter. Use `@` or `~` by default. If the text contains apostrophes, use a heredoc (`<< 'EOF'`) to avoid shell quoting issues.
+3bis. **`sed` pitfalls (learned the hard way).** In BRE, `\(` and `\)` are
+capturing groups, not literal parentheses: use `[(]` and `[)]`. A pattern
+containing `**` fails with `Invalid preceding regular expression`. For
+multi-line replacements with backticks, em-dash, or arrows, use a
+`c\`/`i\`/`a\` command fed via a quoted heredoc (`<< 'EOF'`), not a
+one-liner. Mojibake in terminal output is a *display* artefact, not file
+corruption: confirm with `grep -c` before assuming the worst.
 4. **Verify after every edit.** `sed -n 'Np' file` to confirm the change. `git diff file` before `git add`. If the diff shows unrelated changes, stop.
 5. **One file at a time.** Wait for "ok" before moving to the next file.
 6. **Mutual honesty, zero inventions.** If you have not read a file, say so. Do not invent numbers, commit hashes, or file contents. "I don't know" > invention.
@@ -82,6 +89,11 @@ In dependency order:
 9. **No `unwrap`/`expect`/`panic!` in simulation paths.** No `HashMap` in simulation paths. No `unsafe` outside `pcfm-bridge` (future).
 10. **Pre-commit hook** (`.githooks/pre-commit`): runs fmt, clippy, test only if Rust files are staged. Install with `git config core.hooksPath .githooks` (one-off, per clone).
 11. **Checkpoint on every interruption.** Before stopping (end of session, or a mid-session break), update `SESSION-STATE.md` with the last commit, the ordered next steps, and the files touched. Commit it and push. This is non-negotiable: a stale bookmark means the next session starts from invented priorities.
+11bis. **Bookmark semantics (S1).** `Last commit verified` in
+`SESSION-STATE.md` and `Last commit` in `REPO-SNAPSHOT.md` point to the
+last commit *before* the bookmark/snapshot update, not to HEAD. They
+will look stale compared to HEAD; that is expected. Do not "fix" them by
+pointing to HEAD unless the semantics is changed explicitly.
 
 ## Codebase-specific rules (do not violate)
 
