@@ -16,7 +16,7 @@ fit together.
 
 ---
 
-## 1. The seven crates
+## 1. The nine crates
 
 | Crate | Role | Plane | Depends on |
 |-------|------|-------|------------|
@@ -26,7 +26,9 @@ fit together.
 | `pcfm-stats` | Plane B: MatchEvent, EventChain (append-only, hash chain) | B | `pcfm-core`, `pcfm-model` |
 | `pcfm-match` | Match engine: orchestrator `simulate_match`, `TextMatchEngine`, save/load, narrative | — | `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats` |
 | `pcfm-testkit` | Contract: `Scenario`, `Feature`, `TestRegistry` | — | (none) |
-| `pcfm-debug` | CLI: `--check`, `--list`, `--coverage`, `--json`, `--html`, demo teams, rendering | — | all of the above |
+| `pcfm-test-runner` | CLI: `--check`, `--list`, `--coverage` | — | `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-fixtures` |
+| `pcfm-demo` | CLI: simulate a match, render text/JSON/HTML | — | `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-fixtures` |
+| `pcfm-fixtures` | Hardcoded squads and match fixture | — | `pcfm-core`, `pcfm-model` |
 
 **Dependency rule:** every crate depends only on crates at a level **lower
 or equal** in the list above. No cycles. `pcfm-testkit` is intentionally
@@ -36,13 +38,18 @@ plugin, tool) implements.
 The crate-level dependency graph:
 
 ```
-pcfm-debug
+pcfm-test-runner        pcfm-demo
+├── pcfm-core           ├── pcfm-core
+├── pcfm-model          ├── pcfm-model
+├── pcfm-hidden         ├── pcfm-hidden
+├── pcfm-stats          ├── pcfm-stats
+├── pcfm-match          ├── pcfm-match
+├── pcfm-testkit        └── pcfm-fixtures
+└── pcfm-fixtures
+
+pcfm-fixtures
 ├── pcfm-core
-├── pcfm-model
-├── pcfm-hidden
-├── pcfm-stats
-├── pcfm-match
-└── pcfm-testkit
+└── pcfm-model
 
 pcfm-match
 ├── pcfm-core
@@ -70,8 +77,8 @@ code, they are three distinct things:
 
 | Plane | In code | Serialisable? | Who reads it |
 |-------|---------|---------------|--------------|
-| **A — Ground Truth** | `GroundTruth` in `pcfm-hidden` | ❌ No | Only `pcfm-match` (via `resolve_*`) and `pcfm-debug` (via `demo_match`) |
-| **B — Observation** | `MatchEvent` + `EventChain` in `pcfm-stats` | ✅ Yes | `pcfm-match` (write), `pcfm-debug` (read), future L1/L2 |
+| **A — Ground Truth** | `GroundTruth` in `pcfm-hidden` | ❌ No | Only `pcfm-match` (via `resolve_*`) |
+| **B — Observation** | `MatchEvent` + `EventChain` in `pcfm-stats` | ✅ Yes | `pcfm-match` (write), `pcfm-test-runner` and `pcfm-demo` (read), future L1/L2 |
 | **C — Estimation** | **Not yet implemented** (L2) | — | — |
 
 The boundary is enforced by the compiler, not by review:
@@ -92,10 +99,11 @@ rationale.
 ## 3. The flow of a match
 
 A single match goes through the system in 10 steps. This is the sequence
-that `pcfm-debug` follows, and the sequence that a future UI will follow.
+that `pcfm-demo` (simulation) and `pcfm-test-runner` (testing) follow, and
+the sequence that a future UI will follow.
 
 ```
-1. demo_match(seed) -> Match           (pcfm-debug::demo)
+1. match_fixture(seed) -> Match           (pcfm-fixtures)
 2. GroundTruth::new(world_seed, id)    (pcfm-hidden)         [Plane A]
 3. RngRegistry::new(world_seed)        (pcfm-core)
 4. EventChain::new()                   (pcfm-stats)          [Plane B, empty]
@@ -160,14 +168,14 @@ See `docs/PLUGIN_DEVELOPER_GUIDE.md` §3 for the developer-facing view.
 `Feature`, and `TestRegistry`, and depends on **no other `pcfm-*`
 crate**. This is deliberate.
 
-- A **core module** (`features/l0_match.rs` in `pcfm-debug`) implements
+- A **core module** (`features/l0_match.rs` in `pcfm-test-runner`) implements
   `Scenario` and registers itself in `register_all`.
 - A **plugin** can implement `Scenario` in its own crate, register
   itself via a public `register_tests(registry)` function, and be
-  discovered by `pcfm-debug` (mechanism TBD, see ADR-012).
+  discovered by `pcfm-test-runner` (mechanism TBD, see ADR-012).
 - A **tool** (e.g. `pcfm-verify`) can do the same.
 
-`pcfm-debug --check` builds a `TestRegistry`, calls `register_all`, runs
+`pcfm-test-runner --check` builds a `TestRegistry`, calls `register_all`, runs
 `run_all(seed)`, and aggregates the results. `--list` and `--coverage`
 inspect the registry without running it.
 
