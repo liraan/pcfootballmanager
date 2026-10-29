@@ -1,14 +1,14 @@
 # Agent policy — PCFM
 
-**Purpose:** define what an agent (Warp, DeepSeek-TUI, or a future custom bot) may and may not do on this repository, and how its actions are approved. This is a **policy**, not a specification: it constrains behaviour, not architecture.
+**Purpose:** define what an agent (Warp, DeepSeek-TUI, or a future custom bot) may and may not do on this repository, and how its actions are approved. This is a **policy**, not a specification: it defines the guardrails, not the implementation.
 
 ## 1. Principles
 
 - The agent **proposes**, the human **approves**. No action on the remote repo happens without explicit confirmation.
-- **Phase 2 (ruleset active):** every change goes through a **branch and a pull request**. No direct push to `main` by anyone. **Phase 1 (ruleset disabled, single maintainer):** direct push to `main` is allowed; PR is optional.
+- **Phase 2 (ruleset active):** every change goes through a **branch and a pull request**. No direct push to `main` by anyone. **Phase 1 (ruleset disabled, single maintainer):** direct push to `main` is allowed only to the maintainer.
 - The agent **does not merge** pull requests. Only the human merges.
 - The agent **does not force-push** `main`, **does not delete** `main`, **does not create tags** without explicit confirmation.
-- The agent works on `agent/<task>-<date>` branches. These branches are intentionally **not protected**: they are the agent's workspace. `main` is protected by a GitHub ruleset **when active** (see §6).
+- The agent works on `agent/<task>-<date>` branches. These branches are intentionally **not protected**: they are the agent's workspace. `main` is protected by a GitHub ruleset **when active** (server-side).
 
 ## 2. What the agent may do autonomously
 
@@ -74,8 +74,8 @@ No agent action is irreversible: `main` is protected, and `agent/*` branches can
 
 The GitHub agent is a **separate role** from the chat agent (Warp, DeepSeek-TUI, or a future custom bot). Its default output is a single Markdown analysis file, not code changes.
 
-- **Default:** produces `docs/context/analysis/YYYY-MM-DD-review.md` from a prompt (see `docs/context/GITHUB-AGENT-PROMPT.md`). It does not modify code, configuration, or any other file.
-- **Exception:** the maintainer may explicitly authorize a scoped modification (which files, what kind of change) in the same session. Authorization is written, not inferred. The agent never decides on its own to modify; "emergency" is not a status the agent can claim.
+- **Default:** produces `docs/context/analysis/YYYY-MM-DD-HH-MM-review.md` from a prompt (see `docs/context/GITHUB-AGENT-PROMPT.md`). It does not modify code, configuration, or any other file.
+- **Exception:** the maintainer may explicitly authorize a scoped modification (which files, what kind of change) in the same session. Authorization is written, not inferred. The agent never decides on a scoped modification by itself.
 - **Asynchronous by design.** The GitHub agent is not a synchronous channel: for time-critical fixes, use the chat agent or the maintainer directly.
 - **Even when authorized**, the change follows the standard flow: verify (`NEW-SESSION-PROMPT.md` rule 8), atomic commit, and — in Phase 2 — branch + PR (rule 1).
 
