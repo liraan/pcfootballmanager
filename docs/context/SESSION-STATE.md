@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `ef104e5` — "docs(ideas): record TUI-first presentation sketch (IDEA-PRES-001)"
+**Last commit verified:** `0571d31` — "docs(ideas): record player footedness sketch (IDEA-PM-005)"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -35,5 +35,11 @@ the rest of the bookmark in the same commit.
 10. **GitHub agent workflow (Phase 2)** — first test run on 2026-10-28: Copilot Coding Agent produced a valid report (2 findings, both verified and applied) but created an empty branch and delivered the report in chat instead of committing. Next run: assign an issue, not a chat prompt. Reports archived in `docs/context/analysis/`. Reactivate the ruleset on `main` only if the agent gets a write token (not the default — see `AGENT-POLICY.md` §8).
 10bis. ~~**Rename `pcfm-debug` to `pcfm-test-runner`**~~ — done (ADR-020 implemented, commits `ca7537c`…`f2a8dfb`). 9 crates now: `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures` added. 103 tests, clippy/fmt clean, `--check` 6/6. Docs updated: CONTRIBUTING, CODE_TOUR, PLUGIN_DEVELOPER_GUIDE, 00-foundations, PROJECT-STATUS, STRUCTURE, README, ARCHITECTURE. `REPO-SNAPSHOT.md` marked stale (regeneration deferred).
 10ter. ~~**Record TUI-first presentation sketch**~~ — done (`IDEA-PRES-001`, commit `ef104e5`). IDEA-INFRA-004/005 aligned to the `pcfm-test-runner` rename (commit `3982147`). Next: re-read ADR-005 (step 0).
+10quater. ~~**Record player footedness sketch**~~ — done (`IDEA-PM-005`,
+   commit `0571d31`). Sketch only, open questions in the entry itself: model
+   shape (two per-foot ratings FM-style vs categorical + weak-foot rating),
+   which L0 actions read it, how to treat ambidexterity. Implementation
+   requires an L0 contract revision (new module or revision + ADR if it
+   touches ADR-019). Do not implement from the sketch.
 
 **Files touched this session:** `docs/context/IDEAS.md`, `docs/context/SESSION-STATE.md`.
