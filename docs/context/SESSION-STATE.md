@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `0571d31` — "docs(ideas): record player footedness sketch (IDEA-PM-005)"
+**Last commit verified:** `72398d2` — "Create GitHub agent review report after aligning file naming convention"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -42,4 +42,28 @@ the rest of the bookmark in the same commit.
    requires an L0 contract revision (new module or revision + ADR if it
    touches ADR-019). Do not implement from the sketch.
 
-**Files touched this session:** `docs/context/IDEAS.md`, `docs/context/SESSION-STATE.md`.
+0ter. **Amend ADR-019 D9** (referee non-physical). D9 currently says
+   "in-pitch, with `Position` and functional state", but the agreed
+   correction (2026-10-29) is: the referee is visible and follows play, but
+   is NOT a physical obstacle (no collision, no influence on outcomes).
+   Perception (what the referee sees or does not see) drives decisions.
+   Requires ADR-019 amendment or a new ADR.
+
+0quater. **Terminology: remove "module" from the repo** (2026-10-29
+   decision). Four terms: pack (content), plugin (code), specification
+   (document under `specs/`), framework crate (base crates like
+   `pcfm-match`). Three tasks:
+   - T1 (small): replace "module" as extension in `PLUGIN_DEVELOPER_GUIDE.md`
+     §1; add the four terms to `GLOSSARY.md`.
+   - T2 (small): "core module" → "framework crate" in
+     `PLUGIN_DEVELOPER_GUIDE.md` §2 and §11.
+   - T3 (large, separate commit): rename `modules/` → `specs/`. One logical
+     commit. Do after closing in-progress discussions, not mixed with other
+     work.
+
+0quinquies. **Review new sketches from 2026-10-29** (`IDEA-TACT-001`,
+   `IDEA-INFRA-007`, `IDEA-STAFF-001`). Decide which become ADRs, which
+   become tasks, which stay sketches. All three depend on prerequisites
+   that do not exist today: `L2-tactics`, runtime input channel, `L2-staff`.
+
+**Files touched this session (2026-10-29):** `docs/context/IDEAS.md` (added IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001), `docs/context/SESSION-STATE.md`.
