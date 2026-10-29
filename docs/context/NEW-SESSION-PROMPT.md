@@ -42,20 +42,21 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 - **Pre-commit hook** (`.githooks/pre-commit`, versioned): runs fmt, clippy, test only if Rust files are staged. Install with `git config core.hooksPath .githooks` (one-off).
 - **Phase 1 vs Phase 2:** Phase 1 (now) ruleset disabled, single maintainer, direct push allowed. Phase 2 (when an agent gets a write token and the ruleset is active) branch + PR mandatory. See `docs/context/AGENT-POLICY.md` §1.
 
-## The 4 files you MUST read first (in this order)
+## Why these files matter (the commands are in the Startup ritual)
 
-1. **`docs/context/SESSION-STATE.md`** — the bookmark: last commit, next agreed step, open items. Read this first if the chat is resumed after a pause.
-2. **`docs/context/PROJECT-IDEA-LOG.md`** — history, decisions, sources, what remains open.
-3. **`docs/context/REPO-SNAPSHOT.md`** — briefing snapshot: tree, files, crates, metrics. **Not normative** (see its own premise).
-4. **`docs/context/IDEAS.md`** — open and rejected ideas. Read it to know what is not yet decided; do not implement from it.
+The **Startup ritual** below has the exact commands. This section explains **why** each file is read, so you know what you are looking for.
 
-Then, if you need the architecture: **`docs/ARCHITECTURE.md`** (how the crates interact) and **`docs/CODE_TOUR.md`** (reading path).
+- **`docs/context/SESSION-STATE.md`** — the bookmark. What the next step is, what was done, what is open. Read it first.
+- **`docs/context/PROJECT-IDEA-LOG.md`** — history and decisions, with sources. Why the project is the way it is.
+- **`docs/context/IDEAS.md`** — open and rejected ideas. What is **not** decided yet; do not implement from it.
+- **`docs/context/REPO-SNAPSHOT.md`** — a briefing snapshot (tree, files, crates, metrics). **Not normative, and likely stale**: read it as history, not as state. For current numbers, use `SESSION-STATE.md` and `STRUCTURE.md` §5.
 
-Then the vision: **`docs/WORLD-MODEL.md`** (levels, taxonomy, simulation vs presentation).
+Then, when the task requires it:
 
-Then the doctrine: **`modules/00-foundations.md`** (v2.0, pillar 1 = local determinism, §1 football fidelity) and **`modules/_index.md`** (v2.9).
-
-Then the contract: **`docs/adr/019-match-engine-contract.md`** (agent-first, positional, N agents: players + referee).
+- **Architecture:** `docs/ARCHITECTURE.md` (how the crates interact) and `docs/CODE_TOUR.md` (reading path).
+- **Vision:** `docs/WORLD-MODEL.md` (levels, taxonomy, simulation vs presentation).
+- **Doctrine (non-negotiable):** `modules/00-foundations.md` (v2.0, pillar 1 = local determinism) and `modules/_index.md`.
+- **Contract:** `docs/adr/019-match-engine-contract.md` (agent-first, positional, N agents: players + referee).
 
 ## What remains to be done
 
