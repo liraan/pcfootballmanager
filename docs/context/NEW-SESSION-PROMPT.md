@@ -244,6 +244,7 @@ State explicitly:
 - What was **not** done (and why: blocked, deferred, out of scope)
 - The state of the repo (aligned, clean, quality gate green)
 - The next step for the next session (what `SESSION-STATE.md` says)
+- **The Plan table, presented in chat** (not just written in the file). The maintainer must see it before the session ends. If you skip it, say why.
 
 If you have not run one of the checks in this ritual, say so. "I skipped X" is honest; "I ran X" when you did not is a lie.
 
