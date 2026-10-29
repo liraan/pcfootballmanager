@@ -230,7 +230,7 @@ If any answer is "no", update `SESSION-STATE.md` before closing. It is cheap now
 Update `SESSION-STATE.md`:
 
 - `Last commit verified`: the **last commit before this checkpoint** (semantics S1: it will look stale compared to HEAD; that is expected)
-- `Next steps`: ordered, with the current priority
+- `Next steps`: ordered, with the current priority, **and the first concrete action for each** (the command to run, the file to read, the question to ask). A step without a first action is a step that the next session will skip or re-derive.
 - `Files touched this session`: full list, dated
 - New open items from the session (verification of previous findings, decisions deferred, sketches added)
 

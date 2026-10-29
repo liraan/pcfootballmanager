@@ -52,7 +52,7 @@ the rest of the bookmark in the same commit.
 
 **1. Doc-pass ADR-022** — five files: `README.md`, `PROJECT-STATUS.md`, `STRUCTURE.md`, `docs/ARCHITECTURE.md`, `modules/00-foundations.md`. Update the UI description from Qt-primary to TUI-first. Also check `CONTRIBUTING.md` and `CODE_TOUR.md`. Prerequisite of the TUI demo.
 
-**12. TUI demo (IDEA-INFRA-006)** — short ADR required (second renderer touches `simulation_is_shared_and_renderer_agnostic`), then code in `pcfm-demo`. The ADR says: validation prototype, not L3-ui, no engine change.
+**12. TUI demo (IDEA-INFRA-006)** — short ADR required (second renderer touches `simulation_is_shared_and_renderer_agnostic`), then code in `pcfm-demo`. **First step: read `crates/pcfm-demo/src/` and `MatchResult` (~200-300 lines) to know what the engine actually exposes; only then estimate.** The ADR says: validation prototype, not L3-ui, no engine change.
 
 **2. Fix ADR-003** — ADR-003 still names `pcfm-debug` and `demo.rs`; `pcfm-demo` reads Plane A without authorization. Options: new ADR-023 (ADR-021 and ADR-022 are taken), amend ADR-003, extend ADR-020. Requires explicit confirmation to touch `docs/adr/`.
 
