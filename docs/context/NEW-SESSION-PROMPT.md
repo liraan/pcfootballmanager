@@ -66,39 +66,31 @@ next steps, the current priority, and the files touched.
 
 ## Operating rules (important — we established them together)
 
-0. **Work in the local repo, commit in Git Bash, push.** The GitHub web interface is for emergencies only. Every change: edit locally → `git add` → `git commit`. Commit per file (or per logical group); **push at the end of the session or at a checkpoint (rule 10), not after every commit.** Phase 1 (now): direct push to `main` allowed. Phase 2 (ruleset active): branch + PR, no direct push — see rule 1.
-1. **Phase 1 vs Phase 2.** *Phase 1 (now):* ruleset disabled, single maintainer, direct push to `main` allowed, PR optional. *Phase 2 (when an agent gets a write token):* ruleset active, branch + PR mandatory, no direct push. See `docs/context/AGENT-POLICY.md`.
-2. **Small, targeted edits in Git Bash.** Use `sed`/`awk` for targeted modifications. Do not send the full file in chat when it exceeds ~120 lines: it truncates. For longer files, give the exact `sed`/`awk` commands, one section at a time. A `git diff` pasted in chat truncates at ~80 lines: use `git diff | head -80` + `git diff | tail -60`, not the full diff.
-3. **`sed`/`awk` delimiters.** The replacement text must not contain the delimiter. Use `@` or `~` by default. If the text contains apostrophes, use a heredoc (`<< 'EOF'`) to avoid shell quoting issues.
-3bis. **`sed` pitfalls (learned the hard way).** In BRE, `\(` and `\)` are
-capturing groups, not literal parentheses: use `[(]` and `[)]`. A pattern
-containing `**` fails with `Invalid preceding regular expression`. For
-multi-line replacements with backticks, em-dash, or arrows, use a
-`c\`/`i\`/`a\` command fed via a quoted heredoc (`<< 'EOF'`), not a
-one-liner. Mojibake in terminal output is a *display* artefact, not file
-corruption: confirm with `grep -c` before assuming the worst.
-Before a line-address change (`c`), append (`a`), or insert (`i`)
-command, verify the anchor with `sed -n 'Np'` — never trust line numbers
-deduced from a previous state. After `git checkout --`, re-run ALL seds,
-not only the ones that seem missing.
-4. **Verify after every edit.** `sed -n 'Np' file` to confirm the change. `git diff file` before `git add`. If the diff shows unrelated changes, stop.
-5. **One file at a time, one command at a time, with countdown.** In the current file: edit, verify (`sed -n`, `git diff`), next step. The pasted output of each command is the implicit "ok" to proceed **if the verification is clean**; if it shows a problem, stop and fix before moving on. At the start of each multi-step plan, declare the total number of tasks; each response states `Task i/N`.
-6. **Mutual honesty, zero inventions.** If you have not read a file, say so. Do not invent numbers, commit hashes, or file contents. "I don't know" > invention.
-7. **Small, atomic commits.** One commit per file (or per logical group). Clear messages in English, imperative mood. A rename is ONE logical commit, not one per occurrence: splitting it leaves false sentences in `main` between commits.
-8. **Verify after every code change.** The pre-commit hook (`.githooks/pre-commit`, one-off install: `git config core.hooksPath .githooks`) runs fmt + clippy + test only if Rust files are staged. The hook does **not** replace the full check: also run `cargo build --release`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `cargo fmt --check`, `cargo run --release --bin pcfm-test-runner -- --check --seed 42`. If anything is red, stop and we fix it.
-9. **No `unwrap`/`expect`/`panic!` in simulation paths.** No `HashMap` in simulation paths. No `unsafe` outside `pcfm-bridge` (future).
-10. **Bookmark and checkpoint.** Checkpoint at the end of the session (or at a multi-step plan completion): update `SESSION-STATE.md` with last commit, ordered next steps, files touched. Commit and push. **Bookmark S1:** `Last commit verified` in `SESSION-STATE.md` and `Last commit` in `REPO-SNAPSHOT.md` point to the last commit *before* the bookmark/snapshot update, not to HEAD; they will look stale — that is expected, do not "fix" them. "Pausa" does not trigger the checkpoint (see rule 11).
-11. **"Pausa" — discursive mode.** When the maintainer writes "pausa", switch to discursive mode: prose answers, no commands, no file edits. Use it to amend, rectify, or remove parts of the workflow discursively. Resume when the maintainer says so.
-12. **New ideas go to `IDEAS.md` before discussion, not after.** When a proposal is not yet decided, write it in `docs/context/IDEAS.md` (status `sketch`, with prerequisites and open questions), then discuss. Do not implement from an idea until it has an ADR (if it touches doctrine) or a step in `SESSION-STATE.md` (if it is a task).
-13. **Execution and discussion are separate.** In execution mode, send **one command per message** and wait for the output: no prose around the commands. When something needs discussing, say **"pausa"** explicitly (rule 11): discuss in prose, no commands, and resume execution when the maintainer says so. Do not mix the two modes in the same response. Especially in the evening, execution stays light: discussion goes in "pausa", not inside the commands.
+**A. Mode**
 
-## Codebase-specific rules (do not violate)
+- **A1 — Execution.** One command per message, one file at a time, with countdown. At the start of each multi-step plan, declare the total number of tasks; each response states `Task i/N`. No prose around the commands. The pasted output of each command is the implicit "ok" to proceed **if the verification is clean**; if it shows a problem, stop and fix before moving on.
+- **A2 — Pausa.** The word **"pausa"** may be written by the maintainer **or** by the assistant. It suspends execution (no commands, no file edits) and opens a discussion in prose. Execution resumes **only when the maintainer writes "riprendi"** (or equivalent). The assistant does not resume on its own. Pausa does not trigger the checkpoint (see the Closing ritual).
 
-- **`pcfm-hidden` is special.** It contains Plane A. It has no public fields, it is not `Serialize`, its `Debug` is custom. The only door is `resolve_*` + `drain_observations`. **Do not add getters on latent values.** If a new module needs a latent, add a `resolve_*` (with an ADR).
-- **`pcfm-testkit` has no `pcfm-*` dependencies.** It is the contract that anyone (core, plugins, tools) implements. **Do not add `pcfm-match` or other crates as dependencies.**
-- **The simulation model is a prototype.** `action_probability = 0.0005`, split 60/25/12/3, `noise * 0.2` in `resolve_duel`, latents uniform in [0,1). **Do not "optimise" without an ADR.** A change to `resolve_*` or `MatchState::tick` requires a `SIM_VERSION` bump (see `CHANGELOG-SIM.md`).
-- **The doctrine wins.** If a change contradicts `00-foundations.md`, a doctrine ADR is required.
-- **`docs/adr/` contains only ADRs.** The reading guide is in `docs/`, not in `docs/adr/`. If you add an ADR, `Status: proposed` → discussion → `Status: accepted` (or `rejected`).
+**B. Editing**
+
+- **B1 — Tools and pitfalls.** Use `sed`/`awk` for targeted edits. Do not paste a full file >120 lines in chat (it truncates); give commands, one section at a time. A `git diff` >80 lines truncates: use `git diff | head -80` + `git diff | tail -60`. Delimiters: use `@` or `~`; if the text contains apostrophes, use a heredoc (`<< 'EOF'`). BRE pitfalls: `\(` `\)` are groups, use `[(]` `[)]`; a pattern with `**` fails. For multi-line replacements with backticks/em-dash/arrows, use a `c\`/`i\`/`a\` command via quoted heredoc, not a one-liner. Mojibake in output is a *display* artefact: confirm with `grep -c`. Before `c`/`a`/`i`, verify the anchor with `sed -n 'Np'`; never trust line numbers from a previous state. After `git checkout --`, re-run ALL seds, not only the ones that seem missing.
+- **B2 — Verify after every edit.** `sed -n 'Np' file` to confirm. `git diff file` before `git add`. If the diff shows unrelated changes, stop.
+
+**C. Git and quality**
+
+- **C1 — Commit and push.** Work in the local repo, commit in Git Bash, push. The GitHub web interface is for emergencies only. Every change: edit locally → `git add` → `git commit`. Small, atomic commits (one per file, or per logical group), clear messages in English, imperative mood. A rename is ONE logical commit, not one per occurrence. **Push at the end of the session or at a checkpoint, not after every commit.** *Phase 1 (now):* ruleset disabled, single maintainer, direct push to `main` allowed, PR optional. *Phase 2 (when an agent gets a write token):* ruleset active, branch + PR mandatory, no direct push. See `docs/context/AGENT-POLICY.md`.
+- **C2 — Quality gate.** The pre-commit hook (`.githooks/pre-commit`, one-off install: `git config core.hooksPath .githooks`) runs fmt + clippy + test only if Rust files are staged. The hook does **not** replace the full check: also run `cargo build --release`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `cargo fmt --check`, `cargo run --release --bin pcfm-test-runner -- --check --seed 42`. If anything is red, stop: do not close, do not push, do not "fix later".
+
+**D. Context and doctrine**
+
+- **D1 — Honesty and ideas.** If you have not read a file, say so. Do not invent numbers, commit hashes, or file contents. "I don't know" > invention. New ideas go to `docs/context/IDEAS.md` (status `sketch`, with prerequisites and open questions) **before** discussion, not after. Do not implement from an idea until it has an ADR (if it touches doctrine) or a step in `SESSION-STATE.md` (if it is a task).
+- **D2 — Doctrine and codebase.** No `unwrap`/`expect`/`panic!` in simulation paths. No `HashMap` in simulation paths. No `unsafe` outside `pcfm-bridge` (future). `pcfm-hidden` contains Plane A: no public fields, not `Serialize`, custom `Debug`; the only door is `resolve_*` + `drain_observations`; never add getters on latent values. `pcfm-testkit` has no `pcfm-*` dependencies. The simulation model is a prototype: do not "optimise" without an ADR and a `SIM_VERSION` bump. The doctrine wins: if a change contradicts `00-foundations`, a doctrine ADR is required. `docs/adr/` contains only ADRs.
+
+**Rule precedence**
+
+- **D1 (honesty) wins over everything.** If you have not read a file, say so — even if B1 suggests to proceed.
+- **C2 (quality) wins over speed (A1/B2).** If the quality gate is red: stop. Do not close, do not push, do not "fix later".
+- **D2 (doctrine) wins over convenience.** If a change contradicts `00-foundations`, an ADR is required — even if it is "only one line".
 
 ## What I expect from you in this new chat
 
@@ -143,7 +135,7 @@ At minimum: §1 (pillars), §2 (design pillars), §3 (Three Planes), §5 (banned
 
     sed -n '1,130p' docs/context/NEW-SESSION-PROMPT.md
 
-This very file — rules 0-12, codebase-specific rules, what NOT to do.
+This very file — operating rules (A1, A2, B1, B2, C1, C2, D1, D2), rule precedence, the startup and closing rituals, what NOT to do.
 
 ### 6. Confirm the numbers
 
