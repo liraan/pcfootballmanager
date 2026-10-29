@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `501da46` — "docs(adr): accept ADR-022 (TUI-first presentation), amend ADR-005, update plan"
+**Last commit verified:** `00f0a09` — "docs(session-state): mark doc-pass ADR-022 done, unblock TUI demo"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
