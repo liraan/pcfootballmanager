@@ -341,7 +341,7 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 | 002 | Project name and scope | ✅ accepted | — |
 | 003 | Plane A enforcement | ✅ accepted | — (unblocked L0.04, L0.08, L0.10) |
 | 004 | Panic strategy at FFI | ✅ accepted | — |
-| 005 | Qt binding | ✅ accepted | — (unblocked L3-ui, pcfm-bridge) |
+| 005 | Qt binding | ✅ accepted (amended by ADR-022) | — (unblocked L3-ui, pcfm-bridge; presentation primacy amended by ADR-022) |
 | 006 | License | ✅ accepted | — (unblocked LICENSE.md, every Cargo.toml) |
 | 007 | Canonical language | ✅ accepted | — (unblocked translations, language policy) |
 | 008 | Provider integration is external | ✅ accepted | — (reclassified L2-ingest as external tool) |
