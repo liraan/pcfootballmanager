@@ -337,6 +337,9 @@
     reject this idea. **No code until ADR-005 is revisited.**
   - **ADR-019 D11** (`PositionSnapshot` on attempt events only) constrains
     the match renderer, not the rest of the presentation.
+  - **If ADR-005 is revised:** a documentation pass is required on
+    `README.md`, `PROJECT-STATUS.md`, `STRUCTURE.md`, `docs/ARCHITECTURE.md`,
+    `modules/00-foundations.md`. Do not update them before the ADR decision.
 - **Open questions:**
   1. Competence estimate: per phase, or aggregated? (Per phase is more
      informative; aggregated is simpler.)
