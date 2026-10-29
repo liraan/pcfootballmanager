@@ -2,9 +2,11 @@
 
 **Purpose:** define what an agent (Warp, DeepSeek-TUI, or a future custom bot) may and may not do on this repository, and how its actions are approved. This is a **policy**, not a specification: it defines the guardrails, not the implementation.
 
+**Last updated:** 2026-10-29 (commit `f3fce11`)
+
 ## 1. Principles
 
-- The agent **proposes**, the human **approves**. No action on the remote repo happens without explicit confirmation.
+- The agent **proposes**, the human **approves**. No action on the remote repo happens without explicit confirmation (exception: the audit-report push in §8).
 - **Phase 2 (ruleset active):** every change goes through a **branch and a pull request**. No direct push to `main` by anyone. **Phase 1 (ruleset disabled, single maintainer):** direct push to `main` is allowed only to the maintainer (audit-report exception: see §8).
 - The agent **does not merge** pull requests. Only the human merges.
 - The agent **does not force-push** `main`, **does not delete** `main`, **does not create tags** without explicit confirmation.
@@ -70,7 +72,7 @@ If the agent misbehaves, or if its access must be withdrawn:
 
 No agent action is irreversible: `main` is protected, and `agent/*` branches can be deleted.
 
-## 8. GitHub agent (analysis-only role)
+## 8. Analysis agents (GitHub agent, Hermes, …)
 
 The GitHub agent is a **separate role** from the chat agent (Warp, DeepSeek-TUI, or a future custom bot). Its default output is a single Markdown analysis file, not code changes.
 
