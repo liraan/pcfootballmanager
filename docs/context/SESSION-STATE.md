@@ -30,6 +30,8 @@ the rest of the bookmark in the same commit.
 | ✅    | ADR-022: TUI-first, GUI later (amends ADR-005, view model separation normativo) |
 | ✅    | Closing ritual: obbligo di presentare la tabella Piano in chat |
 | ✅    | IDEA-REJ-003 (ritratti TUI), IDEA-REJ-004 (nomi reali) |
+| ✅    | Closing ritual step 4: ogni step deve avere la prima azione concreta |
+| ✅    | Tabella "Prime azioni" per tutti gli step aperti |
 | ⚫    | — (nessun bloccato) |
 
 **Da fare (in dependency order):**
@@ -49,8 +51,6 @@ the rest of the bookmark in the same commit.
 | ⬜  | 10 | `L1-world/01-nation`    | —                            |
 
 **Dettagli (solo dove servono):**
-
-**1. Doc-pass ADR-022** — five files: `README.md`, `PROJECT-STATUS.md`, `STRUCTURE.md`, `docs/ARCHITECTURE.md`, `modules/00-foundations.md`. Update the UI description from Qt-primary to TUI-first. Also check `CONTRIBUTING.md` and `CODE_TOUR.md`. Prerequisite of the TUI demo.
 
 **12. TUI demo (IDEA-INFRA-006)** — short ADR required (second renderer touches `simulation_is_shared_and_renderer_agnostic`), then code in `pcfm-demo`. **First step: read `crates/pcfm-demo/src/` and `MatchResult` (~200-300 lines) to know what the engine actually exposes; only then estimate.** The ADR says: validation prototype, not L3-ui, no engine change.
 
