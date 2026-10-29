@@ -555,3 +555,11 @@
 ### IDEA-REJ-002 — Sensor in the ball
 - **Source:** conversation 2026-10-27 (user, then discarded)
 - **Why rejected:** unnecessary. The moment of contact is already the event timestamp. A sensor as a separate entity would be a complication without benefit.
+
+### IDEA-REJ-003 — Player portraits in the TUI
+- **Source:** conversation 2026-10-29 (user, then discarded)
+- **Why rejected:** the TUI is the primary presentation, not a fallback. Portraits (procedural or asset-based) would move attention to a channel that carries no information, and would look like "almost a photo, but grainy" — the worst of both worlds. An icon of state (`[GK]`, `[DF]`, …) is fine and different. Revisit only if the presentation changes (GUI L3-ui).
+
+### IDEA-REJ-004 — Real player names (including "initial + surname")
+- **Source:** conversation 2026-10-29 (user, then discarded)
+- **Why rejected:** legal risk (image rights include initials; a surname in context identifies a person) and doctrinal inconsistency (`00-foundations.md` §5: no invented real data, no bundling commercial data). The safe path is procedural, plausible names from `world_seed` + `player_id`. Real names only via an optional user-supplied pack, declared unofficial and never committed to the repo.
