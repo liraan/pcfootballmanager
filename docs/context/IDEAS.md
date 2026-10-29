@@ -254,6 +254,106 @@
 
 ---
 
+### IDEA-PRES-001 — TUI-first presentation and view model
+- **Status:** sketch
+- **Category:** UX / Presentation
+- **Source:** conversation 2026-10-28/29 (user)
+- **Idea:** a terminal UI (TUI) as the primary form of presentation for PCFM,
+  not as a fallback to a future GUI. The TUI reads a **presentation-level
+  view model**: a stable, serializable projection of Plane C (estimation)
+  and Plane B (observation), never Plane A (`pcfm-hidden`). The prototype
+  runs around `pcfm-demo`, with deterministic mock data where L1/L2 does
+  not yet exist.
+- **Screens (prototype scope, 6 ceiling — 5 if finances is cut):**
+  homepage (dashboard), squad, calendar, tactics, finances, staff
+  (staff with two tabs: first team / academy, both filtered views on a
+  single `StaffMember` collection with a `reparto` field).
+- **Order of construction (by pressure on the view model, not by ease):**
+  1. **Squad** — densest table, forces the choice of which fields exist
+     and which are derived.
+  2. **Tactics** — the only writable screen; introduces commands,
+     validation, dirty state, undo/redo, spatial interaction.
+  3. **Calendar** — introduces time as a dimension (past/future, state,
+     next fixture).
+  4. **Finances (or staff)** — numeric aggregation, formatting, locale.
+  5. **Homepage** — **last**, because it aggregates all the others:
+     building it first means inventing the data twice.
+- **Tactics model (decisions from this discussion):**
+  - **Three phases** (with ball, without ball, transition), each with its
+    own zone assignment. Same 11 individuals across phases; positions may
+    vary within role-compatible zones. Not a single tactic with views:
+    three assignments on one shared zone grid.
+  - **Zone + function**, not free positioning. Discrete grid (recommend
+    5×3, named zones in UI, IDs in the model). The user does not move
+    players: assigns players to primary zones and gives each a function
+    per phase.
+  - **Competence is an estimate (Plane C), not the latent (Plane A).**
+    Each `(player, zone, phase)` has an estimated level + reliability +
+    source. Own-team players are always "analysed" (high reliability but
+    not perfect); other teams start unknown until a scout report. Colours
+    and markers on the map are estimates, never facts.
+  - **Heatmap:** observed (Plane B, from played matches) and estimated
+    (Plane C, staff/scout). Both in the player screen, side by side, with
+    a legend. Empty observed heatmap is a valid state (young player never
+    fielded) and is displayed explicitly, not hidden.
+  - **Hysteresis with decay:** competence rises slowly with practice,
+    falls slower without it, with a non-zero floor (an ex-keeper remains
+    a decent keeper). Shape of the curve is a model decision, mocked for
+    the prototype.
+  - **Validation:** hard errors (structural: 11 players, one zone per
+    player, no double assignment) vs soft warnings (competence estimates).
+    Warnings aggregated in the status bar, detailed per-zone.
+- **View model rules (non-negotiable, the only binding part of this
+  sketch):**
+  - The UI reads a view model; it never reads `MatchState`, `Player`, or
+    any `pcfm-hidden` type directly.
+  - The view model projects Plane C and Plane B only. Plane A is never
+    exposed.
+  - The view model is serializable, so snapshot tests are deterministic.
+  - The UI does not compute competence, ratings, or derived stats. If the
+    UI needs a value, the view model must expose it.
+  - Mocks live in a dedicated module, seeded deterministically, and are
+    declared "mock" (not normative) in this sketch.
+- **Responsive:** declared minimum (recommend 100×30 for the app, 120×35
+  for tactics at full layout). Below the minimum, refuse with a clear
+  message; do not adapt. Two or three breakpoints, each with "what appears
+  here". Panels are not added at higher resolutions: they are revealed.
+- **Social feed:** deferred. News of the world covers the "what happened"
+  layer; social reactions require systems (fan sentiment, board pressure,
+  player popularity) that do not exist yet. News = institutional facts
+  derived from world state; social = reactions on those facts. Do not
+  build the second without the first.
+- **What this idea does not cover:** the match renderer
+  (`IDEA-INFRA-006`), L3-ui (ADR-005), simulation changes
+  (`SIM_VERSION` untouched), L1/L2 systems (finances, staff, youth are
+  mocked).
+- **Relationship with existing decisions:**
+  - **`IDEA-INFRA-006`** is the match renderer inside `pcfm-demo`; this
+    idea is the broader presentation layer that contains it. Neither
+    replaces the other.
+  - **ADR-005 chose Qt for L3-ui.** This idea proposes TUI-first as the
+    primary presentation, which is in tension with that choice.
+    Resolution requires re-reading ADR-005 and deciding: revise it, or
+    reject this idea. **No code until ADR-005 is revisited.**
+  - **ADR-019 D11** (`PositionSnapshot` on attempt events only) constrains
+    the match renderer, not the rest of the presentation.
+- **Open questions:**
+  1. Competence estimate: per phase, or aggregated? (Per phase is more
+     informative; aggregated is simpler.)
+  2. Heatmap in the tactics screen, or only in the player screen?
+  3. Grid: 5×3 named zones, or different?
+  4. Minimum terminal size and breakpoints: which values, chosen against
+     which content?
+  5. Is the prototype a throwaway (delete after validation) or a seed
+     for the future UI crate?
+- **Critical note:** this is a **sketch**, not a decision. The only
+  binding item is the **view model separation** (UI reads a projection,
+  never the simulation). Everything else — layout, screens, mocks, order
+  — is up for revision when L1/L2 exist and when ADR-005 is revisited.
+  Do not implement from this idea until ADR-005 is resolved.
+
+---
+
 ## Rejected ideas (for traceability)
 
 ### IDEA-REJ-001 — Drones over the pitch
