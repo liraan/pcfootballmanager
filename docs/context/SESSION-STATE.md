@@ -16,6 +16,11 @@ the rest of the bookmark in the same commit.
    decide on `IDEA-PRES-001`: revise ADR-005, or reject the idea. Until
    resolved, IDEA-PRES-001 cannot become code. IDEA-INFRA-004 is deferred
    (requires ADR-012 runtime, not yet implemented).
+0bis. **Fix ADR-003 Plane A exception after ADR-020.** ADR-003 still names
+   `pcfm-debug` and `demo.rs`; `pcfm-demo` reads Plane A (`GroundTruth`)
+   without authorization. The code violates ADR-003 in letter. Options:
+   new ADR-021 (recommended), amend ADR-003, or extend ADR-020. Requires
+   explicit confirmation to touch `docs/adr/`.
 1. ~~**Finish Grade A/B stale sweep**~~ — done (5/5 files: `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `REPO-SNAPSHOT.md`, `MIGRATION-01-04.md`).
 2. ~~**Revise `L0.05`**~~ — done (v1.1, two-phase temporal events, `PositionSnapshot`, `attempt_event_id`; see commit `e06d8cd`).
 3. ~~**Grade C**~~ — done (4 files: `GLOSSARY.md`, `CODE_TOUR.md`, `ARCHITECTURE.md`, `PLUGIN_DEVELOPER_GUIDE.md`; commits `58c0ae9`, `5fa2b82`, `cb54ba5`, `9476456`, `b40fa0c`, `e2d69d8`).
