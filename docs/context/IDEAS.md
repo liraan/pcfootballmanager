@@ -279,6 +279,168 @@
   the L3-ui (ADR-005 chose Qt for that), and that no engine change is
   planned.
 
+### IDEA-TACT-001 — Tactics as per-state functions
+
+- **Status:** sketch
+- **Category:** Tactics
+- **Source:** conversation 2026-10-29 (user, discussed)
+- **Idea:** replace the classic zone-grid tactics model with a model where
+  each player is assigned **functions** in two states (in possession, out of
+  possession), plus a team-level **transition system** (not a third state with
+  per-player functions). The map becomes **output** (derived), not input. The
+  player flags functions; the system shows the resulting shape.
+- **Two states + one system:**
+  - **In possession:** per-player functions (ceiling 6-8, to be decided)
+  - **Out of possession:** per-player functions (same ceiling)
+  - **Transition:** team-level rule (counter-press / drop back / maintain
+    shape / tactical foul), not per-player
+- **Defaults:** each role provides a default function profile per state. The
+  player starts from the profile and modifies it. Role remains an anchor, not
+  a fixed prescription.
+- **Validation:**
+  - Hard errors: structural (11 players, no double assignment where
+    functions conflict)
+  - Soft warnings: competence estimates, incompatible combinations with
+    explanation
+- **Map:** output, derived from functions. The player does not place players
+  on a grid; the system shows the resulting shape.
+- **Relationship with IDEA-PRES-001:** this idea **revises** the tactics
+  section of IDEA-PRES-001 ("three phases, each with its own zone
+  assignment"). The rest of IDEA-PRES-001 (view model discipline, screens,
+  order) is unchanged.
+- **Pre-requisites:**
+  - `L2-tactics` module (not yet written; ADR-019 deferred 9:
+    "role -> tactic -> parameter chain")
+  - ADR-019 D3: tactical instructions passed as named parameters. The
+    function model must become parameters the engine understands.
+  - Possibly a new ADR if the function model changes the parameter vocabulary.
+- **Open questions:**
+  1. How many functions per state? (Recommendation: 6-8, mutually exclusive
+     or clearly compatible)
+  2. How do functions relate to existing roles? (Anchor + deviation, or
+     replace?)
+  3. Familiarity/cohesion over time (attributable to tactic, not state) — in
+     scope or deferred?
+  4. What is the function vocabulary? (Closed enum, like ADR-019 D2, or open?)
+  5. Is the derived map rendered by the TUI, or is a list enough for v1?
+- **Critical note:** this is a **sketch**, not a decision. Do not implement
+  until `L2-tactics` exists and a dedicated ADR (if needed) is accepted.
+
+### IDEA-INFRA-007 — In-match intervention (manual pause, engine hints)
+
+- **Status:** sketch
+- **Category:** Infrastructure (interaction)
+- **Source:** conversation 2026-10-29 (user, discussed)
+- **Idea:** the manager can **manually pause** the match at any time, change
+  the transition rule (or other pre-defined instructions), and resume. The
+  engine **suggests** notable moments via hints (visible, not blocking), but
+  never pauses on its own. The manager decides.
+- **Separation from IDEA-INFRA-006:** this idea is about **interaction**; the
+  renderer (IDEA-INFRA-006) is about **visibility**. The renderer must exist
+  for the manager to see what to react to. They are separate concerns.
+- **What the engine must provide:**
+  - A **runtime input channel** that accepts commands from the renderer
+  - **Recording of inputs as events in the save** (determinism: replay reads
+    the same commands at the same ticks)
+  - **Notable-transition events** (hints) at the engine's discretion —
+    non-blocking, no automatic pause. Suggested triggers: possession loss in
+    own third, recovery in opponent third, numerical superiority in
+    transition. Whether these are hardcoded or plugin-provided is open.
+- **What the renderer must provide:**
+  - A visible, pausable view of the match (IDEA-INFRA-006 dependency)
+  - A UI for issuing commands while paused
+  - Display of hints as non-blocking notifications
+- **Determinism:** every input is recorded in the save as an event. Replay
+  is identical. The engine does not "know" whether the match is visible; it
+  receives inputs as events like any other.
+- **Pre-requisites (none exist today):**
+  1. Runtime input channel (new ADR)
+  2. Hook system for input (new ADR — ADR-012 mentions `MatchPlugin` but the
+     hook shape is open; rule plugins in ADR-019 D11 produce outcomes from
+     snapshots, not commands)
+  3. Event granularity fine enough to make hints meaningful (~19 events/match
+     today is too coarse — see IDEA-INFRA-006)
+  4. Renderer that shows more than 19 frames per match (IDEA-INFRA-006)
+  5. `SIM_VERSION` bump + performance measurement, if per-tick positions are
+     exposed (IDEA-INFRA-006 decision, ADR required)
+- **Open questions:**
+  1. How many interventions per match? (No auto-budget; the manager is free.
+     But does the engine warn after N? Does it record a counter?)
+  2. Format of the hint / command UI (novice vs expert — expandable per the
+     2026-10-29 discussion)
+  3. How is the hint trigger vocabulary defined? (Closed enum, like D2, or
+     open via plugins?)
+  4. Does the assistant (IDEA-STAFF-001) also emit commands through this
+     channel? If yes, ordering matters (manager vs assistant priority).
+- **Critical note:** this is a **sketch**, not a decision. It depends on
+  four prerequisites that do not exist today. Do not implement until they
+  exist and dedicated ADRs are accepted.
+
+### IDEA-STAFF-001 — Assistant manager and skip-match mode
+
+- **Status:** sketch
+- **Category:** Staff
+- **Source:** conversation 2026-10-29 (user, discussed)
+- **Idea:** a new kind of staff member, the **assistant manager**, with
+  characteristics. When the player chooses to **skip a match**, the assistant
+  manages the team for that match, making changes based on their
+  characteristics. The player delegates and inherits the outcome.
+- **Model B (opaque competence):**
+  - **Observable (Plane B):** professional training, experience (matches
+    managed, contexts).
+  - **Latent (Plane A):** actual competence at in-match decisions. Lives in
+    `pcfm-hidden`, never exposed.
+  - **Estimated (Plane C):** reputation — a noisy signal of competence,
+    correlated with but not identical to the latent. Influenced also by
+    non-competence factors (visibility, team results, media sympathy).
+- **Design constraints:**
+  - Reputation must carry **significant noise**: the manager cannot estimate
+    the latent with arbitrary precision by accumulating observations.
+  - Reputation must not be a **doppelganger** of training + experience; it
+    must add a partially independent signal.
+  - The skip-match outcome is **uncertain by design**: the manager takes a
+    risk by delegating.
+- **What the assistant does (scope of skip-match):**
+  - Manages the team using the pre-match tactic (set by the manager)
+  - Makes in-match decisions (substitutions, transition rule changes) via the
+    runtime input channel (IDEA-INFRA-007)
+  - Deterministic: same characteristics + same context + same seed = same
+    decisions
+- **Relationship with the manager:**
+  - The manager can be present and let the assistant act (delegation)
+  - The manager can pause and override the assistant (IDEA-INFRA-007)
+  - Priority: manager over assistant, per-tick
+- **Relationship with ADR-019:**
+  - If Model B, the assistant is a **new agent type** (not player, not
+    referee, not peripheral-referee). It has a `Position`? No — it is not
+    in-pitch. It is an **external agent** that emits commands via the input
+    channel.
+  - This is a type of agent that ADR-019 does not currently describe. It
+    likely requires an ADR amendment or a new ADR.
+- **Pre-requisites:**
+  1. Plane A (ADR-003) for the latent competence
+  2. Runtime input channel (IDEA-INFRA-007)
+  3. New agent type or input-only agent, ADR amendment/extension
+  4. `L2-staff` module (not yet written)
+  5. Model B decision (if Model A: simpler, no latents, no ADR-003 impact)
+- **Open questions:**
+  1. How much signal vs noise in reputation? (Parameter to calibrate)
+  2. Is there a hard cap on how precisely the latent can be estimated? (E.g.
+     reputation update is slow, or noisy with a floor)
+  3. Skip-match: is the assistant visible to the player, or is the match
+     shown as if the manager were there? (UX question)
+  4. Can the assistant disagree with the manager's pre-match tactic? (If yes,
+     how is the disagreement communicated?)
+  5. What happens to the assistant's reputation after a skip-match loss? (The
+     manager should be able to blame the assistant — but can they?)
+  6. How is the assistant hired? (Scouting, word of mouth, former players,
+     etc.)
+- **Critical note:** this is a **sketch**, not a decision. Do not implement
+  until `L2-staff` exists, the runtime input channel exists (IDEA-INFRA-007),
+  and the assistant agent type is decided (ADR-019 amendment or new ADR).
+  Model A (transparent) is a simpler alternative if Model B turns out too
+  costly.
+
 ---
 
 ### IDEA-PRES-001 — TUI-first presentation and view model
