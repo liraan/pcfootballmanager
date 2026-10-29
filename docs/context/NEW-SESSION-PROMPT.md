@@ -30,18 +30,17 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 - **Status:** L0 (match engine) is complete and implemented. L1–L3 are planned.
 - **Performance target** (`00-foundations.md` §6): 60 fps UI, full season < 60 s on mid-range hardware. Not measured yet.
 
-## Where we are (commit `f3fce11`, 2026-10-29)
+## Where we are (structure, not numbers)
 
-- **9 crates:** `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures`.
-- **103 tests**, clippy clean (`-D warnings`), `--check` 6/6, `--list` 6 scenarios, `--coverage` 2/26 (7%).
-- **17 ADRs accepted** (001-008, 012-016, 018, 019, 020, 021), **1 proposed** (017, roles are labels), 1 template (000), 1 reading guide (`docs/PLUGINS-WORLDS-READING-GUIDE.md`, outside `docs/adr/`). **19 files** in `docs/adr/` total.
-- **ADR-019 (match engine contract)** is `accepted`: agent-first, positional, N agents (players + referee). Deferred 1 (spatial iteration order), 2 (tick-cost pre-emption, selective foul), and 3 (possession representation) resolved. Deferred 4–9 open.
-- **11 L0 modules** ratified + implemented.
-- **`docs/context/`** holds briefing material (not normative): `REPO-SNAPSHOT.md`, `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`.
+**For current numbers (crates, tests, ADR count), read `SESSION-STATE.md` and `STRUCTURE.md` §5. This section only gives the stable structure: it does not duplicate counts that change every session.**
+
+- **Crates:** 9 `pcfm-*` crates: `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures`.
+- **Levels:** L0 (match engine) is complete and implemented. L1-L3 are planned.
+- **ADR-019 (match engine contract)** is `accepted`: agent-first, positional, N agents (players + referee). Deferred 4-9 open.
 - **`STRUCTURE.md` §5** is the single source of truth for ADR status. `modules/_index.md` shows a derived view.
+- **`docs/context/`** holds briefing material (not normative): `REPO-SNAPSHOT.md`, `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`, `HERMES-AGENT-PROMPT.md`, `GITHUB-AGENT-PROMPT.md`.
 - **Pre-commit hook** (`.githooks/pre-commit`, versioned): runs fmt, clippy, test only if Rust files are staged. Install with `git config core.hooksPath .githooks` (one-off).
-- **Ruleset on `main`:** configured (PR required, force-push and deletion blocked, 0 approvals) but **currently disabled** (Phase 1). Reactivate before granting a write token to any agent.
-- **Working tree clean.**
+- **Phase 1 vs Phase 2:** Phase 1 (now) ruleset disabled, single maintainer, direct push allowed. Phase 2 (when an agent gets a write token and the ruleset is active) branch + PR mandatory. See `docs/context/AGENT-POLICY.md` §1.
 
 ## The 4 files you MUST read first (in this order)
 
