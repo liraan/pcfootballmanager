@@ -2,7 +2,7 @@
 
 **Purpose:** define what an agent (Warp, DeepSeek-TUI, or a future custom bot) may and may not do on this repository, and how its actions are approved. This is a **policy**, not a specification: it defines the guardrails, not the implementation.
 
-**Last updated:** 2026-10-29 (commit `f3fce11`)
+**Last updated:** 2026-10-29 (commit `08eb158`)
 
 ## 1. Principles
 
