@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `902f318` — "docs(session-state): mark format note, closing-ritual update, IDEA-REJ as done"
+**Last commit verified:** `06bfe3e` — "docs(session-state): checkpoint after closing-ritual update"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -26,6 +26,7 @@ the rest of the bookmark in the same commit.
 | ✅    | Audit Hermes 2026-10-29 verificato: 4/4 finding veri |
 | ✅    | `NEW-SESSION-PROMPT` consolidato: 13→8 regole, startup + closing ritual, B1/A1/B2 |
 | ✅    | Tabella Piano in `SESSION-STATE` + nota di formato |
+| ✅    | ADR-022: TUI-first, GUI later (amends ADR-005, view model separation normativo) |
 | ✅    | Closing ritual: obbligo di presentare la tabella Piano in chat |
 | ✅    | IDEA-REJ-003 (ritratti TUI), IDEA-REJ-004 (nomi reali) |
 | ⚫    | — (nessun bloccato) |
@@ -34,7 +35,8 @@ the rest of the bookmark in the same commit.
 
 | Pr. | #  | Cosa                    | Dipende da                   |
 |-----|----|-------------------------|------------------------------|
-| 🔴  | 1  | ADR-005 / IDEA-PRES-001 | —                            |
+| 🟡  | 1  | Doc-pass ADR-022 (5 file) | —                            |
+| 🟡  | 12 | TUI demo (IDEA-INFRA-006): ADR breve + codice | doc-pass ADR-022 |
 | 🟡  | 2  | Fix ADR-003             | —                            |
 | 🟡  | 3  | Terminologia            | —                            |
 | 🟡  | 4  | Audit 2026-10-29 (T1,T2)| —                            |
@@ -48,9 +50,11 @@ the rest of the bookmark in the same commit.
 
 **Dettagli (solo dove servono):**
 
-**1. ADR-005 / IDEA-PRES-001** — re-read ADR-005, decide: revise (new ADR-022) or reject IDEA-PRES-001. Until resolved, IDEA-PRES-001 cannot become code. IDEA-INFRA-004 deferred (requires ADR-012 runtime, not implemented).
+**1. Doc-pass ADR-022** — five files: `README.md`, `PROJECT-STATUS.md`, `STRUCTURE.md`, `docs/ARCHITECTURE.md`, `modules/00-foundations.md`. Update the UI description from Qt-primary to TUI-first. Also check `CONTRIBUTING.md` and `CODE_TOUR.md`. Prerequisite of the TUI demo.
 
-**2. Fix ADR-003** — ADR-003 still names `pcfm-debug` and `demo.rs`; `pcfm-demo` reads Plane A without authorization. Options: new ADR-022 (ADR-021 is taken), amend ADR-003, extend ADR-020. Requires explicit confirmation to touch `docs/adr/`.
+**12. TUI demo (IDEA-INFRA-006)** — short ADR required (second renderer touches `simulation_is_shared_and_renderer_agnostic`), then code in `pcfm-demo`. The ADR says: validation prototype, not L3-ui, no engine change. Depends on doc-pass ADR-022.
+
+**2. Fix ADR-003** — ADR-003 still names `pcfm-debug` and `demo.rs`; `pcfm-demo` reads Plane A without authorization. Options: new ADR-023 (ADR-021 and ADR-022 are taken), amend ADR-003, extend ADR-020. Requires explicit confirmation to touch `docs/adr/`.
 
 **3. Terminologia** — T1 (small): `PLUGIN_DEVELOPER_GUIDE.md` §1 + `GLOSSARY.md`. T2 (small): "core module" → "framework crate" in §2 and §11. T3 (large, one commit): rename `modules/` → `specs/`.
 
@@ -60,4 +64,4 @@ the rest of the bookmark in the same commit.
 
 **Done (storico):** 1, 2, 3, 6, 10bis, 10ter, 10quater, 0ter — commit hash in `git log --oneline`.
 
-**Files touched this session (2026-10-29):** `docs/context/IDEAS.md` (added IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001; rejected IDEA-REJ-003, IDEA-REJ-004); `docs/context/SESSION-STATE.md`; `docs/adr/021-referee-non-physical.md` (new, accepted); `docs/adr/019-match-engine-contract.md` (Superseded by ADR-021 D9 only); `STRUCTURE.md` (ADR status table, added 020/021); `modules/_index.md` (ADR status table, added 020/021); `docs/context/analysis/2026-10-29-18-18-review.md` (renamed from audit-full); `docs/context/AGENT-POLICY.md` (audit-report push exception, §1 and §8); `docs/context/HERMES-AGENT-PROMPT.md` (new, audit agent contract); `docs/context/NEW-SESSION-PROMPT.md` (refreshed counts, startup + closing rituals, rule 13; closing ritual now requires presenting the Plan table in chat).
+**Files touched this session (2026-10-29):** `docs/context/IDEAS.md` (added IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001; rejected IDEA-REJ-003, IDEA-REJ-004); `docs/context/SESSION-STATE.md`; `docs/adr/021-referee-non-physical.md` (new, accepted); `docs/adr/019-match-engine-contract.md` (Superseded by ADR-021 D9 only); `STRUCTURE.md` (ADR status table, added 020/021); `modules/_index.md` (ADR status table, added 020/021); `docs/context/analysis/2026-10-29-18-18-review.md` (renamed from audit-full); `docs/context/AGENT-POLICY.md` (audit-report push exception, §1 and §8); `docs/context/HERMES-AGENT-PROMPT.md` (new, audit agent contract); `docs/context/NEW-SESSION-PROMPT.md` (refreshed counts, startup + closing rituals, rule 13; closing ritual now requires presenting the Plan table in chat); `docs/adr/022-presentation-tui-first.md` (new, accepted); `docs/adr/005-qt-binding.md` (Amended by ADR-022); `STRUCTURE.md` + `modules/_index.md` (ADR 022 added, count 18).
