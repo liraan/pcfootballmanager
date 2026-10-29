@@ -92,14 +92,6 @@ next steps, the current priority, and the files touched.
 - **C2 (quality) wins over speed (A1/B2).** If the quality gate is red: stop. Do not close, do not push, do not "fix later".
 - **D2 (doctrine) wins over convenience.** If a change contradicts `00-foundations`, an ADR is required — even if it is "only one line".
 
-## What I expect from you in this new chat
-
-1. **Read `docs/context/SESSION-STATE.md` first**, then the 4 key documents. Do not propose anything before you have the context.
-2. **Confirm the state** with the commands I ask you for (`git pull`, `git log`, `cargo test`, etc.), without assuming it is what I describe.
-3. **Propose the next concrete step** (whatever I prefer) and, if needed, give me the exact `sed`/`awk` command. Do not send the full file in chat if it exceeds ~120 lines: it truncates.
-4. **Do not invent anything.** If you don't know, ask. If you haven't read a file, say so.
-5. **If a test fails, stop.** Do not "fix" the test to make it pass.
-
 ## Startup ritual — the exact commands to ask for
 
 At the start of every new chat, **before proposing anything**, ask the maintainer to run these commands in order and paste the output. Do not assume the state described in this prompt is still true: verify it.
