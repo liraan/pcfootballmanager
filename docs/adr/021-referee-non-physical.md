@@ -5,7 +5,7 @@
 - **Supersedes:** ADR-019, decision D9 only (all other decisions of ADR-019 remain in force)
 - **Superseded by:** —
 - **Blocks:** 2D implementation of referee positioning behaviour; any engine rule that relies on the referee as a collision body.
-- **Depends on:** ADR-019 (match engine contract, D1 and D9), ADR-003 (Plane A enforcement, for perception inputs).
+- **Depends on:** ADR-019 (match engine contract, D1 and D9).
 
 ## Context
 
@@ -163,7 +163,7 @@ In particular:
 ## References
 
 - ADR-019 — match engine contract (D1, D4, D9, D10, D11)
-- ADR-003 — Plane A enforcement (perception as a potential Plane A input)
+- ADR-003 — Plane A enforcement (relevant only if perception is later decided to live in Plane A; see Open question 2).
 - `modules/00-foundations.md` §3 — Three Planes (observation vs truth)
 - conversation 2026-10-29 (this ADR is its first written record); related sketches in
   `docs/context/IDEAS.md` (IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001)
