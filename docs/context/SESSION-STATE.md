@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `04639bd` — "docs(agent-policy): fix Last updated to point to previous commit (S1)"
+**Last commit verified:** `f380763` — "docs(new-session-prompt): trim 'What NOT to do' (remove duplicates of B1/D1/D2/C1, drop hardcoded ADR counts)"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
