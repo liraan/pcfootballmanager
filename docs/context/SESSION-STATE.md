@@ -66,4 +66,37 @@ the rest of the bookmark in the same commit.
    become tasks, which stay sketches. All three depend on prerequisites
    that do not exist today: `L2-tactics`, runtime input channel, `L2-staff`.
 
+0sexies. **Verify and fix audit findings from `2026-10-29-18-18-review.md`**
+   (2026-10-29). All four findings verified as real. Three tasks:
+   - **T1** (small): sanitize the `--html` path in
+     `crates/pcfm-demo/src/render.rs:159` (`std::fs::write(path, html)`):
+     canonicalize + confine to a safe directory to prevent path traversal.
+     Low risk (offline CLI, local user), but real.
+   - **T2** (small): align `CHANGELOG-SIM.md` lines 19 and 41 — they say
+     `SIM_VERSION` is defined in `pcfm-core (planned)`, but the code has
+     `pub const SIM_VERSION: u32 = 1` in `crates/pcfm-match/src/save.rs:76`.
+   - **T3** (note, not a task): `pcfm-match/src/state.rs:222-226`
+     (`pick_players`) uses a single RNG roll for both attacker and defender
+     indices, introducing artificial correlation between the two teams.
+     Design note, not a bug. Record in `IDEAS.md` or as a note for the
+     positional engine (ADR-019) — do not fix in the probability model.
+   The fourth finding (ADR-003 mentions `pcfm-debug`) is already tracked
+   as `0bis`.
+
+0septies. **Record the Hermes Agent policy incident** (2026-10-29). Hermes
+   pushed `a355bf2` directly to `main` with the maintainer's git
+   credentials. `AGENT-POLICY.md` §1 (post-`aba16a8`) says: "Phase 1
+   (ruleset disabled, single maintainer): direct push to `main` is allowed
+   **only to the maintainer**." Hermes is an agent, not the maintainer.
+   The commit itself is harmless (one `.md` file, no code, no secrets), but
+   the action violates the written policy. No action on the commit (it is
+   kept, it is a valid audit report). Options for the record:
+   (a) amend `AGENT-POLICY.md` §1 to clarify that in Phase 1 an agent with
+   a write token must still open a PR, not push directly; or
+   (b) leave the policy as-is and treat the incident as a one-off, to be
+   recorded in `AGENT-POLICY.md` §8 ("lessons") without changing the rule.
+   The distinction matters: if the policy stays, the incident is a
+   violation to be prevented next time; if it changes, the incident was
+   the trigger for a policy amendment.
+
 **Files touched this session (2026-10-29):** `docs/context/IDEAS.md` (added IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001), `docs/context/SESSION-STATE.md`.
