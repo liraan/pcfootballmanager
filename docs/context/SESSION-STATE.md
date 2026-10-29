@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `b7059e8` — "docs(new-session-prompt): B1 add long-heredoc, code-fence, cat -A lessons"
+**Last commit verified:** `e8d76a2` — "docs(new-session-prompt): B1 confirmed fence-vs-length test result"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
