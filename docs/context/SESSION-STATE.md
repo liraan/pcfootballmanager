@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `ba62515` — "docs(ideas): record rejected ideas REJ-003 (TUI portraits) and REJ-004 (real player names)"
+**Last commit verified:** `902f318` — "docs(session-state): mark format note, closing-ritual update, IDEA-REJ as done"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
