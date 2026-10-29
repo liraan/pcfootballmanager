@@ -199,7 +199,8 @@ scenario.
 | Plugin system (ADR-012) | Accepted, not implemented | `pcfm-gen`, `pcfm-match-3d`, etc. |
 | World system (ADR-013) | Accepted, not implemented | Save format, LOD, manifest |
 | 3D match engine | Planned | `crates/pcfm-match-3d/` |
-| Qt UI | Planned | `crates/pcfm-bridge/`, `crates/pcfm-ui/` |
+| TUI (primary, v1) | Planned | `crates/pcfm-tui/` (or `pcfm-demo` prototype first, per IDEA-INFRA-006) |
+| Qt UI (future GUI) | Planned | `crates/pcfm-bridge/`, `crates/pcfm-ui/` |
 | Deterministic sim model (realistic xG, duels, …) | Prototype | `pcfm-hidden::resolve_*` |
 
 The current simulation (`pcfm-hidden::resolve_*`) is a **prototype**.
