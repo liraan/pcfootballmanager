@@ -26,6 +26,7 @@ the rest of the bookmark in the same commit.
 | ✅    | Audit Hermes 2026-10-29 verificato: 4/4 finding veri |
 | ✅    | `NEW-SESSION-PROMPT` consolidato: 13→8 regole, startup + closing ritual, B1/A1/B2 |
 | ✅    | Tabella Piano in `SESSION-STATE` + nota di formato |
+| ✅    | Doc-pass ADR-022 completo: README (2 righe), STRUCTURE (ADR-005 amended), ARCHITECTURE (TUI primary). STATUS e 00-foundations già neutri |
 | ✅    | ADR-022: TUI-first, GUI later (amends ADR-005, view model separation normativo) |
 | ✅    | Closing ritual: obbligo di presentare la tabella Piano in chat |
 | ✅    | IDEA-REJ-003 (ritratti TUI), IDEA-REJ-004 (nomi reali) |
@@ -35,8 +36,7 @@ the rest of the bookmark in the same commit.
 
 | Pr. | #  | Cosa                    | Dipende da                   |
 |-----|----|-------------------------|------------------------------|
-| 🟡  | 1  | Doc-pass ADR-022 (5 file) | —                            |
-| 🟡  | 12 | TUI demo (IDEA-INFRA-006): ADR breve + codice | doc-pass ADR-022 |
+| 🟡  | 12 | TUI demo (IDEA-INFRA-006): ADR breve + codice | — |
 | 🟡  | 2  | Fix ADR-003             | —                            |
 | 🟡  | 3  | Terminologia            | —                            |
 | 🟡  | 4  | Audit 2026-10-29 (T1,T2)| —                            |
@@ -52,7 +52,7 @@ the rest of the bookmark in the same commit.
 
 **1. Doc-pass ADR-022** — five files: `README.md`, `PROJECT-STATUS.md`, `STRUCTURE.md`, `docs/ARCHITECTURE.md`, `modules/00-foundations.md`. Update the UI description from Qt-primary to TUI-first. Also check `CONTRIBUTING.md` and `CODE_TOUR.md`. Prerequisite of the TUI demo.
 
-**12. TUI demo (IDEA-INFRA-006)** — short ADR required (second renderer touches `simulation_is_shared_and_renderer_agnostic`), then code in `pcfm-demo`. The ADR says: validation prototype, not L3-ui, no engine change. Depends on doc-pass ADR-022.
+**12. TUI demo (IDEA-INFRA-006)** — short ADR required (second renderer touches `simulation_is_shared_and_renderer_agnostic`), then code in `pcfm-demo`. The ADR says: validation prototype, not L3-ui, no engine change.
 
 **2. Fix ADR-003** — ADR-003 still names `pcfm-debug` and `demo.rs`; `pcfm-demo` reads Plane A without authorization. Options: new ADR-023 (ADR-021 and ADR-022 are taken), amend ADR-003, extend ADR-020. Requires explicit confirmation to touch `docs/adr/`.
 
