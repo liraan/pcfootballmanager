@@ -62,6 +62,22 @@ the rest of the bookmark in the same commit.
 
 **5. Review sketch 2026-10-29** — IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001. Decide: ADR, task, or stays sketch. Depends on `L2-tactics`, runtime input channel, `L2-staff` (none exist).
 
+**Prime azioni (per step):**
+
+| #  | Prima azione |
+|----|--------------|
+| 2  | Leggere ADR-003 §Exception: `sed -n '204,235p' docs/adr/003-plane-a-enforcement.md` |
+| 3  | Leggere `PLUGIN_DEVELOPER_GUIDE.md` §1: `sed -n '13,40p'` |
+| 4  | Leggere `render.rs:150-170` e `CHANGELOG-SIM.md:19,41` |
+| 5  | Leggere i tre sketch in `IDEAS.md` (TACT-001, INFRA-007, STAFF-001) |
+| 6  | Da definire in sessione: il riferimento "grep + classification" non è in nessun file |
+| 7  | Decidere da quale file parte la cascade (candidato: `README.md`) |
+| 8  | Rileggere ADR-019 §Deferred, decidere quali dei 4-9 chiudere (3 già resolved) |
+| 9  | Leggere ADR-017, decidere: ratificare o rinviare |
+| 10 | Scrivere `L1.04` (`L1-world/00-overview.md`) prima di `L1.05` |
+| 11 | Decisione del maintainer: attivare o no il ruleset |
+| 12 | Leggere `crates/pcfm-demo/src/` e `MatchResult` |
+
 **Done (storico):** 1, 2, 3, 6, 10bis, 10ter, 10quater, 0ter — commit hash in `git log --oneline`.
 
 **Files touched this session (2026-10-29):** `docs/context/IDEAS.md` (added IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001; rejected IDEA-REJ-003, IDEA-REJ-004); `docs/context/SESSION-STATE.md`; `docs/adr/021-referee-non-physical.md` (new, accepted); `docs/adr/019-match-engine-contract.md` (Superseded by ADR-021 D9 only); `STRUCTURE.md` (ADR status table, added 020/021); `modules/_index.md` (ADR status table, added 020/021); `docs/context/analysis/2026-10-29-18-18-review.md` (renamed from audit-full); `docs/context/AGENT-POLICY.md` (audit-report push exception, §1 and §8); `docs/context/HERMES-AGENT-PROMPT.md` (new, audit agent contract); `docs/context/NEW-SESSION-PROMPT.md` (refreshed counts, startup + closing rituals, rule 13; closing ritual now requires presenting the Plan table in chat); `docs/adr/022-presentation-tui-first.md` (new, accepted); `docs/adr/005-qt-binding.md` (Amended by ADR-022); `STRUCTURE.md` + `modules/_index.md` (ADR 022 added, count 18).
