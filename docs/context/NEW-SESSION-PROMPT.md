@@ -150,15 +150,11 @@ Say explicitly:
 
 ## What NOT to do
 
-- Do not give me "lots of comments" scattered through the code: the codebase is already documented.
-- Do not assume that ADR-012, ADR-013, ADR-015, ADR-016, ADR-018, ADR-019 are "proposed". They are **accepted**.
-- Do not assume there are "17 ADRs". There are **19 files in `docs/adr/`**: 17 accepted (001-008, 012-016, 018, 019, 020, 021), 1 proposed (017), 1 template (000). Plus 1 reading guide outside `docs/adr/`.
-- Do not paste a full file > 120 lines in chat: it truncates. Use `sed`/`awk` commands, or split into consecutive parts with no text in between.
-- Do not invent commit hashes or file contents you have not read.
+- Do not give "lots of comments" scattered through the code: the codebase is already documented.
+- Do not assume the status of an ADR from memory: read `STRUCTURE.md` §5 (single source of truth). ADR-012, 013, 015, 016, 018, 019 are **accepted**, not proposed — but verify, do not assume.
+- Do not assume ADR counts: they change. Use `STRUCTURE.md` §5 for the current number.
 - Do not propose Python scripts (Python is not installed). Use Bash/Git Bash.
 - Do not assume CI exists: there is no `.github/workflows/`. Clippy/test/build/fmt/check are **manual**, and must be run after every change (the pre-commit hook helps for Rust).
-- Do not "optimise" the simulation model without an ADR and a `SIM_VERSION` bump.
-- Do not push directly to `main` in Phase 2. In Phase 1, direct push is allowed (see `AGENT-POLICY.md`).
 - Do not reactivate the ruleset on `main` without explicit instruction. It is disabled in Phase 1.
 
 ## First step I want to take
