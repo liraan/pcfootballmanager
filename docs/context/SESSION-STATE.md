@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `72398d2` — "Create GitHub agent review report after aligning file naming convention"
+**Last commit verified:** `f3ec829` — "docs(adr): accept ADR-021 (referee non-physical), close ADR-020/021 in status tables"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -97,4 +97,4 @@ the rest of the bookmark in the same commit.
    violation to be prevented next time; if it changes, the incident was
    the trigger for a policy amendment.
 
-**Files touched this session (2026-10-29):** `docs/context/IDEAS.md` (added IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001), `docs/context/SESSION-STATE.md`.
+**Files touched this session (2026-10-29):** `docs/context/IDEAS.md` (added IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001); `docs/context/SESSION-STATE.md`; `docs/adr/021-referee-non-physical.md` (new, accepted); `docs/adr/019-match-engine-contract.md` (Superseded by ADR-021 D9 only); `STRUCTURE.md` (ADR status table, added 020/021); `modules/_index.md` (ADR status table, added 020/021); `docs/context/analysis/2026-10-29-18-18-review.md` (renamed from audit-full).
