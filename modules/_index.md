@@ -263,5 +263,7 @@ These are components that are referenced across modules but are not crates. They
 | [017](../docs/adr/017-roles-are-labels.md) | Roles are labels, not modifiers | 🟡 proposed | Role catalogue in L1-roster; the engine is blind to roles |
 | [018](../docs/adr/018-defer-crowd-media.md) | Defer crowd and media to v1.1 | ✅ accepted | Partially supersedes ADR-015: crowd and media ship in v1.1 |
 | [019](../docs/adr/019-match-engine-contract.md) | Match engine contract | ✅ accepted | Agent-first state in players, integer position, resolution as engine parameter, zone of influence as derived relation |
+| [020](../docs/adr/020-split-test-runner-from-demo.md) | Split the test runner from the demo tool | ✅ accepted | Split `pcfm-debug` into `pcfm-test-runner` (tests) and `pcfm-demo` (demo) |
+| [021](../docs/adr/021-referee-non-physical.md) | Referee is a non-physical perceptual agent | ✅ accepted | Supersedes ADR-019 D9: referee visible but not physical, perception drives decisions |
 
-**Open ADRs:** 017 (proposed). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015, 016, 018, 019 (15).
+**Open ADRs:** 017 (proposed). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015, 016, 018, 019, 020, 021 (17).

@@ -3,7 +3,7 @@
 **Status:** accepted
 **Date:** 2026-10-27
 **Supersedes:** none (clarifies, does not replace, ADR-013)
-**Superseded by:** —
+**Superseded by:** ADR-021 (D9 only)
 **Blocks:** positional match engine implementation; first L1 module (`L1-world/01-nation.md`)
 **Depends on:** ADR-012 (plugin contract), ADR-013 (LOD and local determinism)
 

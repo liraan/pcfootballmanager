@@ -42,12 +42,10 @@ the rest of the bookmark in the same commit.
    requires an L0 contract revision (new module or revision + ADR if it
    touches ADR-019). Do not implement from the sketch.
 
-0ter. **Amend ADR-019 D9** (referee non-physical). D9 currently says
-   "in-pitch, with `Position` and functional state", but the agreed
-   correction (2026-10-29) is: the referee is visible and follows play, but
-   is NOT a physical obstacle (no collision, no influence on outcomes).
+0ter. ~~**Amend ADR-019 D9**~~ — done (ADR-021 accepted, 2026-10-29).
+   D9 is superseded by ADR-021: the referee is visible and follows play,
+   but is NOT a physical obstacle (no collision, no influence on outcomes).
    Perception (what the referee sees or does not see) drives decisions.
-   Requires ADR-019 amendment or a new ADR.
 
 0quater. **Terminology: remove "module" from the repo** (2026-10-29
    decision). Four terms: pack (content), plugin (code), specification
