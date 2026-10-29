@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-27 (commit `3c4673b`)
+**Last updated:** 2026-10-29 (commit `f3fce11`)
 
 ---
 
@@ -30,11 +30,11 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 - **Status:** L0 (match engine) is complete and implemented. L1–L3 are planned.
 - **Performance target** (`00-foundations.md` §6): 60 fps UI, full season < 60 s on mid-range hardware. Not measured yet.
 
-## Where we are (commit `37a9315`, 2026-10-28)
+## Where we are (commit `f3fce11`, 2026-10-29)
 
 - **9 crates:** `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures`.
 - **103 tests**, clippy clean (`-D warnings`), `--check` 6/6, `--list` 6 scenarios, `--coverage` 2/26 (7%).
-- **16 ADRs accepted** (001-008, 012-016, 018, 019, 020), **1 proposed** (017, roles are labels), 1 template (000), 1 reading guide (`docs/PLUGINS-WORLDS-READING-GUIDE.md`, outside `docs/adr/`). **18 files** in `docs/adr/` total.
+- **17 ADRs accepted** (001-008, 012-016, 018, 019, 020, 021), **1 proposed** (017, roles are labels), 1 template (000), 1 reading guide (`docs/PLUGINS-WORLDS-READING-GUIDE.md`, outside `docs/adr/`). **19 files** in `docs/adr/` total.
 - **ADR-019 (match engine contract)** is `accepted`: agent-first, positional, N agents (players + referee). Deferred 1 (spatial iteration order), 2 (tick-cost pre-emption, selective foul), and 3 (possession representation) resolved. Deferred 4–9 open.
 - **11 L0 modules** ratified + implemented.
 - **`docs/context/`** holds briefing material (not normative): `REPO-SNAPSHOT.md`, `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`.
@@ -107,11 +107,67 @@ not only the ones that seem missing.
 4. **Do not invent anything.** If you don't know, ask. If you haven't read a file, say so.
 5. **If a test fails, stop.** Do not "fix" the test to make it pass.
 
+## Startup ritual — the exact commands to ask for
+
+At the start of every new chat, **before proposing anything**, ask the maintainer to run these commands in order and paste the output. Do not assume the state described in this prompt is still true: verify it.
+
+### 1. Repo alignment
+
+    git status --short
+    git pull --ff-only
+    git log --oneline -5
+    git rev-parse HEAD
+
+Check: working tree clean (or only known untracked files), HEAD matches `Last commit verified` in `SESSION-STATE.md` (semantics S1: it points to the commit *before* the bookmark update), no unexpected commits.
+
+### 2. Read the bookmark
+
+    sed -n '1,160p' docs/context/SESSION-STATE.md
+
+If >160 lines, split. Extract: last commit verified, next steps, open items, files touched.
+
+### 3. Read the latest analysis reports (continuity)
+
+    ls -t docs/context/analysis/*.md | head -3
+
+For each of the 3 most recent reports, read the executive summary and any finding that is still open. If a report says "Pass" but has unverified findings, do not trust the verdict: verify each finding with `grep`/`sed` before acting.
+
+### 4. Read the doctrine (non-negotiable)
+
+    sed -n '1,130p' modules/00-foundations.md
+
+At minimum: §1 (pillars), §2 (design pillars), §3 (Three Planes), §5 (banned things).
+
+### 5. Read the operating rules
+
+    sed -n '1,130p' docs/context/NEW-SESSION-PROMPT.md
+
+This very file — rules 0-12, codebase-specific rules, what NOT to do.
+
+### 6. Confirm the numbers
+
+    cargo test --workspace 2>/dev/null | grep "test result"
+    ls crates/ | grep pcfm | wc -l
+    for f in docs/adr/*.md; do sed -n '3p' "$f"; done | grep -c 'Status:\*\* accepted'
+
+Compare with `SESSION-STATE.md` and this prompt. If they diverge, the docs are stale — report it before proceeding.
+
+### 7. Report to the maintainer
+
+Say explicitly:
+- What you read (files, line ranges)
+- What you did **not** read (and why)
+- The state of the repo (aligned? clean? numbers?)
+- The next step according to `SESSION-STATE.md`
+- Any divergence between docs and reality
+
+**Do not propose a step before step 7 is done.** "I have not read X" is a valid state, not a failure.
+
 ## What NOT to do
 
 - Do not give me "lots of comments" scattered through the code: the codebase is already documented.
 - Do not assume that ADR-012, ADR-013, ADR-015, ADR-016, ADR-018, ADR-019 are "proposed". They are **accepted**.
-- Do not assume there are "17 ADRs". There are **18 files in `docs/adr/`**: 16 accepted (001-008, 012-016, 018, 019, 020), 1 proposed (017), 1 template (000). Plus 1 reading guide outside `docs/adr/`.
+- Do not assume there are "17 ADRs". There are **19 files in `docs/adr/`**: 17 accepted (001-008, 012-016, 018, 019, 020, 021), 1 proposed (017), 1 template (000). Plus 1 reading guide outside `docs/adr/`.
 - Do not paste a full file > 120 lines in chat: it truncates. Use `sed`/`awk` commands, or split into consecutive parts with no text in between.
 - Do not invent commit hashes or file contents you have not read.
 - Do not propose Python scripts (Python is not installed). Use Bash/Git Bash.
@@ -125,4 +181,99 @@ not only the ones that seem missing.
 **Whatever `docs/context/SESSION-STATE.md` says at step 0.** Read the bookmark
 before proposing anything. Do not assume a step is still open because it was
 open in a previous session: verify with `git log` and the bookmark.
+
+## Closing ritual — the exact commands to run before ending a session
+
+At the end of every session (or at a multi-step plan completion), **before declaring the session closed**, run these checks. If any is red, stop and fix before closing.
+
+### 1. Repo alignment and real verification
+
+    git status --short
+    git log --oneline -5
+    git rev-parse HEAD
+
+If there are local commits not pushed:
+
+    git push
+    git log --oneline -3
+    git status -sb
+
+Then the full quality gate (not just the pre-commit hook):
+
+    cargo build --release
+    cargo clippy --workspace --all-targets -- -D warnings
+    cargo test --workspace
+    cargo fmt --check
+    cargo run --release --bin pcfm-test-runner -- --check --seed 42
+
+If anything is red: **stop**. Do not declare the session closed. Fix first.
+
+### 2. Documentation coherence
+
+Compare the numbers across the files that claim them:
+
+    grep -n 'tests\|crates\|ADR' docs/context/SESSION-STATE.md | head -10
+    grep -n '^| 0' STRUCTURE.md | tail -25
+    grep -n '^| \[0' modules/_index.md | tail -25
+    grep -n 'test\|crate\|ADR' docs/context/NEW-SESSION-PROMPT.md | head -15
+
+All must agree. If they diverge, one is stale: fix it, and commit the fix in the same session.
+
+If you touched a file X (renamed it, changed its path, changed its content), verify that references to X are updated everywhere:
+
+    git diff --name-only HEAD~N..HEAD | while read f; do
+      base=$(basename "$f")
+      grep -rn "$base" --include='*.md' --include='*.rs' . | head -3
+    done
+
+(replace `N` with the number of commits in this session)
+
+### 3. Analysis of `docs/context/` from a fresh-chat perspective
+
+The test: **if tomorrow you opened a new chat, read only `NEW-SESSION-PROMPT.md` + `SESSION-STATE.md` + the last two reports in `analysis/`, would you have enough context to resume?**
+
+If the answer is no, the bookmark is insufficient. The bookmark is the memory of the project; if the memory is incomplete, the next session starts blind.
+
+Check explicitly:
+- Does `SESSION-STATE.md` say what the next step is? Or only what was done?
+- Does it list the open items, or only the closed ones?
+- Does `Files touched this session` include every file modified?
+- Are there sketches in `IDEAS.md` that the bookmark should point to but does not?
+- Are there ADRs in `proposed` or `deferred` state that the bookmark should surface?
+- Did `analysis/` receive a new report that the bookmark does not mention?
+
+If any answer is "no", update `SESSION-STATE.md` before closing. It is cheap now, expensive tomorrow.
+
+### 4. Bookmark update
+
+Update `SESSION-STATE.md`:
+
+- `Last commit verified`: the **last commit before this checkpoint** (semantics S1: it will look stale compared to HEAD; that is expected)
+- `Next steps`: ordered, with the current priority
+- `Files touched this session`: full list, dated
+- New open items from the session (verification of previous findings, decisions deferred, sketches added)
+
+Do not update `REPO-SNAPSHOT.md` unless its own premise says it is current: it is **not normative**, and its staleness is expected.
+
+### 5. Final report to the maintainer
+
+State explicitly:
+- What was done (one line per commit)
+- What was verified (real tool output, not claims)
+- What was **not** done (and why: blocked, deferred, out of scope)
+- The state of the repo (aligned, clean, quality gate green)
+- The next step for the next session (what `SESSION-STATE.md` says)
+
+If you have not run one of the checks in this ritual, say so. "I skipped X" is honest; "I ran X" when you did not is a lie.
+
+### 6. Commit and push
+
+The checkpoint commit is **one logical commit**:
+
+    git add docs/context/SESSION-STATE.md
+    git commit -m "docs(session-state): checkpoint after <what happened>"
+    git push
+    git status -sb
+
+`git status -sb` must show `## main...origin/main` with no `[ahead]` or `[behind]`. If it does, the session is not closed.
 ````
