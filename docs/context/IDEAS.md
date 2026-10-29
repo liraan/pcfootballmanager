@@ -96,6 +96,33 @@
   measurement, which today does not exist (`PROJECT-STATUS.md`:
   "Not yet measured"). Do not implement before the prerequisites above.
 
+### IDEA-PM-005 — Player footedness (strong foot / weak foot)
+- **Status:** sketch
+- **Category:** Player model (attributes) / Match engine (L0 action modifier)
+- **Source:** conversation 2026-10-29 (user)
+- **Idea:** each player has a footedness: a preferred (strong) foot and a
+  weak foot. Footedness modifies the quality/cost of actions resolved with
+  the weak foot (first touch, pass, shot) and can influence trajectory
+  preferences (e.g. a winger cutting inside to shoot with the strong foot).
+  Real-world datasets model this simply (preferred_foot: left/right/both);
+  FM-style games use two separate ratings, one per foot.
+- **Three Planes:** footedness is a stable identity trait (Plane A) and
+  highly observable (Plane B/C): unlike hidden traits, estimation error is
+  low. A simple, verifiable test case for the observation doctrine.
+- **Open questions:**
+  1. Model shape: two separate per-foot ratings (FM-style) vs a single
+     categorical field (left/right/both) plus one weak-foot rating — the
+     latter is more aligned with the minimalist philosophy of PCFM.
+  2. Which L0 actions read footedness (first touch, pass, shot, dribble
+     direction?) and how it modifies them: action cost, success range (see
+     IDEA-PM-002), or both.
+  3. Is "both" a real value (ambidextrous players) or just the top of a
+     weak-foot scale?
+- **Critical note:** L0 is complete and ratified; adding footedness is a
+  contract change — it requires a new module or a revision, and an ADR if it
+  touches the match engine contract (ADR-019). Do not implement from this
+  sketch.
+
 ### IDEA-RULE-001 — Contract for rule modules
 - **Status:** discussing
 - **Category:** Match engine (L0 rules)
