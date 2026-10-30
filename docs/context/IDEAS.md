@@ -1,6 +1,6 @@
 # Ideas — PCFM
 
-**Purpose:** a curated backlog of ideas that are not yet decisions. Unlike `PROJECT-IDEA-LOG.md` (historical record), this file holds ideas in motion: sketches, open questions, trade-offs.
+**Purpose:** a curated backlog of ideas that are not yet decisions. Unlike `PROJECT-IDEA-LOG.md` (archived historical record), this file holds ideas in motion: sketches, open questions, trade-offs.
 
 **Admission rule:** an idea enters only if (a) it has been discussed, (b) it is not already decided or placed elsewhere (ADR, module, `WORLD-MODEL.md`), (c) it is worth tracking. Rejected ideas are kept in a separate section, with motivation, to avoid re-discussing them.
 

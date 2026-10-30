@@ -34,14 +34,13 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 **For current numbers (crates, tests, ADR count), read `SESSION-STATE.md` and `STRUCTURE.md` §5. This section only gives the stable structure: it does not duplicate counts that change every session.**
 
 - **Crates:** 9 `pcfm-*` crates: `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures`.
-- **`docs/context/`** holds briefing material (not normative): `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`, `GITHUB-SESSION-PROMPT.md`.
+- **`docs/context/`** holds briefing material (not normative): `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`, `GITHUB-SESSION-PROMPT.md`.
 
 ## Why these files matter (the commands are in the Startup ritual)
 
 The **Startup ritual** below has the exact commands. This section explains **why** each file is read, so you know what you are looking for.
 
 - **`docs/context/SESSION-STATE.md`** — the bookmark. What the next step is, what was done, what is open. Read it first.
-- **`docs/context/PROJECT-IDEA-LOG.md`** — history and decisions, with sources. Why the project is the way it is.
 - **`docs/context/IDEAS.md`** — open and rejected ideas. What is **not** decided yet; do not implement from it.
 
 Then, when the task requires it:

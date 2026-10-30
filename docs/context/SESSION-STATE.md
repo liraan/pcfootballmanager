@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `0ab92c6` — "docs(prompt): startup reads IDEAS.md backlog (new step 4, renumber)"
+**Last commit verified:** `557e1d4` — "docs(session-state): add Open items section, migrate OI-1..OI-6, update Last commit verified"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -59,10 +59,11 @@ the rest of the bookmark in the same commit.
 |---|------|---------------|--------------|
 | OI-1 | **R-01: causa rimossa (1b) o osservata?** La decisione salvata (rimuovere `CauseTrace`+`Factor`) poggia su premesse incomplete: 7 leak (non 5), `primary_cause` ha 3 consumer reali, `05-match-events.md:117` richiede la cause trace. La tua posizione: "la dottrina è migliorabile". | Decisione di design sospesa: 1b vs causa osservata (motore, non resolver) vs rinvio | Leggere `05-match-events.md:64-68,117-160` e `10-ground-truth.md:96-111` per intero, poi scrivere ADR-023 come decisione (non come fix) |
 | OI-2 | **Nuovo audit `2026-10-30-20-24-review.md`** non tracciato: R-01..R-11 (R-07 `CODE_TOUR:128` "5 references" nuovo; gli altri R-04..R-11 già in step 2/4/6/14/15 o step 6) | Triagare: quali finding sono già coperti, quali nuovi step | Leggere i finding e mappare su step esistenti |
-| OI-3 | **`PROJECT-IDEA-LOG`: A (due file), B (uno), C (archiviare)?** | Decisione di policy: formato di SESSION-STATE dipende da questa scelta | Se C: verificare copertura §3.1-3.10 (fatta, tutte con commit) + migrare §2.2/§2.3/§5 in Open items |
 | OI-4 | **`README.md:148` cita `pcfm-gen`** come esistente, ma non è tra i 9 crate | Verificare se è nota intenzionale o stale | `grep -rn "pcfm-gen" --include="*.md" --include="*.rs" .` |
 | OI-5 | **`CHANGELOG-SIM:17-19,41` "(planned)" stale**: "No code exists yet", "defined in pcfm-match (planned)" | Deferito: si aggiorna al primo bump reale (step 14) | Aggiornare insieme al `SIM_VERSION` bump |
-| OI-6 | **`docs/performance.md` e `docs/save-security.md`** mancanti (dal §2.3 di `PROJECT-IDEA-LOG`) | Mai creati, non tracciati altrove; con (C) si perderebbero | Se C: migrare in Open items prima di archiviare |
+| OI-6 | **`docs/performance.md` e `docs/save-security.md`** mancanti (dal §2.3 di `PROJECT-IDEA-LOG`, ora archiviato) | Mai creati, non tracciati altrove | Decidere se e quando crearli (probabilmente pre-release, insieme a step 13) |
+| OI-7 | **Gap B: `ProjectionProfile` senza metodo di calcolo** (dal §2.2 di `PROJECT-IDEA-LOG`): bootstrap? Bayesiano? quantili empirici? Senza specifica, la banda è arbitraria | Mai tracciato altrove; con (C) si perderebbe | Decidere il metodo quando si apre `L2-scouting` |
+| OI-8 | **Gap C: `ScoutReport.DeclaredBias` senza formula** (dal §2.2): è solo un'etichetta o entra nel calcolo? | Mai tracciato altrove; con (C) si perderebbe | Decidere quando si apre `L2-scouting` |
 
 **Da fare (in dependency order):**
 
@@ -128,7 +129,9 @@ the rest of the bookmark in the same commit.
 | 13 | Installare `cargo-audit` e `cargo-deny` (o verificarne la disponibilità) e lanciarli sul workspace |
 | 16 | `ls -R archive data mods registry docs/calibration docs/legal 2>&1; git ls-files | wc -l; grep -rn "PLUGINS-WORLDS-READING-GUIDE\|PROJECT-STATUS" --include="*.md" . | head -20` — poi classificare vivo/orfano/alveare e proporre tagli |
 
-**Done (storico):** 1, 2, 6, 10bis, 10ter, 10quater, 0ter, 15 — commit hash in `git log --oneline`.
+**Done (storico):** 1, 2, 6, 10bis, 10ter, 10quater, 0ter, 15; OI-3 (C: PROJECT-IDEA-LOG archived) — commit hash in `git log --oneline`.
+
+**Archiviati:** `PROJECT-IDEA-LOG.md` → `archive/PROJECT-IDEA-LOG.md` (2026-10-30). Le decisioni durevoli sono in ADR; le minori nei commit message; le narrative storiche nel file archiviato. §2.2 (gap B, C) e §2.3 (2 documenti) sono migrati in OI-7, OI-8, OI-6.
 
 **Files touched this session (2026-10-29):** `docs/context/IDEAS.md` (added IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001; rejected IDEA-REJ-003, IDEA-REJ-004); `docs/context/SESSION-STATE.md`; `docs/adr/021-referee-non-physical.md` (new, accepted); `docs/adr/019-match-engine-contract.md` (Superseded by ADR-021 D9 only); `STRUCTURE.md` (ADR status table, added 020/021); `specs/_index.md` (ADR status table, added 020/021); `docs/context/analysis/2026-10-29-18-18-review.md` (renamed from audit-full); `docs/context/AGENT-POLICY.md` (audit-report push exception, §1 and §8); `docs/context/HERMES-AGENT-PROMPT.md` (new, audit agent contract); `docs/context/NEW-SESSION-PROMPT.md` (refreshed counts, startup + closing rituals, rule 13; closing ritual now requires presenting the Plan table in chat); `docs/adr/022-presentation-tui-first.md` (new, accepted); `docs/adr/005-qt-binding.md` (Amended by ADR-022); `STRUCTURE.md` + `specs/_index.md` (ADR 022 added, count 18). Audit workflow 2026-10-30: `GITHUB-SESSION-PROMPT.md` wrapper paste-ready + test plan + 3b ambiguities + comprehensive report + evidenza negativa (`55a932a`, `5fbaf34`, `c8f3291`); audit Copilot pubblicato (`943b317`, `2026-10-30-13-39-review.md`); R-01 Critical verificato e tracciato come step 14 🔴 (`9c937a0`); baseline C2 verde post-audit. B3 fix (`2178270`): literal echo template, sentinel was ambiguous in new sessions.
  🛑 hard-stop marker + E2 rewritten + Rule precedence trimmed (`5101f9d`).

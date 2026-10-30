@@ -31,7 +31,7 @@ This exception applies **only to `docs/context/`**. Everywhere else, the standar
 
 **Supporting material (not normative):**
 
-- `PROJECT-IDEA-LOG.md` — history, decisions, sources, what remains open.
+- `PROJECT-IDEA-LOG.md` — **archived** to `archive/PROJECT-IDEA-LOG.md` (historical record, frozen at 2026-10-27). Decisions now live in ADRs and `SESSION-STATE.md` Open items.
 - `IDEAS.md` — open and rejected ideas. Do not implement from it.
 
 **Subfolders:**
