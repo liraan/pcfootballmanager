@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-30 (commit after E3: after-closing default is track, not execute)
+**Last updated:** 2026-10-30 (E3 after-closing default is track; startup ritual reads full files via cat, not obsolete sed ranges)
 
 ---
 
@@ -109,9 +109,9 @@ Check: working tree clean (or only known untracked files), HEAD matches `Last co
 
 ### 2. Read the bookmark
 
-    sed -n '1,160p' docs/context/SESSION-STATE.md
+    cat docs/context/SESSION-STATE.md
 
-If >160 lines, split. Extract: last commit verified, next steps, open items, files touched.
+Extract: last commit verified, next steps, open items, files touched.
 
 ### 3. Read all analysis reports in `analysis/` (continuity)
 
@@ -121,13 +121,13 @@ For each report in `docs/context/analysis/` (not `analysis/archive/`), read the 
 
 ### 4. Read the doctrine (non-negotiable)
 
-    sed -n '1,130p' specs/00-foundations.md
+    cat specs/00-foundations.md
 
 At minimum: §1 (pillars), §2 (design pillars), §3 (Three Planes), §5 (banned things).
 
 ### 5. Read the operating rules
 
-    sed -n '1,130p' docs/context/NEW-SESSION-PROMPT.md
+    cat docs/context/NEW-SESSION-PROMPT.md
 
 This very file — operating rules (A1, A2, B1, B2, C1, C2, D1, D2, D3), rule precedence, the startup and closing rituals, what NOT to do.
 
