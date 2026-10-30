@@ -12,7 +12,7 @@ Review notes under `analysis/` are evaluative material, not source-of-truth repo
 This directory contains **functional working documents** (session prompts, policy, bookmark, analysis reports), not historical records. Unlike the rest of the repository:
 
 - Files here **can be removed, restructured, or rewritten** freely when their function has been served.
-- **Analysis reports** in `analysis/` are working documents. A report is **closed** when all its findings are either fixed, explicitly deferred in `SESSION-STATE.md`, or rejected with a reason. Closed reports are moved to `analysis/archive/` at the closing ritual (history preserved in git, active directory clean).
+- **Analysis reports** in `analysis/` are working documents. A report is **closed** when it has been **examined** and its findings are **entered in `SESSION-STATE.md`** — as steps to do, or as explicitly rejected/deferred items. Resolution is not required: the report is a transport for findings, and its function is served once the findings are in the plan. Closed reports are moved to `analysis/archive/` at the closing ritual (history preserved in git, active directory clean).
 - At the startup ritual, read **all reports in `analysis/`** (not `analysis/archive/`). No fixed count.
 
 This exception applies **only to `docs/context/`**. Everywhere else, the standard rules apply.
