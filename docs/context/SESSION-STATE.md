@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `c86ab8b` — "docs(prompt): rename sentinel to OUTPUT START/END, add E session lifecycle, mark rituals mandatory"
+**Last commit verified:** `fe31d5c` — "docs(context): create analysis/archive/ for closed audit reports"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -34,6 +34,9 @@ the rest of the bookmark in the same commit.
 | ✅    | Tabella "Prime azioni" per tutti gli step aperti |
 | ✅    | Step 3 T3: rename `modules/` → `specs/` (13 rename + 62 file con riferimenti aggiornati, commit `5e77d17`) |
 | ✅    | Doc-pass `NEW-SESSION-PROMPT.md`: 260→256 righe, B2 aggiornata + B3 "OUTPUT START/END", sezione E (session lifecycle), accorpamento First step, rimozione Performance target, dedup "Where we are" (6 commit, `00bd5ba`..`c86ab8b`) |
+| ✅    | Unificazione agent prompt: `GITHUB-SESSION-PROMPT.md` agent-agnostic, rimossi `GITHUB-AGENT-PROMPT.md` e `HERMES-AGENT-PROMPT.md` (`0a20a9d`, `0b941b9`) |
+| ✅    | Policy "functional directory" per `docs/context/` in `README.md` + `analysis/archive/` creata (`a2c02c1`, `fe31d5c`) |
+| ✅    | C2-bis "beyond baseline" + closing step invertiti (report dopo push) + startup step 3 legge tutti i report (`5365cef`) |
 | ⚫    | — (nessun bloccato) |
 
 **Da fare (in dependency order):**
@@ -86,4 +89,4 @@ the rest of the bookmark in the same commit.
 
 **Files touched this session (2026-10-29):** `docs/context/IDEAS.md` (added IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001; rejected IDEA-REJ-003, IDEA-REJ-004); `docs/context/SESSION-STATE.md`; `docs/adr/021-referee-non-physical.md` (new, accepted); `docs/adr/019-match-engine-contract.md` (Superseded by ADR-021 D9 only); `STRUCTURE.md` (ADR status table, added 020/021); `specs/_index.md` (ADR status table, added 020/021); `docs/context/analysis/2026-10-29-18-18-review.md` (renamed from audit-full); `docs/context/AGENT-POLICY.md` (audit-report push exception, §1 and §8); `docs/context/HERMES-AGENT-PROMPT.md` (new, audit agent contract); `docs/context/NEW-SESSION-PROMPT.md` (refreshed counts, startup + closing rituals, rule 13; closing ritual now requires presenting the Plan table in chat); `docs/adr/022-presentation-tui-first.md` (new, accepted); `docs/adr/005-qt-binding.md` (Amended by ADR-022); `STRUCTURE.md` + `specs/_index.md` (ADR 022 added, count 18).
 
-**Files touched this session (2026-10-30):** `docs/context/NEW-SESSION-PROMPT.md` (removed duplicate B1 bullet); `docs/context/SESSION-STATE.md` (step 13 cargo-audit; step 3 T3 done); `STRUCTURE.md` (Italian example → English); **rename `modules/` → `specs/`** with 62 files updated: `.github/*`, `crates/*` (Cargo.toml + src), `docs/*.md`, `docs/adr/*.md`, `docs/context/*` (except `analysis/` and `PROJECT-IDEA-LOG.md` body), `archive/README.md` (live refs only), `CHANGELOG-REGISTRY.md:19`, `specs/*` self-references; note in `PROJECT-IDEA-LOG.md` header; historical commands preserved in `archive/README.md:35-36` and `docs/MIGRATION-01-04.md:45`. Doc-pass on `NEW-SESSION-PROMPT.md` (6 commits `00bd5ba`..`c86ab8b`): B3 renamed to OUTPUT START/END, section E session lifecycle, First step merged into What remains, perf target removed, dedup Where we are.
+**Files touched this session (2026-10-30):** `docs/context/NEW-SESSION-PROMPT.md` (removed duplicate B1 bullet); `docs/context/SESSION-STATE.md` (step 13 cargo-audit; step 3 T3 done); `STRUCTURE.md` (Italian example → English); **rename `modules/` → `specs/`** with 62 files updated: `.github/*`, `crates/*` (Cargo.toml + src), `docs/*.md`, `docs/adr/*.md`, `docs/context/*` (except `analysis/` and `PROJECT-IDEA-LOG.md` body), `archive/README.md` (live refs only), `CHANGELOG-REGISTRY.md:19`, `specs/*` self-references; note in `PROJECT-IDEA-LOG.md` header; historical commands preserved in `archive/README.md:35-36` and `docs/MIGRATION-01-04.md:45`. Doc-pass on `NEW-SESSION-PROMPT.md` (6 commits `00bd5ba`..`c86ab8b`): B3 renamed to OUTPUT START/END, section E session lifecycle, First step merged into What remains, perf target removed, dedup Where we are. Agent prompt unification (`0a20a9d`..`fe31d5c`): new `GITHUB-SESSION-PROMPT.md`, removed `GITHUB-AGENT-PROMPT.md` + `HERMES-AGENT-PROMPT.md`, functional-directory policy in `README.md`, `analysis/archive/` created, `AGENT-POLICY.md` §8 and startup step 3 updated.
