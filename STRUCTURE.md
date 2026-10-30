@@ -196,7 +196,7 @@ pc-football-manager/
 └── data/                      # examples only, never real licensed data
 ```
 
-**File naming:** `NN-kebab-case-name.md`, two-digit prefix, no Italian, no version in the filename. `04-match-engine.md`, not `Modulo 04 — Motore Partita (rev 1.1).md`. The filename is stable; the revision lives in the frontmatter.
+**File naming:** `NN-kebab-case-name.md`, two-digit prefix, no Italian, no version in the filename. `04-match-engine.md`, not `Match Engine 04 (rev 1.1).md`. The filename is stable; the revision lives in the frontmatter.
 
 **Crate naming:** the crates in `crates/` use the `pcfm-` prefix. Current: `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-match`, `pcfm-stats`, `pcfm-testkit`, `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures`. Planned (post-v1.0): `pcfm-packs`, `pcfm-assets`, `pcfm-pack`. `pcfm-testkit` is the public test harness contract: it has **no dependency on any other `pcfm-*` crate**, so core modules, plugins, and tools can all implement `pcfm_testkit::Scenario` without coupling. The historical prefix `fmr-` (from the original "FMR project" name) is deprecated and must not be used in new files. Rust module paths follow the same convention with an underscore: `pcfm_core::rng`, `pcfm_match::simulate`, `pcfm_testkit::Scenario`, etc.
 
