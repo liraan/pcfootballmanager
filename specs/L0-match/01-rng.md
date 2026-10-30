@@ -147,4 +147,4 @@ If the RNG algorithm, seed derivation, or stream naming changes, `SIM_VERSION` i
 - [`00-overview.md`](00-overview.md) — L0 cell map
 - [`04-match-engine.md`](04-match-engine.md) — consumer
 - [`08-random-events.md`](08-random-events.md) — consumer
-- `../../docs/MIGRATION-01-04.md` — `SIM_VERSION` bump procedure *(planned — the file does not exist yet)*
+- `../../docs/MIGRATION-01-04.md` — `SIM_VERSION` bump procedure

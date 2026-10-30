@@ -83,7 +83,7 @@ pub fn migrate_save_if_needed(save: &mut MatchSave) -> Result<()>;
 - If `schema_version < CURRENT`, apply migrations in order
 - If `sim_version != CURRENT`, the save is **readable but not replayable**. The match result is shown as-is, but the user is warned that replay will differ.
 - Migration scripts live in `crates/pcfm-data/migrations/match/` *(planned — the `crates/` directory does not exist yet)*
-- The migration procedure (and the `SIM_VERSION` bump rules) is documented in `docs/MIGRATION-01-04.md` *(planned)* and in [`CHANGELOG-SIM.md`](../../CHANGELOG-SIM.md)
+- The migration procedure (and the `SIM_VERSION` bump rules) is documented in `docs/MIGRATION-01-04.md` and in [`CHANGELOG-SIM.md`](../../CHANGELOG-SIM.md)
 
 ### 2.4 Verification
 
