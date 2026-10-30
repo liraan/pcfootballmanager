@@ -76,7 +76,7 @@ Design notes that are not bugs but that the maintainer should know about. Exampl
 
 Write to: `docs/context/analysis/YYYY-MM-DD-HH-MM-review.md` (ISO date, UTC).
 
-Structure: a header with `title`, `version`, `status`, `last_updated`, `auditor`, `conforms_to`; then sections 1-8 as in the existing reports (see `docs/context/analysis/2026-10-29-18-18-review.md` for the exact structure). Number every finding `R-01`, `R-02`, … so the maintainer can verify each one with `grep`/`sed`.
+Structure: a header with `title`, `version`, `status`, `last_updated`, `auditor`, `conforms_to`; then sections 1-8 as in the existing reports (see `docs/context/analysis/archive/2026-10-29-18-18-review.md` for the exact structure). Number every finding `R-01`, `R-02`, … so the maintainer can verify each one with `grep`/`sed`.
 
 ## Rules (non-negotiable)
 
