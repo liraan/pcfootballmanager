@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `a391b85` — "docs(adr-003): note ADR-020 rename (pcfm-debug -> pcfm-test-runner, pcfm-demo split)"
+**Last commit verified:** `6a123d8` — "docs(prompt): add D3 bee doctrine (no structure without concrete content)"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -46,6 +46,7 @@ the rest of the bookmark in the same commit.
 | ✅    | ADR-003: nota rename `pcfm-debug` → `pcfm-test-runner` + split `pcfm-demo`, corpo ADR intatto (`a391b85`) |
 | ✅    | R-01 verificato end-to-end: `Factor`→`cause_trace`→`chain_hash`→save. Decisione: rimuovere `CauseTrace`+`Factor` (1b), `risk_modifier`, `temperament`/`injury_risk_modifier` di `DuelOutcome`; `SIM_VERSION` bump |
 | 🔵    | Fase B incompleta: fix `CHANGELOG-SIM.md` (19/41/47/107-109), `README.md` (9/156), `STRUCTURE.md` §5, `specs/L0-match/*` conforms_to v2.0, IDEA-PM-005, SESSION-STATE (HERMES, 250 righe) |
+| ✅    | D3 Bee doctrine in `NEW-SESSION-PROMPT.md` §D (struttura solo se contenuto concreto oggi; altrimenti `IDEAS.md`, non ADR/tipo/livello) (`6a123d8`) |
 | ✅    | Discussioni rinviate per dottrina ape: tassonomia valori (diretto/inferito/costrutto), Plane C, livello interpretazione (già in IDEA-PRES-001+INFRA-006); niente ADR finché manca contenuto |
 | ⚫    | — (nessun bloccato) |
 
