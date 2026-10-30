@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-30 (commit `d4ca36a`)
+**Last updated:** 2026-10-30 (commit `f79dc8a`)
 
 ---
 
@@ -70,7 +70,7 @@ ordered next steps, the current priority, and the files touched.
 **B. Editing**
 - **B1 — Tools and pitfalls.** Use `sed`/`awk` for targeted edits. Do not paste a full file >120 lines in chat (it truncates); give commands, one section at a time. A `git diff` >80 lines truncates: use `git diff | head -80` + `git diff | tail -60`. Delimiters: use `@` or `~`; if the text contains apostrophes, use a heredoc (`<< 'EOF'`). BRE pitfalls: `\(` `\)` are groups, use `[(]` `[)]`; a pattern with `**` fails. For multi-line replacements with backticks/em-dash/arrows, use a `c\`/`i\`/`a\` command via quoted heredoc, not a one-liner. **Heredoc limit (tested 2026-10-29): the problem is the code fence (` ``` `), not the length.** A 44-line heredoc without fences works; a 12-line heredoc with a fence breaks. Use 4-space indentation for code blocks inside heredocs, never ` ``` `. Long heredocs are fine as long as they contain no fences. To verify an anchor with invisible characters, use `sed -n 'Np' file | cat -A`. Mojibake in output is a *display* artefact: confirm with `grep -c`. Before `c`/`a`/`i`, verify the anchor with `sed -n 'Np'`; never trust line numbers from a previous state. After `git checkout --`, re-run ALL seds, not only the ones that seem missing.
 - **B2 — Verify after every edit.** `sed -n 'Np' file` to confirm. `git diff file` before `git add`. If the diff shows unrelated changes, stop. If between the sentinels there is no content, the command succeeded but was silent. If the content is not what was expected, stop and report it.
-- **B3 — Output sentinel.** Every command must be wrapped in the sentinel: blank line, `► PCFM START`, output, `► PCFM END`, blank line. A command without sentinel is a violation.
+- **B3 — Output sentinel.** Every command must be wrapped in the sentinel: blank line, `► OUTPUT START` (bold via ANSI in terminal), output, `► OUTPUT END` (bold via ANSI), blank line. Bold is lost on copy/paste to chat: expected, not a bug. A command without sentinel is a violation.
 
 **C. Git and quality**
 
@@ -82,13 +82,18 @@ ordered next steps, the current priority, and the files touched.
 - **D1 — Honesty and ideas.** If you have not read a file, say so. Do not invent numbers, commit hashes, or file contents. "I don't know" > invention. New ideas go to `docs/context/IDEAS.md` (status `sketch`, with prerequisites and open questions) **before** discussion, not after. Do not implement from an idea until it has an ADR (if it touches doctrine) or a step in `SESSION-STATE.md` (if it is a task).
 - **D2 — Doctrine and codebase.** No `unwrap`/`expect`/`panic!` in simulation paths. No `HashMap` in simulation paths. No `unsafe` outside `pcfm-bridge` (future). `pcfm-hidden` contains Plane A: no public fields, not `Serialize`, custom `Debug`; the only door is `resolve_*` + `drain_observations`; never add getters on latent values. `pcfm-testkit` has no `pcfm-*` dependencies. The simulation model is a prototype: do not "optimise" without an ADR and a `SIM_VERSION` bump. The doctrine wins: if a change contradicts `00-foundations`, a doctrine ADR is required. `docs/adr/` contains only ADRs.
 
+**E. Session lifecycle**
+
+- **E1 — Startup ritual mandatory.** At the start of every new session, before proposing anything, execute the Startup ritual. Not optional. If a step is impossible (e.g. no network for `git pull`), report the failure and proceed with what is possible. Never invent output.
+- **E2 — Closing ritual mandatory, with approval.** Before executing the Closing ritual, ask the maintainer for explicit approval ("shall I close?"). Execute only after confirmation. If the maintainer has already requested it explicitly ("close", "checkpoint", "end session"), that is the approval.
+
 **Rule precedence**
 
 - **D1 (honesty) wins over everything.** If you have not read a file, say so — even if B1 suggests to proceed.
 - **C2 (quality) wins over speed (A1/B2).** If the quality gate is red: stop. Do not close, do not push, do not "fix later".
 - **D2 (doctrine) wins over convenience.** If a change contradicts `00-foundations`, an ADR is required — even if it is "only one line".
 
-## Startup ritual — the exact commands to ask for
+## Startup ritual (mandatory — see E1)
 
 At the start of every new chat, **before proposing anything**, ask the maintainer to run these commands in order and paste the output. Do not assume the state described in this prompt is still true: verify it.
 
@@ -153,7 +158,7 @@ Say explicitly:
 - Do not assume CI exists: there is no `.github/workflows/`. Clippy/test/build/fmt/check are **manual**, and must be run after every change (the pre-commit hook helps for Rust).
 - Do not reactivate the ruleset on `main` without explicit instruction. It is disabled in Phase 1.
 
-## Closing ritual — the exact commands to run before ending a session
+## Closing ritual (mandatory — see E2)
 
 At the end of every session (or at a multi-step plan completion), **before declaring the session closed**, run these checks. If any is red, stop and fix before closing.
 
