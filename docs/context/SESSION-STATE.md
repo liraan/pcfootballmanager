@@ -46,6 +46,7 @@ the rest of the bookmark in the same commit.
 
 | Pr. | #  | Cosa                    | Dipende da                   |
 |-----|----|-------------------------|------------------------------|
+| 🔴  | 14 | **R-01 Critical**: latenti Plane A in `Factor.value` → eventi Plane B → save (ADR-023 richiesto) | — |
 | 🟡  | 12 | TUI demo (IDEA-INFRA-006): ADR breve + codice | — |
 | 🟡  | 2  | Fix ADR-003             | —                            |
 | 🟡  | 3  | Terminologia (T1+T2, T3 done) | —                        |
@@ -69,6 +70,10 @@ the rest of the bookmark in the same commit.
 
 **4. Audit 2026-10-29** — T1: sanitize `--html` in `pcfm-demo/src/render.rs:159`. T2: align `CHANGELOG-SIM.md` lines 19/41 (`pcfm-core` → `pcfm-match`). T3 (note, not a task): `pick_players` correlation in `state.rs:222-226`. Fourth finding (`pcfm-debug`) is item 2.
 
+
+**14. R-01 Critical — Plane A leak** (audit 2026-10-30-13-39, verificato sui file:line). Latenti `finishing`/`passing`/`injury_proneness`/`attacker_score` scritti in `Factor.value` (`pcfm-hidden/src/lib.rs:140-145,182,213,262`), `Factor` è `Serialize` (`pcfm-model/src/cause.rs:11-16`), propagato in `MatchEvent.cause_trace` (`pcfm-stats/src/event.rs:109`), emesso (`pcfm-match/src/state.rs:118-120,141-143`), serializzato nel save (`save.rs:131`). Viola `00-foundations` §3/§5, `05-match-events.md:21-24,117`, `10-ground-truth.md:96-111`. **Serve ADR-023** (politica delle cause senza disclosure) prima di qualsiasi fix. Test mancanti: nessun test serializza un save e verifica l assenza di latenti.
+
+**Altri finding audit 2026-10-30** (dopo R-01, da verificare e triagare): R-02 attempt/outcome assenti (già noto); R-03 save contract (già noto); R-04 doc drift (`STRUCTURE.md` 17 ADR vs 20 file, `CHANGELOG-SIM.md` dice `pcfm-core`) → confluisce in step 6; R-05 stream senza `match_id` (`state.rs:57-63`); R-06 `pick_players` (già T3 noto); R-07 panic handler non isolati (`event_bus.rs:81-85,126-140`); R-08 `expect` in simulazione (`state.rs:57-63`, `hidden/lib.rs:68-71`); R-09 `MatchContext` senza bus/modifiers (già noto); R-10 `GroundTruth` getter/Debug (`hidden/lib.rs:84-91,351-356`).
 **5. Review sketch 2026-10-29** — IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001. Decide: ADR, task, or stays sketch. Depends on `L2-tactics`, runtime input channel, `L2-staff` (none exist).
 
 **6. Doc consistency check** — finding dai report 2026-10-28 (da chiudere):
@@ -81,6 +86,7 @@ the rest of the bookmark in the same commit.
 
 | #  | Prima azione |
 |----|--------------|
+| 14 | Scrivere ADR-023 (politica cause senza disclosure); prima leggere `pcfm-hidden/src/lib.rs:130-270`, `pcfm-model/src/cause.rs`, `05-match-events.md:21-24` |
 | 2  | Leggere ADR-003 §Exception: `sed -n '204,235p' docs/adr/003-plane-a-enforcement.md` |
 | 3  | Leggere `PLUGIN_DEVELOPER_GUIDE.md` §1: `sed -n '13,40p'` |
 | 4  | Leggere `render.rs:150-170` e `CHANGELOG-SIM.md:19,41` |
