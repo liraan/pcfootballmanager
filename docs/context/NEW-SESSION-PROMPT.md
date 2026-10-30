@@ -133,19 +133,25 @@ Extract: sections 1-4 of the Bookmark contract (§F above).
 
 For each report in `docs/context/analysis/` (not `analysis/archive/`), read the executive summary and any finding that is still open. If a report says "Pass" but has unverified findings, do not trust the verdict: verify each finding with `grep`/`sed` before acting.
 
-### 4. Read the doctrine (non-negotiable)
+### 4. Read the ideas backlog (what is not decided yet)
+
+    grep -nE "^### IDEA-|^- \*\*Status:\*\*" docs/context/IDEAS.md
+
+Read the ID, title, and status of every idea. Do not implement from `IDEAS.md`. The purpose is to know what has already been thought of (and rejected), so the session does not re-propose it or reopen a REJ.
+
+### 5. Read the doctrine (non-negotiable)
 
     cat specs/00-foundations.md
 
 At minimum: §1 (pillars), §2 (design pillars), §3 (Three Planes), §5 (banned things).
 
-### 5. Read the operating rules
+### 6. Read the operating rules
 
     cat docs/context/NEW-SESSION-PROMPT.md
 
 This very file — operating rules (A1, A2, B1, B2, C1, C2, D1, D2, D3), rule precedence, the startup and closing rituals, what NOT to do.
 
-### 6. Confirm the numbers
+### 7. Confirm the numbers
 
     cargo test --workspace 2>/dev/null | grep "test result"
     ls crates/ | grep pcfm | wc -l
@@ -153,7 +159,7 @@ This very file — operating rules (A1, A2, B1, B2, C1, C2, D1, D2, D3), rule pr
 
 Compare with `SESSION-STATE.md` and this prompt. If they diverge, the docs are stale — report it before proceeding.
 
-### 7. Report to the maintainer
+### 8. Report to the maintainer
 
 Say explicitly:
 - What you read (files, line ranges)
