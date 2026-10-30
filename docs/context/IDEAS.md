@@ -546,6 +546,16 @@
 
 ---
 
+### IDEA-DOC-001 — Maturity statement in README
+- **Status:** sketch
+- **Category:** Documentation
+- **Source:** audit report 2026-10-28-09-42, finding #6 (third-pass review)
+- **Idea:** add a short "current maturity" block to `README.md` and `PROJECT-STATUS.md`, separating four status dimensions that today are mixed in prose: doctrine status, implementation status, ADR status, current test status. Goal: prevent a reader (human or AI) from inferring a higher maturity than the repo actually supports.
+- **Open questions:** where exactly (top of README, or a dedicated `docs/MATURITY.md`); whether it is generated or hand-maintained; how to keep it from going stale (it is exactly the failure mode it is meant to prevent).
+- **Critical note:** this is a documentation-hygiene idea, not a code change. Do not implement without an ADR only if it changes the doctrine; otherwise it is a doc task to schedule in `SESSION-STATE.md`.
+
+---
+
 ## Rejected ideas (for traceability)
 
 ### IDEA-REJ-001 — Drones over the pitch

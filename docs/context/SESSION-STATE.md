@@ -68,6 +68,12 @@ the rest of the bookmark in the same commit.
 
 **5. Review sketch 2026-10-29** — IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001. Decide: ADR, task, or stays sketch. Depends on `L2-tactics`, runtime input channel, `L2-staff` (none exist).
 
+**6. Doc consistency check** — finding dai report 2026-10-28 (da chiudere):
+- **F1** `crates/pcfm-test-runner/Cargo.toml:10`: `documentation = ".../docs/MODULE_DEVELOPER_GUIDE.md"` → `.../docs/PLUGIN_DEVELOPER_GUIDE.md` (file inesistente, verificato).
+- **F2** `README.md:9` badge tests `107` → `103` (verificato: 103 reali); `README.md:156` ADR range `012–020` → `012–022`.
+- **F6** Aggiungere in `README.md` una "maturity statement" (doctrine / implementation / ADR / test status), come chiesto dal report 09-42.
+- **F3/F5/F7** narrativi: F7 → coperto da D1 esteso; F5 → "Do not assume CI exists"; F3 → backlog in `IDEAS.md` (IDEA-DOC-001).
+
 **Prime azioni (per step):**
 
 | #  | Prima azione |
@@ -76,7 +82,7 @@ the rest of the bookmark in the same commit.
 | 3  | Leggere `PLUGIN_DEVELOPER_GUIDE.md` §1: `sed -n '13,40p'` |
 | 4  | Leggere `render.rs:150-170` e `CHANGELOG-SIM.md:19,41` |
 | 5  | Leggere i tre sketch in `IDEAS.md` (TACT-001, INFRA-007, STAFF-001) |
-| 6  | Da definire in sessione: il riferimento "grep + classification" non è in nessun file |
+| 6  | Leggere `crates/pcfm-test-runner/Cargo.toml:10`, `README.md:9,156` (F1, F2) e decidere dove inserire la maturity statement (F6) |
 | 7  | Decidere da quale file parte la cascade (candidato: `README.md`) |
 | 8  | Rileggere ADR-019 §Deferred, decidere quali dei 4-9 chiudere (3 già resolved) |
 | 9  | Leggere ADR-017, decidere: ratificare o rinviare |
