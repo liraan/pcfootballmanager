@@ -55,8 +55,10 @@ Then, when the task requires it:
 ## What remains to be done
 
 **The live plan is in `docs/context/SESSION-STATE.md` §"Next steps".** Do not
-maintain a second list here: it diverges. Read the bookmark for the ordered
-next steps, the current priority, and the files touched.
+maintain a second list here: it diverges. **Read the bookmark before proposing
+anything.** Do not assume a step is still open because it was open in a
+previous session: verify with `git log` and the bookmark. Read it for the
+ordered next steps, the current priority, and the files touched.
 
 ## Operating rules (important — we established them together)
 
@@ -150,12 +152,6 @@ Say explicitly:
 - Do not propose Python scripts (Python is not installed). Use Bash/Git Bash.
 - Do not assume CI exists: there is no `.github/workflows/`. Clippy/test/build/fmt/check are **manual**, and must be run after every change (the pre-commit hook helps for Rust).
 - Do not reactivate the ruleset on `main` without explicit instruction. It is disabled in Phase 1.
-
-## First step I want to take
-
-**Whatever `docs/context/SESSION-STATE.md` says at step 0.** Read the bookmark
-before proposing anything. Do not assume a step is still open because it was
-open in a previous session: verify with `git log` and the bookmark.
 
 ## Closing ritual — the exact commands to run before ending a session
 
