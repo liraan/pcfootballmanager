@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `2d6339b` — "docs(prompt): add E3 after-closing rule (default track, not execute; 3 exceptions)"
+**Last commit verified:** `0ab92c6` — "docs(prompt): startup reads IDEAS.md backlog (new step 4, renumber)"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -52,6 +52,17 @@ the rest of the bookmark in the same commit.
 | ✅    | Step 16 tracciato: censimento repo (file orfani, cartelle vuote, D3) (`da0c1d7`) |
 | ✅    | E3 in `NEW-SESSION-PROMPT.md` §E: dopo il closing il default è "traccia, non esegui"; 3 eccezioni (bookmark incoerente, C2 rosso, richiesta esplicita) (`2d6339b`) |
 | ⚫    | — (nessun bloccato) |
+
+**Open items (what is not decided or verified yet):**
+
+| # | Cosa | Perché aperto | Prima azione |
+|---|------|---------------|--------------|
+| OI-1 | **R-01: causa rimossa (1b) o osservata?** La decisione salvata (rimuovere `CauseTrace`+`Factor`) poggia su premesse incomplete: 7 leak (non 5), `primary_cause` ha 3 consumer reali, `05-match-events.md:117` richiede la cause trace. La tua posizione: "la dottrina è migliorabile". | Decisione di design sospesa: 1b vs causa osservata (motore, non resolver) vs rinvio | Leggere `05-match-events.md:64-68,117-160` e `10-ground-truth.md:96-111` per intero, poi scrivere ADR-023 come decisione (non come fix) |
+| OI-2 | **Nuovo audit `2026-10-30-20-24-review.md`** non tracciato: R-01..R-11 (R-07 `CODE_TOUR:128` "5 references" nuovo; gli altri R-04..R-11 già in step 2/4/6/14/15 o step 6) | Triagare: quali finding sono già coperti, quali nuovi step | Leggere i finding e mappare su step esistenti |
+| OI-3 | **`PROJECT-IDEA-LOG`: A (due file), B (uno), C (archiviare)?** | Decisione di policy: formato di SESSION-STATE dipende da questa scelta | Se C: verificare copertura §3.1-3.10 (fatta, tutte con commit) + migrare §2.2/§2.3/§5 in Open items |
+| OI-4 | **`README.md:148` cita `pcfm-gen`** come esistente, ma non è tra i 9 crate | Verificare se è nota intenzionale o stale | `grep -rn "pcfm-gen" --include="*.md" --include="*.rs" .` |
+| OI-5 | **`CHANGELOG-SIM:17-19,41` "(planned)" stale**: "No code exists yet", "defined in pcfm-match (planned)" | Deferito: si aggiorna al primo bump reale (step 14) | Aggiornare insieme al `SIM_VERSION` bump |
+| OI-6 | **`docs/performance.md` e `docs/save-security.md`** mancanti (dal §2.3 di `PROJECT-IDEA-LOG`) | Mai creati, non tracciati altrove; con (C) si perderebbero | Se C: migrare in Open items prima di archiviare |
 
 **Da fare (in dependency order):**
 
