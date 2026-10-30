@@ -91,6 +91,20 @@ ordered next steps, the current priority, and the files touched.
 - **E1 — Startup ritual mandatory.** At the start of every new session, before proposing anything, execute the Startup ritual. Not optional. If a step is impossible (e.g. no network for `git pull`), report the failure and proceed with what is possible. Never invent output.
 - **E2 — Closing ritual requires explicit approval.** The closing ritual is never automatic. When the work seems complete, pause (A2) and ask: *"Shall I proceed with the closing ritual?"*, listing what it will do. Execute only after an explicit "riprendi" or equivalent. Silence, an "ok" to an unrelated question, or the natural end of a task are **not** approval. An explicit request to close ("close", "checkpoint") still requires the pause and the confirmation.
 - **E3 — After the closing, the default is "track", not "execute".** Once the bookmark commit is made, the session is closed. Any new work that emerges afterwards is added to `SESSION-STATE.md` as a step (with its first concrete action) **and is not executed in the same session**. Three exceptions, and only three: (a) the bookmark is *internally inconsistent* (e.g. `Last commit verified` or `Files touched` does not match reality) — a broken bookmark is worse than an incomplete one; (b) a quality-gate failure (C2) is discovered; (c) the maintainer explicitly asks for the work to be done now. "It would be useful for the next session" is **not** an exception: that is precisely what the step list is for. The test is: *if this is not done now, can the next session reconstruct the state from the repo?* If yes, track it. If no, do it. This rule exists because every reopening after the closing makes the bookmark less trustworthy, and the bookmark is the memory of the project.
+- **E4 — Bookmark update.** The bookmark is updated in three cases: (a) a significant step is closed; (b) before a push (the bookmark update is the last commit before the push); (c) the context limit approaches. In all three: write `SESSION-STATE.md` complete according to the Bookmark contract, commit, report. In emergency mode (c), no new work starts: the session closes, the next session resumes from a coherent bookmark.
+- **E5 — Ideas from pause.** On "riprendi" after a pause (A2), if ideas emerged during the pause, the **first command** writes them to the right place before any agreed work resumes: design ideas to `IDEAS.md` (status `sketch`, with prerequisites and open questions); operational rules to this file; project decisions or open items to `SESSION-STATE.md` Open items. E5 is the operational trigger of D1; D1 remains the principle.
+
+**F. Bookmark contract**
+
+`SESSION-STATE.md` has a fixed structure. Sections, in this order:
+
+1. **Last commit verified** (S1 semantics: the commit before the bookmark update).
+2. **Open items** — decisions deferred, pending verifications, ideas in flight. Each entry: what, why open, first action to close it. Open items are not the Plan: they are what is *not decided*, not what *will be done*.
+3. **Plan** — ordered steps with priority. Each step: what, dependency, first concrete action (the command to run, the file to read, the question to ask). A step without a first action is a step the next session will skip.
+4. **Files touched this session** (dated).
+5. **Done (storico)** — closed items, with commit ranges.
+
+The startup ritual extracts §1–§4. The closing ritual updates all five. Open items and Plan are distinct: Plan = what will be done; Open items = what is not yet decided or verified.
 
 **Rule precedence:** the hard stops (D1, D2, C2) win over everything else. D1 (honesty) first. In any other conflict, ask the maintainer.
 
@@ -111,7 +125,7 @@ Check: working tree clean (or only known untracked files), HEAD matches `Last co
 
     cat docs/context/SESSION-STATE.md
 
-Extract: last commit verified, next steps, open items, files touched.
+Extract: sections 1-4 of the Bookmark contract (§F above).
 
 ### 3. Read all analysis reports in `analysis/` (continuity)
 
@@ -217,13 +231,7 @@ If any answer is "no", update `SESSION-STATE.md` before closing. It is cheap now
 
 ### 4. Bookmark update
 
-Update `SESSION-STATE.md`:
-
-- `Last commit verified`: the **last commit before this checkpoint** (semantics S1: it will look stale compared to HEAD; that is expected)
-- `Next steps`: ordered, with the current priority, **and the first concrete action for each** (the command to run, the file to read, the question to ask). A step without a first action is a step that the next session will skip or re-derive.
-- `Files touched this session`: full list, dated
-- New open items from the session (verification of previous findings, decisions deferred, sketches added)
-
+Update all five sections of the Bookmark contract (§F above). In particular: `Last commit verified` (S1 semantics), Open items (new verifications, decisions deferred, ideas), Plan (next steps, each with first concrete action), Files touched this session (dated), Done (closed items, commit ranges).
 
 ### 5. Commit and push (before the report)
 
