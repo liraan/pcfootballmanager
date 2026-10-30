@@ -45,7 +45,7 @@ the rest of the bookmark in the same commit.
 | ✅    | Fase A cleanup repo: `REPO-SNAPSHOT.md` rimosso, 15 riferimenti vivi corretti, `PROJECT-IDEA-LOG.md` §6 tagliato + §5 disclaimer (`e22d9f3`) |
 | ✅    | ADR-003: nota rename `pcfm-debug` → `pcfm-test-runner` + split `pcfm-demo`, corpo ADR intatto (`a391b85`) |
 | ✅    | R-01 verificato end-to-end: `Factor`→`cause_trace`→`chain_hash`→save. Decisione: rimuovere `CauseTrace`+`Factor` (1b), `risk_modifier`, `temperament`/`injury_risk_modifier` di `DuelOutcome`; `SIM_VERSION` bump |
-| 🔵    | Fase B incompleta: fix `CHANGELOG-SIM.md` (19/41/47/107-109), `README.md` (9/156), `STRUCTURE.md` §5, `specs/L0-match/*` conforms_to v2.0, IDEA-PM-005, SESSION-STATE (HERMES, 250 righe) |
+| 🔵    | Fase B incompleta: fix `CHANGELOG-SIM.md` (19/41/47/107-109), `README.md` (9/156), `STRUCTURE.md` §5, `specs/L0-match/*` conforms_to v2.0, IDEA-PM-005 |
 | ✅    | D3 Bee doctrine in `NEW-SESSION-PROMPT.md` §D (struttura solo se contenuto concreto oggi; altrimenti `IDEAS.md`, non ADR/tipo/livello) (`6a123d8`) |
 | ✅    | Discussioni rinviate per dottrina ape: tassonomia valori (diretto/inferito/costrutto), Plane C, livello interpretazione (già in IDEA-PRES-001+INFRA-006); niente ADR finché manca contenuto |
 | ✅    | Step 14 espanso: decisioni R-01, opzione C resolver, forma test anti-leak, fuori scope (`73f7ad1`) |
@@ -70,7 +70,7 @@ the rest of the bookmark in the same commit.
 | ⬜  | 9  | Ratify ADR-017          | —                            |
 | ⬜  | 10 | `L1-world/01-nation`    | —                            |
 | ⬜  | 13 | `cargo-audit`/`cargo-deny` pre-release | — |
-| 🔴  | 15 | **Fase B cleanup** (prima della prossima sessione): `CHANGELOG-SIM.md` 19/41 (`pcfm-core`→`pcfm-match`), 107-109 (`modules/`→`specs/`), 47 (MIGRATION esiste); `README.md` 9 (107→103), 156 (012-020→012-022); `STRUCTURE.md` §5 (20 file, 18 accepted); `specs/L0-match/*` (10 file, v1.1→v2.0); IDEA-PM-005 (togliere "Plane A"); SESSION-STATE (togliere HERMES, 256→250); NEW-SESSION-PROMPT (verificare riga closing su REPO-SNAPSHOT) | — |
+| 🔴  | 15 | **Fase B cleanup** (prima della prossima sessione): `CHANGELOG-SIM.md` 19/41 (`pcfm-core`→`pcfm-match`), 107-109 (`modules/`→`specs/`), 47 (MIGRATION esiste); `README.md` 9 (107→103), 156 (012-020→012-022); `STRUCTURE.md` §5 (20 file, 18 accepted); `specs/L0-match/*` (10 file, v1.1→v2.0); IDEA-PM-005 (togliere "Plane A"); NEW-SESSION-PROMPT (verificare riga closing su REPO-SNAPSHOT) | — |
 | 🟡  | 16 | **Censimento repo (igiene documentale, D3)**: verificare file orfani e cartelle vuote fuori da `docs/context/`. Sospetti: `docs/PLUGINS-WORLDS-READING-GUIDE.md` (mai citato?), `PROJECT-STATUS.md` root (README lo dice "planned"), `archive/` `data/` `mods/` `registry/` `docs/calibration/` `docs/legal/` (solo `.gitkeep`?). Nessun rischio sicurezza: urgenza 🟡, ma da fare prima che qualcuno ci costruisca sopra | — |
 
 **Dettagli (solo dove servono):**
