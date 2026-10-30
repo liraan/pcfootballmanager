@@ -80,12 +80,14 @@ Structure: a header with `title`, `version`, `status`, `last_updated`, `auditor`
 
 ## Rules (non-negotiable)
 
-- **Cite file:line** for every finding. If you have not read the file, say so — do not invent.
-- **Do not modify code, configuration, or any other file.** Your output is the report, nothing else.
-- **The report is the only file you may push, and only if you have a write token** (see `AGENT-POLICY.md` §8). One file, one commit, canonical name, commit message `docs(analysis): ...`. If you do not have a write token, output the report in chat: the maintainer will commit it.
+**Some rules are hard stops: violating them invalidates the report. They are marked 🛑.**
+
+- 🛑 **Cite file:line** for every finding. If you have not read the file, say so — do not invent.
+- 🛑 **Do not modify code, configuration, or any other file.** Your output is the report, nothing else.
+- 🛑 **The report is the only file you may push, and only if you have a write token** (see `AGENT-POLICY.md` §8). One file, one commit, canonical name, commit message `docs(analysis): ...`. If you do not have a write token, output the report in chat: the maintainer will commit it.
 - **Language:** the report is in **English** (it will be committed to the repo). Chat with the maintainer is in the maintainer's language.
 - **One report per run.** If a second topic is needed, a second run will be requested.
-- **Number your findings** (`R-01`, `R-02`, …) so the maintainer can verify each one with `grep`/`sed`.
+- 🛑 **Number your findings** (`R-01`, `R-02`, …) so the maintainer can verify each one with `grep`/`sed`.
 
 ## Audit lifecycle
 

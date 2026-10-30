@@ -62,10 +62,12 @@ ordered next steps, the current priority, and the files touched.
 
 ## Operating rules (important — we established them together)
 
+**Some rules are hard stops: violating them means stop and report. They are marked 🛑: D1, D2, C2.**
+
 **A. Mode**
 
 - **A1 — Execution.** One command per message, one file at a time, with countdown. At the start of each multi-step plan, declare the total number of tasks; each response states `Task i/N`. When announcing a mini-session, state the expected number of commands (`3/4`) if it is predictable; if it is not, say so (`commands expected: not predictable`) and proceed in blocks. No prose around the commands. The pasted output of each command is the implicit "ok" to proceed **if the verification is clean**; if it shows a problem, stop and fix before moving on.
-- **A2 — Pausa.** The word **"pausa"** may be written by the maintainer **or** by the assistant. It suspends execution (no commands, no file edits) and opens a discussion in prose. Execution resumes **only when the maintainer writes "riprendi"** (or equivalent). The assistant does not resume on its own. Pausa does not trigger the checkpoint (see the Closing ritual).
+- **A2 — Pausa.** The word **"pausa"** may be written by the maintainer **or** by the assistant. It suspends execution (no commands, no file edits) and opens a discussion in prose. Execution resumes **only when the maintainer writes "riprendi"** (or equivalent). The assistant does not resume on its own. Pausa does not trigger the closing ritual.
 
 **B. Editing**
 - **B1 — Tools and pitfalls.** Use `sed`/`awk` for targeted edits. Delimiters: use `@` or `~`; if the text contains apostrophes, use a heredoc (`<< 'EOF'`). BRE pitfalls: `\(` `\)` are groups, use `[(]` `[)]`; a pattern with `**` fails. For multi-line replacements with backticks/em-dash/arrows, use a `c\`/`i\`/`a\` command via quoted heredoc, not a one-liner. **Heredoc limit (tested 2026-10-29): the problem is the code fence (` ``` `), not the length.** A 44-line heredoc without fences works; a 12-line heredoc with a fence breaks. Use 4-space indentation for code blocks inside heredocs, never ` ``` `. Long heredocs are fine as long as they contain no fences. To verify an anchor with invisible characters, use `sed -n 'Np' file | cat -A`. Mojibake in output is a *display* artefact: confirm with `grep -c`. Before `c`/`a`/`i`, verify the anchor with `sed -n 'Np'`; never trust line numbers from a previous state. After `git checkout --`, re-run ALL seds, not only the ones that seem missing.
@@ -75,25 +77,21 @@ ordered next steps, the current priority, and the files touched.
 **C. Git and quality**
 
 - **C1 — Commit and push.** Work in the local repo, commit in Git Bash, push. The GitHub web interface is for emergencies only. Every change: edit locally → `git add` → `git commit`. Small, atomic commits (one per file, or per logical group), clear messages in English, imperative mood. A rename is ONE logical commit, not one per occurrence. **Push at the end of the session or at a checkpoint, not after every commit.** *Phase 1 (now):* ruleset disabled, single maintainer, direct push to `main` allowed, PR optional. *Phase 2 (when an agent gets a write token):* ruleset active, branch + PR mandatory, no direct push. See `docs/context/AGENT-POLICY.md`.
-- **C2 — Quality gate (baseline, mandatory).** The pre-commit hook (`.githooks/pre-commit`, one-off install: `git config core.hooksPath .githooks`) runs fmt + clippy + test only if Rust files are staged. The hook does **not** replace the full check: also run `cargo build --release`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `cargo fmt --check`, `cargo run --release --bin pcfm-test-runner -- --check --seed 42`. If anything is red, stop: do not close, do not push, do not "fix later".
+- 🛑 **C2 — Quality gate (baseline, mandatory).** The pre-commit hook (`.githooks/pre-commit`, one-off install: `git config core.hooksPath .githooks`) runs fmt + clippy + test only if Rust files are staged. The hook does **not** replace the full check: also run `cargo build --release`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `cargo fmt --check`, `cargo run --release --bin pcfm-test-runner -- --check --seed 42`. If anything is red, stop: do not close, do not push, do not "fix later".
 - **C2-bis — Beyond the baseline (encouraged).** The goal is a clean, optimized, secure repository, not merely passing the commands above. If your toolchain or model capabilities allow additional checks — e.g. `cargo-audit`, `cargo-deny`, `miri`, coverage (`cargo-tarpaulin`), mutation testing, fuzzing, manual review of hot paths — run them and report the result. Do not limit yourself to the baseline.
   - **Caveat (D2 applies).** "Optimized" means *verified* optimization: reduce allocations, profile, remove redundancy, **without changing behaviour**. Any change to the simulation model requires an ADR and a `SIM_VERSION` bump. Do not introduce `unsafe`, `HashMap` in simulation paths, or other banned patterns in the name of optimization.
 
 **D. Context and doctrine**
 
-- **D1 — Honesty and ideas.** If you have not read a file, say so. Do not invent numbers, commit hashes, or file contents. "I don't know" > invention. **When facing ambiguity, or when the context has not been fully read, prefer completeness over speed: read the full context before acting.** New ideas go to `docs/context/IDEAS.md` (status `sketch`, with prerequisites and open questions) **before** discussion, not after. Do not implement from an idea until it has an ADR (if it touches doctrine) or a step in `SESSION-STATE.md` (if it is a task).
-- **D2 — Doctrine and codebase.** No `unwrap`/`expect`/`panic!` in simulation paths. No `HashMap` in simulation paths. No `unsafe` outside `pcfm-bridge` (future). `pcfm-hidden` contains Plane A: no public fields, not `Serialize`, custom `Debug`; the only door is `resolve_*` + `drain_observations`; never add getters on latent values. `pcfm-testkit` has no `pcfm-*` dependencies. The simulation model is a prototype: do not "optimise" without an ADR and a `SIM_VERSION` bump. The doctrine wins: if a change contradicts `00-foundations`, a doctrine ADR is required. `docs/adr/` contains only ADRs.
+- 🛑 **D1 — Honesty and ideas.** If you have not read a file, say so. Do not invent numbers, commit hashes, or file contents. "I don't know" > invention. **When facing ambiguity, or when the context has not been fully read, prefer completeness over speed: read the full context before acting.** New ideas go to `docs/context/IDEAS.md` (status `sketch`, with prerequisites and open questions) **before** discussion, not after. Do not implement from an idea until it has an ADR (if it touches doctrine) or a step in `SESSION-STATE.md` (if it is a task).
+- 🛑 **D2 — Doctrine and codebase.** No `unwrap`/`expect`/`panic!` in simulation paths. No `HashMap` in simulation paths. No `unsafe` outside `pcfm-bridge` (future). `pcfm-hidden` contains Plane A: no public fields, not `Serialize`, custom `Debug`; the only door is `resolve_*` + `drain_observations`; never add getters on latent values. `pcfm-testkit` has no `pcfm-*` dependencies. The simulation model is a prototype: do not "optimise" without an ADR and a `SIM_VERSION` bump. The doctrine wins: if a change contradicts `00-foundations`, a doctrine ADR is required. `docs/adr/` contains only ADRs.
 
 **E. Session lifecycle**
 
 - **E1 — Startup ritual mandatory.** At the start of every new session, before proposing anything, execute the Startup ritual. Not optional. If a step is impossible (e.g. no network for `git pull`), report the failure and proceed with what is possible. Never invent output.
-- **E2 — Closing ritual mandatory, with approval.** Before executing the Closing ritual, ask the maintainer for explicit approval ("shall I close?"). Execute only after confirmation. If the maintainer has already requested it explicitly ("close", "checkpoint", "end session"), that is the approval.
+- **E2 — Closing ritual requires explicit approval.** The closing ritual is never automatic. When the work seems complete, pause (A2) and ask: *"Shall I proceed with the closing ritual?"*, listing what it will do. Execute only after an explicit "riprendi" or equivalent. Silence, an "ok" to an unrelated question, or the natural end of a task are **not** approval. An explicit request to close ("close", "checkpoint") still requires the pause and the confirmation.
 
-**Rule precedence**
-
-- **D1 (honesty) wins over everything.** If you have not read a file, say so — even if B1 suggests to proceed.
-- **C2 (quality) wins over speed (A1/B2).** If the quality gate is red: stop. Do not close, do not push, do not "fix later".
-- **D2 (doctrine) wins over convenience.** If a change contradicts `00-foundations`, an ADR is required — even if it is "only one line".
+**Rule precedence:** the hard stops (D1, D2, C2) win over everything else. D1 (honesty) first. In any other conflict, ask the maintainer.
 
 ## Startup ritual (mandatory — see E1)
 
@@ -162,7 +160,7 @@ Say explicitly:
 
 ## Closing ritual (mandatory — see E2)
 
-At the end of every session (or at a multi-step plan completion), **before declaring the session closed**, run these checks. If any is red, stop and fix before closing.
+After the maintainer approves the closing (E2), run these checks in order. If any is red, stop and fix before closing.
 
 ### 1. Repo alignment and real verification
 
