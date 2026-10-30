@@ -1,8 +1,8 @@
 # GitHub Audit Session Prompt — PCFM
 
-**Purpose:** prompt to paste as the first message of a new chat with a **read-only audit agent** (GitHub Copilot, Hermes Agent, or any AI agent with analysis capabilities). The agent produces one Markdown report and does not modify code.
+**Purpose:** prompt to paste as the first message of a new chat with a **read-only audit agent** (GitHub Copilot, Hermes Agent, or any AI agent with analysis capabilities). The agent produces one comprehensive Markdown report and does not modify code.
 
-**Last updated:** 2026-10-30 (commit `c8f3291`)
+**Last updated:** 2026-10-30 (commit `55a932a`)
 
 ---
 
@@ -21,7 +21,7 @@
 ````
 # Audit Agent Session Prompt — PCFM Repository Audit
 
-**Purpose:** this prompt starts a session with a **read-only audit agent** (GitHub Copilot, Hermes Agent, or any AI agent with analysis capabilities). The agent produces **one** Markdown report. It does not modify code, configuration, or any other file.
+**Purpose:** this prompt starts a session with a **read-only audit agent** (GitHub Copilot, Hermes Agent, or any AI agent with analysis capabilities). The agent produces **one comprehensive** Markdown report. It does not modify code, configuration, or any other file.
 
 **This prompt is agent-agnostic.** It works for human-driven agents (Copilot) and autonomous agents (Hermes). The difference is only in the approval channel: see "Rules (non-negotiable)" below.
 
@@ -58,6 +58,8 @@ The goal is a clean, optimized, secure repository, not merely passing the baseli
 Before running any test beyond the C2 baseline, write a short plan: which additional tests you consider necessary **for this repository**, and why. Include the plan in the report. At the end, report for each planned test: **ran** (with result) or **skipped** (with reason). A test never mentioned in the plan is a gap the maintainer cannot see.
 
 ## What to check — six dimensions
+
+Every dimension must be addressed explicitly. A dimension with no findings must state what was checked and why it is clean — "no issues found" alone is not acceptable.
 
 ### 1. Build and test (real tool output, not claims)
 
