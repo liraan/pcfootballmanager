@@ -203,6 +203,8 @@ crates/
 
 ## Exception: `pcfm-debug`
 
+> **Note (2026-10-30):** ADR-020 renamed `pcfm-debug` to `pcfm-test-runner`, and split `pcfm-demo` out of it. Read every `pcfm-debug` below as: `pcfm-test-runner` (the test runner) and `pcfm-demo` (the demo). Both depend on `pcfm-hidden` only to construct a `GroundTruth` for the engine; neither reads latents. Verified: `crates/pcfm-test-runner/src/features/l0_match.rs:10,54`, `crates/pcfm-demo/Cargo.toml:18`.
+
 ADR-003 states that only `pcfm-match` and `pcfm-gen` may declare a dependency on `pcfm-hidden`. The `pcfm-debug` crate is a **controlled exception**, and this section documents why.
 
 ### What `pcfm-debug` does
