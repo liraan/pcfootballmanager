@@ -98,7 +98,7 @@ Before the layout, the terminology. Three words, three things:
 
 **A module is a document. A plugin is code.** The two are different things, and the terms are not interchangeable. The historical term **cell** is **deprecated**: it meant what is now called "module", and its use is discouraged in new text. The field `cell` in the frontmatter is a historical name: its value is the module directory name.
 
-### Current state (as of 2026-10-27)
+### Current state (as of 2026-10-30)
 
 The repository contains **documentation and code**.
 
@@ -110,7 +110,7 @@ specs/
 ├── _index.md
 └── L0-match/         (11 files, 00 → 10)
 docs/
-├── adr/              (17 files, 000 → 019)
+├── adr/              (20 files, 000, 001–008, 012–022)
 ├── calibration/      (.gitkeep)
 ├── context/          (briefing material: not normative)
 ├── legal/            (.gitkeep)
