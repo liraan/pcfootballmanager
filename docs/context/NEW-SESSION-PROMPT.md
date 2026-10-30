@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-29 (commit `f3fce11`)
+**Last updated:** 2026-10-30 (commit `9ca0d2a`)
 
 ---
 
@@ -28,19 +28,13 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 - **What it is:** a community alternative to commercial football management games. Transparent, offline-first, deterministic. Doctrine of the Three Planes (Plane A = Ground Truth, Plane B = Observation, Plane C = Estimation).
 - **Language:** technical documentation in English; conversation with me in Italian.
 - **Status:** L0 (match engine) is complete and implemented. L1–L3 are planned.
-- **Performance target** (`00-foundations.md` §6): 60 fps UI, full season < 60 s on mid-range hardware. Not measured yet.
 
 ## Where we are (structure, not numbers)
 
 **For current numbers (crates, tests, ADR count), read `SESSION-STATE.md` and `STRUCTURE.md` §5. This section only gives the stable structure: it does not duplicate counts that change every session.**
 
 - **Crates:** 9 `pcfm-*` crates: `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures`.
-- **Levels:** L0 (match engine) is complete and implemented. L1-L3 are planned.
-- **ADR-019 (match engine contract)** is `accepted`: agent-first, positional, N agents (players + referee). Deferred 4-9 open.
-- **`STRUCTURE.md` §5** is the single source of truth for ADR status. `specs/_index.md` shows a derived view.
 - **`docs/context/`** holds briefing material (not normative): `REPO-SNAPSHOT.md`, `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`, `HERMES-AGENT-PROMPT.md`, `GITHUB-AGENT-PROMPT.md`.
-- **Pre-commit hook** (`.githooks/pre-commit`, versioned): runs fmt, clippy, test only if Rust files are staged. Install with `git config core.hooksPath .githooks` (one-off).
-- **Phase 1 vs Phase 2:** Phase 1 (now) ruleset disabled, single maintainer, direct push allowed. Phase 2 (when an agent gets a write token and the ruleset is active) branch + PR mandatory. See `docs/context/AGENT-POLICY.md` §1.
 
 ## Why these files matter (the commands are in the Startup ritual)
 
