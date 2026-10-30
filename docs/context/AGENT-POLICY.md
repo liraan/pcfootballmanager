@@ -72,14 +72,14 @@ If the agent misbehaves, or if its access must be withdrawn:
 
 No agent action is irreversible: `main` is protected, and `agent/*` branches can be deleted.
 
-## 8. Analysis agents (GitHub agent, Hermes, …)
+## 8. Analysis agents (audit agents)
 
-The GitHub agent is a **separate role** from the chat agent (Warp, DeepSeek-TUI, or a future custom bot). Its default output is a single Markdown analysis file, not code changes.
+The audit agent is a **separate role** from the chat agent (Warp, DeepSeek-TUI, or a future custom bot). Its default output is a single Markdown analysis file, not code changes.
 
-- **Default:** produces `docs/context/analysis/YYYY-MM-DD-HH-MM-review.md` from a prompt (see `docs/context/GITHUB-AGENT-PROMPT.md`). It does not modify code, configuration, or any other file.
-- **Analysis-only agents with a write token (e.g. Hermes Agent).** An audit agent that produces a full repository audit (build + test + clippy + security scan + coherence) may push the report directly to `main`, provided: (a) the file matches `docs/context/analysis/YYYY-MM-DD-HH-MM-review.md`; (b) the file is the **only** change in the commit; (c) the commit message follows the repo convention (`docs(analysis): ...`); (d) the maintainer verifies every finding with `grep`/`sed` before any action is taken. If any condition is violated, the exception does not apply: branch + PR in Phase 2, or the maintainer commits manually in Phase 1. See `docs/context/HERMES-AGENT-PROMPT.md` for the interaction contract.
+- **Default:** produces `docs/context/analysis/YYYY-MM-DD-HH-MM-review.md` from a prompt (see `docs/context/GITHUB-SESSION-PROMPT.md`). It does not modify code, configuration, or any other file.
+- **Analysis-only agents with a write token (e.g. Hermes).** An audit agent that produces a full repository audit (build + test + clippy + security scan + coherence) may push the report directly to `main`, provided: (a) the file matches `docs/context/analysis/YYYY-MM-DD-HH-MM-review.md`; (b) the file is the **only** change in the commit; (c) the commit message follows the repo convention (`docs(analysis): ...`); (d) the maintainer verifies every finding with `grep`/`sed` before any action is taken. If any condition is violated, the exception does not apply: branch + PR in Phase 2, or the maintainer commits manually in Phase 1. See `docs/context/GITHUB-SESSION-PROMPT.md` for the interaction contract.
 - **Exception:** the maintainer may explicitly authorize a scoped modification (which files, what kind of change) in the same session. Authorization is written, not inferred. The agent never decides on a scoped modification by itself.
-- **Asynchronous by design.** The GitHub agent is not a synchronous channel: for time-critical fixes, use the chat agent or the maintainer directly.
+- **Asynchronous by design.** The audit agent is not a synchronous channel: for time-critical fixes, use the chat agent or the maintainer directly.
 - **Even when authorized**, the change follows the standard flow: verify (`NEW-SESSION-PROMPT.md` rule 8), atomic commit, and — in Phase 2 — branch + PR (rule 1).
 
 ## 9. What this policy is not

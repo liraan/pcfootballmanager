@@ -7,6 +7,16 @@ This directory is an **agent workspace**, not human documentation. The documenta
 The repository itself remains the source of truth. The files in `docs/context/` are session memory, snapshots, policies, and review notes. Before treating any item here as live fact, validate it against the current repo state (`git status`, `git log`, `git ls-files`, `cargo test`).
 Review notes under `analysis/` are evaluative material, not source-of-truth repository state: they are not the project specification and not a substitute for the live code and live git state.
 
+## Functional directory (exception to the repo rules)
+
+This directory contains **functional working documents** (session prompts, policy, bookmark, analysis reports), not historical records. Unlike the rest of the repository:
+
+- Files here **can be removed, restructured, or rewritten** freely when their function has been served.
+- **Analysis reports** in `analysis/` are working documents. A report is **closed** when all its findings are either fixed, explicitly deferred in `SESSION-STATE.md`, or rejected with a reason. Closed reports are moved to `analysis/archive/` at the closing ritual (history preserved in git, active directory clean).
+- At the startup ritual, read **all reports in `analysis/`** (not `analysis/archive/`). No fixed count.
+
+This exception applies **only to `docs/context/`**. Everywhere else, the standard rules apply.
+
 ## Files in this directory
 
 **Entry points (read in this order):**
@@ -15,9 +25,9 @@ Review notes under `analysis/` are evaluative material, not source-of-truth repo
 2. `NEW-SESSION-PROMPT.md` — prompt for the chat agent. Contains the operating rules and the codebase-specific rules.
 3. `AGENT-POLICY.md` — policy for any agent (chat or GitHub). What it may do, what requires confirmation, what it must never do, how approval works, how revocation works.
 
-**GitHub agent entry point:**
+**Audit agent entry point:**
 
-- `GITHUB-AGENT-PROMPT.md` — prompt for the GitHub agent (analysis reports, not code changes).
+- `GITHUB-SESSION-PROMPT.md` — prompt for the audit agent (analysis reports, not code changes).
 
 **Supporting material (not normative):**
 
@@ -27,20 +37,20 @@ Review notes under `analysis/` are evaluative material, not source-of-truth repo
 
 **Subfolders:**
 
-- `analysis/` — review outputs and AI handoff assessments. Reviews are dated files (`YYYY-MM-DD-HH-MM-review.md`); the latest date is the current review. Written by the GitHub agent, never by the chat agent.
+- `analysis/` — review outputs and AI handoff assessments. Reviews are dated files (`YYYY-MM-DD-HH-MM-review.md`); the latest date is the current review. Written by the audit agent, never by the chat agent.
 
-## Two agents, two prompts, one policy
+## Two modes, one policy
 
 - **Chat agent** (interactive): reads `NEW-SESSION-PROMPT.md`, follows the operating rules, edits files, commits, and pushes on approval.
-- **GitHub agent** (asynchronous): reads `GITHUB-AGENT-PROMPT.md`, produces one Markdown report in `analysis/`, does not modify code. Role and limits are in `AGENT-POLICY.md` §8.
+- **Audit agent** (asynchronous): reads `GITHUB-SESSION-PROMPT.md`, produces one Markdown report in `analysis/`, does not modify code. Role and limits are in `AGENT-POLICY.md` §8.
 - **Both** follow the same `AGENT-POLICY.md`. The two prompts cite it; they do not duplicate it.
 
 ## Workflow
 
-1. The GitHub agent produces `analysis/YYYY-MM-DD-HH-MM-review.md` (findings table: ID, severity, file:line, issue, recommendation).
+1. The audit agent produces `analysis/YYYY-MM-DD-HH-MM-review.md` (findings table: ID, severity, file:line, issue, recommendation).
 2. The chat agent triages: for each finding, propose **apply** (with commit + verification), **reject** (with reason), or **backlog** (add to `IDEAS.md`).
 3. The maintainer approves or rejects. Nothing is applied because a report says so.
-4. The maintainer may authorize the GitHub agent to apply a scoped modification as an exception (see `AGENT-POLICY.md` §8). For synchronous emergencies, use the chat agent or the maintainer directly.
+4. The maintainer may authorize the audit agent to apply a scoped modification as an exception (see `AGENT-POLICY.md` §8). For synchronous emergencies, use the chat agent or the maintainer directly.
 
 ## Read order for a new chat
 

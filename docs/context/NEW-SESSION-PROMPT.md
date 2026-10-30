@@ -34,7 +34,7 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 **For current numbers (crates, tests, ADR count), read `SESSION-STATE.md` and `STRUCTURE.md` §5. This section only gives the stable structure: it does not duplicate counts that change every session.**
 
 - **Crates:** 9 `pcfm-*` crates: `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures`.
-- **`docs/context/`** holds briefing material (not normative): `REPO-SNAPSHOT.md`, `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`, `HERMES-AGENT-PROMPT.md`, `GITHUB-AGENT-PROMPT.md`.
+- **`docs/context/`** holds briefing material (not normative): `REPO-SNAPSHOT.md`, `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`, `GITHUB-SESSION-PROMPT.md`.
 
 ## Why these files matter (the commands are in the Startup ritual)
 
@@ -114,11 +114,11 @@ Check: working tree clean (or only known untracked files), HEAD matches `Last co
 
 If >160 lines, split. Extract: last commit verified, next steps, open items, files touched.
 
-### 3. Read the latest analysis reports (continuity)
+### 3. Read all analysis reports in `analysis/` (continuity)
 
-    ls -t docs/context/analysis/*.md | head -3
+    ls docs/context/analysis/*.md
 
-For each of the 3 most recent reports, read the executive summary and any finding that is still open. If a report says "Pass" but has unverified findings, do not trust the verdict: verify each finding with `grep`/`sed` before acting.
+For each report in `docs/context/analysis/` (not `analysis/archive/`), read the executive summary and any finding that is still open. If a report says "Pass" but has unverified findings, do not trust the verdict: verify each finding with `grep`/`sed` before acting.
 
 ### 4. Read the doctrine (non-negotiable)
 
