@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
 
-**Last commit verified:** `37391db` — "docs(session-state): remove done detail, add missing done rows to status table"
+**Last commit verified:** `5e77d17` — "refactor: rename modules/ → specs/ (step 3 T3)"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -32,6 +32,7 @@ the rest of the bookmark in the same commit.
 | ✅    | IDEA-REJ-003 (ritratti TUI), IDEA-REJ-004 (nomi reali) |
 | ✅    | Closing ritual step 4: ogni step deve avere la prima azione concreta |
 | ✅    | Tabella "Prime azioni" per tutti gli step aperti |
+| ✅    | Step 3 T3: rename `modules/` → `specs/` (13 rename + 62 file con riferimenti aggiornati, commit `5e77d17`) |
 | ⚫    | — (nessun bloccato) |
 
 **Da fare (in dependency order):**
@@ -40,7 +41,7 @@ the rest of the bookmark in the same commit.
 |-----|----|-------------------------|------------------------------|
 | 🟡  | 12 | TUI demo (IDEA-INFRA-006): ADR breve + codice | — |
 | 🟡  | 2  | Fix ADR-003             | —                            |
-| 🟡  | 3  | Terminologia            | —                            |
+| 🟡  | 3  | Terminologia (T1+T2, T3 done) | —                        |
 | 🟡  | 4  | Audit 2026-10-29 (T1,T2)| —                            |
 | 🟡  | 11 | GitHub agent Phase 2    | ruleset attivo               |
 | ⬜  | 5  | Review sketch ×3        | L2-tactics, input, L2-staff  |
@@ -57,7 +58,7 @@ the rest of the bookmark in the same commit.
 
 **2. Fix ADR-003** — ADR-003 still names `pcfm-debug` and `demo.rs`; `pcfm-demo` reads Plane A without authorization. Options: new ADR-023 (ADR-021 and ADR-022 are taken), amend ADR-003, extend ADR-020. Requires explicit confirmation to touch `docs/adr/`.
 
-**3. Terminologia** — T1 (small): `PLUGIN_DEVELOPER_GUIDE.md` §1 + `GLOSSARY.md`. T2 (small): "core module" → "framework crate" in §2 and §11. T3 (large, one commit): rename `specs/` → `specs/`.
+**3. Terminologia** — T1 (small): `PLUGIN_DEVELOPER_GUIDE.md` §1 + `GLOSSARY.md`. T2 (small): "core module" → "framework crate" in §2 and §11. T3 (large, one commit): rename `modules/` → `specs/` — **✅ done, commit `5e77d17`**.
 
 **4. Audit 2026-10-29** — T1: sanitize `--html` in `pcfm-demo/src/render.rs:159`. T2: align `CHANGELOG-SIM.md` lines 19/41 (`pcfm-core` → `pcfm-match`). T3 (note, not a task): `pick_players` correlation in `state.rs:222-226`. Fourth finding (`pcfm-debug`) is item 2.
 
@@ -80,6 +81,8 @@ the rest of the bookmark in the same commit.
 | 12 | Leggere `crates/pcfm-demo/src/` e `MatchResult` |
 | 13 | Installare `cargo-audit` e `cargo-deny` (o verificarne la disponibilità) e lanciarli sul workspace |
 
-**Done (storico):** 1, 2, 3, 6, 10bis, 10ter, 10quater, 0ter — commit hash in `git log --oneline`.
+**Done (storico):** 1, 2, 6, 10bis, 10ter, 10quater, 0ter — commit hash in `git log --oneline`.
 
 **Files touched this session (2026-10-29):** `docs/context/IDEAS.md` (added IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001; rejected IDEA-REJ-003, IDEA-REJ-004); `docs/context/SESSION-STATE.md`; `docs/adr/021-referee-non-physical.md` (new, accepted); `docs/adr/019-match-engine-contract.md` (Superseded by ADR-021 D9 only); `STRUCTURE.md` (ADR status table, added 020/021); `specs/_index.md` (ADR status table, added 020/021); `docs/context/analysis/2026-10-29-18-18-review.md` (renamed from audit-full); `docs/context/AGENT-POLICY.md` (audit-report push exception, §1 and §8); `docs/context/HERMES-AGENT-PROMPT.md` (new, audit agent contract); `docs/context/NEW-SESSION-PROMPT.md` (refreshed counts, startup + closing rituals, rule 13; closing ritual now requires presenting the Plan table in chat); `docs/adr/022-presentation-tui-first.md` (new, accepted); `docs/adr/005-qt-binding.md` (Amended by ADR-022); `STRUCTURE.md` + `specs/_index.md` (ADR 022 added, count 18).
+
+**Files touched this session (2026-10-30):** `docs/context/NEW-SESSION-PROMPT.md` (removed duplicate B1 bullet); `docs/context/SESSION-STATE.md` (step 13 cargo-audit; step 3 T3 done); `STRUCTURE.md` (Italian example → English); **rename `modules/` → `specs/`** with 62 files updated: `.github/*`, `crates/*` (Cargo.toml + src), `docs/*.md`, `docs/adr/*.md`, `docs/context/*` (except `analysis/` and `PROJECT-IDEA-LOG.md` body), `archive/README.md` (live refs only), `CHANGELOG-REGISTRY.md:19`, `specs/*` self-references; note in `PROJECT-IDEA-LOG.md` header; historical commands preserved in `archive/README.md:35-36` and `docs/MIGRATION-01-04.md:45`.
