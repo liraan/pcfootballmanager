@@ -9,7 +9,7 @@ last_updated: "2026-10-25"
 supersedes: null
 depends_on: ["00-foundations", "L0.05"]
 referenced_by: ["L0.07", "L1-season", "L2-scouting", "L3-ui"]
-conforms_to: "00-foundations (v1.1)"
+conforms_to: "00-foundations (v2.0)"
 ---
 
 <!--

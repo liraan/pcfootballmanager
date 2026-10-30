@@ -9,7 +9,7 @@ last_updated: "2026-10-25"
 supersedes: null
 depends_on: ["00-foundations"]
 referenced_by: ["L0.02", "L0.04", "L0.08", "L1-season", "L2-market", "L2-psyche"]
-conforms_to: "00-foundations (v1.1)"
+conforms_to: "00-foundations (v2.0)"
 ---
 
 <!--

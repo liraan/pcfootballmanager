@@ -9,7 +9,7 @@ last_updated: "2026-10-25"
 supersedes: null
 depends_on: ["00-foundations", "L0.01"]
 referenced_by: ["L0.04", "L0.05", "L0.07", "L0.08", "L0.09", "L0.10", "L1-roster"]
-conforms_to: "00-foundations (v1.1)"
+conforms_to: "00-foundations (v2.0)"
 ---
 
 <!--

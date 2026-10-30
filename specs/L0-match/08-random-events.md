@@ -9,7 +9,7 @@ last_updated: "2026-10-25"
 supersedes: null
 depends_on: ["00-foundations", "L0.01", "L0.03", "L0.04", "L0.05", "L0.10"]
 referenced_by: ["L0.06", "L2-psyche"]
-conforms_to: "00-foundations (v1.1)"
+conforms_to: "00-foundations (v2.0)"
 ---
 
 <!--
