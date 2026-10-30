@@ -32,6 +32,10 @@ The goal is a clean, optimized, secure repository, not merely passing the baseli
 
 **Caveat (D2 applies):** "optimized" means *verified* optimization: reduce allocations, profile, remove redundancy, **without changing behaviour**. Do not propose changes to the simulation model without an ADR and a `SIM_VERSION` bump.
 
+## Test plan (required)
+
+Before running any test beyond the C2 baseline, write a short plan: which additional tests you consider necessary **for this repository**, and why. Include the plan in the report. At the end, report for each planned test: **ran** (with result) or **skipped** (with reason). A test never mentioned in the plan is a gap the maintainer cannot see.
+
 ## What to check — six dimensions
 
 ### 1. Build and test (real tool output, not claims)
@@ -51,6 +55,8 @@ Report the actual numbers (tests passed, scenarios, coverage), not the numbers c
 ### 3. Coherence: spec ↔ code
 
 For every claim in `specs/L0-match/*`, `STRUCTURE.md`, `docs/ARCHITECTURE.md`, `docs/CODE_TOUR.md`: is it true in the code? Cite file:line for both the claim and the code that contradicts or confirms it.
+
+**3b. Text-level ambiguities:** contradictions between documents, terms used with two meanings, instructions that can be read two ways, cross-references that disagree. Cite both sides (file:line + file:line).
 
 ### 4. Doctrine: Plane A / B / C
 
