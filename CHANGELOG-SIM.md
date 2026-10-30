@@ -16,7 +16,7 @@ SIM_VERSION = 1
 
 This is the **initial baseline**. No code exists yet, so no bump has occurred. When the first line of simulation code is merged, this value becomes the reference against which all future bumps are measured.
 
-`SIM_VERSION` is defined in `pcfm-core` (planned) and embedded in every save (see `L0.07` §2.1).
+`SIM_VERSION` is defined in `pcfm-match` (planned) and embedded in every save (see `L0.07` §2.1).
 
 ---
 
@@ -38,13 +38,13 @@ If none of the above is true, `SIM_VERSION` is **not** bumped. A refactor that p
 
 A `SIM_VERSION` bump requires **all five steps**, in order. The CI will not merge a bump that skips any of them.
 
-1. **Bump the value** in `pcfm-core` (planned). The value is a monotonic integer. It never goes down.
+1. **Bump the value** in `pcfm-match` (planned). The value is a monotonic integer. It never goes down.
 2. **Regenerate the golden hash** — the expected state hash for the 10-season golden test (see `00-foundations` §4). The new hash is committed alongside the bump.
 3. **Write the entry** in the "History" section below, using the template.
 4. **Verify save compatibility** — every existing save fixture must still load. If a save cannot be reconstructed under the new `SIM_VERSION`, the entry must say so explicitly and a migration must be provided (see `L0.07` §2.3).
 5. **Review by a second pair of eyes** — a `SIM_VERSION` bump is never merged by the author alone. The reviewer confirms that the golden hash change is expected and that the entry is honest.
 
-The full migration procedure for **saves** lives in [`docs/MIGRATION-01-04.md`](docs/MIGRATION-01-04.md) *(planned)*. When that file exists, it will point back to this changelog for the bump side and forward to the save side. Until it exists, this changelog is the source of truth for the bump procedure.
+The full migration procedure for **saves** lives in [`docs/MIGRATION-01-04.md`](docs/MIGRATION-01-04.md). That document points back to this changelog for the bump side and forward to the save side.
 
 ---
 
@@ -104,8 +104,8 @@ match), say so and give the distribution delta.
     before merging. The cost of a missed bump is a silent determinism
     regression, which is the worst kind of bug this project can have.
   - This file is linked from:
-      - modules/00-foundations.md §4 (determinism)
-      - modules/L0-match/01-rng.md §2.6
-      - modules/L0-match/07-save-minimal.md §2.3
+      - specs/00-foundations.md §4 (determinism)
+      - specs/L0-match/01-rng.md §2.6
+      - specs/L0-match/07-save-minimal.md §2.3
     If you move or rename this file, update those links.
 -->
