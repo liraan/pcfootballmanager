@@ -1,6 +1,6 @@
 # Session state — PCFM
 
-**Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is (see `REPO-SNAPSHOT.md` for that). Update at the end of a session, not at the start.
+**Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
 **Last commit verified:** `2178270` — "docs(prompt): B3 uses a literal echo template (fix: sentinel was ambiguous to new sessions)"
 

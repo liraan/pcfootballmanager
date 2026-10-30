@@ -31,7 +31,6 @@ This exception applies **only to `docs/context/`**. Everywhere else, the standar
 
 **Supporting material (not normative):**
 
-- `REPO-SNAPSHOT.md` — factual snapshot of the repository (crate-by-crate). May lag behind; treat as a briefing.
 - `PROJECT-IDEA-LOG.md` — history, decisions, sources, what remains open.
 - `IDEAS.md` — open and rejected ideas. Do not implement from it.
 

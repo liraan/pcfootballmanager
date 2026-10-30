@@ -34,7 +34,7 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 **For current numbers (crates, tests, ADR count), read `SESSION-STATE.md` and `STRUCTURE.md` §5. This section only gives the stable structure: it does not duplicate counts that change every session.**
 
 - **Crates:** 9 `pcfm-*` crates: `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures`.
-- **`docs/context/`** holds briefing material (not normative): `REPO-SNAPSHOT.md`, `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`, `GITHUB-SESSION-PROMPT.md`.
+- **`docs/context/`** holds briefing material (not normative): `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`, `GITHUB-SESSION-PROMPT.md`.
 
 ## Why these files matter (the commands are in the Startup ritual)
 
@@ -43,7 +43,6 @@ The **Startup ritual** below has the exact commands. This section explains **why
 - **`docs/context/SESSION-STATE.md`** — the bookmark. What the next step is, what was done, what is open. Read it first.
 - **`docs/context/PROJECT-IDEA-LOG.md`** — history and decisions, with sources. Why the project is the way it is.
 - **`docs/context/IDEAS.md`** — open and rejected ideas. What is **not** decided yet; do not implement from it.
-- **`docs/context/REPO-SNAPSHOT.md`** — a briefing snapshot (tree, files, crates, metrics). **Not normative, and likely stale**: read it as history, not as state. For current numbers, use `SESSION-STATE.md` and `STRUCTURE.md` §5.
 
 Then, when the task requires it:
 
@@ -223,7 +222,6 @@ Update `SESSION-STATE.md`:
 - `Files touched this session`: full list, dated
 - New open items from the session (verification of previous findings, decisions deferred, sketches added)
 
-Do not update `REPO-SNAPSHOT.md` unless its own premise says it is current: it is **not normative**, and its staleness is expected.
 
 ### 5. Commit and push (before the report)
 

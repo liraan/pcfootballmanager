@@ -1,8 +1,8 @@
 # Project Idea Log — PCFM
 
-> **Update 2026-10-26:** ADR-012, ADR-013, and ADR-015 have been ratified. See `docs/context/REPO-SNAPSHOT.md` for the current state. This log keeps the original entries for traceability.
+> **Update 2026-10-26:** ADR-012, ADR-013, and ADR-015 have been ratified. See `docs/context/SESSION-STATE.md` for the current state. This log keeps the original entries for traceability.
 >
-> **Update 2026-10-27:** ADR-019 (match engine contract) has been ratified. See `docs/context/SESSION-STATE.md` for the current working state and `docs/context/REPO-SNAPSHOT.md` for the briefing snapshot. This log keeps the original entries for traceability.
+> **Update 2026-10-27:** ADR-019 (match engine contract) has been ratified. See `docs/context/SESSION-STATE.md` for the current working state. This log keeps the original entries for traceability.
 >
 > **Update 2026-10-29:** ADR-020 renamed the crate `pcfm-debug` to
 > `pcfm-test-runner`. References to `pcfm-debug` in this log are
@@ -13,7 +13,7 @@
 >
 > **Update 2026-10-30:** the step 3 T3 rename renamed the directory `modules/` to `specs/`. References to `modules/` below are **historical** and kept for traceability; read them as `specs/` for the current state.
 
-**Purpose:** record the ideas, decisions, and open questions of the project, with the source of each. This is not a status document for the code (see `REPO-SNAPSHOT.md`). It is not a specification (see `modules/`).
+**Purpose:** record the ideas, decisions, and open questions of the project, with the source of each. This is not a status document for the code. It is not a specification (see `modules/`).
 
 **Rule of this document:** every statement has a source. If a decision was made, there is a commit or message that contains it. If an idea is only sketched, it is marked as "idea". If we do not know something, we write "I don't know" instead of inventing.
 
@@ -140,7 +140,7 @@ In chronological order. Each decision has the commit that recorded it (when avai
 - **ADR-019 (match engine contract)** — `accepted` (2026-10-27). 11 decisions (D1–D11) + 9 deferred. Deferred 1 (spatial iteration order), deferred 2 (tick-cost pre-emption, selective foul), and deferred 3 (possession representation) resolved. Deferred 4–9 remain open.
 - **`AGENT-POLICY.md`** — created in `docs/context/`. Defines what an agent may do autonomously, what requires confirmation, what it must never do, and how to revoke. Phase 1 (ruleset disabled, single maintainer) vs Phase 2 (ruleset active, PR mandatory).
 - **Pre-commit hook** — `.githooks/pre-commit` (versioned). Runs fmt, clippy, test only if Rust files are staged. Installation: `git config core.hooksPath .githooks` (one-off, per clone).
-- **`docs/context/`** — `REPO-SNAPSHOT.md`, `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`. Briefing material, not normative. `STRUCTURE.md` §5 remains the ADR status source of truth.
+- **`docs/context/`** — `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`. Briefing material, not normative. `STRUCTURE.md` §5 remains the ADR status source of truth.
 - **Ruleset** — configured on `main` (PR required, force-push blocked, deletion blocked, 0 approvals). **Currently disabled** (Phase 1). Reactivate before granting a write token to any agent.
 - **Doctrine** — added "Football fidelity" as a tie-breaker criterion in `modules/00-foundations.md` §1.
 - **Commits** — `88d20b4`, `67c2098`, `952c5a4`, `b1196c3`, `23add74`, `c82e310`, `a261439`, `b4ff405`, `eb71bda`, `25cb73c`, `7f3a7a6`, and subsequent.
@@ -182,17 +182,9 @@ In chronological order. Each decision has the commit that recorded it (when avai
 
 ## 5. What I do NOT know (and do not want to invent)
 
-All tracked files have been read (see `REPO-SNAPSHOT.md` §7). The only thing outside is:
+Verified at 2026-10-27. Not updated since. Current state: `SESSION-STATE.md`.
 
 1. **Any other chats or decisions taken outside this session.** If there are any, I do not see them.
 
 ---
 
-## 6. Next steps (in dependency order)
-
-1. **Resolve the remaining ADR-019 deferred decisions** (4–9): granular UX (4), resolution per platform (5), adaptive resolution (6), LOD override (7), zone-of-influence formula (8), role→mechanic chain (9). Deferred 1 (spatial order), deferred 2 (pre-emption), and deferred 3 (possession) are resolved.
-2. **Ratify ADR-017** ("roles are labels, not modifiers", `proposed`): move the role catalogue to L1-roster and confirm the engine is blind to roles.
-3. **Address the 2 technical gaps** (`ProjectionProfile`, `ScoutReport.DeclaredBias`). The third (psyche) is inside ADR-016.
-4. **Write the 2 missing documents** (`performance.md`, `save-security.md`).
-5. **Start writing L1** (first module: `L1-world/01-nation.md`). Unblocks the first L1 scenarios in the coretest.
-6. **Agent setup (Warp)** — Phase 2. Reactivate the ruleset on `main` before granting a write token. See `docs/context/AGENT-POLICY.md`.

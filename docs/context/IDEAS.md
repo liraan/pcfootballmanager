@@ -202,8 +202,8 @@
 - **Critical note:** before designing, read (a) the 6 scenarios in
   `crates/pcfm-test-runner/src/features/l0_match.rs` to see what a good `Scenario`
   looks like, (b) `docs/adr/012-plugins.md` §1–§3 for the sheet contract,
-  (c) `docs/adr/013-worlds.md` §3 for the manifest. `REPO-SNAPSHOT.md` §6.2
-  is not sufficient.
+  (c) `docs/adr/013-worlds.md` §3 for the manifest. A stale
+  snapshot is not sufficient.
 
 ### IDEA-INFRA-005 — Separate diagnostics and benchmark from the test runner
 - **Status:** discussing
