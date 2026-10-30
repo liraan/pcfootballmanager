@@ -1,3 +1,24 @@
+# GitHub Audit Session Prompt — PCFM
+
+**Purpose:** prompt to paste as the first message of a new chat with a **read-only audit agent** (GitHub Copilot, Hermes Agent, or any AI agent with analysis capabilities). The agent produces one Markdown report and does not modify code.
+
+**Last updated:** 2026-10-30 (commit `c8f3291`)
+
+---
+
+## How to use
+
+1. Open a new chat with the audit agent (GitHub Copilot, Hermes, or any agent with analysis capabilities).
+2. Copy the content of the block below (from `# Audit Agent Session Prompt` to the last line, without the 4 backticks).
+3. Paste it as the first message.
+4. If the agent has a write token, it commits the report to `docs/context/analysis/YYYY-MM-DD-HH-MM-review.md`. Otherwise, it outputs the report in chat: save it and commit it yourself.
+5. **Copilot Coding Agent (cloud):** assign an issue rather than pasting a chat prompt — the agent may open an empty branch and deliver the report in chat instead of committing it.
+
+---
+
+## Prompt
+
+````
 # Audit Agent Session Prompt — PCFM Repository Audit
 
 **Purpose:** this prompt starts a session with a **read-only audit agent** (GitHub Copilot, Hermes Agent, or any AI agent with analysis capabilities). The agent produces **one** Markdown report. It does not modify code, configuration, or any other file.
@@ -102,3 +123,4 @@ A report is **open** until all its findings are either fixed, explicitly deferre
 ## What this prompt is not
 
 It is not a specification of the project (`STRUCTURE.md`, `specs/`, ADRs are). It is not a substitute for the chat agent's judgment (see `docs/context/NEW-SESSION-PROMPT.md`). The maintainer triages every finding with `grep`/`sed` before anything is applied. An audit that says "Pass" without verified findings is a draft, not a fact.
+````
