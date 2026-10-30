@@ -106,9 +106,10 @@
   preferences (e.g. a winger cutting inside to shoot with the strong foot).
   Real-world datasets model this simply (preferred_foot: left/right/both);
   FM-style games use two separate ratings, one per foot.
-- **Three Planes:** footedness is a stable identity trait (Plane A) and
-  highly observable (Plane B/C): unlike hidden traits, estimation error is
-  low. A simple, verifiable test case for the observation doctrine.
+- **Three Planes (proposal, not decided):** footedness would likely live in
+  Plane A as a stable identity trait, and be highly observable (Plane B/C):
+  unlike hidden traits, estimation error is low. A candidate test case for
+  the observation doctrine, subject to ADR.
 - **Open questions:**
   1. Model shape: two separate per-foot ratings (FM-style) vs a single
      categorical field (left/right/both) plus one weak-foot rating — the
