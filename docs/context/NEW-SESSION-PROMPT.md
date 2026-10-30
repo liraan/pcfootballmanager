@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-30 (commit after D3 bee doctrine)
+**Last updated:** 2026-10-30 (commit after E3: after-closing default is track, not execute)
 
 ---
 
@@ -90,6 +90,7 @@ ordered next steps, the current priority, and the files touched.
 
 - **E1 — Startup ritual mandatory.** At the start of every new session, before proposing anything, execute the Startup ritual. Not optional. If a step is impossible (e.g. no network for `git pull`), report the failure and proceed with what is possible. Never invent output.
 - **E2 — Closing ritual requires explicit approval.** The closing ritual is never automatic. When the work seems complete, pause (A2) and ask: *"Shall I proceed with the closing ritual?"*, listing what it will do. Execute only after an explicit "riprendi" or equivalent. Silence, an "ok" to an unrelated question, or the natural end of a task are **not** approval. An explicit request to close ("close", "checkpoint") still requires the pause and the confirmation.
+- **E3 — After the closing, the default is "track", not "execute".** Once the bookmark commit is made, the session is closed. Any new work that emerges afterwards is added to `SESSION-STATE.md` as a step (with its first concrete action) **and is not executed in the same session**. Three exceptions, and only three: (a) the bookmark is *internally inconsistent* (e.g. `Last commit verified` or `Files touched` does not match reality) — a broken bookmark is worse than an incomplete one; (b) a quality-gate failure (C2) is discovered; (c) the maintainer explicitly asks for the work to be done now. "It would be useful for the next session" is **not** an exception: that is precisely what the step list is for. The test is: *if this is not done now, can the next session reconstruct the state from the repo?* If yes, track it. If no, do it. This rule exists because every reopening after the closing makes the bookmark less trustworthy, and the bookmark is the memory of the project.
 
 **Rule precedence:** the hard stops (D1, D2, C2) win over everything else. D1 (honesty) first. In any other conflict, ask the maintainer.
 
