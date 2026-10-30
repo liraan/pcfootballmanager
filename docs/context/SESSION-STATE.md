@@ -68,6 +68,7 @@ the rest of the bookmark in the same commit.
 | ⬜  | 10 | `L1-world/01-nation`    | —                            |
 | ⬜  | 13 | `cargo-audit`/`cargo-deny` pre-release | — |
 | 🔴  | 15 | **Fase B cleanup** (prima della prossima sessione): `CHANGELOG-SIM.md` 19/41 (`pcfm-core`→`pcfm-match`), 107-109 (`modules/`→`specs/`), 47 (MIGRATION esiste); `README.md` 9 (107→103), 156 (012-020→012-022); `STRUCTURE.md` §5 (20 file, 18 accepted); `specs/L0-match/*` (10 file, v1.1→v2.0); IDEA-PM-005 (togliere "Plane A"); SESSION-STATE (togliere HERMES, 256→250); NEW-SESSION-PROMPT (verificare riga closing su REPO-SNAPSHOT) | — |
+| 🟡  | 16 | **Censimento repo (igiene documentale, D3)**: verificare file orfani e cartelle vuote fuori da `docs/context/`. Sospetti: `docs/PLUGINS-WORLDS-READING-GUIDE.md` (mai citato?), `PROJECT-STATUS.md` root (README lo dice "planned"), `archive/` `data/` `mods/` `registry/` `docs/calibration/` `docs/legal/` (solo `.gitkeep`?). Nessun rischio sicurezza: urgenza 🟡, ma da fare prima che qualcuno ci costruisca sopra | — |
 
 **Dettagli (solo dove servono):**
 
@@ -112,6 +113,7 @@ the rest of the bookmark in the same commit.
 | 11 | Decisione del maintainer: attivare o no il ruleset |
 | 12 | Leggere `crates/pcfm-demo/src/` e `MatchResult` |
 | 13 | Installare `cargo-audit` e `cargo-deny` (o verificarne la disponibilità) e lanciarli sul workspace |
+| 16 | `ls -R archive data mods registry docs/calibration docs/legal 2>&1; git ls-files | wc -l; grep -rn "PLUGINS-WORLDS-READING-GUIDE\|PROJECT-STATUS" --include="*.md" . | head -20` — poi classificare vivo/orfano/alveare e proporre tagli |
 
 **Done (storico):** 1, 2, 6, 10bis, 10ter, 10quater, 0ter — commit hash in `git log --oneline`.
 
