@@ -12,8 +12,8 @@ The archive exists for traceability: so that "why did we decide X?" can be answe
 |---|---|---|
 | `Prompt_Master_v5.md` | The v5 doctrine (pre-statistics) | `Prompt_Master_v6.md` |
 | `Prompt_Master_v6.md` | The v6 doctrine (statistics added) | `Prompt_Master_v7.md` |
-| `Prompt_Master_v7.md` | The v7 doctrine (CA/PA removed, Three Planes explicit) | `modules/00-foundations.md` (v1.0) |
-| `00-foundations-vX.Y.md` | Previous versions of the doctrine | current `modules/00-foundations.md` |
+| `Prompt_Master_v7.md` | The v7 doctrine (CA/PA removed, Three Planes explicit) | `specs/00-foundations.md` (v1.0) |
+| `00-foundations-vX.Y.md` | Previous versions of the doctrine | current `specs/00-foundations.md` |
 | `01-architecture-vX.Y.md` | Previous versions | current module |
 | `legacy/01-architecture.md` | The original Italian `01-architecture.md`, from the flat 25-module structure | `docs/MIGRATION-01-04.md` |
 | `legacy/02-registry.md` | The original Italian `02-registry.md` | `docs/MIGRATION-01-04.md` |
@@ -53,12 +53,12 @@ git show <commit>:modules/01-architecture.md > archive/legacy/01-architecture.md
 When a document is superseded by a newer version:
 
 1. **Copy** (do not move) the old version to `archive/<subfolder>/<name>-vX.Y.md`.
-2. **Move** the old version out of its original location (delete it from `modules/` or `docs/`).
+2. **Move** the old version out of its original location (delete it from `specs/` or `docs/`).
 3. **Update this README** with the new row in the table at the top.
 4. **Add an entry to `CHANGELOG.md`** under "Removed" or "Changed", referencing the archive file.
 5. **In the new document**, add `supersedes: "<archived-id>"` in its frontmatter (if it has one).
 
-For the doctrine specifically (`modules/00-foundations.md`), the archive subfolder is `archive/doctrine/`. For the prompt masters, it is `archive/prompts/`. For the legacy flat modules, it is `archive/legacy/`.
+For the doctrine specifically (`specs/00-foundations.md`), the archive subfolder is `archive/doctrine/`. For the prompt masters, it is `archive/prompts/`. For the legacy flat modules, it is `archive/legacy/`.
 
 ---
 
@@ -99,7 +99,7 @@ The archive is not a graveyard. It is the project's memory.
     still stays; the point is traceability, not cleanliness.
   - When you create a subfolder, create its README.md at the same time.
   - This file is linked from:
-      - modules/00-foundations.md §8 (as the historical reference, once it
+      - specs/00-foundations.md §8 (as the historical reference, once it
         exists)
       - docs/MIGRATION-01-04.md §5 (as the eventual destination of the
         legacy modules)

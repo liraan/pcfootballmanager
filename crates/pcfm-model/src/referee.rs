@@ -1,6 +1,6 @@
 //! Referee — strictness and consistency.
 //!
-//! See `modules/L0-match/03-entities-minimal.md` §2.6.
+//! See `specs/L0-match/03-entities-minimal.md` §2.6.
 
 use pcfm_core::ids::RefereeId;
 use serde::{Deserialize, Serialize};
@@ -9,7 +9,7 @@ use crate::error::ModelError;
 
 /// The referee.
 ///
-/// See `modules/L0-match/03-entities-minimal.md` §2.6.
+/// See `specs/L0-match/03-entities-minimal.md` §2.6.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Referee {
     /// The unique identifier of the referee.

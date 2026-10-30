@@ -69,7 +69,7 @@ pcfootballmanager/
 │   ├── PLUGIN_DEVELOPER_GUIDE.md
 │   └── PLUGINS-WORLDS-READING-GUIDE.md
 ├── mods/.gitkeep
-├── modules/
+├── specs/
 │   ├── 00-foundations.md
 │   ├── _index.md
 │   └── L0-match/            (11 files, 00-10)
@@ -153,23 +153,23 @@ pcfootballmanager/
 
 ---
 
-## 5. Modules (`modules/`)
+## 5. Modules (`specs/`)
 
 | File | Lines | Status | What I know |
 |------|-------|--------|-------------|
-| `modules/00-foundations.md` | ~245 | ✅ | v2.0 (2026-10-26). Pillar 1 revised (ADR-013): local determinism. §1 Role, §2 Design Pillars (10), §3 Three Planes, §4 Determinism (local), §5 Banned Things, §6 Product Goal, §7 Non-Goals, §8 References, §9 Concentric Structure. |
-| `modules/_index.md` | ~265 | ✅ | v2.9. Current state (2026-10-26), Doctrine, L0 (11 ratified), L1-L3 (planned), Provider integrations, Plugins and worlds (accepted), How to read, Doctrine compliance, Level graph, Status legend, Components, ADR status (14 accepted, 1 proposed (017), 1 template, 1 reading guide). |
-| `modules/L0-match/00-overview.md` | 203 | ✅ | `Status: ratified`. 11 cells, 7-point checklist, dependency rules. |
-| `modules/L0-match/01-rng.md` | 150 | ✅ | `Status: ratified`. ChaCha20Rng, named streams, seed derivation, SIM_VERSION. |
-| `modules/L0-match/02-event-bus.md` | 138 | ✅ | `Status: ratified`. EventBus, ordering by `seq`, single-thread per match, replay compatibility. |
-| `modules/L0-match/03-entities-minimal.md` | 232 | ✅ | `Status: ratified`. 7 entities: Player (no latents), PhysicalStateMinimal, PsychologicalStateMinimal, Squad, Pitch, Referee, Match. |
-| `modules/L0-match/04-match-engine.md` | 217 | ✅ | `Status: ratified`. `MatchEngine` trait, tick loop, micro-decision, `resolve_*` mapping, no ratings. |
-| `modules/L0-match/05-match-events.md` | 185 | ✅ | `Status: ratified`. `MatchEvent`, EventType (L0 set), CauseTrace, EventChain (hash chain), append-only. |
-| `modules/L0-match/06-match-output.md` | 185 | ✅ | `Status: ratified`. Score, Ratings (from events), MatchStatistics, Narrative. |
-| `modules/L0-match/07-save-minimal.md` | 176 | ✅ | `Status: ratified`. MatchSave (postcard), migration, verification, GroundTruth reconstructed from seed + command log. |
-| `modules/L0-match/08-random-events.md` | 220 | ✅ | `Status: ratified`. Event catalogue (physical, technical, psychological, relational, environmental, set-piece). Deterministic sampling. |
-| `modules/L0-match/09-context-modifiers.md` | 177 | ✅ | `Status: ratified`. `ContextModifiers` (14 fields, all observed, no latent). |
-| `modules/L0-match/10-ground-truth.md` | 190 | ✅ | `Status: ratified`. `GroundTruth` API: `new`, 7 `resolve_*`, `drain_observations`. No public fields, not `Serialize`, custom `Debug`. |
+| `specs/00-foundations.md` | ~245 | ✅ | v2.0 (2026-10-26). Pillar 1 revised (ADR-013): local determinism. §1 Role, §2 Design Pillars (10), §3 Three Planes, §4 Determinism (local), §5 Banned Things, §6 Product Goal, §7 Non-Goals, §8 References, §9 Concentric Structure. |
+| `specs/_index.md` | ~265 | ✅ | v2.9. Current state (2026-10-26), Doctrine, L0 (11 ratified), L1-L3 (planned), Provider integrations, Plugins and worlds (accepted), How to read, Doctrine compliance, Level graph, Status legend, Components, ADR status (14 accepted, 1 proposed (017), 1 template, 1 reading guide). |
+| `specs/L0-match/00-overview.md` | 203 | ✅ | `Status: ratified`. 11 cells, 7-point checklist, dependency rules. |
+| `specs/L0-match/01-rng.md` | 150 | ✅ | `Status: ratified`. ChaCha20Rng, named streams, seed derivation, SIM_VERSION. |
+| `specs/L0-match/02-event-bus.md` | 138 | ✅ | `Status: ratified`. EventBus, ordering by `seq`, single-thread per match, replay compatibility. |
+| `specs/L0-match/03-entities-minimal.md` | 232 | ✅ | `Status: ratified`. 7 entities: Player (no latents), PhysicalStateMinimal, PsychologicalStateMinimal, Squad, Pitch, Referee, Match. |
+| `specs/L0-match/04-match-engine.md` | 217 | ✅ | `Status: ratified`. `MatchEngine` trait, tick loop, micro-decision, `resolve_*` mapping, no ratings. |
+| `specs/L0-match/05-match-events.md` | 185 | ✅ | `Status: ratified`. `MatchEvent`, EventType (L0 set), CauseTrace, EventChain (hash chain), append-only. |
+| `specs/L0-match/06-match-output.md` | 185 | ✅ | `Status: ratified`. Score, Ratings (from events), MatchStatistics, Narrative. |
+| `specs/L0-match/07-save-minimal.md` | 176 | ✅ | `Status: ratified`. MatchSave (postcard), migration, verification, GroundTruth reconstructed from seed + command log. |
+| `specs/L0-match/08-random-events.md` | 220 | ✅ | `Status: ratified`. Event catalogue (physical, technical, psychological, relational, environmental, set-piece). Deterministic sampling. |
+| `specs/L0-match/09-context-modifiers.md` | 177 | ✅ | `Status: ratified`. `ContextModifiers` (14 fields, all observed, no latent). |
+| `specs/L0-match/10-ground-truth.md` | 190 | ✅ | `Status: ratified`. `GroundTruth` API: `new`, 7 `resolve_*`, `drain_observations`. No public fields, not `Serialize`, custom `Debug`. |
 
 ---
 
@@ -323,8 +323,8 @@ All 16 identified inconsistencies have been closed. Summary:
 | 1 | ADR-003 truncated (only "Exception") | `docs/adr/003-plane-a-enforcement.md` | `b309f23` |
 | 2 | ADR-004 truncated (half Rust code) | `docs/adr/004-panic-strategy-ffi.md` | `c4c775b` |
 | 3 | `module-revision.md` is not a template | `.github/ISSUE_TEMPLATE/module-revision.md` | `251a197` |
-| 4 | `00-foundations` says "ADR-013 proposed" (false) | `modules/00-foundations.md` | `d6c3c8b` + `fd2c298` |
-| 5 | `_index.md` ADR table stale | `modules/_index.md` | `f1dc5fe` |
+| 4 | `00-foundations` says "ADR-013 proposed" (false) | `specs/00-foundations.md` | `d6c3c8b` + `fd2c298` |
+| 5 | `_index.md` ADR table stale | `specs/_index.md` | `f1dc5fe` |
 | 6 | `CONTRIBUTING.md` status stale | `CONTRIBUTING.md` | `635bc61` |
 | 7 | `001` cites `01-architecture.md` (removed) | `docs/adr/001-language-rust.md` | `d03bd2e` |
 | 8 | Reading guide in `docs/adr/` with `Status: active` | `docs/adr/012-013-reading-guide.md` | `5cff4f8` (mv) + `46180ab` (content) + `749f154` (rename) + `3a8a0d2` (links) |

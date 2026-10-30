@@ -1,6 +1,6 @@
 //! `pcfm-hidden` — Plane A (Ground Truth) for PCFM.
 //!
-//! See `modules/L0-match/10-ground-truth.md` and
+//! See `specs/L0-match/10-ground-truth.md` and
 //! `docs/adr/003-plane-a-enforcement.md` for the full specification.
 //!
 //! # What this crate is

@@ -1,6 +1,6 @@
 //! `pcfm-stats` — Plane B (Observation) for PCFM.
 //!
-//! See `modules/L0-match/05-match-events.md` for the full specification.
+//! See `specs/L0-match/05-match-events.md` for the full specification.
 //!
 //! # What this crate is
 //!

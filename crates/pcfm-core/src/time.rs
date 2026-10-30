@@ -3,7 +3,7 @@
 //! `GameInstant` is not `SystemTime`. It is a counter that starts at zero
 //! when the save is created. It is deterministic, portable, and serialisable.
 //!
-//! See `modules/00-foundations.md` §4 (determinism).
+//! See `specs/00-foundations.md` §4 (determinism).
 
 use serde::{Deserialize, Serialize};
 

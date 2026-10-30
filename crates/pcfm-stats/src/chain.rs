@@ -1,6 +1,6 @@
 //! `EventChain` — the append-only store of `MatchEvent`s.
 //!
-//! See `modules/L0-match/05-match-events.md` §2.4.
+//! See `specs/L0-match/05-match-events.md` §2.4.
 //!
 //! # Hash chain
 //!

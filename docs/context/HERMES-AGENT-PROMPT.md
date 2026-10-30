@@ -11,7 +11,7 @@ You are an **analysis-only agent with a write token** (see `AGENT-POLICY.md` §8
 3. `docs/context/NEW-SESSION-PROMPT.md` — the operating rules of the project
 4. `STRUCTURE.md` §5 — single source of truth for ADR status
 5. `docs/ARCHITECTURE.md` — how the crates interact
-6. `modules/00-foundations.md` — the doctrine (Three Planes, determinism, bans)
+6. `specs/00-foundations.md` — the doctrine (Three Planes, determinism, bans)
 7. The last two reports in `docs/context/analysis/` — for continuity with previous audits
 
 ## What to check
@@ -39,7 +39,7 @@ Report the **actual numbers** (tests passed, scenarios, coverage), not the numbe
 - Dependencies: `cargo audit` / `cargo deny` if available; if not, say so and list transitive dependencies by hand
 
 ### 3. Coherence: spec ↔ code
-For every claim in `modules/L0-match/*`, `STRUCTURE.md`, `docs/ARCHITECTURE.md`, `docs/CODE_TOUR.md`: is it true in the code? Cite file:line for both the claim and the code that contradicts or confirms it.
+For every claim in `specs/L0-match/*`, `STRUCTURE.md`, `docs/ARCHITECTURE.md`, `docs/CODE_TOUR.md`: is it true in the code? Cite file:line for both the claim and the code that contradicts or confirms it.
 
 ### 4. Doctrine: Plane A / B / C
 - Does any crate outside `pcfm-match` / `pcfm-gen` read `pcfm-hidden` directly?
@@ -75,4 +75,4 @@ Structure: a header with `title`, `version`, `status`, `last_updated`, `auditor`
 
 ## What this prompt is not
 
-It is not a specification of the project (`STRUCTURE.md`, `modules/`, ADRs are). It is not a substitute for the chat agent's judgment (see `docs/context/NEW-SESSION-PROMPT.md`). The maintainer triages every finding with `grep`/`sed` before anything is applied. An audit that says "Pass" without verified findings is a draft, not a fact.
+It is not a specification of the project (`STRUCTURE.md`, `specs/`, ADRs are). It is not a substitute for the chat agent's judgment (see `docs/context/NEW-SESSION-PROMPT.md`). The maintainer triages every finding with `grep`/`sed` before anything is applied. An audit that says "Pass" without verified findings is a draft, not a fact.

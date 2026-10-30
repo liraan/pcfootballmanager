@@ -70,7 +70,7 @@ The debug UI is the **meeting point** of the two ADRs. It is the tool where the 
 
 ## What these ADRs change in the doctrine
 
-ADR-013 **supersedes** the first pillar of `modules/00-foundations.md` §2:
+ADR-013 **supersedes** the first pillar of `specs/00-foundations.md` §2:
 
 > "Traceable determinism. Same seed + same inputs = same result. Never compromised."
 
@@ -80,7 +80,7 @@ After ADR-013, the pillar becomes:
 
 This is a **deliberate change**. The project prioritises simulation richness and scalability over global reproducibility. The consequences are declared in ADR-013.
 
-The pillar was revised in `modules/00-foundations.md` v2.0 (2026-10-26). The other pillars, the Three Planes, the determinism rules (§4), the banned things (§5), and the concentric structure (§9) are **unchanged**. Only the first pillar is superseded.
+The pillar was revised in `specs/00-foundations.md` v2.0 (2026-10-26). The other pillars, the Three Planes, the determinism rules (§4), the banned things (§5), and the concentric structure (§9) are **unchanged**. Only the first pillar is superseded.
 
 ## How to read the two ADRs
 
@@ -103,6 +103,6 @@ These are the next decisions. They will be the object of future ADRs or modules.
 
 - [ADR-012](adr/012-plugins.md) — Plugins: The Brick Contract
 - [ADR-013](adr/013-worlds.md) — Worlds: LOD, Manifest, and Local Determinism
-- [`modules/00-foundations.md`](../modules/00-foundations.md) — the doctrine (pillar 1 revised by ADR-013, v2.0)
+- [`specs/00-foundations.md`](../specs/00-foundations.md) — the doctrine (pillar 1 revised by ADR-013, v2.0)
 - [`STRUCTURE.md`](../STRUCTURE.md) §9 — What Packs Can and Cannot Extend
 - [`docs/PLUGIN_DEVELOPER_GUIDE.md`](PLUGIN_DEVELOPER_GUIDE.md) — how to write a plugin

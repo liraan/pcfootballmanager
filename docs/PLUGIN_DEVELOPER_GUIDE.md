@@ -65,7 +65,7 @@ The dependency graph is **inward-only**: a crate at level N depends on crates at
    license.workspace = true
    repository.workspace = true
    description = "One-line description of what this crate does"
-   documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules/L0-match/<module>.md"
+   documentation = "https://github.com/liraan/pcfootballmanager/tree/main/specs/L0-match/<module>.md"
 
    [dependencies]
    # Only what you need. No dependency without an ADR (see §6).
@@ -163,10 +163,10 @@ The pattern is tested by `pcfm-match`'s test `simulation_is_shared_and_renderer_
 2. **Add the variant** to `EventType` in `pcfm-stats::event`.
 3. **Update `pcfm-match`** to emit the event where it happens.
 4. **Update `docs/GLOSSARY.md`** if the term is new.
-5. **Update the module `modules/L0-match/05-match-events.md`** with the new variant.
+5. **Update the module `specs/L0-match/05-match-events.md`** with the new variant.
 6. **Open a PR** with **one ADR and one crate change**, in two commits.
 
-**Two-phase temporal events:** if the new event is a temporal event, decide whether it is an *attempt* event (carries a `PositionSnapshot`) or an *outcome* event (links back via `attempt_event_id`). See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md) §2.6 and ADR-019 D11.
+**Two-phase temporal events:** if the new event is a temporal event, decide whether it is an *attempt* event (carries a `PositionSnapshot`) or an *outcome* event (links back via `attempt_event_id`). See [`specs/L0-match/05-match-events.md`](../specs/L0-match/05-match-events.md) §2.6 and ADR-019 D11.
 
 The ADR is the gate. Without it, the PR is not reviewed.
 
@@ -194,7 +194,7 @@ The ADR is the gate. Without it, the PR is not reviewed.
 3. **Add `resolve_xxx`** to `GroundTruth` in `pcfm-hidden::lib`.
 4. **Add the corresponding `ObservationEvent` variant** in `pcfm-hidden::observation`. This is what `drain_observations` returns.
 5. **Add the corresponding `EventType`** in `pcfm-stats::event` (see §4). An action that produces an observation must have an event type.
-6. **Update the module `modules/L0-match/10-ground-truth.md`** with the new method.
+6. **Update the module `specs/L0-match/10-ground-truth.md`** with the new method.
 7. **Open a PR** with **one ADR and the modules**, then **one PR** with the code.
 
 ---
@@ -261,7 +261,7 @@ Every crate has an `error.rs` with a `thiserror`-derived enum. The enum is `#[no
 
 ### Documentation
 
-- **`//!` for the module**, with a link to the module in `modules/`.
+- **`//!` for the module**, with a link to the module in `specs/`.
 - **`///` for every public item**, with a `# Errors` section if it returns `Result`, a `# Panics` section if it can panic (and it should not, except for compile-time constants), and an `# Example` section if the usage is not obvious.
 - **`# Safety`** only if the function is `unsafe` (it should not be; see §7.1).
 - **Links to the ADR** when the code implements a decision. E.g. "See `docs/adr/003-plane-a-enforcement.md`".
@@ -301,7 +301,7 @@ If you find yourself wanting to read a latent value outside `pcfm-hidden`, you a
 - [ ] If the change adds a `resolve_*`, there is an ADR in `docs/adr/`.
 - [ ] If the change touches a plane, the plane separation is respected.
 - [ ] If the change adds a test scenario, it is registered in `pcfm-test-runner/src/features/register_all` (see §11).
-- [ ] The module in `modules/` is updated (if the change is a spec change).
+- [ ] The module in `specs/` is updated (if the change is a spec change).
 - [ ] `CHANGELOG.md` has an entry (if the change is user-visible).
 
 ---
@@ -416,10 +416,10 @@ Your feature should now show `[✅]`. If it shows `[⬜]`, the scenario is not r
 ## 12. References
 
 - [`STRUCTURE.md`](../STRUCTURE.md) — repository structure and rules
-- [`modules/00-foundations.md`](../modules/00-foundations.md) — the doctrine (Three Planes, determinism, bans)
+- [`specs/00-foundations.md`](../specs/00-foundations.md) — the doctrine (Three Planes, determinism, bans)
 - [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md) — the capability API
-- [`modules/L0-match/04-match-engine.md`](../modules/L0-match/04-match-engine.md) — the match engine module
-- [`modules/L0-match/10-ground-truth.md`](../modules/L0-match/10-ground-truth.md) — the `GroundTruth` API
+- [`specs/L0-match/04-match-engine.md`](../specs/L0-match/04-match-engine.md) — the match engine module
+- [`specs/L0-match/10-ground-truth.md`](../specs/L0-match/10-ground-truth.md) — the `GroundTruth` API
 - [`docs/GLOSSARY.md`](GLOSSARY.md) — terms used in this guide
 - [`crates/pcfm-testkit/`](../crates/pcfm-testkit/) — the test harness contract
 

@@ -112,12 +112,12 @@ A pack is a post-v1.0 content bundle that respects the module contract (ADR-012)
 These decisions are **not** blocking for the ratification of this ADR. They are listed here so that ADR-016 has a starting point. ADR-016 ("v1.0 content selections") will resolve them.
 
 1. **Which 3 psychological axes are active in v1.0?**
-   - Candidate set (from `modules/L2-psyche/`, if present): *professionalism*, *ambition*, *loyalty*, *pressure*, *consistency*, *temperament*.
+   - Candidate set (from `specs/L2-psyche/`, if present): *professionalism*, *ambition*, *loyalty*, *pressure*, *consistency*, *temperament*.
    - Proposed: professionalism, ambition, pressure. To be confirmed against the actual data model (L2-psyche does not exist yet).
 
 2. **Which 20 roles are in v1.0?**
    - Candidate approach: the 20 most-used roles in the FM community (GK, CB, FB, DM, CM, AM, W, ST, etc.).
-   - Needs the actual list from `modules/L2-*` or from the role taxonomy (L2-tactics does not exist yet).
+   - Needs the actual list from `specs/L2-*` or from the role taxonomy (L2-tactics does not exist yet).
 
 3. **Which 10 formations are in v1.0?**
    - Candidate approach: 4-4-2, 4-3-3, 4-2-3-1, 3-5-2, 3-4-3, 4-4-1-1, 4-1-4-1, 5-3-2, 4-3-1-2, 4-2-2-2.
@@ -130,20 +130,20 @@ These decisions are **not** blocking for the ratification of this ADR. They are 
 5. **Which L2 modules are in v1.0?**
    - The doctrine lists 9 L2 cells. Proposed: market, finance, youth (basic), scouting, psyche (3 axes), crowd (basic), media (basic), AI (basic).
    - **Excluded from v1.0:** advanced media (weekly show), advanced crowd (chants, tifos), advanced youth economy.
-   - To be confirmed against `modules/_index.md`.
+   - To be confirmed against `specs/_index.md`.
 
 6. **Which L3 modules are in v1.0?**
    - Proposed: registry, packs (contract only, no marketplace), generator (basic), editor (basic), assets, UI (functional), statistics (full), quality.
    - **Excluded from v1.0:** plugin marketplace, multi-world editing, advanced editor features.
-   - To be confirmed against `modules/_index.md`.
+   - To be confirmed against `specs/_index.md`.
 
 7. **Dependency on ADR-012 / ADR-013 (resolved).**
    - ADR-012 and ADR-013 are **accepted** (2026-10-25). The "packs" mechanism exists. The "in a pack" answer is now safe.
 
 ## References
 
-- `modules/00-foundations.md` §7 — "Full 6-axis psychology (3 axes in v1.0, the other 3 in a pack)". The precedent for this ADR.
-- `modules/_index.md` — the full module inventory.
+- `specs/00-foundations.md` §7 — "Full 6-axis psychology (3 axes in v1.0, the other 3 in a pack)". The precedent for this ADR.
+- `specs/_index.md` — the full module inventory.
 - ADR-012 (module system) — the mechanism that makes "in a pack" safe. **Accepted 2026-10-25.**
 - ADR-013 (world system) — the mechanism that makes multi-world editing safe post-v1.0. **Accepted 2026-10-25.**
 - `docs/adr/002-project-name-and-scope.md` — the original scope decision.

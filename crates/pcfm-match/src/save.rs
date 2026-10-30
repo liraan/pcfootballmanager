@@ -1,6 +1,6 @@
 //! `MatchSave` — save and load a single match.
 //!
-//! See `modules/L0-match/07-save-minimal.md` for the full specification.
+//! See `specs/L0-match/07-save-minimal.md` for the full specification.
 //!
 //! # What is saved
 //!

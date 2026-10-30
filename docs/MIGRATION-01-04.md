@@ -28,7 +28,7 @@
 
 ## 1. Context
 
-The repository originally used a **flat 25-module structure** (00 to 24). The current structure is **concentric** (L0 → L1 → L2 → L3), described in `STRUCTURE.md` §2 and `modules/00-foundations.md` §9.
+The repository originally used a **flat 25-module structure** (00 to 24). The current structure is **concentric** (L0 → L1 → L2 → L3), described in `STRUCTURE.md` §2 and `specs/00-foundations.md` §9.
 
 Four modules were written in the flat structure, in Italian:
 
@@ -137,7 +137,7 @@ For each target cell:
 1. Copy the relevant legacy section into the target cell (as English prose).
 2. Apply the removals in §3.
 3. Adapt the cell frontmatter (level, cell, module_id, version, status).
-4. Add the target cell to `modules/_index.md`.
+4. Add the target cell to `specs/_index.md`.
 5. Update `referenced_by` in the cells that now reference it.
 
 ### Step 4 — Verify
@@ -150,7 +150,7 @@ For each target cell:
 - [ ] Concentric cell ID, not flat module number.
 - [ ] `MIT OR Apache-2.0` for code, `CC-BY-NC-SA-4.0` for assets.
 - [ ] `conforms_to: "00-foundations (v1.1)"` in the frontmatter.
-- [ ] `modules/_index.md` updated.
+- [ ] `specs/_index.md` updated.
 - [ ] `CHANGELOG.md` entry added.
 
 ## 5. Current status
@@ -178,8 +178,8 @@ Legend: ❌ not started · 🟡 in progress · ✅ done · "unknown" = not check
 
 - [`../CHANGELOG.md`](../CHANGELOG.md) — entry `[2026-10-25]` → "Removed"
 - [`../STRUCTURE.md`](../STRUCTURE.md) §2 — concentric levels
-- [`../modules/00-foundations.md`](../modules/00-foundations.md) §3, §4, §5 — the bans that the migration must respect
-- [`../modules/L0-match/03-entities-minimal.md`](../modules/L0-match/03-entities-minimal.md) — the `Player` struct without latents
+- [`../specs/00-foundations.md`](../specs/00-foundations.md) §3, §4, §5 — the bans that the migration must respect
+- [`../specs/L0-match/03-entities-minimal.md`](../specs/L0-match/03-entities-minimal.md) — the `Player` struct without latents
 - [`adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md) — no public latents
 - [`adr/006-license.md`](adr/006-license.md) — MIT/Apache-2.0 + CC-BY-NC-SA-4.0
 - [`adr/007-canonical-language.md`](adr/007-canonical-language.md) — English canonical

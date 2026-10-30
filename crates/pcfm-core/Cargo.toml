@@ -7,7 +7,7 @@ authors.workspace = true
 license.workspace = true
 repository.workspace = true
 description = "Core infrastructure for PCFM: RNG, event bus, IDs, deterministic math"
-documentation = "https://github.com/liraan/pcfootballmanager/tree/main/modules/L0-match"
+documentation = "https://github.com/liraan/pcfootballmanager/tree/main/specs/L0-match"
 
 [dependencies]
 rand_chacha.workspace = true

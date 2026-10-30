@@ -1,6 +1,6 @@
 //! `MatchEvent` — the atomic unit of Plane B.
 //!
-//! See `modules/L0-match/05-match-events.md` for the full specification.
+//! See `specs/L0-match/05-match-events.md` for the full specification.
 //!
 //! # Append-only
 //!
@@ -80,7 +80,7 @@ pub enum EventType {
 /// A `MatchEvent` — the atomic unit of Plane B.
 ///
 /// The event is **append-only**: once created, it is never modified or
-/// deleted. See `modules/L0-match/05-match-events.md` §2.4.
+/// deleted. See `specs/L0-match/05-match-events.md` §2.4.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MatchEvent {
     /// The unique identifier of the event (generational).

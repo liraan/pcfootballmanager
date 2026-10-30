@@ -1,6 +1,6 @@
 //! `pcfm-model` — minimal entities for PCFM.
 //!
-//! See `modules/L0-match/03-entities-minimal.md` for the full specification.
+//! See `specs/L0-match/03-entities-minimal.md` for the full specification.
 //!
 //! # Design
 //!
@@ -14,7 +14,7 @@
 //! logged, and displayed. Latent attributes (Plane A) do **not** appear in
 //! any struct here. They live in `pcfm-hidden`, indexed by `PlayerId`, and
 //! are accessed only via `GroundTruth::resolve_*` (see ADR-003 and
-//! `modules/L0-match/10-ground-truth.md`).
+//! `specs/L0-match/10-ground-truth.md`).
 
 #![deny(missing_docs)]
 

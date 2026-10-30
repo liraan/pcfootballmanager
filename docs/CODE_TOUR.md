@@ -24,7 +24,7 @@ Prerequisites:
 
 - **Rust 1.85+** (stable). The workspace is pinned via `rust-toolchain.toml`.
 - Familiarity with Rust basics: ownership, `Result`, traits.
-- Read first: [`modules/00-foundations.md`](../modules/00-foundations.md) §3
+- Read first: [`specs/00-foundations.md`](../specs/00-foundations.md) §3
   (the Three Planes) and §4 (determinism). Without those two sections, the
   code is harder to follow than it needs to be.
 
@@ -140,7 +140,7 @@ reconstructed? Why is `MatchSave` JSON and not `postcard` yet?
 **Key test to read:** `simulation_is_shared_and_renderer_agnostic` in
 `engine.rs`. It is the contract that any renderer must satisfy.
 
-**A note on events:** the match engine emits temporal events in two synchronous phases (ADR-019 D11): an *attempt* event carrying a `PositionSnapshot`, followed by the *outcome* event linked back via `attempt_event_id`. See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md) §2.6.
+**A note on events:** the match engine emits temporal events in two synchronous phases (ADR-019 D11): an *attempt* event carrying a `PositionSnapshot`, followed by the *outcome* event linked back via `attempt_event_id`. See [`specs/L0-match/05-match-events.md`](../specs/L0-match/05-match-events.md) §2.6.
 
 ---
 
@@ -178,7 +178,7 @@ After the tour, pick one of these (in order of impact for a newcomer):
 | Explain a model constant in a doc comment | `crates/pcfm-match/src/state.rs`, `crates/pcfm-hidden/src/lib.rs` | ~5 lines each |
 | Add a scenario for a corner case you found | `crates/pcfm-test-runner/src/features/l0_match.rs` | ~30 lines |
 | Improve the prototype model (realistic xG, duels) | `crates/pcfm-hidden/src/lib.rs` | open an ADR first |
-| Write a first L1 cell | `modules/L1-world/01-nation.md` (does not exist yet) | open an ADR first |
+| Write a first L1 cell | `specs/L1-world/01-nation.md` (does not exist yet) | open an ADR first |
 
 The first two are **safe**: they add documentation, not behaviour. The
 third is safe if the scenario passes. The last two require an ADR, as per
@@ -194,7 +194,7 @@ If you want to go deeper, in this order:
 2. [`docs/context/REPO-SNAPSHOT.md`](context/REPO-SNAPSHOT.md) — what each file contains.
 3. [`docs/PLUGIN_DEVELOPER_GUIDE.md`](PLUGIN_DEVELOPER_GUIDE.md) — how to write a plugin.
 4. [`docs/adr/`](adr/) — every decision the project has made, and why.
-5. [`modules/L0-match/`](../modules/L0-match/) — the full specification of L0, cell by cell.
+5. [`specs/L0-match/`](../specs/L0-match/) — the full specification of L0, cell by cell.
 
 ---
 

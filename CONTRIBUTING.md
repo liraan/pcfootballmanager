@@ -15,9 +15,9 @@ If you are new, read the files in the order below before opening a PR.
 ## Read in this order
 
 1. [`README.md`](README.md) — what the project is
-2. [`modules/00-foundations.md`](modules/00-foundations.md) — the doctrine. **Non-negotiable.** *(v2.0, pillar 1 revised by ADR-013.)*
+2. [`specs/00-foundations.md`](specs/00-foundations.md) — the doctrine. **Non-negotiable.** *(v2.0, pillar 1 revised by ADR-013.)*
 3. [`STRUCTURE.md`](STRUCTURE.md) — how the repo works
-4. [`modules/_index.md`](modules/_index.md) — what exists, what's missing
+4. [`specs/_index.md`](specs/_index.md) — what exists, what's missing
 5. [`docs/GLOSSARY.md`](docs/GLOSSARY.md) — the terms used across the spec
 6. [`docs/PLUGIN_DEVELOPER_GUIDE.md`](docs/PLUGIN_DEVELOPER_GUIDE.md) — how to write a module (and why the simulation/rendering split matters)
 7. [`docs/adr/`](docs/adr/) — the decisions, including open ones
@@ -90,7 +90,7 @@ Including in AI-drafted text. Especially in AI-drafted text. The AI disclosure i
 4. **Update `last_updated`.**
 5. **Update `referenced_by`** in downstream cells if the dependency changed.
 6. **Open a PR with one cell.**
-7. **If the change is a status transition** (e.g. `draft → ratified`), update both `modules/_index.md` and the overview cell of the level (`00-overview.md` for L0).
+7. **If the change is a status transition** (e.g. `draft → ratified`), update both `specs/_index.md` and the overview cell of the level (`00-overview.md` for L0).
 
 ---
 
@@ -98,10 +98,10 @@ Including in AI-drafted text. Especially in AI-drafted text. The AI disclosure i
 
 1. **Pick the level** (L0, L1, L2, L3) the new cell belongs to. See `STRUCTURE.md` §2.
 2. **Check the dependency rules.** A level N cell may not depend on level `> N`.
-3. **Create the directory** `modules/L{N}-{kebab-name}/`.
+3. **Create the directory** `specs/L{N}-{kebab-name}/`.
 4. **Add `00-overview.md`** with the frontmatter (see `STRUCTURE.md` §4). The overview is the "border" of the cell: contracts, dependencies, DoD, risks.
 5. **Add the sub-cells** as files inside the directory.
-6. **Add a row to `modules/_index.md`.**
+6. **Add a row to `specs/_index.md`.**
 7. **Open a PR with one cell.**
 
 A cell without:
@@ -175,7 +175,7 @@ Imperative mood, one line ≤ 72 chars, then a body if needed.
 - [ ] The WHY is explained, not just the what
 - [ ] One change per PR
 - [ ] If it touches an open ADR, the ADR is accepted first
-- [ ] `modules/_index.md` updated if a cell was added
+- [ ] `specs/_index.md` updated if a cell was added
 - [ ] If it is a status transition, the level's overview cell is updated too
 - [ ] No contradiction with existing cells (or the contradiction is the point of the PR)
 - [ ] Language is English (or a translation in `locales/`)

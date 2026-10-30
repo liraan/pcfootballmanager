@@ -51,7 +51,7 @@ The single most important architectural choice in PCFM is the strict separation 
 
 **Why it matters:** scouting in PCFM is not a lookup — it's an *estimate of an observation of the truth*. The player is meant to be uncertain. That uncertainty is the game.
 
-Full doctrine → [`modules/00-foundations.md`](modules/00-foundations.md) · Enforcement → [ADR-003](docs/adr/003-plane-a-enforcement.md)
+Full doctrine → [`specs/00-foundations.md`](specs/00-foundations.md) · Enforcement → [ADR-003](docs/adr/003-plane-a-enforcement.md)
 
 ---
 
@@ -139,7 +139,7 @@ Dependencies are pinned and justified in ADRs. No `*` versions in `Cargo.toml`. 
 
 ```
 pcfootballmanager/
-├── modules/          # specification, concentric L0–L3
+├── specs/          # specification, concentric L0–L3
 │   ├── 00-foundations.md
 │   └── L0-match/     # 11 cells, ratified + implemented
 ├── crates/           # code, one crate per architectural concern
@@ -158,7 +158,7 @@ pcfootballmanager/
 └── archive/          # historical Prompt Masters, legacy modules
 ```
 
-Full layout and rules → [`STRUCTURE.md`](STRUCTURE.md) · Index of all modules → [`modules/_index.md`](modules/_index.md)
+Full layout and rules → [`STRUCTURE.md`](STRUCTURE.md) · Index of all modules → [`specs/_index.md`](specs/_index.md)
 
 ---
 
@@ -195,9 +195,9 @@ The specification is **concentric**. Read in this order:
 
 | # | File | Answers |
 |---|------|---------|
-| 1 | [`modules/00-foundations.md`](modules/00-foundations.md) | *Why does this project exist? What are the non-negotiable rules?* |
+| 1 | [`specs/00-foundations.md`](specs/00-foundations.md) | *Why does this project exist? What are the non-negotiable rules?* |
 | 2 | [`STRUCTURE.md`](STRUCTURE.md) | *How is the repo organised?* |
-| 3 | [`modules/_index.md`](modules/_index.md) | *What exists at each level, and in what state?* |
+| 3 | [`specs/_index.md`](specs/_index.md) | *What exists at each level, and in what state?* |
 | 4 | [`docs/adr/`](docs/adr/) | *Which decisions have been made, and why?* |
 | 5 | [`docs/GLOSSARY.md`](docs/GLOSSARY.md) | *What does each term mean?* |
 | 6 | [`docs/PLUGIN_DEVELOPER_GUIDE.md`](docs/PLUGIN_DEVELOPER_GUIDE.md) | *How do I write a module? How do I test it?* |

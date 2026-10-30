@@ -233,6 +233,6 @@ All decisions are ratified (D1-D7). No open questions remain. Changes require an
 - ADR-012 — Plugins: The Brick Contract (accepted)
 - ADR-013 — Worlds: LOD, Manifest, and Local Determinism (accepted)
 - ADR-007 — Canonical language (English; this ADR is in English)
-- `modules/00-foundations.md` §5 (banned things), §7 (non-goals)
-- `modules/_index.md` — the L1/L2/L3 module inventory
+- `specs/00-foundations.md` §5 (banned things), §7 (non-goals)
+- `specs/_index.md` — the L1/L2/L3 module inventory
 - `docs/context/PROJECT-IDEA-LOG.md` §4.4 — the three technical gaps (gap A is resolved in D1)

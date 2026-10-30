@@ -77,7 +77,7 @@ This ADR is **proposed**, not accepted. No code changes until it is ratified.
 3. Keep in `pcfm-test-runner`: `check.rs`, `commands.rs`, `features/`, and the runner-only part of `args.rs`. Remove from it: `demo.rs`, `render.rs`, the simulation part of `main.rs`.
 4. Update the ~53 live references: `ARCHITECTURE.md`, `README.md`, `PLUGIN_DEVELOPER_GUIDE.md`, `CODE_TOUR.md`, `STRUCTURE.md`, `PROJECT-STATUS.md`, `CONTRIBUTING.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `REPO-SNAPSHOT.md`.
 5. **Do not touch:** `docs/adr/003-plane-a-enforcement.md` (immutable ADR), `IDEAS.md` / `PROJECT-IDEA-LOG.md` / `2026-10-28-09-42-review.md` (historical), except for an append that cites this ADR.
-6. `modules/00-foundations.md` (1 reference): verify whether it is doctrine or an example. If doctrine, update it with this ADR as the reference.
+6. `specs/00-foundations.md` (1 reference): verify whether it is doctrine or an example. If doctrine, update it with this ADR as the reference.
 7. Full verification cascade after the change: `cargo build --release`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `cargo fmt --check`, `cargo run --release --bin pcfm-test-runner -- --check --seed 42`.
 
 ## Post-implementation note

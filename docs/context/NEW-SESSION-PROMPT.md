@@ -37,7 +37,7 @@ I am resuming work on **PC Football Manager (PCFM)**. The previous chat ended at
 - **Crates:** 9 `pcfm-*` crates: `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner`, `pcfm-demo`, `pcfm-fixtures`.
 - **Levels:** L0 (match engine) is complete and implemented. L1-L3 are planned.
 - **ADR-019 (match engine contract)** is `accepted`: agent-first, positional, N agents (players + referee). Deferred 4-9 open.
-- **`STRUCTURE.md` §5** is the single source of truth for ADR status. `modules/_index.md` shows a derived view.
+- **`STRUCTURE.md` §5** is the single source of truth for ADR status. `specs/_index.md` shows a derived view.
 - **`docs/context/`** holds briefing material (not normative): `REPO-SNAPSHOT.md`, `PROJECT-IDEA-LOG.md`, `NEW-SESSION-PROMPT.md`, `SESSION-STATE.md`, `AGENT-POLICY.md`, `HERMES-AGENT-PROMPT.md`, `GITHUB-AGENT-PROMPT.md`.
 - **Pre-commit hook** (`.githooks/pre-commit`, versioned): runs fmt, clippy, test only if Rust files are staged. Install with `git config core.hooksPath .githooks` (one-off).
 - **Phase 1 vs Phase 2:** Phase 1 (now) ruleset disabled, single maintainer, direct push allowed. Phase 2 (when an agent gets a write token and the ruleset is active) branch + PR mandatory. See `docs/context/AGENT-POLICY.md` §1.
@@ -55,7 +55,7 @@ Then, when the task requires it:
 
 - **Architecture:** `docs/ARCHITECTURE.md` (how the crates interact) and `docs/CODE_TOUR.md` (reading path).
 - **Vision:** `docs/WORLD-MODEL.md` (levels, taxonomy, simulation vs presentation).
-- **Doctrine (non-negotiable):** `modules/00-foundations.md` (v2.0, pillar 1 = local determinism) and `modules/_index.md`.
+- **Doctrine (non-negotiable):** `specs/00-foundations.md` (v2.0, pillar 1 = local determinism) and `specs/_index.md`.
 - **Contract:** `docs/adr/019-match-engine-contract.md` (agent-first, positional, N agents: players + referee).
 
 ## What remains to be done
@@ -118,7 +118,7 @@ For each of the 3 most recent reports, read the executive summary and any findin
 
 ### 4. Read the doctrine (non-negotiable)
 
-    sed -n '1,130p' modules/00-foundations.md
+    sed -n '1,130p' specs/00-foundations.md
 
 At minimum: §1 (pillars), §2 (design pillars), §3 (Three Planes), §5 (banned things).
 
@@ -194,7 +194,7 @@ Compare the numbers across the files that claim them:
 
     grep -n 'tests\|crates\|ADR' docs/context/SESSION-STATE.md | head -10
     grep -n '^| 0' STRUCTURE.md | tail -25
-    grep -n '^| \[0' modules/_index.md | tail -25
+    grep -n '^| \[0' specs/_index.md | tail -25
     grep -n 'test\|crate\|ADR' docs/context/NEW-SESSION-PROMPT.md | head -15
 
 All must agree. If they diverge, one is stale: fix it, and commit the fix in the same session.

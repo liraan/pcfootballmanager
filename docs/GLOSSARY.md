@@ -14,27 +14,27 @@ If a term is missing, open an issue with the `glossary` label. If a definition c
 
 ### Three Planes
 
-The non-negotiable architectural separation of data into three layers. Plane A (Ground Truth) is never exposed; Plane B (Observation) is computed from events; Plane C (Estimation) is what the player sees. See [`modules/00-foundations.md`](../modules/00-foundations.md) §3.
+The non-negotiable architectural separation of data into three layers. Plane A (Ground Truth) is never exposed; Plane B (Observation) is computed from events; Plane C (Estimation) is what the player sees. See [`specs/00-foundations.md`](../specs/00-foundations.md) §3.
 
 ### Plane A — Ground Truth
 
-The actual state of the world: latent attributes, physiological state, latent psychological state, internal RNG seed. Lives in `pcfm-hidden`. Never exposed. Read only by `pcfm-match` and `pcfm-gen`, via `resolve_*` functions. See [`modules/00-foundations.md`](../modules/00-foundations.md) §3 and [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md).
+The actual state of the world: latent attributes, physiological state, latent psychological state, internal RNG seed. Lives in `pcfm-hidden`. Never exposed. Read only by `pcfm-match` and `pcfm-gen`, via `resolve_*` functions. See [`specs/00-foundations.md`](../specs/00-foundations.md) §3 and [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md).
 
 ### Plane B — Observation
 
-Events and statistics computed exclusively from observable outcomes. Includes `MatchEvent`, aggregated statistics, ratings (computed from events, never from attributes), and temporal trends. Append-only. Lives in `pcfm-stats`. See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md).
+Events and statistics computed exclusively from observable outcomes. Includes `MatchEvent`, aggregated statistics, ratings (computed from events, never from attributes), and temporal trends. Append-only. Lives in `pcfm-stats`. See [`specs/L0-match/05-match-events.md`](../specs/L0-match/05-match-events.md).
 
 ### Plane C — Estimation
 
-Valuations, projections, and indexes derived from statistical models. Includes `IndexSnapshot`, `ProjectionProfile`, visible attributes, and scouting reports. This is what the player sees. See [`modules/00-foundations.md`](../modules/00-foundations.md) §3.
+Valuations, projections, and indexes derived from statistical models. Includes `IndexSnapshot`, `ProjectionProfile`, visible attributes, and scouting reports. This is what the player sees. See [`specs/00-foundations.md`](../specs/00-foundations.md) §3.
 
 ### Doctrine
 
-The set of non-negotiable rules that every module must obey. Lives in [`modules/00-foundations.md`](../modules/00-foundations.md). Changing the doctrine requires an ADR.
+The set of non-negotiable rules that every module must obey. Lives in [`specs/00-foundations.md`](../specs/00-foundations.md). Changing the doctrine requires an ADR.
 
 ### Concentric structure
 
-The specification is organised in four concentric levels (L0 → L1 → L2 → L3), each expanding the previous one without replacing it. Dependencies flow inward. See [`STRUCTURE.md`](../STRUCTURE.md) §2 and [`modules/00-foundations.md`](../modules/00-foundations.md) §9.
+The specification is organised in four concentric levels (L0 → L1 → L2 → L3), each expanding the previous one without replacing it. Dependencies flow inward. See [`STRUCTURE.md`](../STRUCTURE.md) §2 and [`specs/00-foundations.md`](../specs/00-foundations.md) §9.
 
 ### Level
 
@@ -42,7 +42,7 @@ One of the four concentric layers: L0 (Match), L1 (Season), L2 (Career), L3 (Met
 
 ### Module
 
-A directory under `modules/`, containing a `00-overview.md` and one or more sub-modules. A module is identified by a `cell` field (historical name) and a `module_id` in its frontmatter (e.g. `L0-match`, `L0.04`). A **sub-module** is a file inside a module.
+A directory under `specs/`, containing a `00-overview.md` and one or more sub-modules. A module is identified by a `cell` field (historical name) and a `module_id` in its frontmatter (e.g. `L0-match`, `L0.04`). A **sub-module** is a file inside a module.
 
 ### `00-overview.md`
 
@@ -50,7 +50,7 @@ The "border" of a module. It declares the module's contracts, dependencies, Defi
 
 ### Two-phase temporal pattern
 
-A temporal event is emitted in two synchronous phases: phase 1 is an *attempt* event carrying a `PositionSnapshot`; phase 2 is the *outcome* event, linked back to the attempt via `attempt_event_id`. Both phases occur within the same tick; there is no deferred resolution in v1.0. See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md) §2.6 and ADR-019 D11.
+A temporal event is emitted in two synchronous phases: phase 1 is an *attempt* event carrying a `PositionSnapshot`; phase 2 is the *outcome* event, linked back to the attempt via `attempt_event_id`. Both phases occur within the same tick; there is no deferred resolution in v1.0. See [`specs/L0-match/05-match-events.md`](../specs/L0-match/05-match-events.md) §2.6 and ADR-019 D11.
 
 ---
 
@@ -58,31 +58,31 @@ A temporal event is emitted in two synchronous phases: phase 1 is an *attempt* e
 
 ### `MatchEvent`
 
-The atomic unit of Plane B. Every observable action in a match. Append-only: never modified, never deleted. Carries a `CauseTrace`. Defined in [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md).
+The atomic unit of Plane B. Every observable action in a match. Append-only: never modified, never deleted. Carries a `CauseTrace`. Defined in [`specs/L0-match/05-match-events.md`](../specs/L0-match/05-match-events.md).
 
 ### `EventChain`
 
-The append-only store of `MatchEvent`s, with a hash chain to detect tampering. Reloading a save verifies the chain. Defined in [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md) §2.4.
+The append-only store of `MatchEvent`s, with a hash chain to detect tampering. Reloading a save verifies the chain. Defined in [`specs/L0-match/05-match-events.md`](../specs/L0-match/05-match-events.md) §2.4.
 
 ### `CauseTrace`
 
-The structured explanation carried by every `MatchEvent`, describing why the event happened. Mandatory. Contains `primary_cause`, `contributing_factors`, and an `explanation_template`. Defined in [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md) §2.3.
+The structured explanation carried by every `MatchEvent`, describing why the event happened. Mandatory. Contains `primary_cause`, `contributing_factors`, and an `explanation_template`. Defined in [`specs/L0-match/05-match-events.md`](../specs/L0-match/05-match-events.md) §2.3.
 
 ### `GroundTruth`
 
-The opaque type exposed by `pcfm-hidden`. Contains Plane A. Has no public fields; only the `resolve_*` methods. See [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md) and [`modules/L0-match/03-entities-minimal.md`](../modules/L0-match/03-entities-minimal.md) §3.2.
+The opaque type exposed by `pcfm-hidden`. Contains Plane A. Has no public fields; only the `resolve_*` methods. See [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md) and [`specs/L0-match/03-entities-minimal.md`](../specs/L0-match/03-entities-minimal.md) §3.2.
 
 ### `resolve_*`
 
-The public API of `pcfm-hidden`: `resolve_duel`, `resolve_shot`, `resolve_pass`, `resolve_pressure`, `resolve_injury_risk`, `resolve_save`, `resolve_set_piece`, `drain_observations`. The match engine calls these; it never reads a latent value. See [`modules/L0-match/03-entities-minimal.md`](../modules/L0-match/03-entities-minimal.md) §3.2.
+The public API of `pcfm-hidden`: `resolve_duel`, `resolve_shot`, `resolve_pass`, `resolve_pressure`, `resolve_injury_risk`, `resolve_save`, `resolve_set_piece`, `drain_observations`. The match engine calls these; it never reads a latent value. See [`specs/L0-match/03-entities-minimal.md`](../specs/L0-match/03-entities-minimal.md) §3.2.
 
 ### `IndexSnapshot`
 
-A windowed observed measurement over time. Replaces the banned CA/PA scalar. Lives in Plane C. See [`modules/00-foundations.md`](../modules/00-foundations.md) §3.
+A windowed observed measurement over time. Replaces the banned CA/PA scalar. Lives in Plane C. See [`specs/00-foundations.md`](../specs/00-foundations.md) §3.
 
 ### `PositionSnapshot`
 
-The positions of the agents relevant to an event, captured at the moment of an *attempt* event (phase 1 of the two-phase temporal pattern, ADR-019 D11). Bounded to the agents relevant to the event. See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md) §2.6.
+The positions of the agents relevant to an event, captured at the moment of an *attempt* event (phase 1 of the two-phase temporal pattern, ADR-019 D11). Bounded to the agents relevant to the event. See [`specs/L0-match/05-match-events.md`](../specs/L0-match/05-match-events.md) §2.6.
 
 ### `attempt_event_id`
 
@@ -90,19 +90,19 @@ On an outcome event (phase 2 of the two-phase temporal pattern, ADR-019 D11), th
 
 ### `ProjectionProfile`
 
-A forecast expressed as a **confidence band**, never a single number. Replaces the banned PA. Contains `expected_band`, `confidence_curve`, `positive_drivers`, `risk_factors`. See [`modules/00-foundations.md`](../modules/00-foundations.md) §3.
+A forecast expressed as a **confidence band**, never a single number. Replaces the banned PA. Contains `expected_band`, `confidence_curve`, `positive_drivers`, `risk_factors`. See [`specs/00-foundations.md`](../specs/00-foundations.md) §3.
 
 ### `ContextModifiers`
 
-The struct that carries external state into the match engine. Produced by L1/L2, consumed by L0.04 and L0.08. Every field is observed, none is latent. Defined in [`modules/L0-match/09-context-modifiers.md`](../modules/L0-match/09-context-modifiers.md).
+The struct that carries external state into the match engine. Produced by L1/L2, consumed by L0.04 and L0.08. Every field is observed, none is latent. Defined in [`specs/L0-match/09-context-modifiers.md`](../specs/L0-match/09-context-modifiers.md).
 
 ### `RandomEvent`
 
-A discrete in-match event (injury, card, brawl, weather interruption). "Random" means unpredictable to the player, not non-deterministic to the system. Sampled from a dedicated stream. Defined in [`modules/L0-match/08-random-events.md`](../modules/L0-match/08-random-events.md).
+A discrete in-match event (injury, card, brawl, weather interruption). "Random" means unpredictable to the player, not non-deterministic to the system. Sampled from a dedicated stream. Defined in [`specs/L0-match/08-random-events.md`](../specs/L0-match/08-random-events.md).
 
 ### Entity ID
 
-A generational identifier (`EntityId<T>`), never a hash or a pointer. Used for all entities. See [`modules/L0-match/03-entities-minimal.md`](../modules/L0-match/03-entities-minimal.md) §3.1.
+A generational identifier (`EntityId<T>`), never a hash or a pointer. Used for all entities. See [`specs/L0-match/03-entities-minimal.md`](../specs/L0-match/03-entities-minimal.md) §3.1.
 
 ### Append-only
 
@@ -118,15 +118,15 @@ A property of `MatchEvent`, `EventChain`, and the registry: entries are never mo
 
 ### Determinism
 
-Same seed + same inputs = same result. Always. A non-negotiable pillar. See [`modules/00-foundations.md`](../modules/00-foundations.md) §4.
+Same seed + same inputs = same result. Always. A non-negotiable pillar. See [`specs/00-foundations.md`](../specs/00-foundations.md) §4.
 
 ### Named RNG stream
 
-A random stream identified by a name (`match:{id}:micro-decisions`) and derived from `(world_seed, stream_name)`. Adding a new stream never shifts the results of existing streams. Implemented in `L0.01`. See [`modules/L0-match/01-rng.md`](../modules/L0-match/01-rng.md).
+A random stream identified by a name (`match:{id}:micro-decisions`) and derived from `(world_seed, stream_name)`. Adding a new stream never shifts the results of existing streams. Implemented in `L0.01`. See [`specs/L0-match/01-rng.md`](../specs/L0-match/01-rng.md).
 
 ### `world_seed`
 
-The top-level seed from which all streams are derived. Changing it changes the entire world. Stored in the save. See [`modules/L0-match/01-rng.md`](../modules/L0-match/01-rng.md) §2.4.
+The top-level seed from which all streams are derived. Changing it changes the entire world. Stored in the save. See [`specs/L0-match/01-rng.md`](../specs/L0-match/01-rng.md) §2.4.
 
 ### `SIM_VERSION`
 
@@ -134,11 +134,11 @@ The version identifier of the simulation behaviour. Bumped whenever the outcome 
 
 ### Golden test
 
-A test that replays a known scenario from a known seed and compares a hash of the resulting state. If the hash changes, the CI fails and asks for a `SIM_VERSION` bump. See [`modules/00-foundations.md`](../modules/00-foundations.md) §4.
+A test that replays a known scenario from a known seed and compares a hash of the resulting state. If the hash changes, the CI fails and asks for a `SIM_VERSION` bump. See [`specs/00-foundations.md`](../specs/00-foundations.md) §4.
 
 ### Property test
 
-A test that asserts a property that must hold for all inputs (e.g. "money is conserved"), using `proptest`. See [`modules/00-foundations.md`](../modules/00-foundations.md) §4.
+A test that asserts a property that must hold for all inputs (e.g. "money is conserved"), using `proptest`. See [`specs/00-foundations.md`](../specs/00-foundations.md) §4.
 
 ---
 
@@ -153,7 +153,7 @@ The Rust crates of the project. Each has a single responsibility. The mapping:
 - `pcfm-stats` — Plane B storage (append-only)
 - `pcfm-model` — pure entities
 - `pcfm-gen` — world generator
-- Others — see [`modules/00-foundations.md`](../modules/00-foundations.md) §8 and [`STRUCTURE.md`](../STRUCTURE.md) §2.
+- Others — see [`specs/00-foundations.md`](../specs/00-foundations.md) §8 and [`STRUCTURE.md`](../STRUCTURE.md) §2.
 
 ### `pcfm-bridge`
 
@@ -185,7 +185,7 @@ An ADR with `status: proposed`. It **blocks** the code in the area it touches. N
 
 ### Doctrine amendment
 
-A change to `modules/00-foundations.md`. Requires a doctrine ADR. Cannot be done silently.
+A change to `specs/00-foundations.md`. Requires a doctrine ADR. Cannot be done silently.
 
 ### Definition of Done (DoD)
 
@@ -217,19 +217,19 @@ Frontmatter fields that declare the dependency graph. `depends_on` lists modules
 
 ### CA/PA
 
-`current_ability`, `potential_ability`, and any equivalent scalar. **Banned.** Replaced by `IndexSnapshot` and `ProjectionProfile`. See [`modules/00-foundations.md`](../modules/00-foundations.md) §5.
+`current_ability`, `potential_ability`, and any equivalent scalar. **Banned.** Replaced by `IndexSnapshot` and `ProjectionProfile`. See [`specs/00-foundations.md`](../specs/00-foundations.md) §5.
 
 ### Truth leakage
 
-Any path by which Plane A data reaches a module outside `pcfm-hidden` / `pcfm-match` / `pcfm-gen`. **Banned.** See [`modules/00-foundations.md`](../modules/00-foundations.md) §3.
+Any path by which Plane A data reaches a module outside `pcfm-hidden` / `pcfm-match` / `pcfm-gen`. **Banned.** See [`specs/00-foundations.md`](../specs/00-foundations.md) §3.
 
 ### `HashMap` in simulation paths
 
-**Banned.** Use `BTreeMap`, `BTreeSet`, or explicitly sorted `Vec`. Iteration order of `HashMap` is not deterministic. See [`modules/L0-match/01-rng.md`](../modules/L0-match/01-rng.md) §2.5.
+**Banned.** Use `BTreeMap`, `BTreeSet`, or explicitly sorted `Vec`. Iteration order of `HashMap` is not deterministic. See [`specs/L0-match/01-rng.md`](../specs/L0-match/01-rng.md) §2.5.
 
 ### Hardcoded balance values
 
-**Banned.** All tunable values live in `balance/*.toml` or `registry/*.yaml`. See [`modules/00-foundations.md`](../modules/00-foundations.md) §5.
+**Banned.** All tunable values live in `balance/*.toml` or `registry/*.yaml`. See [`specs/00-foundations.md`](../specs/00-foundations.md) §5.
 
 ### `Proprietary`
 
@@ -299,8 +299,8 @@ These terms appeared in previous versions of the specification and are no longer
 | **Cell** (deprecated) | Now called "module"; the `cell` field in the frontmatter is a historical name | Module |
 | **Sub-cell** (deprecated) | Now called "sub-module" | Sub-module |
 | **`01-architecture.md` … `04-data-model.md`** | Removed; content is being migrated | Distributed across L0, L1, L3 (see [`docs/MIGRATION-01-04.md`](MIGRATION-01-04.md)) |
-| **`Prompt Master`** | The original source doctrine, archived | [`modules/00-foundations.md`](../modules/00-foundations.md) |
-| **`modules/L1-season/00-overview.md` (link)** | The file does not exist yet | Marked `*(planned)*` in [`modules/_index.md`](../modules/_index.md) |
+| **`Prompt Master`** | The original source doctrine, archived | [`specs/00-foundations.md`](../specs/00-foundations.md) |
+| **`specs/L1-season/00-overview.md` (link)** | The file does not exist yet | Marked `*(planned)*` in [`specs/_index.md`](../specs/_index.md) |
 
 ---
 

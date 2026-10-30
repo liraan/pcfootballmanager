@@ -16,7 +16,7 @@ Active entities:  0
 Deprecated:       0
 ```
 
-The registry module is planned at **L3** (`modules/L3-registry/`). No registry files exist yet. When the first registry file is written, this section is updated.
+The registry module is planned at **L3** (`specs/L3-registry/`). No registry files exist yet. When the first registry file is written, this section is updated.
 
 ---
 

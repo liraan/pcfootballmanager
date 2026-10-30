@@ -1,6 +1,6 @@
 //! Event bus — deterministic, in-process dispatch.
 //!
-//! See `modules/L0-match/02-event-bus.md` for the full specification.
+//! See `specs/L0-match/02-event-bus.md` for the full specification.
 //!
 //! # Design
 //!

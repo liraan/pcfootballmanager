@@ -64,7 +64,7 @@ If the UI needs a value, the view model must expose it. This is the only binding
 
 ### 4. Documentation pass, after acceptance
 
-Five files describe the UI as Qt and must be updated to reflect TUI-first: `README.md`, `PROJECT-STATUS.md`, `STRUCTURE.md`, `docs/ARCHITECTURE.md`, `modules/00-foundations.md`. The pass is **after** acceptance, not before: the ADR is the decision, the documents follow.
+Five files describe the UI as Qt and must be updated to reflect TUI-first: `README.md`, `PROJECT-STATUS.md`, `STRUCTURE.md`, `docs/ARCHITECTURE.md`, `specs/00-foundations.md`. The pass is **after** acceptance, not before: the ADR is the decision, the documents follow.
 
 ### 5. ADR-005 is amended, not rewritten
 
@@ -105,4 +105,4 @@ ADR-005 receives `Amended by: ADR-022 (presentation primacy only)` in its header
 - ADR-003 — Plane A enforcement
 - ADR-019 — match engine contract
 - `docs/context/IDEAS.md` — IDEA-PRES-001 (TUI-first), IDEA-INFRA-006 (TUI renderer prototype)
-- `modules/00-foundations.md` §2 (clean data/logic/UI separation), §3 (Three Planes)
+- `specs/00-foundations.md` §2 (clean data/logic/UI separation), §3 (Three Planes)

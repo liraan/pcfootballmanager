@@ -1,6 +1,6 @@
 //! Match — home + away + pitch + referee + seed + rules.
 //!
-//! See `modules/L0-match/03-entities-minimal.md` §2.7.
+//! See `specs/L0-match/03-entities-minimal.md` §2.7.
 
 use pcfm_core::ids::MatchId;
 use serde::{Deserialize, Serialize};
@@ -11,8 +11,8 @@ use crate::squad::Squad;
 
 /// The seed of a match, derived from `world_seed + match_id`.
 ///
-/// See `modules/L0-match/03-entities-minimal.md` §2.7 and
-/// `modules/L0-match/01-rng.md` §2.4.
+/// See `specs/L0-match/03-entities-minimal.md` §2.7 and
+/// `specs/L0-match/01-rng.md` §2.4.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub struct MatchSeed(u64);
 
@@ -36,7 +36,7 @@ impl MatchSeed {
 
 /// The rules of a match.
 ///
-/// See `modules/L0-match/03-entities-minimal.md` §2.7.
+/// See `specs/L0-match/03-entities-minimal.md` §2.7.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct MatchRules {
     /// Total duration, in minutes (default 90).
@@ -65,7 +65,7 @@ impl Default for MatchRules {
 
 /// A match, as seen by the match engine.
 ///
-/// See `modules/L0-match/03-entities-minimal.md` §2.7.
+/// See `specs/L0-match/03-entities-minimal.md` §2.7.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Match {
     /// The unique identifier of the match.

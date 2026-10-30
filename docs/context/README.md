@@ -47,7 +47,7 @@ Review notes under `analysis/` are evaluative material, not source-of-truth repo
 1. `SESSION-STATE.md`
 2. `NEW-SESSION-PROMPT.md`
 3. `AGENT-POLICY.md`
-4. Only then the normative docs (`STRUCTURE.md`, `docs/ARCHITECTURE.md`, `docs/CODE_TOUR.md`, `modules/...`).
+4. Only then the normative docs (`STRUCTURE.md`, `docs/ARCHITECTURE.md`, `docs/CODE_TOUR.md`, `specs/...`).
 
 ## In short
 

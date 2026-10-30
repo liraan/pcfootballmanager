@@ -66,7 +66,7 @@ The single most important architectural rule. Violating it introduces systemic b
 
 **Rule:** no external module may read Plane A. Ever. Not even for debugging.
 
-**Enforcement:** the technical mechanism is decided in [`docs/adr/003-plane-a-enforcement.md`](../docs/adr/003-plane-a-enforcement.md). The API is defined in [`modules/L0-match/10-ground-truth.md`](L0-match/10-ground-truth.md).
+**Enforcement:** the technical mechanism is decided in [`docs/adr/003-plane-a-enforcement.md`](../docs/adr/003-plane-a-enforcement.md). The API is defined in [`specs/L0-match/10-ground-truth.md`](L0-match/10-ground-truth.md).
 
 ### Plane B — Observation (generated from raw events)
 
@@ -236,6 +236,6 @@ L3 — META               Registry, packs, generator, editor, assets, UI, statis
 - The `00-foundations` doctrine applies at all levels.
 - The Three Planes apply at all levels.
 
-**Terminology.** In this project, "L0" denotes the **base**: the match engine and its contract. It is not a module or a plugin. "Module" (or "plugin") denotes an extension at **L1 and above**, subject to the contract in ADR-012. Consequently: `L0-match/` is the specification of the base; `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner` are the implementation of the base; modules/plugins live above.
+**Terminology.** In this project, "L0" denotes the **base**: the match engine and its contract. It is not a module or a plugin. "Module" (or "plugin") denotes an extension at **L1 and above**, subject to the contract in ADR-012. Consequently: `L0-match/` is the specification of the base; `pcfm-core`, `pcfm-model`, `pcfm-hidden`, `pcfm-stats`, `pcfm-match`, `pcfm-testkit`, `pcfm-test-runner` are the implementation of the base; specs/plugins live above.
 
 **The full map is in [`_index.md`](_index.md).**

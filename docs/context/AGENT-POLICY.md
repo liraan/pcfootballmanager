@@ -25,7 +25,7 @@
 ## 3. What requires explicit confirmation
 
 - Opening a pull request.
-- Modifying any file under `docs/adr/`, `modules/`, `docs/context/`.
+- Modifying any file under `docs/adr/`, `specs/`, `docs/context/`.
 - Modifying `Cargo.toml`, `Cargo.lock`, `rust-toolchain.toml`.
 - Modifying `LICENSE*`, `.github/`, `.githooks/`.
 - Any operation not listed in §2.

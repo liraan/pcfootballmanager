@@ -10,6 +10,8 @@
 > for the current state. `IDEA-PRES-001` (TUI-first presentation) has been
 > registered as a sketch in `docs/context/IDEAS.md`, in tension with
 > ADR-005 (Qt for L3-ui) — see that sketch and `SESSION-STATE.md` step 0.
+>
+> **Update 2026-10-30:** the step 3 T3 rename renamed the directory `modules/` to `specs/`. References to `modules/` below are **historical** and kept for traceability; read them as `specs/` for the current state.
 
 **Purpose:** record the ideas, decisions, and open questions of the project, with the source of each. This is not a status document for the code (see `REPO-SNAPSHOT.md`). It is not a specification (see `modules/`).
 

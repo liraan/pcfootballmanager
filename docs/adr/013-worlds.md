@@ -157,9 +157,9 @@ The cause traces (diegetic level) are sufficient to understand **what happened**
 
 ## References
 
-- `modules/00-foundations.md` §2 — Design Pillars (pillar 1 superseded)
-- `modules/00-foundations.md` §3 — The Three Planes (unchanged)
-- `modules/00-foundations.md` §4 — Determinism (local, not global)
+- `specs/00-foundations.md` §2 — Design Pillars (pillar 1 superseded)
+- `specs/00-foundations.md` §3 — The Three Planes (unchanged)
+- `specs/00-foundations.md` §4 — Determinism (local, not global)
 - ADR-012 — Plugins: The Brick Contract
 - `STRUCTURE.md` §2 — Concentric levels
 - `docs/PLUGIN_DEVELOPER_GUIDE.md` — how to write a plugin

@@ -1,6 +1,6 @@
 //! IDs — generational entity identifiers.
 //!
-//! See `modules/L0-match/03-entities-minimal.md` §3.1 for the full
+//! See `specs/L0-match/03-entities-minimal.md` §3.1 for the full
 //! specification.
 //!
 //! # Design

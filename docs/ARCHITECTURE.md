@@ -11,7 +11,7 @@ flows through the system, and what the two architectural patterns
 describes the *rules of the repository*.
 
 It is the document that was missing: a newcomer could read the doctrine
-(`modules/00-foundations.md`) and the code (52 files), but not how they
+(`specs/00-foundations.md`) and the code (52 files), but not how they
 fit together.
 
 ---
@@ -72,7 +72,7 @@ pcfm-core          pcfm-testkit
 
 ## 2. The Three Planes, in code
 
-The doctrine (`modules/00-foundations.md` §3) defines three planes. In the
+The doctrine (`specs/00-foundations.md` §3) defines three planes. In the
 code, they are three distinct things:
 
 | Plane | In code | Serialisable? | Who reads it |
@@ -121,7 +121,7 @@ the sequence that a future UI will follow.
 10. MatchSave::to_bytes() / from_bytes()                      [JSON, for now]
 ```
 
-**Two-phase events:** step 6e emits temporal events in two synchronous phases (ADR-019 D11): an *attempt* event carrying a `PositionSnapshot`, followed by the *outcome* event linked back via `attempt_event_id`. Both phases occur in the same tick. See [`modules/L0-match/05-match-events.md`](../modules/L0-match/05-match-events.md) §2.6.
+**Two-phase events:** step 6e emits temporal events in two synchronous phases (ADR-019 D11): an *attempt* event carrying a `PositionSnapshot`, followed by the *outcome* event linked back via `attempt_event_id`. Both phases occur in the same tick. See [`specs/L0-match/05-match-events.md`](../specs/L0-match/05-match-events.md) §2.6.
 
 **Key invariant:** step 6d is the only interaction with Plane A. The
 engine constructs a `DuelContext`/`ShotContext`/etc., calls `resolve_*`,
@@ -193,9 +193,9 @@ scenario.
 
 | Component | Status | Where it will live |
 |-----------|--------|---------------------|
-| L1 (season, world, roster) | Planned | `modules/L1-*/`, `crates/pcfm-l1-*/` |
-| L2 (career, market, psyche, …) | Planned | `modules/L2-*/`, `crates/pcfm-l2-*/` |
-| L3 (registry, packs, editor, UI, …) | Planned | `modules/L3-*/`, `crates/pcfm-l3-*/` |
+| L1 (season, world, roster) | Planned | `specs/L1-*/`, `crates/pcfm-l1-*/` |
+| L2 (career, market, psyche, …) | Planned | `specs/L2-*/`, `crates/pcfm-l2-*/` |
+| L3 (registry, packs, editor, UI, …) | Planned | `specs/L3-*/`, `crates/pcfm-l3-*/` |
 | Plugin system (ADR-012) | Accepted, not implemented | `pcfm-gen`, `pcfm-match-3d`, etc. |
 | World system (ADR-013) | Accepted, not implemented | Save format, LOD, manifest |
 | 3D match engine | Planned | `crates/pcfm-match-3d/` |
@@ -213,7 +213,7 @@ simplifications.
 ## 7. References
 
 - [`STRUCTURE.md`](../STRUCTURE.md) — repository structure and rules
-- [`modules/00-foundations.md`](../modules/00-foundations.md) — the doctrine (Three Planes, determinism, bans)
+- [`specs/00-foundations.md`](../specs/00-foundations.md) — the doctrine (Three Planes, determinism, bans)
 - [`docs/PLUGIN_DEVELOPER_GUIDE.md`](PLUGIN_DEVELOPER_GUIDE.md) — how to write a plugin, plane separation, simulation/rendering split, testkit
 - [`docs/context/REPO-SNAPSHOT.md`](context/REPO-SNAPSHOT.md) — factual snapshot of the repository (crate-by-crate)
 - [`docs/adr/003-plane-a-enforcement.md`](adr/003-plane-a-enforcement.md) — capability API, why latents are unreachable

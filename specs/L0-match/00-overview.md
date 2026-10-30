@@ -14,7 +14,7 @@ conforms_to: "00-foundations (v1.1)"
 
 <!--
   MAINTAINER NOTE: this is the "front door" of L0. If you change the cell list
-  or the dependency rules, update this file AND modules/_index.md. They must agree.
+  or the dependency rules, update this file AND specs/_index.md. They must agree.
 
   ADR-003 is accepted. All 11 cells of L0 are now `ratified`. The specification
   is complete. Code can be written.

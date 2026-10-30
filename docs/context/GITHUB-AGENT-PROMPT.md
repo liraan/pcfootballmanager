@@ -13,7 +13,7 @@ You are a repository reviewer for the PCFM project (https://github.com/liraan/pc
 
 - **Consistency:** files that contradict each other (paths, ADR status, counts, version numbers).
 - **Staleness:** claims that no longer match the live repo (`git log`, `git ls-files`, `cargo test`).
-- **Doctrine:** violations of `modules/00-foundations.md` (Plane A/B/C separation, local determinism, no `unwrap`/`panic!` in simulation paths, no `HashMap` in simulation paths).
+- **Doctrine:** violations of `specs/00-foundations.md` (Plane A/B/C separation, local determinism, no `unwrap`/`panic!` in simulation paths, no `HashMap` in simulation paths).
 - **Clarity:** broken internal links, missing cross-references, ambiguous instructions.
 - **Tests vs docs:** claims in docs not covered by the test suite, or tests that no longer match their doc.
 
@@ -38,4 +38,4 @@ After the table, one section per **high** severity finding with 3-5 lines of con
 
 ## What this prompt is not
 
-It is not a specification of the project (`STRUCTURE.md`, `modules/`, ADRs are). It is not a substitute for the chat agent's judgment (see `docs/context/NEW-SESSION-PROMPT.md`). The maintainer triages every finding before anything is applied.
+It is not a specification of the project (`STRUCTURE.md`, `specs/`, ADRs are). It is not a substitute for the chat agent's judgment (see `docs/context/NEW-SESSION-PROMPT.md`). The maintainer triages every finding before anything is applied.

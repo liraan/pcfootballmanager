@@ -43,7 +43,7 @@ For ADR status, see `STRUCTURE.md` §5 (single source of truth). For the detaile
 - `docs/ARCHITECTURE.md` — how the crates interact
 - `docs/CODE_TOUR.md` — guided reading path
 - `docs/WORLD-MODEL.md` — levels, taxonomy, simulation vs presentation
-- `modules/00-foundations.md` — doctrine (v2.0)
+- `specs/00-foundations.md` — doctrine (v2.0)
 - `docs/context/SESSION-STATE.md` — agent bookmark (for the chat agent)
 
 ## How this file is maintained

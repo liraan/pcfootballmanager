@@ -8,7 +8,7 @@ assignees: []
 
 # Module revision
 
-This template is for **proposing a revision to an existing module** (a file under `modules/`). It is not for:
+This template is for **proposing a revision to an existing module** (a file under `specs/`). It is not for:
 
 - Creating a new module — use a regular PR with the "New cell" type, see `.github/PULL_REQUEST_TEMPLATE.md`.
 - Reporting a bug — use `bug_report.md`.
@@ -23,7 +23,7 @@ A revision can be **minor** (clarification, typo, added example) or **major** (c
 <!--
   Which module? Give the file path and the module_id.
   Example:
-    - File: modules/L0-match/04-match-engine.md
+    - File: specs/L0-match/04-match-engine.md
     - module_id: L0.04
     - Current version: 1.2
 -->
@@ -140,7 +140,7 @@ A revision can be **minor** (clarification, typo, added example) or **major** (c
 
 <!--
   Does this revision change what is saved? If yes, a migration is needed.
-  See modules/L0-match/07-save-minimal.md §2.3.
+  See specs/L0-match/07-save-minimal.md §2.3.
 -->
 
 - [ ] This revision does not change the save format.
@@ -163,13 +163,13 @@ A revision can be **minor** (clarification, typo, added example) or **major** (c
 
 ## 8. Checklist
 
-- [ ] I have read `modules/00-foundations.md` to check that my proposal does not contradict the doctrine.
+- [ ] I have read `specs/00-foundations.md` to check that my proposal does not contradict the doctrine.
 - [ ] If this is a major revision, an ADR is linked in §5 and it is accepted (or this revision is the ADR ratification).
 - [ ] If this revision affects `referenced_by`, I have listed the downstream modules in §6.
 - [ ] If this revision changes the save format, a migration plan is described in §6.
 - [ ] I have bumped the version in the frontmatter (see §7).
 - [ ] I have updated `last_updated` in the frontmatter.
-- [ ] I have updated `modules/_index.md` if the module's status changed.
+- [ ] I have updated `specs/_index.md` if the module's status changed.
 - [ ] I have not bundled unrelated changes (one revision per PR).
 
 ---

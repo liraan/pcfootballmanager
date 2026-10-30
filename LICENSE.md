@@ -7,7 +7,7 @@ PC Football Manager uses a **dual license** to balance openness (for code) with 
 | What | License | File |
 |------|---------|------|
 | **Code** — `crates/`, executables, build scripts | **MIT OR Apache-2.0** (at your option) | [`LICENSE-MIT`](LICENSE-MIT), [`LICENSE-APACHE`](LICENSE-APACHE) |
-| **Assets and documentation** — `mods/`, `data/`, `assets/`, `locales/`, `docs/`, `modules/` | **CC BY-NC-SA 4.0** | [`LICENSE-ASSETS`](LICENSE-ASSETS) |
+| **Assets and documentation** — `mods/`, `data/`, `assets/`, `locales/`, `docs/`, `specs/` | **CC BY-NC-SA 4.0** | [`LICENSE-ASSETS`](LICENSE-ASSETS) |
 | **Trademarks** — the "PC Football Manager" name and logo | Trademark rights reserved | This file |
 
 ## Code — MIT OR Apache-2.0
@@ -24,7 +24,7 @@ license = "MIT OR Apache-2.0"
 
 ## Assets and documentation — CC BY-NC-SA 4.0
 
-All non-code content — data packs, images, sounds, documentation in `modules/` and `docs/`, translations in `locales/` — is licensed under **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International**.
+All non-code content — data packs, images, sounds, documentation in `specs/` and `docs/`, translations in `locales/` — is licensed under **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International**.
 
 In short:
 

@@ -1,6 +1,6 @@
 //! Pitch — dimensions, condition, weather.
 //!
-//! See `modules/L0-match/03-entities-minimal.md` §2.5.
+//! See `specs/L0-match/03-entities-minimal.md` §2.5.
 
 use serde::{Deserialize, Serialize};
 
@@ -21,7 +21,7 @@ pub enum Weather {
 
 /// The pitch.
 ///
-/// See `modules/L0-match/03-entities-minimal.md` §2.5.
+/// See `specs/L0-match/03-entities-minimal.md` §2.5.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Pitch {
     /// The length in metres (default 105).

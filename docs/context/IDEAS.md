@@ -528,7 +528,7 @@
     the match renderer, not the rest of the presentation.
   - **If ADR-005 is revised:** a documentation pass is required on
     `README.md`, `PROJECT-STATUS.md`, `STRUCTURE.md`, `docs/ARCHITECTURE.md`,
-    `modules/00-foundations.md`. Do not update them before the ADR decision.
+    `specs/00-foundations.md`. Do not update them before the ADR decision.
 - **Open questions:**
   1. Competence estimate: per phase, or aggregated? (Per phase is more
      informative; aggregated is simpler.)

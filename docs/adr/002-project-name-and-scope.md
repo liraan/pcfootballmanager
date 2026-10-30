@@ -75,5 +75,5 @@ PCFM is **not** an FM clone. It is an alternative with a different philosophy:
 ## References
 
 - `README.md` — product description
-- `modules/00-foundations.md` §6, §7 — product goal and non-goals
+- `specs/00-foundations.md` §6, §7 — product goal and non-goals
 - ADR-006 — trademark

@@ -55,5 +55,5 @@ The v1.0 L2 set is: `tactics` (full), `market` (full), `finance` (full), `scouti
 
 - ADR-015 — v1.0 scope (accepted; partially superseded here)
 - ADR-016 — v1.0 content selections (accepted; D5 depends on this ADR)
-- `modules/_index.md` — L2 module list
-- `modules/00-foundations.md` §5 (no invented data presented as certain), §7 (non-goals)
+- `specs/_index.md` — L2 module list
+- `specs/00-foundations.md` §5 (no invented data presented as certain), §7 (non-goals)

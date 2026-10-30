@@ -50,7 +50,7 @@ The full texts are in `LICENSE-MIT` and `LICENSE-APACHE`.
 
 ### Assets — CC-BY-NC-SA-4.0
 
-Every asset (data packs, images, sounds, documentation in `modules/`, `docs/`, `locales/`) is licensed under **CC-BY-NC-SA-4.0**. This protects the project's identity from commercial repackaging while keeping the assets shareable.
+Every asset (data packs, images, sounds, documentation in `specs/`, `docs/`, `locales/`) is licensed under **CC-BY-NC-SA-4.0**. This protects the project's identity from commercial repackaging while keeping the assets shareable.
 
 The full text is in `LICENSE-ASSETS`.
 

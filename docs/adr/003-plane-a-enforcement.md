@@ -196,9 +196,9 @@ crates/
 ## References
 
 - `00-foundations.md` §3 — Three Planes
-- `modules/L0-match/10-ground-truth.md` — the cell that documents the API
-- `modules/L0-match/03-entities-minimal.md` — entities, without latents
-- `modules/L0-match/04-match-engine.md` — the orchestrator
+- `specs/L0-match/10-ground-truth.md` — the cell that documents the API
+- `specs/L0-match/03-entities-minimal.md` — entities, without latents
+- `specs/L0-match/04-match-engine.md` — the orchestrator
 - `STRUCTURE.md` §2 — level rules
 
 ## Exception: `pcfm-debug`
@@ -231,5 +231,5 @@ If a future crate needs `pcfm-hidden` for a reason other than match engine input
 ### References
 
 - [`crates/pcfm-debug/Cargo.toml`](../../crates/pcfm-debug/Cargo.toml) — the dependency declaration
-- [`modules/00-foundations.md`](../../modules/00-foundations.md) §3 — the Three Planes doctrine
+- [`specs/00-foundations.md`](../../specs/00-foundations.md) §3 — the Three Planes doctrine
 - [`crates/pcfm-debug/src/check.rs`](../../crates/pcfm-debug/src/check.rs) — the health check that uses the exception

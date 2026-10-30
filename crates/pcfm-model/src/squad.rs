@@ -1,6 +1,6 @@
 //! Squad — 11 starters + bench + formation.
 //!
-//! See `modules/L0-match/03-entities-minimal.md` §2.4.
+//! See `specs/L0-match/03-entities-minimal.md` §2.4.
 
 use pcfm_core::ids::SquadId;
 use serde::{Deserialize, Serialize};
@@ -45,7 +45,7 @@ impl FormationId {
 
 /// A squad, as seen by the match engine.
 ///
-/// See `modules/L0-match/03-entities-minimal.md` §2.4.
+/// See `specs/L0-match/03-entities-minimal.md` §2.4.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Squad {
     /// The unique identifier of the squad.

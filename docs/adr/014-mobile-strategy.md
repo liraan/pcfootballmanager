@@ -163,5 +163,5 @@ The golden tests must run on **both x86_64 and ARM64**. A simulation that is det
 - ADR-005 — Qt binding
 - ADR-012 — Plugins: The Brick Contract (desktop-only, see §"Scope")
 - ADR-013 — Worlds: LOD, Manifest, and Local Determinism (LOD on mobile, see §"Scope")
-- `modules/00-foundations.md` §4 — Determinism (golden tests)
+- `specs/00-foundations.md` §4 — Determinism (golden tests)
 - `STRUCTURE.md` §3 — Crate naming

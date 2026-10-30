@@ -132,8 +132,8 @@ This is the **plugin view** of the debug UI. ADR-013 defines the **world view**.
 
 ## References
 
-- `modules/00-foundations.md` §2 — Design Pillars (to be revised by ADR-013)
-- `modules/00-foundations.md` §5 — Banned Things
+- `specs/00-foundations.md` §2 — Design Pillars (to be revised by ADR-013)
+- `specs/00-foundations.md` §5 — Banned Things
 - `STRUCTURE.md` §9 — What Packs Can and Cannot Extend
 - ADR-013 — Worlds: LOD, Manifest, and Local Determinism
 - `docs/PLUGIN_DEVELOPER_GUIDE.md` — how to write a plugin

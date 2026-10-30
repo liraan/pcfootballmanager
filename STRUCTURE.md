@@ -22,8 +22,8 @@ Doctrine  →  Modules (L0–L3)  →  ADRs  →  Code
 
 | Layer | Lives in | Purpose | Changes how often |
 |---|---|---|---|
-| **Doctrine** | `modules/00-foundations.md` | Why the project exists, the Three Planes, the banned things, the concentric model | Rarely. Only through a doctrine ADR. |
-| **Modules** | `modules/L0-*/`, `L1-*/`, `L2-*/`, `L3-*/` | How one subsystem works, at one level | Often. Each has its own revision history. |
+| **Doctrine** | `specs/00-foundations.md` | Why the project exists, the Three Planes, the banned things, the concentric model | Rarely. Only through a doctrine ADR. |
+| **Modules** | `specs/L0-*/`, `L1-*/`, `L2-*/`, `L3-*/` | How one subsystem works, at one level | Often. Each has its own revision history. |
 | **ADRs** | `docs/adr/NNN-*.md` | Why one architectural decision was made | Never edited after acceptance. Superseded by a new ADR. |
 | **Plugins** | `crates/` + `sheet.toml` | A piece of code that extends the engine | Continuously, once the plugin system exists |
 | **Code** | `crates/` | The implementation | Continuously, once it exists. |
@@ -92,8 +92,8 @@ Before the layout, the terminology. Three words, three things:
 
 | Term | What it is | Example |
 |---|---|---|
-| **Module** | A directory of the specification, at one level. Contains sub-modules. | `modules/L0-match/`, `modules/L2-psyche/` |
-| **Sub-module** | A file inside a module. | `modules/L0-match/04-match-engine.md` |
+| **Module** | A directory of the specification, at one level. Contains sub-modules. | `specs/L0-match/`, `specs/L2-psyche/` |
+| **Sub-module** | A file inside a module. | `specs/L0-match/04-match-engine.md` |
 | **Plugin** | A Rust crate with a `sheet.toml`, that extends the engine at runtime. | `crates/pcfm-match-3d/` (future) |
 
 **A module is a document. A plugin is code.** The two are different things, and the terms are not interchangeable. The historical term **cell** is **deprecated**: it meant what is now called "module", and its use is discouraged in new text. The field `cell` in the frontmatter is a historical name: its value is the module directory name.
@@ -105,7 +105,7 @@ The repository contains **documentation and code**.
 **Documentation:**
 
 ```
-modules/
+specs/
 ├── 00-foundations.md
 ├── _index.md
 └── L0-match/         (11 files, 00 → 10)
@@ -173,7 +173,7 @@ pc-football-manager/
 ├── CHANGELOG.md
 ├── CHANGELOG-SIM.md
 ├── CHANGELOG-REGISTRY.md
-├── modules/
+├── specs/
 │   ├── 00-foundations.md
 │   ├── _index.md
 │   ├── L0-match/
@@ -276,7 +276,7 @@ conforms_to: "00-foundations (v1.1)"
 
 **Version policy:** bump the minor version for clarifications, the major version for changes that affect downstream modules. A major bump requires an ADR if it changes an invariant.
 
-**`conforms_to` policy:** the field records the doctrine version the module was **verified against**. It is not bumped automatically when the doctrine changes for clarifications. It is bumped only when the module is re-verified (which happens when an invariant changes). See `modules/_index.md` §"Doctrine compliance" for the rationale.
+**`conforms_to` policy:** the field records the doctrine version the module was **verified against**. It is not bumped automatically when the doctrine changes for clarifications. It is bumped only when the module is re-verified (which happens when an invariant changes). See `specs/_index.md` §"Doctrine compliance" for the rationale.
 
 ---
 
@@ -331,7 +331,7 @@ Easier / harder / locked in.
 
 If an ADR is `proposed` and touches an area, **no code may be written in that area until the ADR is accepted**. This is the rule that prevents the "we'll decide later" trap.
 
-**This is the single source of truth for ADR status.** Other files (including `modules/_index.md`) show a derived view and defer to this table.
+**This is the single source of truth for ADR status.** Other files (including `specs/_index.md`) show a derived view and defer to this table.
 
 ### Current ADR status
 
@@ -361,7 +361,7 @@ If an ADR is `proposed` and touches an area, **no code may be written in that ar
 
 **ADR-012 and ADR-013 are two halves of one decision.** Read them together, in order: [`PLUGINS-WORLDS-READING-GUIDE.md`](docs/PLUGINS-WORLDS-READING-GUIDE.md). ADR-013 depends on ADR-012.
 
-**Note on pillar 1.** ADR-013 (accepted, 2026-10-25) superseded pillar 1 of `00-foundations` §2 and replaced the **global** determinism with **local** determinism (same save + same match + same plugin configuration = same result). `modules/00-foundations.md` v2.0 reflects this; pillar 1 now reads "local".
+**Note on pillar 1.** ADR-013 (accepted, 2026-10-25) superseded pillar 1 of `00-foundations` §2 and replaced the **global** determinism with **local** determinism (same save + same match + same plugin configuration = same result). `specs/00-foundations.md` v2.0 reflects this; pillar 1 now reads "local".
 
 **Note on ADR-015.** ADR-015 (accepted 2026-10-26) formalises the v1.0 scope reduction. It depends on ADR-012 and ADR-013, both accepted. The specific selections were resolved in ADR-016 (accepted 2026-10-27); ADR-018 (accepted) partially supersedes ADR-015 for crowd and media.
 
@@ -388,10 +388,10 @@ Rationale:
 
 1. Pick the level (L0, L1, L2, L3) the new module belongs to.
 2. Check that the module does not violate the dependency rules in §2.
-3. Create the directory `modules/L{N}-{kebab-name}/`.
+3. Create the directory `specs/L{N}-{kebab-name}/`.
 4. Add `00-overview.md` with the frontmatter (see §4). The overview is the "border" of the module: it declares contracts, dependencies, DoD, risks.
 5. Add the sub-modules as files inside the directory.
-6. Add a row to `modules/_index.md`.
+6. Add a row to `specs/_index.md`.
 7. Open a PR with **one module only**.
 8. After merge, update `referenced_by` in the modules that now reference it.
 

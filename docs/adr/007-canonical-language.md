@@ -11,7 +11,7 @@
 The repository currently mixes Italian and English:
 
 - `README.md`, `STRUCTURE.md`, `CONTRIBUTING.md` are in English.
-- `modules/00-foundations.md` and the `L0-match/*` cells are in English.
+- `specs/00-foundations.md` and the `L0-match/*` cells are in English.
 - The legacy files `01-architecture.md`, `02-registry.md`, `03-pack-system.md`, `04-data-model.md` are in Italian.
 - The archived `Prompt_Master_v5.md`, `v6.md`, `v7.md` are in Italian.
 
@@ -42,9 +42,9 @@ The `STRUCTURE.md` §5 already states "English is canonical, Italian is a transl
 
 ### Rules
 
-1. **English is the canonical language** for every file in `modules/`, `docs/`, `STRUCTURE.md`, `CONTRIBUTING.md`, and the `README.md`.
-2. **Italian is a translation**, stored in `locales/it/`, mirroring the structure of `modules/`. Translations:
-   - Carry a header `translation_of: modules/XX-name.md@vX.Y`
+1. **English is the canonical language** for every file in `specs/`, `docs/`, `STRUCTURE.md`, `CONTRIBUTING.md`, and the `README.md`.
+2. **Italian is a translation**, stored in `locales/it/`, mirroring the structure of `specs/`. Translations:
+   - Carry a header `translation_of: specs/XX-name.md@vX.Y`
    - Are updated by volunteers
    - Never override the English version
    - May lag behind (and say so)

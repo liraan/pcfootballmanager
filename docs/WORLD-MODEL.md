@@ -4,7 +4,7 @@
 
 **Status:** living document (update when the vision changes).
 
-**See also:** `docs/ARCHITECTURE.md` (how the crates interact), `docs/adr/019-match-engine-contract.md` (the contract), `modules/00-foundations.md` §9 (concentric levels).
+**See also:** `docs/ARCHITECTURE.md` (how the crates interact), `docs/adr/019-match-engine-contract.md` (the contract), `specs/00-foundations.md` §9 (concentric levels).
 
 ---
 
@@ -16,7 +16,7 @@ This document answers three questions:
 2. **What categories of things exist?** (agents, physical objects, modifiers, processes)
 3. **What belongs to v1.0, to 2D, to post-v1.0?**
 
-It does **not** specify how any of it is implemented. That is the job of `modules/` and `docs/adr/`.
+It does **not** specify how any of it is implemented. That is the job of `specs/` and `docs/adr/`.
 
 ---
 
@@ -96,7 +96,7 @@ The two are **separate**. A 3D stadium with 45,000 people is rendering; the crow
 ## 6. What this document is not
 
 - It is **not** a contract. The contract is `docs/adr/019-match-engine-contract.md`.
-- It is **not** a specification. The specification is `modules/`.
+- It is **not** a specification. The specification is `specs/`.
 - It is **not** a promise of implementation. Some of it may never be implemented.
 - It is **not** a briefing. Briefings live in `docs/context/`.
 

@@ -74,4 +74,4 @@ The core is responsible for:
 - `00-foundations.md` §2 (offline-first), §5 (no bundled commercial data), §7 (non-goals)
 - `STRUCTURE.md` §9 (what packs can and cannot extend)
 - `L3-packs` *(planned)*
-- `modules/_index.md` (the row that was `L2-ingest` is now `🚧 external tool`)
+- `specs/_index.md` (the row that was `L2-ingest` is now `🚧 external tool`)

@@ -1,6 +1,6 @@
 //! RNG — deterministic, isolated, named random streams.
 //!
-//! See `modules/L0-match/01-rng.md` for the full specification.
+//! See `specs/L0-match/01-rng.md` for the full specification.
 
 use std::collections::BTreeMap;
 

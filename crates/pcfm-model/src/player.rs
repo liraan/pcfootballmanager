@@ -1,6 +1,6 @@
 //! Player and its minimal physical and psychological state.
 //!
-//! See `modules/L0-match/03-entities-minimal.md` §2.1–§2.3.
+//! See `specs/L0-match/03-entities-minimal.md` §2.1–§2.3.
 //!
 //! # Plane separation
 //!
@@ -57,7 +57,7 @@ impl RoleId {
 
 /// The minimal physical state of a player, as seen by the match engine.
 ///
-/// See `modules/L0-match/03-entities-minimal.md` §2.2.
+/// See `specs/L0-match/03-entities-minimal.md` §2.2.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct PhysicalStateMinimal {
     /// Freshness, 0.0–1.0.
@@ -99,7 +99,7 @@ impl Default for PhysicalStateMinimal {
 
 /// The minimal psychological state of a player, as seen by the match engine.
 ///
-/// See `modules/L0-match/03-entities-minimal.md` §2.3.
+/// See `specs/L0-match/03-entities-minimal.md` §2.3.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct PsychologicalStateMinimal {
     /// Confidence, 0.0–1.0.
@@ -141,7 +141,7 @@ impl Default for PsychologicalStateMinimal {
 
 /// The minimal player entity, as seen by the match engine.
 ///
-/// See `modules/L0-match/03-entities-minimal.md` §2.1.
+/// See `specs/L0-match/03-entities-minimal.md` §2.1.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Player {
     /// The unique identifier of the player.

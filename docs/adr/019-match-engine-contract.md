@@ -168,6 +168,6 @@ or dedicated notes before implementation:
 - ADR-012 (Plugins: brick contract)
 - ADR-013 (Worlds: LOD and local determinism)
 - ADR-015 / ADR-016 (v1.0 scope)
-- `modules/00-foundations.md` §3 (Three Planes), §9 (Concentric Structure)
-- `modules/L0-match/04-match-engine.md` (current engine specification)
+- `specs/00-foundations.md` §3 (Three Planes), §9 (Concentric Structure)
+- `specs/L0-match/04-match-engine.md` (current engine specification)
 - `docs/context/REPO-SNAPSHOT.md` §6.5 (`pcfm-match` state)
