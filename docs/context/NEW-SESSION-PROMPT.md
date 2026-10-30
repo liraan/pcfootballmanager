@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-30 (commit `f79dc8a`)
+**Last updated:** 2026-10-30 (commit `787e25e`)
 
 ---
 
@@ -75,7 +75,9 @@ ordered next steps, the current priority, and the files touched.
 **C. Git and quality**
 
 - **C1 — Commit and push.** Work in the local repo, commit in Git Bash, push. The GitHub web interface is for emergencies only. Every change: edit locally → `git add` → `git commit`. Small, atomic commits (one per file, or per logical group), clear messages in English, imperative mood. A rename is ONE logical commit, not one per occurrence. **Push at the end of the session or at a checkpoint, not after every commit.** *Phase 1 (now):* ruleset disabled, single maintainer, direct push to `main` allowed, PR optional. *Phase 2 (when an agent gets a write token):* ruleset active, branch + PR mandatory, no direct push. See `docs/context/AGENT-POLICY.md`.
-- **C2 — Quality gate.** The pre-commit hook (`.githooks/pre-commit`, one-off install: `git config core.hooksPath .githooks`) runs fmt + clippy + test only if Rust files are staged. The hook does **not** replace the full check: also run `cargo build --release`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `cargo fmt --check`, `cargo run --release --bin pcfm-test-runner -- --check --seed 42`. If anything is red, stop: do not close, do not push, do not "fix later".
+- **C2 — Quality gate (baseline, mandatory).** The pre-commit hook (`.githooks/pre-commit`, one-off install: `git config core.hooksPath .githooks`) runs fmt + clippy + test only if Rust files are staged. The hook does **not** replace the full check: also run `cargo build --release`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `cargo fmt --check`, `cargo run --release --bin pcfm-test-runner -- --check --seed 42`. If anything is red, stop: do not close, do not push, do not "fix later".
+- **C2-bis — Beyond the baseline (encouraged).** The goal is a clean, optimized, secure repository, not merely passing the commands above. If your toolchain or model capabilities allow additional checks — e.g. `cargo-audit`, `cargo-deny`, `miri`, coverage (`cargo-tarpaulin`), mutation testing, fuzzing, manual review of hot paths — run them and report the result. Do not limit yourself to the baseline.
+  - **Caveat (D2 applies).** "Optimized" means *verified* optimization: reduce allocations, profile, remove redundancy, **without changing behaviour**. Any change to the simulation model requires an ADR and a `SIM_VERSION` bump. Do not introduce `unsafe`, `HashMap` in simulation paths, or other banned patterns in the name of optimization.
 
 **D. Context and doctrine**
 
@@ -174,13 +176,7 @@ If there are local commits not pushed:
     git log --oneline -3
     git status -sb
 
-Then the full quality gate (not just the pre-commit hook):
-
-    cargo build --release
-    cargo clippy --workspace --all-targets -- -D warnings
-    cargo test --workspace
-    cargo fmt --check
-    cargo run --release --bin pcfm-test-runner -- --check --seed 42
+Then the full quality gate, as defined in **C2** (baseline mandatory) and **C2-bis** (additional checks encouraged). The baseline commands are not repeated here: C2 is the single source of truth for the gate.
 
 If anything is red: **stop**. Do not declare the session closed. Fix first.
 
@@ -231,19 +227,7 @@ Update `SESSION-STATE.md`:
 
 Do not update `REPO-SNAPSHOT.md` unless its own premise says it is current: it is **not normative**, and its staleness is expected.
 
-### 5. Final report to the maintainer
-
-State explicitly:
-- What was done (one line per commit)
-- What was verified (real tool output, not claims)
-- What was **not** done (and why: blocked, deferred, out of scope)
-- The state of the repo (aligned, clean, quality gate green)
-- The next step for the next session (what `SESSION-STATE.md` says)
-- **The Plan table, presented in chat** (not just written in the file). The maintainer must see it before the session ends. If you skip it, say why.
-
-If you have not run one of the checks in this ritual, say so. "I skipped X" is honest; "I ran X" when you did not is a lie.
-
-### 6. Commit and push
+### 5. Commit and push (before the report)
 
 The checkpoint commit is **one logical commit**:
 
@@ -253,4 +237,16 @@ The checkpoint commit is **one logical commit**:
     git status -sb
 
 `git status -sb` must show `## main...origin/main` with no `[ahead]` or `[behind]`. If it does, the session is not closed.
+
+### 6. Final report to the maintainer
+
+State explicitly:
+- What was done (one line per commit)
+- What was verified (real tool output, not claims)
+- What was **not** done (and why: blocked, deferred, out of scope)
+- The state of the repo (aligned, clean, quality gate green) — verified after the push
+- The next step for the next session (what `SESSION-STATE.md` says)
+- **The Plan table, presented in chat** (not just written in the file). The maintainer must see it before the session ends. If you skip it, say why.
+
+If you have not run one of the checks in this ritual, say so. "I skipped X" is honest; "I ran X" when you did not is a lie.
 ````
