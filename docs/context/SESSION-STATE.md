@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `2178270` — "docs(prompt): B3 uses a literal echo template (fix: sentinel was ambiguous to new sessions)"
+**Last commit verified:** `a391b85` — "docs(adr-003): note ADR-020 rename (pcfm-debug -> pcfm-test-runner, pcfm-demo split)"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -42,6 +42,11 @@ the rest of the bookmark in the same commit.
 | ✅    | 🛑 marker su hard-stop (D1, D2, C2) + legenda; E2 riscritta (closing mai automatico, pausa + domanda esplicita); A2 e header closing ripuliti; Rule precedence ridotta a una riga (`5101f9d`) |
 | ✅    | Baseline C2 eseguita dopo l audit di Copilot (che l aveva bloccata): build, clippy, test 103/103, fmt, test-runner 6/6 — tutta verde |
 | ✅    | Audit prompt 2026-10-30 valutato: test plan rispettato (5 pianificati, 5 skipped con motivazione), evidenza negativa presente, R-01 Critical trovato e verificato — il prompt funziona |
+| ✅    | Fase A cleanup repo: `REPO-SNAPSHOT.md` rimosso, 15 riferimenti vivi corretti, `PROJECT-IDEA-LOG.md` §6 tagliato + §5 disclaimer (`e22d9f3`) |
+| ✅    | ADR-003: nota rename `pcfm-debug` → `pcfm-test-runner` + split `pcfm-demo`, corpo ADR intatto (`a391b85`) |
+| ✅    | R-01 verificato end-to-end: `Factor`→`cause_trace`→`chain_hash`→save. Decisione: rimuovere `CauseTrace`+`Factor` (1b), `risk_modifier`, `temperament`/`injury_risk_modifier` di `DuelOutcome`; `SIM_VERSION` bump |
+| 🔵    | Fase B incompleta: fix `CHANGELOG-SIM.md` (19/41/47/107-109), `README.md` (9/156), `STRUCTURE.md` §5, `specs/L0-match/*` conforms_to v2.0, IDEA-PM-005, SESSION-STATE (HERMES, 250 righe) |
+| ✅    | Discussioni rinviate per dottrina ape: tassonomia valori (diretto/inferito/costrutto), Plane C, livello interpretazione (già in IDEA-PRES-001+INFRA-006); niente ADR finché manca contenuto |
 | ⚫    | — (nessun bloccato) |
 
 **Da fare (in dependency order):**
@@ -50,7 +55,7 @@ the rest of the bookmark in the same commit.
 |-----|----|-------------------------|------------------------------|
 | 🔴  | 14 | **R-01 Critical**: latenti Plane A in `Factor.value` → eventi Plane B → save (ADR-023 richiesto) | — |
 | 🟡  | 12 | TUI demo (IDEA-INFRA-006): ADR breve + codice | — |
-| 🟡  | 2  | Fix ADR-003             | —                            |
+| 🟡  | 2  | Fix ADR-003 (nota rename fatta `a391b85`; restano `demo.rs`, autorizzazione `pcfm-demo`) | —                            |
 | 🟡  | 3  | Terminologia (T1+T2, T3 done) | —                        |
 | 🟡  | 4  | Audit 2026-10-29 (T1,T2)| —                            |
 | 🟡  | 11 | GitHub agent Phase 2    | ruleset attivo               |
@@ -61,6 +66,7 @@ the rest of the bookmark in the same commit.
 | ⬜  | 9  | Ratify ADR-017          | —                            |
 | ⬜  | 10 | `L1-world/01-nation`    | —                            |
 | ⬜  | 13 | `cargo-audit`/`cargo-deny` pre-release | — |
+| 🔴  | 15 | **Fase B cleanup** (prima della prossima sessione): `CHANGELOG-SIM.md` 19/41 (`pcfm-core`→`pcfm-match`), 107-109 (`modules/`→`specs/`), 47 (MIGRATION esiste); `README.md` 9 (107→103), 156 (012-020→012-022); `STRUCTURE.md` §5 (20 file, 18 accepted); `specs/L0-match/*` (10 file, v1.1→v2.0); IDEA-PM-005 (togliere "Plane A"); SESSION-STATE (togliere HERMES, 256→250); NEW-SESSION-PROMPT (verificare riga closing su REPO-SNAPSHOT) | — |
 
 **Dettagli (solo dove servono):**
 
@@ -106,4 +112,5 @@ the rest of the bookmark in the same commit.
 
 **Files touched this session (2026-10-29):** `docs/context/IDEAS.md` (added IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001; rejected IDEA-REJ-003, IDEA-REJ-004); `docs/context/SESSION-STATE.md`; `docs/adr/021-referee-non-physical.md` (new, accepted); `docs/adr/019-match-engine-contract.md` (Superseded by ADR-021 D9 only); `STRUCTURE.md` (ADR status table, added 020/021); `specs/_index.md` (ADR status table, added 020/021); `docs/context/analysis/2026-10-29-18-18-review.md` (renamed from audit-full); `docs/context/AGENT-POLICY.md` (audit-report push exception, §1 and §8); `docs/context/HERMES-AGENT-PROMPT.md` (new, audit agent contract); `docs/context/NEW-SESSION-PROMPT.md` (refreshed counts, startup + closing rituals, rule 13; closing ritual now requires presenting the Plan table in chat); `docs/adr/022-presentation-tui-first.md` (new, accepted); `docs/adr/005-qt-binding.md` (Amended by ADR-022); `STRUCTURE.md` + `specs/_index.md` (ADR 022 added, count 18). Audit workflow 2026-10-30: `GITHUB-SESSION-PROMPT.md` wrapper paste-ready + test plan + 3b ambiguities + comprehensive report + evidenza negativa (`55a932a`, `5fbaf34`, `c8f3291`); audit Copilot pubblicato (`943b317`, `2026-10-30-13-39-review.md`); R-01 Critical verificato e tracciato come step 14 🔴 (`9c937a0`); baseline C2 verde post-audit. B3 fix (`2178270`): literal echo template, sentinel was ambiguous in new sessions.
  🛑 hard-stop marker + E2 rewritten + Rule precedence trimmed (`5101f9d`).
+**Files touched this session (2026-10-30, seconda sessione):** `docs/context/REPO-SNAPSHOT.md` (deleted); `docs/context/NEW-SESSION-PROMPT.md`, `docs/context/README.md`, `docs/ARCHITECTURE.md`, `docs/CODE_TOUR.md`, `docs/context/IDEAS.md`, `docs/context/PROJECT-IDEA-LOG.md`, `docs/context/SESSION-STATE.md` (reference cleanup + trim, `e22d9f3`); `docs/adr/003-plane-a-enforcement.md` (note rename, `a391b85`).
 **Files touched this session (2026-10-30):** `docs/context/NEW-SESSION-PROMPT.md` (removed duplicate B1 bullet); `docs/context/SESSION-STATE.md` (step 13 cargo-audit; step 3 T3 done); `STRUCTURE.md` (Italian example → English); **rename `modules/` → `specs/`** with 62 files updated: `.github/*`, `crates/*` (Cargo.toml + src), `docs/*.md`, `docs/adr/*.md`, `docs/context/*` (except `analysis/` and `PROJECT-IDEA-LOG.md` body), `archive/README.md` (live refs only), `CHANGELOG-REGISTRY.md:19`, `specs/*` self-references; note in `PROJECT-IDEA-LOG.md` header; historical commands preserved in `archive/README.md:35-36` and `docs/MIGRATION-01-04.md:45`. Doc-pass on `NEW-SESSION-PROMPT.md` (6 commits `00bd5ba`..`c86ab8b`): B3 renamed to OUTPUT START/END, section E session lifecycle, First step merged into What remains, perf target removed, dedup Where we are. Agent prompt unification (`0a20a9d`..`fe31d5c`): new `GITHUB-SESSION-PROMPT.md`, removed `GITHUB-AGENT-PROMPT.md` + `HERMES-AGENT-PROMPT.md`, functional-directory policy in `README.md`, `analysis/archive/` created, `AGENT-POLICY.md` §8 and startup step 3 updated. D1 extended with completeness-over-speed (`45bc60d`); B1 paste limits removed (`ac2d39a`); 2026-10-28 audit findings tracked in step 6 + IDEA-DOC-001 (`b0c3b9b`); 6 reports archived to `analysis/archive/` (`cd882dc`); report-closure policy refined (`1c50db1`); audit prompt points to archived example (`64e6713`). 🛑 hard-stop marker + E2 rewritten + Rule precedence trimmed (`5101f9d`).
