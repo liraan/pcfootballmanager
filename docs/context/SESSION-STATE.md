@@ -49,6 +49,7 @@ the rest of the bookmark in the same commit.
 | ⬜  | 8  | ADR-019 deferred 4-9    | —                            |
 | ⬜  | 9  | Ratify ADR-017          | —                            |
 | ⬜  | 10 | `L1-world/01-nation`    | —                            |
+| ⬜  | 13 | `cargo-audit`/`cargo-deny` pre-release | — |
 
 **Dettagli (solo dove servono):**
 
@@ -77,6 +78,7 @@ the rest of the bookmark in the same commit.
 | 10 | Scrivere `L1.04` (`L1-world/00-overview.md`) prima di `L1.05` |
 | 11 | Decisione del maintainer: attivare o no il ruleset |
 | 12 | Leggere `crates/pcfm-demo/src/` e `MatchResult` |
+| 13 | Installare `cargo-audit` e `cargo-deny` (o verificarne la disponibilità) e lanciarli sul workspace |
 
 **Done (storico):** 1, 2, 3, 6, 10bis, 10ter, 10quater, 0ter — commit hash in `git log --oneline`.
 
