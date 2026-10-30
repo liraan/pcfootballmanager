@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-30 (commit `9ca0d2a`)
+**Last updated:** 2026-10-30 (commit `d4ca36a`)
 
 ---
 
