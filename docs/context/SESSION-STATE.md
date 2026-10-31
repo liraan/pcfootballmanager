@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `2e89f88` — "docs(ideas): add IDEA-INFRA-008 (explanation/narration as a plugin, not in the engine)"
+**Last commit verified:** `a94049d` — "docs(adr): amend ADR-023 (Outcome not ObservationEvent, drop explanation_template, deterministic order, 9 sites, engine.rs:160, test-first procedure)"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -143,3 +143,5 @@ the rest of the bookmark in the same commit.
 **Files touched this session (2026-10-31, chiusura OI-1):** `docs/adr/023-observed-cause-traces.md` (new, proposed, `946459f`); `STRUCTURE.md`, `specs/_index.md` (ADR-023 added to status tables, `946459f`); `docs/context/SESSION-STATE.md` (OI-1 closed, OI-9/OI-10 added, step 14 re-scoped, `946459f`..).
 
 **Files touched this session (2026-10-31, IDEA-INFRA-008):** `docs/context/IDEAS.md` (added IDEA-INFRA-008, `2e89f88`); `docs/context/SESSION-STATE.md` (step 14 links IDEA-INFRA-008, `2e89f88`..).
+
+**Files touched this session (2026-10-31, ADR-023 amendment):** `docs/adr/023-observed-cause-traces.md` (amended: A-G points, `a94049d`); `docs/context/SESSION-STATE.md` (bookmark update, `a94049d`..).
