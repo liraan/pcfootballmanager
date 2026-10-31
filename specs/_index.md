@@ -266,5 +266,6 @@ These are components that are referenced across modules but are not crates. They
 | [020](../docs/adr/020-split-test-runner-from-demo.md) | Split the test runner from the demo tool | ✅ accepted | Split `pcfm-debug` into `pcfm-test-runner` (tests) and `pcfm-demo` (demo) |
 | [021](../docs/adr/021-referee-non-physical.md) | Referee is a non-physical perceptual agent | ✅ accepted | Supersedes ADR-019 D9: referee visible but not physical, perception drives decisions |
 | [022](../docs/adr/022-presentation-tui-first.md) | Presentation strategy: TUI-first, GUI later | ✅ accepted | Amends ADR-005 (presentation primacy only); TUI is v1 primary, view model separation normative |
+| [023](../docs/adr/023-observed-cause-traces.md) | Observed cause traces, not latent-derived causes | 🟡 proposed | Blocks L0 match engine event emission, `pcfm-hidden` outcome types, `pcfm-stats` event validation, `pcfm-model::cause`, the R-01 fix and its anti-leak test |
 
-**Open ADRs:** 017 (proposed). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015, 016, 018, 019, 020, 021, 022 (18).
+**Open ADRs:** 017 (proposed), 023 (proposed). **Accepted:** 001, 002, 003, 004, 005, 006, 007, 008, 012, 013, 014, 015, 016, 018, 019, 020, 021, 022 (18).
