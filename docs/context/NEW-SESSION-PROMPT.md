@@ -218,21 +218,21 @@ If you touched a file X (renamed it, changed its path, changed its content), ver
 
 (replace `N` with the number of commits in this session)
 
-### 3. Analysis of `docs/context/` from a fresh-chat perspective
+### 3. Fresh-session simulation (mechanical, before the closing commit)
 
-The test: **if tomorrow you opened a new chat, read only `NEW-SESSION-PROMPT.md` + `SESSION-STATE.md` + the last two reports in `analysis/`, would you have enough context to resume?**
+Do not answer this from memory. Simulate: the next session reads `NEW-SESSION-PROMPT.md`, runs the startup ritual, reads `SESSION-STATE.md`, the two latest reports in `analysis/`, and `IDEAS.md` (headers and status). Would it resume without asking a question the bookmark already answers?
 
-If the answer is no, the bookmark is insufficient. The bookmark is the memory of the project; if the memory is incomplete, the next session starts blind.
+Run these checks. A failed check is fixed **before** step 5, not noted for later.
 
-Check explicitly:
-- Does `SESSION-STATE.md` say what the next step is? Or only what was done?
-- Does it list the open items, or only the closed ones?
-- Does `Files touched this session` include every file modified?
-- Are there sketches in `IDEAS.md` that the bookmark should point to but does not?
-- Are there ADRs in `proposed` or `deferred` state that the bookmark should surface?
-- Did `analysis/` receive a new report that the bookmark does not mention?
+1. **Next step has a first action.** The first open step in the Plan must say what to do first (a command, a file to read, a question). `grep -n "Primo passo\|First step\|Ratificare" SESSION-STATE.md`. If the first step has no action, add it.
+2. **No contradiction between Plan and Detail.** The Plan's first step and the same step's Detail/DoD must agree on the order (e.g. "ratify then test" vs "test then ratify"). Read both. If they disagree, fix the Plan (it is what the next session reads first).
+3. **Pending actions are Open items.** Any action that is not a Plan step (a ratification, a verification, a decision) must be an OI-NN. `grep -c "OI-" SESSION-STATE.md`. If a pending action is not listed, add it.
+4. **"Prime azioni" match reality.** For the first open step, the "Prime azioni" entry must not describe work already done. Read it; if it says "write X" and X exists, update it.
+5. **Every touched file is in `Files touched`.** `git diff --name-only <last-verified>..HEAD` against the list. If a file is missing, add it.
+6. **Proposed/deferred ADRs are surfaced.** `for f in docs/adr/*.md; do sed -n '3p' "$f"; done | grep -c proposed`. Each `proposed` ADR that blocks a step must appear in the Plan or Open items.
+7. **New reports are cited.** `ls -t docs/context/analysis/*.md | head -2`. Each must be cited in the bookmark (as a finding, an OI, or a step).
 
-If any answer is "no", update `SESSION-STATE.md` before closing. It is cheap now, expensive tomorrow.
+If any check fails, update `SESSION-STATE.md` and re-run the failed check. The bookmark is the memory of the project; a memory that contradicts itself is worse than a short one. This step is a **gate**, not a reflection: step 5 does not start until all seven pass.
 
 ### 4. Bookmark update
 

@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `cd31500` — "docs(session-state): bookmark after ADR-023 amendment"
+**Last commit verified:** `7378271` — "docs(session-state): checkpoint after ADR-023 amendment; align step 14 detail to ADR-023, trace step 17 (§F reformat)"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -65,12 +65,13 @@ the rest of the bookmark in the same commit.
 | OI-8 | **Gap C: `ScoutReport.DeclaredBias` senza formula** (dal §2.2): è solo un'etichetta o entra nel calcolo? | Mai tracciato altrove; con (C) si perderebbe | Decidere quando si apre `L2-scouting` |
 | OI-9 | **`ShotOutcome.xg_value` è potenzialmente un leak separato**: oggi è `noise * 0.3 + finishing`, funzione esatta del latente. Finisce in `MatchStatistics.xg` (`result.rs`). Non coperto da R-01 (che è sulla cause trace). | Non verificato end-to-end: non ho letto `state.rs` per intero per vedere dove finisce `xg_value`. | Leggere `pcfm-match/src/state.rs` e `result.rs` per intero, decidere se è un leak da fixare (separato da ADR-023) |
 | OI-10 | **Test anti-leak deve fallire pre-fix**: ADR-023 punto 1 lo richiede. Oggi i test in `pcfm-hidden` verificano `Debug` e `drain`, non serializzano un save. Va scritto e dimostrato fallire prima della fix. | Requisito di ADR-023, non ancora eseguito | Scrivere il test, eseguirlo sul commit attuale, salvare l'output di fallimento come evidenza |
+| OI-11 | **Ratificare ADR-023** (`proposed` → `accepted`): decisione presa il 2026-10-31, non ancora formalizzata. Blocca step 14 (`STRUCTURE §5`: Open ADRs block code) | Status `proposed`; decisione già presa e documentata | `sed` status → accepted in ADR-023; aggiornare `STRUCTURE.md:361`, `specs/_index.md:271`, `SESSION-STATE`; commit unico |
 
 **Da fare (in dependency order):**
 
 | Pr. | #  | Cosa                    | Dipende da                   |
 |-----|----|-------------------------|------------------------------|
-| 🔴  | 14 | **R-01 Critical**: latenti Plane A in `Factor.value` → eventi Plane B → save. **ADR-023 `proposed`** (causa osservata, non rimossa; alternativa a lungo termine: IDEA-INFRA-008). Ordine: test anti-leak che fallisce pre-fix (OI-10) → fix → test verde → `SIM_VERSION` bump. Dettagli in ADR-023 §Implementation notes | — |
+| 🔴  | 14 | **R-01 Critical**: latenti Plane A in `Factor.value` → eventi Plane B → save. **Primo passo: ratificare ADR-023** (`STRUCTURE §5`: Open ADRs block code; OI-11). Poi: test anti-leak che fallisce pre-fix (OI-10) → fix → test verde → `SIM_VERSION` bump. ADR-023 `proposed`, alternativa a lungo termine IDEA-INFRA-008. Dettagli in ADR-023 §Implementation notes | Ratifica ADR-023 (OI-11) |
 | 🟡  | 12 | TUI demo (IDEA-INFRA-006): ADR breve + codice | — |
 | 🟡  | 2  | Fix ADR-003 (nota rename fatta `a391b85`; restano `demo.rs`, autorizzazione `pcfm-demo`) | —                            |
 | 🟡  | 3  | Terminologia (T1+T2, T3 done) | —                        |
@@ -112,7 +113,7 @@ the rest of the bookmark in the same commit.
 
 | #  | Prima azione |
 |----|--------------|
-| 14 | Scrivere ADR-023 (politica cause senza disclosure); prima leggere `pcfm-hidden/src/lib.rs:130-270`, `pcfm-model/src/cause.rs`, `05-match-events.md:21-24` |
+| 14 | **Ratificare ADR-023** (OI-11, `proposed` → `accepted`), poi scrivere il test anti-leak che fallisce pre-fix (OI-10). Leggere ADR-023 §Implementation notes |
 | 2  | Leggere ADR-003 §Exception: `sed -n '204,235p' docs/adr/003-plane-a-enforcement.md` |
 | 3  | Leggere `PLUGIN_DEVELOPER_GUIDE.md` §1: `sed -n '13,40p'` |
 | 4  | Leggere `render.rs:150-170` e `CHANGELOG-SIM.md:19,41` |
@@ -144,3 +145,5 @@ the rest of the bookmark in the same commit.
 **Files touched this session (2026-10-31, ADR-023 amendment):** `docs/adr/023-observed-cause-traces.md` (amended: A-G points, `a94049d`); `docs/context/SESSION-STATE.md` (bookmark update, `a94049d`..).
 
 **Files touched this session (2026-10-31, closing):** `docs/context/SESSION-STATE.md` (Dettagli step 14 aligned to ADR-023, step 17 traced, bookmark updated, `cd31500`..).
+
+**Files touched this session (2026-10-31, closing fixes):** `docs/context/SESSION-STATE.md` (step 14 first action = ratify ADR-023, OI-11 added, Prime azioni 14 updated); `docs/context/NEW-SESSION-PROMPT.md` (closing step 3 rewritten as 7 mechanical checks before commit).
