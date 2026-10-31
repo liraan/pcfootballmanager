@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `d9dbe38` — "docs(ideas): add IDEA-DOC-002 (ASCII/ANSI docs, likely reject) and IDEA-DOC-003 (TUI screenshot/GIF, depends on step 12)"
+**Last commit verified:** `946459f` — "docs(adr): ADR-023 observed cause traces (proposed)"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -57,19 +57,20 @@ the rest of the bookmark in the same commit.
 
 | # | Cosa | Perché aperto | Prima azione |
 |---|------|---------------|--------------|
-| OI-1 | **R-01: causa rimossa (1b) o osservata?** La decisione salvata (rimuovere `CauseTrace`+`Factor`) poggia su premesse incomplete: 7 leak (non 5), `primary_cause` ha 3 consumer reali, `05-match-events.md:117` richiede la cause trace. La tua posizione: "la dottrina è migliorabile". | Decisione di design sospesa: 1b vs causa osservata (motore, non resolver) vs rinvio | Leggere `05-match-events.md:64-68,117-160` e `10-ground-truth.md:96-111` per intero, poi scrivere ADR-023 come decisione (non come fix) |
 | OI-2 | **Nuovo audit `2026-10-30-20-24-review.md`** non tracciato: R-01..R-11 (R-07 `CODE_TOUR:128` "5 references" nuovo; gli altri R-04..R-11 già in step 2/4/6/14/15 o step 6) | Triagare: quali finding sono già coperti, quali nuovi step | Leggere i finding e mappare su step esistenti |
 | OI-4 | **`README.md:148` cita `pcfm-gen`** come esistente, ma non è tra i 9 crate | Verificare se è nota intenzionale o stale | `grep -rn "pcfm-gen" --include="*.md" --include="*.rs" .` |
 | OI-5 | **`CHANGELOG-SIM:17-19,41` "(planned)" stale**: "No code exists yet", "defined in pcfm-match (planned)" | Deferito: si aggiorna al primo bump reale (step 14) | Aggiornare insieme al `SIM_VERSION` bump |
 | OI-6 | **`docs/performance.md` e `docs/save-security.md`** mancanti (dal §2.3 di `PROJECT-IDEA-LOG`, ora archiviato) | Mai creati, non tracciati altrove | Decidere se e quando crearli (probabilmente pre-release, insieme a step 13) |
 | OI-7 | **Gap B: `ProjectionProfile` senza metodo di calcolo** (dal §2.2 di `PROJECT-IDEA-LOG`): bootstrap? Bayesiano? quantili empirici? Senza specifica, la banda è arbitraria | Mai tracciato altrove; con (C) si perderebbe | Decidere il metodo quando si apre `L2-scouting` |
 | OI-8 | **Gap C: `ScoutReport.DeclaredBias` senza formula** (dal §2.2): è solo un'etichetta o entra nel calcolo? | Mai tracciato altrove; con (C) si perderebbe | Decidere quando si apre `L2-scouting` |
+| OI-9 | **`ShotOutcome.xg_value` è potenzialmente un leak separato**: oggi è `noise * 0.3 + finishing`, funzione esatta del latente. Finisce in `MatchStatistics.xg` (`result.rs`). Non coperto da R-01 (che è sulla cause trace). | Non verificato end-to-end: non ho letto `state.rs` per intero per vedere dove finisce `xg_value`. | Leggere `pcfm-match/src/state.rs` e `result.rs` per intero, decidere se è un leak da fixare (separato da ADR-023) |
+| OI-10 | **Test anti-leak deve fallire pre-fix**: ADR-023 punto 1 lo richiede. Oggi i test in `pcfm-hidden` verificano `Debug` e `drain`, non serializzano un save. Va scritto e dimostrato fallire prima della fix. | Requisito di ADR-023, non ancora eseguito | Scrivere il test, eseguirlo sul commit attuale, salvare l'output di fallimento come evidenza |
 
 **Da fare (in dependency order):**
 
 | Pr. | #  | Cosa                    | Dipende da                   |
 |-----|----|-------------------------|------------------------------|
-| 🔴  | 14 | **R-01 Critical**: latenti Plane A in `Factor.value` → eventi Plane B → save (ADR-023 richiesto) | — |
+| 🔴  | 14 | **R-01 Critical**: latenti Plane A in `Factor.value` → eventi Plane B → save. **ADR-023 `proposed`** (causa osservata, non rimossa). Ordine: test anti-leak che fallisce pre-fix (OI-10) → fix → test verde → `SIM_VERSION` bump. Dettagli in ADR-023 §Implementation notes | — |
 | 🟡  | 12 | TUI demo (IDEA-INFRA-006): ADR breve + codice | — |
 | 🟡  | 2  | Fix ADR-003 (nota rename fatta `a391b85`; restano `demo.rs`, autorizzazione `pcfm-demo`) | —                            |
 | 🟡  | 3  | Terminologia (T1+T2, T3 done) | —                        |
@@ -88,7 +89,7 @@ the rest of the bookmark in the same commit.
 
 **12. TUI demo (IDEA-INFRA-006)** — short ADR required (second renderer touches `simulation_is_shared_and_renderer_agnostic`), then code in `pcfm-demo`. **First step: read `crates/pcfm-demo/src/` and `MatchResult` (~200-300 lines) to know what the engine actually exposes; only then estimate.** The ADR says: validation prototype, not L3-ui, no engine change.
 
-**2. Fix ADR-003** — ADR-003 still names `pcfm-debug` and `demo.rs`; `pcfm-demo` reads Plane A without authorization. Options: new ADR-023 (ADR-021 and ADR-022 are taken), amend ADR-003, extend ADR-020. Requires explicit confirmation to touch `docs/adr/`.
+**2. Fix ADR-003** — ADR-003 still names `pcfm-debug` and `demo.rs`; `pcfm-demo` reads Plane A without authorization. ADR-023 exists (2026-10-31, observed cause traces) and does not cover ADR-003. Options: amend ADR-003, or extend ADR-020. Requires explicit confirmation to touch `docs/adr/`.
 
 **3. Terminologia** — T1 (small): `PLUGIN_DEVELOPER_GUIDE.md` §1 + `GLOSSARY.md`. T2 (small): "core module" → "framework crate" in §2 and §11. T3 (large, one commit): rename `modules/` → `specs/` — **✅ done, commit `5e77d17`**.
 
@@ -129,7 +130,7 @@ the rest of the bookmark in the same commit.
 | 13 | Installare `cargo-audit` e `cargo-deny` (o verificarne la disponibilità) e lanciarli sul workspace |
 | 16 | `ls -R archive data mods registry docs/calibration docs/legal 2>&1; git ls-files | wc -l; grep -rn "PLUGINS-WORLDS-READING-GUIDE\|PROJECT-STATUS" --include="*.md" . | head -20` — poi classificare vivo/orfano/alveare e proporre tagli |
 
-**Done (storico):** 1, 2, 6, 10bis, 10ter, 10quater, 0ter, 15; OI-3 (C: PROJECT-IDEA-LOG archived) — commit hash in `git log --oneline`.
+**Done (storico):** 1, 2, 6, 10bis, 10ter, 10quater, 0ter, 15; OI-1 (R-01 decision: causa osservata, ADR-023); OI-3 (C: PROJECT-IDEA-LOG archived) — commit hash in `git log --oneline`.
 
 **Archiviati:** `PROJECT-IDEA-LOG.md` → `archive/PROJECT-IDEA-LOG.md` (2026-10-30). Le decisioni durevoli sono in ADR; le minori nei commit message; le narrative storiche nel file archiviato. §2.2 (gap B, C) e §2.3 (2 documenti) sono migrati in OI-7, OI-8, OI-6.
 
@@ -139,3 +140,4 @@ the rest of the bookmark in the same commit.
 **Files touched this session (2026-10-30):** `docs/context/NEW-SESSION-PROMPT.md` (removed duplicate B1 bullet); `docs/context/SESSION-STATE.md` (step 13 cargo-audit; step 3 T3 done); `STRUCTURE.md` (Italian example → English); **rename `modules/` → `specs/`** with 62 files updated: `.github/*`, `crates/*` (Cargo.toml + src), `docs/*.md`, `docs/adr/*.md`, `docs/context/*` (except `analysis/` and `PROJECT-IDEA-LOG.md` body), `archive/README.md` (live refs only), `CHANGELOG-REGISTRY.md:19`, `specs/*` self-references; note in `PROJECT-IDEA-LOG.md` header; historical commands preserved in `archive/README.md:35-36` and `docs/MIGRATION-01-04.md:45`. Doc-pass on `NEW-SESSION-PROMPT.md` (6 commits `00bd5ba`..`c86ab8b`): B3 renamed to OUTPUT START/END, section E session lifecycle, First step merged into What remains, perf target removed, dedup Where we are. Agent prompt unification (`0a20a9d`..`fe31d5c`): new `GITHUB-SESSION-PROMPT.md`, removed `GITHUB-AGENT-PROMPT.md` + `HERMES-AGENT-PROMPT.md`, functional-directory policy in `README.md`, `analysis/archive/` created, `AGENT-POLICY.md` §8 and startup step 3 updated. D1 extended with completeness-over-speed (`45bc60d`); B1 paste limits removed (`ac2d39a`); 2026-10-28 audit findings tracked in step 6 + IDEA-DOC-001 (`b0c3b9b`); 6 reports archived to `analysis/archive/` (`cd882dc`); report-closure policy refined (`1c50db1`); audit prompt points to archived example (`64e6713`). 🛑 hard-stop marker + E2 rewritten + Rule precedence trimmed (`5101f9d`).
 
 **Files touched this session (2026-10-30/31):** `docs/context/NEW-SESSION-PROMPT.md` (startup reads full files via `cat` not obsolete `sed` ranges, `f678b4b`; E4 bookmark update + E5 ideas-from-pause + §F bookmark contract, `3cfbd93`; startup step 4 reads `IDEAS.md`, `0ab92c6`); `CHANGELOG-SIM.md` (crate rename, migration status, `modules/`→`specs/`, `18232f9`); `README.md` (tests 107→103, ADR 012-020→012-022, `7b6a50e`); `STRUCTURE.md` (current-state snapshot, `4695828`); `specs/L0-match/*` (stale `MIGRATION-01-04` refs `6f85770`; false `crates/` claim `f8f9768`; `conforms_to` v2.0, 10 files `858ef08`); `docs/context/IDEAS.md` (IDEA-PM-005 D3 proposal `7b9c35d`; IDEA-DOC-002/003 `d9dbe38`); `docs/context/SESSION-STATE.md` (HERMES cleanup `09e6cf4`; step 15 complete `56805ae`; Open items `557e1d4`; archive log `03f3ea2`); `docs/context/README.md` (archived log ref, `03f3ea2`); **archived** `docs/context/PROJECT-IDEA-LOG.md` → `archive/PROJECT-IDEA-LOG.md` (`03f3ea2`).
+**Files touched this session (2026-10-31, chiusura OI-1):** `docs/adr/023-observed-cause-traces.md` (new, proposed, `946459f`); `STRUCTURE.md`, `specs/_index.md` (ADR-023 added to status tables, `946459f`); `docs/context/SESSION-STATE.md` (OI-1 closed, OI-9/OI-10 added, step 14 re-scoped, `946459f`..).
