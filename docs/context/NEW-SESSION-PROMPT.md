@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-31 (fase 2 E3c: B1-bis tool fallbacks; D4 decision pre-mortem; E2 green-path derogation (auto-closing + auto-push); startup reads AGENT-POLICY + DECISION-PATTERNS (grep); §G What Git already does (trailers, commit-msg hook, git bisect/notes/revert); closing Step 2 = session capture + 2b rules self-audit; DECISION-PATTERNS.md, .gitmessage, .githooks/commit-msg added; AGENT-POLICY §10 rollback + post-push review)
+**Last updated:** 2026-10-31 (fase 2+fixes: B1-bis tool fallbacks; D4 decision pre-mortem + exit clause; E2 green-path derogation (auto-closing + auto-push); startup reads AGENT-POLICY + DECISION-PATTERNS (grep); §G What Git already does (interpret-trailers, commit-msg hook, DP archival check, git bisect/notes/revert); closing Step 2 = capture (2a workflow, 2b rules self-audit, 2c DP archival); Step 5 commit via .gitmessage + required trailers; DECISION-PATTERNS.md, .gitmessage, .githooks/commit-msg added; AGENT-POLICY §10 rollback + post-push review)
 
 ---
 
@@ -99,6 +99,8 @@ ordered next steps, the current priority, and the files touched.
     Output: `pre-mortem: coherence ok; leak ok; exists no` (or the specific finding). A finding → pause (A2), not "note for later".
 
     **Mandatory triggers:** (a) new rule; (b) removed rule; (c) new file in `docs/context/`; (d) any change to D1/D2/C2, startup, closing, or a closing step; (e) any decision the maintainer declares will be implemented. For minor edits (typos, formatting, moving bullets within a section), the pre-mortem is implicit and produces no output.
+    **Exit clause.** A finding that requires a decision unavailable in this session (maintainer async, or out of scope) does not block the session. The rule change does not enter; the finding goes to `SESSION-STATE.md` Open items with a first action; the `Rules-Audit:` trailer records `findings=[...; unresolved: OI-XX]`. A finding blocks the rule, not the session.
+
 
 **E. Session lifecycle**
 
@@ -134,7 +136,9 @@ If Git provides the mechanism, use it. Session metadata lives in **commit traile
 - **Reading trailers**:
     - `git log -1 --format='%(trailers:key=DPs-Applied,valueonly)'`
     - `git log --format='%h %s | %(trailers:key=DPs-Applied,valueonly)' -20`
-- **DP archival check** (no counter, no date field): a DP not mentioned in two consecutive closing commits is proposed for archival. Find the last two closings and check.
+- **DP archival check** (no counter, no date field). Run at every closing if active DPs ≥ 3. Two commands:
+    - `git log --format='%h %(trailers:key=DPs-Applied,valueonly)' -6 --grep='checkpoint\|session-state'`
+    - For each active DP not listed in the two most recent closings, propose archival in the report. Archival is a maintainer decision, not automatic.
 - **Regression isolation**: `git bisect run <script>` isolates the commit that introduced a failing behaviour (the anti-leak test is the script).
 - **Post-hoc annotations**: `git notes add` on an old commit, never rewrite history.
 - **Release exclusion**: `.gitattributes` with `export-ignore` for `docs/context/` and `DECISION-PATTERNS.md` when packaging.
@@ -276,6 +280,8 @@ Output trailer: `Rules-Audit: findings=[...]` (paused) or `Rules-Audit: N change
 
 **DP capture.** If a recurring judgment pattern emerged (not a workflow fix), add it to `DECISION-PATTERNS.md` with `Source:` pointing to the session and a commit hash. No source → no DP.
 
+**2c — DP archival check** (only if active DPs ≥ 3). Run `git log --format='%h %(trailers:key=DPs-Applied,valueonly)' -6 --grep='checkpoint\|session-state'` and compare against active DPs. A DP absent from the two most recent closings is proposed for archival in the report; archival is a maintainer decision, not automatic.
+
 ### 3. Pre-close gates (both must pass before step 4)
 
 Two gates, run in order. If either fails, fix and re-run it before step 4. Do not note a failure for later; the bookmark must be true when the closing commit is made.
@@ -327,9 +333,18 @@ Update all five sections of the Bookmark contract (§F above). In particular: `L
 The checkpoint commit is **one logical commit**:
 
     git add docs/context/SESSION-STATE.md
-    git commit -m "docs(session-state): checkpoint after <what happened>"
+    git commit -t .gitmessage
     git push
     git status -sb
+
+The commit message uses `.gitmessage` as template. Compile subject, optional body, and the **required trailers** (validated by `.githooks/commit-msg`):
+
+- `DPs-Applied: DP-01, DP-03` or `DPs-Applied: none`
+- `Rules-Audit: N changes, 0 contradictions, 0 leaks` or `Rules-Audit: skipped, no rule changes` or `Rules-Audit: findings=[...; unresolved: OI-XX]`
+- `Verified: C2-green`
+- `Deferred: OI-XX (reason)` — optional, only if the OI exists in `SESSION-STATE.md`
+
+`--no-verify` is a protocol violation, not a shortcut.
 
 `git status -sb` must show `## main...origin/main` with no `[ahead]` or `[behind]`. If it does, the session is not closed.
 

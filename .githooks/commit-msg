@@ -1,11 +1,9 @@
 #!/bin/sh
 # Validates closing-commit trailers per NEW-SESSION-PROMPT.md §G.
-# Applies only when a closing commit is in progress, detected by the presence
-# of "checkpoint" or "session-state" in the subject line.
-# A non-closing commit is not validated.
+# Uses `git interpret-trailers --parse`, the same parser as
+# `git log --format='%(trailers:...)'`, so validation and reading agree.
 
 MSG="$1"
-
 subject=$(head -1 "$MSG")
 
 case "$subject" in
@@ -13,23 +11,29 @@ case "$subject" in
   *) exit 0 ;;
 esac
 
+trailers=$(git interpret-trailers --parse < "$MSG")
+
 # Rule changes require an explicit, non-skipped Rules-Audit trailer.
 if git diff --cached --name-only | grep -q '^docs/context/NEW-SESSION-PROMPT.md$'; then
-  if grep -qE '^Rules-Audit: skipped' "$MSG"; then
+  if echo "$trailers" | grep -qE '^Rules-Audit:[[:space:]]*skipped'; then
     echo "commit-msg: NEW-SESSION-PROMPT.md changed; Rules-Audit: skipped is not allowed" >&2
     exit 1
   fi
 fi
 
 # Required trailers.
-grep -qE '^DPs-Applied: ' "$MSG" || { echo "commit-msg: missing DPs-Applied trailer" >&2; exit 1; }
-grep -qE '^Rules-Audit: ' "$MSG" || { echo "commit-msg: missing Rules-Audit trailer" >&2; exit 1; }
-grep -qE '^Verified: ' "$MSG" || { echo "commit-msg: missing Verified trailer" >&2; exit 1; }
+echo "$trailers" | grep -qE '^DPs-Applied:'    || { echo "commit-msg: missing DPs-Applied trailer" >&2; exit 1; }
+echo "$trailers" | grep -qE '^Rules-Audit:'    || { echo "commit-msg: missing Rules-Audit trailer" >&2; exit 1; }
+echo "$trailers" | grep -qE '^Verified:'       || { echo "commit-msg: missing Verified trailer" >&2; exit 1; }
 
 # Deferred: refer to an existing OI, if present.
-deferred=$(grep -E '^Deferred: ' "$MSG" || true)
+deferred=$(echo "$trailers" | grep -E '^Deferred:' || true)
 if [ -n "$deferred" ]; then
-  oi=$(echo "$deferred" | sed -E 's/^Deferred: (OI-[0-9]+).*/\1/')
+  oi=$(echo "$deferred" | sed -E 's/^Deferred:[[:space:]]*(OI-[0-9]+).*/\1/')
+  if ! echo "$oi" | grep -qE '^OI-[0-9]+$'; then
+    echo "commit-msg: Deferred trailer must reference an OI-NN identifier" >&2
+    exit 1
+  fi
   if ! grep -qE "^\| $oi " docs/context/SESSION-STATE.md; then
     echo "commit-msg: Deferred: $oi does not exist in SESSION-STATE.md" >&2
     exit 1
