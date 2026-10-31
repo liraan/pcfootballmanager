@@ -128,7 +128,7 @@ The startup ritual extracts §1–§4. The closing ritual updates all five. Open
 
 If Git provides the mechanism, use it. Session metadata lives in **commit trailers**, not in chat prose, so it is verifiable from `git log` at any later date.
 
-- **Commit trailers** (block of `key: value` lines at the bottom of the commit message, after a blank line). The `commit-msg` hook (`.githooks/commit-msg`, one-off install: `git config core.hooksPath .githooks`) validates them. Required on closing commits:
+- **Commit trailers** (block of `key: value` lines at the bottom of the commit message, after a blank line). The `commit-msg` hook (`.githooks/commit-msg`, one-off install: `git config core.hooksPath .githooks`) validates them. **The hook fires when `docs/context/SESSION-STATE.md` is staged** (closing commit), not by subject: a closing commit with an arbitrary subject is still validated. Required on closing commits:
     - `DPs-Applied:` — which decision patterns were used (`DP-01, DP-03` or `none`).
     - `Rules-Audit:` — output of Step 2b (`N changes, 0 contradictions, 0 leaks`, or `findings=[...]`).
     - `Verified:` — `C2-green` when the full quality gate ran and passed.

@@ -1,32 +1,28 @@
 #!/bin/sh
 # Validates closing-commit trailers per NEW-SESSION-PROMPT.md §G.
-# Uses `git interpret-trailers --parse`, the same parser as
-# `git log --format='%(trailers:...)'`, so validation and reading agree.
+# Uses `git interpret-trailers --parse`, the same parser as `git log --format`.
+# The hook fires when SESSION-STATE.md is staged (closing commit), not by subject.
 
 MSG="$1"
-subject=$(head -1 "$MSG")
 
-case "$subject" in
-  *checkpoint*|*session-state*|*closing*) : ;;
-  *) exit 0 ;;
-esac
+if ! git diff --cached --name-only | grep -qx 'docs/context/SESSION-STATE.md'; then
+  exit 0
+fi
 
 trailers=$(git interpret-trailers --parse < "$MSG")
 
 # Rule changes require an explicit, non-skipped Rules-Audit trailer.
-if git diff --cached --name-only | grep -q '^docs/context/NEW-SESSION-PROMPT.md$'; then
+if git diff --cached --name-only | grep -qx 'docs/context/NEW-SESSION-PROMPT.md'; then
   if echo "$trailers" | grep -qE '^Rules-Audit:[[:space:]]*skipped'; then
     echo "commit-msg: NEW-SESSION-PROMPT.md changed; Rules-Audit: skipped is not allowed" >&2
     exit 1
   fi
 fi
 
-# Required trailers.
-echo "$trailers" | grep -qE '^DPs-Applied:'    || { echo "commit-msg: missing DPs-Applied trailer" >&2; exit 1; }
-echo "$trailers" | grep -qE '^Rules-Audit:'    || { echo "commit-msg: missing Rules-Audit trailer" >&2; exit 1; }
-echo "$trailers" | grep -qE '^Verified:'       || { echo "commit-msg: missing Verified trailer" >&2; exit 1; }
+echo "$trailers" | grep -qE '^DPs-Applied:'  || { echo "commit-msg: missing DPs-Applied trailer" >&2; exit 1; }
+echo "$trailers" | grep -qE '^Rules-Audit:'  || { echo "commit-msg: missing Rules-Audit trailer" >&2; exit 1; }
+echo "$trailers" | grep -qE '^Verified:'     || { echo "commit-msg: missing Verified trailer" >&2; exit 1; }
 
-# Deferred: refer to an existing OI, if present.
 deferred=$(echo "$trailers" | grep -E '^Deferred:' || true)
 if [ -n "$deferred" ]; then
   oi=$(echo "$deferred" | sed -E 's/^Deferred:[[:space:]]*(OI-[0-9]+).*/\1/')
