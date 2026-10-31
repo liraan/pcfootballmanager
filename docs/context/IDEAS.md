@@ -555,6 +555,22 @@
 - **Open questions:** where exactly (top of README, or a dedicated `docs/MATURITY.md`); whether it is generated or hand-maintained; how to keep it from going stale (it is exactly the failure mode it is meant to prevent).
 - **Critical note:** this is a documentation-hygiene idea, not a code change. Do not implement without an ADR only if it changes the doctrine; otherwise it is a doc task to schedule in `SESSION-STATE.md`.
 
+### IDEA-DOC-002 — ASCII/ANSI style in documentation files
+- **Status:** sketch (with critical note — likely reject)
+- **Category:** Documentation / presentation
+- **Source:** conversation 2026-10-31 (maintainer suggestion)
+- **Idea:** since the project is TUI-first (ADR-022), replace emoji and other Unicode decoration in documentation files (README badges, `SESSION-STATE` status icons, `IDEAS.md` markers) with ASCII/ANSI equivalents, so that the docs visually reflect the TUI choice.
+- **Open questions:** does any consumer read the `.md` files in a terminal? Is the emoji in `SESSION-STATE` operational readability (for the maintainer) rather than presentation of the game? What is the actual scale (how many files, how many occurrences)?
+- **Critical note:** this is probably over-engineering today. ADR-022 concerns the game renderer (`pcfm-demo` TUI), not the project documentation, which is read on GitHub web where emoji render correctly. Replacing operational status icons (✅🔴🟡) with text labels would be a readability downgrade, not an alignment. D3: no concrete content today requires ASCII docs. Do not implement without a concrete consumer.
+
+### IDEA-DOC-003 — Screenshot or GIF of the TUI in the README
+- **Status:** sketch
+- **Category:** Documentation / presentation
+- **Source:** conversation 2026-10-31 (maintainer suggestion)
+- **Idea:** add to `README.md` a screenshot, animated GIF, or ASCII capture showing the TUI renderer in action, so that the TUI-first choice is *shown* rather than *declared*. More effective than rewriting 60 documentation files.
+- **Open questions:** static screenshot vs GIF vs terminal cast; where to host the asset (repo binary vs release artifact); how to keep it up to date as the TUI evolves.
+- **Critical note:** depends on step 12 (TUI demo, IDEA-INFRA-006). Today there is nothing to capture yet. Do not implement before the TUI exists.
+
 ---
 
 ## Rejected ideas (for traceability)
