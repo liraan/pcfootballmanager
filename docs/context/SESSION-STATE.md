@@ -57,7 +57,6 @@ the rest of the bookmark in the same commit.
 
 | # | Cosa | Perché aperto | Prima azione |
 |---|------|---------------|--------------|
-| OI-2 | **Nuovo audit `2026-10-30-20-24-review.md`** non tracciato: R-01..R-11 (R-07 `CODE_TOUR:128` "5 references" nuovo; gli altri R-04..R-11 già in step 2/4/6/14/15 o step 6) | Triagare: quali finding sono già coperti, quali nuovi step | Leggere i finding e mappare su step esistenti |
 | OI-4 | **`README.md:148` cita `pcfm-gen`** come esistente, ma non è tra i 9 crate | Verificare se è nota intenzionale o stale | `grep -rn "pcfm-gen" --include="*.md" --include="*.rs" .` |
 | OI-5 | **`CHANGELOG-SIM:17-19,41` "(planned)" stale**: "No code exists yet", "defined in pcfm-match (planned)" | Deferito: si aggiorna al primo bump reale (step 14) | Aggiornare insieme al `SIM_VERSION` bump |
 | OI-6 | **`docs/performance.md` e `docs/save-security.md`** mancanti (dal §2.3 di `PROJECT-IDEA-LOG`, ora archiviato) | Mai creati, non tracciati altrove | Decidere se e quando crearli (probabilmente pre-release, insieme a step 13) |
@@ -67,6 +66,7 @@ the rest of the bookmark in the same commit.
 | OI-10 | **Test anti-leak deve fallire pre-fix**: ADR-023 punto 1 lo richiede. Oggi i test in `pcfm-hidden` verificano `Debug` e `drain`, non serializzano un save. Va scritto e dimostrato fallire prima della fix. | Requisito di ADR-023, non ancora eseguito | Scrivere il test, eseguirlo sul commit attuale, salvare l'output di fallimento come evidenza |
 | OI-11 | **Ratificare ADR-023** (`proposed` → `accepted`): decisione presa il 2026-10-31, non ancora formalizzata. Blocca step 14 (`STRUCTURE §5`: Open ADRs block code) | Status `proposed`; decisione già presa e documentata | `sed` status → accepted in ADR-023; aggiornare `STRUCTURE.md:361`, `specs/_index.md:271`, `SESSION-STATE`; commit unico |
 | OI-12 | **Gate A check A4 troppo rumoroso**: `grep -n 'test\|crate\|ADR' NEW-SESSION-PROMPT.md` cattura prosa (B1, C2, D1, D2, D3), non numeri. Funziona oggi (nessun numero hardcoded) ma non è un buon check. | Non bloccante; mai fallito | Sostituire con pattern stretto (es. `grep -nE '[0-9]+ (test\|crate\|ADR)'`) o con `grep -nE '^\s*[-*].*\b[0-9]+\b.*(test\|crate\|ADR)'`. Da testare con la simulazione fresh-session |
+| OI-13 | **Deferred a L1: finding dei 2 report non assegnati a step**. Report1 (13-39, §3b salvo dove indicato): `conforms_to v1.1` in 10/11 file L0 (solo 05-match-events dice v2.0) — il più grave; "ratified" in 00-overview:92-106 vs checklist pending 00-overview:165-177; L0.03 condition-clamp (03:189) vs reject (pitch.rs:56-60); L0.06 output contract + DoD unchecked (06:159-171); L0.08 random-events: nessuna integrazione trovata (08:185-205); L0.10 GroundTruth getter/Debug (riga 104 cita ma non step). Report2 (20-24, R-N sono gli ID reali): R-08 RNG stream senza match_id (state.rs:57-63); R-10 EventBus panics (event_bus.rs:81-85,126-140); R-11 expect in simulazione (state.rs:57-63, hidden/lib.rs:68-71); R-02/R-03 attempt/outcome + save contract (attesi: implementazione futura). | Nessuno è bloccante per L0; sono gap spec↔code o doc drift che non cambiano il motore. Diventano step quando si apre L1 (o prima se un bump SIM li tocca). | Decidere: (a) promuovere un singolo finding a step, oppure (b) dichiararli "target design, non current" in `specs/L0-match/00-overview.md` (una riga) e chiudere OI-13. |
 
 **Da fare (in dependency order):**
 
@@ -109,6 +109,9 @@ the rest of the bookmark in the same commit.
 - **F2** `README.md:9` badge tests `107` → `103` (verificato: 103 reali); `README.md:156` ADR range `012–020` → `012–022`.
 - **F6** Aggiungere in `README.md` una "maturity statement" (doctrine / implementation / ADR / test status), come chiesto dal report 09-42.
 - **F3/F5/F7** narrativi: F7 → coperto da D1 esteso; F5 → "Do not assume CI exists"; F3 → backlog in `IDEAS.md` (IDEA-DOC-001).
+- **R-07** (report `2026-10-30-20-24`): `docs/CODE_TOUR.md:128` calls `MatchContext` "5 references"; actual is 4 references + by-value `MatchConfig` (low).
+- **R-04** (report `2026-10-30-13-39`): `STRUCTURE.md:101-113` dice "17 ADR, 000–019" ma `docs/adr/` ha 20 file (000–008, 012–022); `STRUCTURE.md:340-360` già include 020–022 e conta 18 accepted → snapshot vs tabella incoerenti. `CHANGELOG-SIM.md:19,41` dice `SIM_VERSION` "planned in pcfm-core", ma la costante è in `crates/pcfm-match/src/save.rs:76`.
+- **R-05** (report `2026-10-30-20-24`): sovrapposto a R-04 precedente per `STRUCTURE` + `CHANGELOG-SIM`. In più: verificare che la location `SIM_VERSION` citata nei riferimenti (`CODE_TOUR.md:210`) sia coerente con `save.rs:76`.
 
 **Prime azioni (per step):**
 
@@ -130,6 +133,7 @@ the rest of the bookmark in the same commit.
 | 16 | `ls -R archive data mods registry docs/calibration docs/legal 2>&1; git ls-files | wc -l; grep -rn "PLUGINS-WORLDS-READING-GUIDE\|PROJECT-STATUS" --include="*.md" . | head -20` — poi classificare vivo/orfano/alveare e proporre tagli |
 
 **Done (storico):** 1, 2, 6, 10bis, 10ter, 10quater, 0ter, 15; OI-1 (R-01 decision: causa osservata, ADR-023); OI-3 (C: PROJECT-IDEA-LOG archived) — commit hash in `git log --oneline`.
+OI-2 (triag 2 report 2026-10-30: tracked in steps 2/4/6/14, deferred in OI-13); reports moved to analysis/archive/ (13-39 + 20-24).
 
 **Archiviati:** `PROJECT-IDEA-LOG.md` → `archive/PROJECT-IDEA-LOG.md` (2026-10-30). Le decisioni durevoli sono in ADR; le minori nei commit message; le narrative storiche nel file archiviato. §2.2 (gap B, C) e §2.3 (2 documenti) sono migrati in OI-7, OI-8, OI-6.
 
@@ -154,3 +158,5 @@ the rest of the bookmark in the same commit.
 **Files touched this session (2026-10-31, closing fixes and ritual test):** `docs/context/SESSION-STATE.md` (OI-12 traced, step 17 includes bookmark length, `Last commit verified` updated, `f8c2e2d`); `docs/context/NEW-SESSION-PROMPT.md` (`Last updated` refreshed after B4/startup/closing rewrite, `f8c2e2d`..).
 
 **Files touched this session (2026-10-31, closing ritual hardening):** `docs/context/NEW-SESSION-PROMPT.md` (closing: order enforcement, Gate A `Last updated` check, B5 reformulated for the closing commit, `41506ae`..); `docs/context/SESSION-STATE.md` (bookmark update, `41506ae`..).
+
+**Files touched this session (2026-10-31, triag + archive 2 report):** `docs/context/SESSION-STATE.md` (OI-2 rewritten with per-report mapping; OI-13 added: deferred findings from both reports; step 6 extended with R-04 (report1), R-05 (report2), R-07 (report2); format fix R-07; OI-2 removed after triage); `docs/context/analysis/2026-10-30-13-39-review.md` → `analysis/archive/` (git mv); `docs/context/analysis/2026-10-30-20-24-review.md` → `analysis/archive/` (git mv).
