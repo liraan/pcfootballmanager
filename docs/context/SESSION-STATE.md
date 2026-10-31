@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `889d812` — "docs(session-state): document decisions before code — choice B (xg in ADR-023), 6a/6b split, OI-14/15/16"
+**Last commit verified:** `6a1f214` — "fix(rules): commit-msg fires on SESSION-STATE staged; §G documents the trigger; D4 exit clause, 2c DP check"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
