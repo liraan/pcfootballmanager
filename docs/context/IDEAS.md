@@ -377,6 +377,22 @@
   four prerequisites that do not exist today. Do not implement until they
   exist and dedicated ADRs are accepted.
 
+### IDEA-INFRA-008 — Explanation/narration as a plugin, not in the engine
+
+- **Status:** sketch
+- **Category:** Presentation / Infrastructure / Narrative
+- **Source:** conversation 2026-10-31 (user suggestion), during the ADR-023 discussion
+- **Idea:** the engine does not produce a textual explanation of events. It produces `MatchEvent` with `event_type`, `fields`, and `contributing_factors` (observed). A **plugin** (L3, ADR-012) reads the match — today the event stream, tomorrow the 2D positional state (ADR-019) — and generates the explanation/narrative text. The explanation is presentation (Plane C/UI), not data (Plane B), and belongs to the consumer that has the context to produce it.
+- **Why this matters:** at L0 a cause trace built by the engine is tautological ("the shot is a shot"). The real value ("the player shot from outside because the defender was out of position") requires the full match context, which the engine at L0 does not have and cannot have. A plugin at L3 can. Moving the explanation to the plugin keeps `MatchEvent` minimal and durable, and eliminates the temptation to put presentational strings (like `explanation_template`) on the event.
+- **Relationship with ADR-023:** ADR-023 (option 2) has the engine build an observed cause trace. IDEA-INFRA-008 is the longer-term alternative: no cause trace in the engine at all, the plugin does it. If adopted, ADR-023 becomes a stepping stone (engine produces the minimal observed factors; the plugin enriches the explanation) or is superseded (the engine produces no cause; the plugin reads `MatchEvent` and builds its own).
+- **Open questions:**
+  1. Does the plugin import `pcfm-model::CauseTrace` (shared type) or define its own explanation type?
+  2. How does the plugin access the match state? Today: event stream (`MatchEvent`). Tomorrow: 2D positional state (ADR-019) — is that exposed to plugins, and how?
+  3. Localisation: the plugin ships localised templates. How does that interact with ADR-007 (English canonical) and the future `locales/it/`?
+  4. Determinism: the plugin's output must not affect the simulation (Plane C → Plane A forbidden). Is the explanation purely presentational, or can it feed back into decisions (e.g. the assistant manager reading the narrative)? If it feeds back, it becomes Plane B and must be deterministic.
+  5. Performance: reading the full event stream per match is cheap at L0; at L1/L2 with seasons, it must be scoped.
+- **Critical note:** this is a **sketch**, not a decision. It depends on ADR-012 (plugin contract) and ADR-019 (positional engine), neither of which is implemented. Do not implement before those exist. ADR-023 (option 2) is the L0 decision and is not blocked by this sketch.
+
 ### IDEA-STAFF-001 — Assistant manager and skip-match mode
 
 - **Status:** sketch
