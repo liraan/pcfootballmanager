@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `3bdc0d9` — "docs(prompt): add B4 mutation protocol; startup 8->5 steps; closing 6->5 steps (gates A+B under one step)"
+**Last commit verified:** `dd6a48c` — "docs(session-state): bookmark after B4 and ritual optimisation"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -66,6 +66,7 @@ the rest of the bookmark in the same commit.
 | OI-9 | **`ShotOutcome.xg_value` è potenzialmente un leak separato**: oggi è `noise * 0.3 + finishing`, funzione esatta del latente. Finisce in `MatchStatistics.xg` (`result.rs`). Non coperto da R-01 (che è sulla cause trace). | Non verificato end-to-end: non ho letto `state.rs` per intero per vedere dove finisce `xg_value`. | Leggere `pcfm-match/src/state.rs` e `result.rs` per intero, decidere se è un leak da fixare (separato da ADR-023) |
 | OI-10 | **Test anti-leak deve fallire pre-fix**: ADR-023 punto 1 lo richiede. Oggi i test in `pcfm-hidden` verificano `Debug` e `drain`, non serializzano un save. Va scritto e dimostrato fallire prima della fix. | Requisito di ADR-023, non ancora eseguito | Scrivere il test, eseguirlo sul commit attuale, salvare l'output di fallimento come evidenza |
 | OI-11 | **Ratificare ADR-023** (`proposed` → `accepted`): decisione presa il 2026-10-31, non ancora formalizzata. Blocca step 14 (`STRUCTURE §5`: Open ADRs block code) | Status `proposed`; decisione già presa e documentata | `sed` status → accepted in ADR-023; aggiornare `STRUCTURE.md:361`, `specs/_index.md:271`, `SESSION-STATE`; commit unico |
+| OI-12 | **Gate A check A4 troppo rumoroso**: `grep -n 'test\|crate\|ADR' NEW-SESSION-PROMPT.md` cattura prosa (B1, C2, D1, D2, D3), non numeri. Funziona oggi (nessun numero hardcoded) ma non è un buon check. | Non bloccante; mai fallito | Sostituire con pattern stretto (es. `grep -nE '[0-9]+ (test\|crate\|ADR)'`) o con `grep -nE '^\s*[-*].*\b[0-9]+\b.*(test\|crate\|ADR)'`. Da testare con la simulazione fresh-session |
 
 **Da fare (in dependency order):**
 
@@ -85,7 +86,7 @@ the rest of the bookmark in the same commit.
 | ⬜  | 10 | `L1-world/01-nation`    | —                            |
 | ⬜  | 13 | `cargo-audit`/`cargo-deny` pre-release | — |
 | 🟡  | 16 | **Censimento repo (igiene documentale, D3)**: verificare file orfani e cartelle vuote fuori da `docs/context/`. Sospetti: `docs/PLUGINS-WORLDS-READING-GUIDE.md` (mai citato?), `PROJECT-STATUS.md` root (README lo dice "planned"), `archive/` `data/` `mods/` `registry/` `docs/calibration/` `docs/legal/` (solo `.gitkeep`?). Nessun rischio sicurezza: urgenza 🟡, ma da fare prima che qualcuno ci costruisca sopra | — |
-| 🟡  | 17 | **Riformatto §F residuo**: `SESSION-STATE` ha 3 sezioni extra (`Stato lavoro`, `Dettagli`, `Prime azioni`) non previste da §F, e `Files`/`Done` invertiti. Consolidamento meccanico: spostare `Stato lavoro` dentro `Done`, fondere `Dettagli`+`Prime azioni` nel Piano, riordinare. Rischio: tabelle con emoji, `sed` fallisce su pattern multibyte (già visto in sessione); usare `sed` per numero di riga. | — |
+| 🟡  | 17 | **Riformatto §F residuo**: `SESSION-STATE` ha 3 sezioni extra (`Stato lavoro`, `Dettagli`, `Prime azioni`) non previste da §F, `Files`/`Done` invertiti, e 151 righe (contratto: "short bookmark"). Consolidamento meccanico: spostare `Stato lavoro` dentro `Done`, fondere `Dettagli`+`Prime azioni` nel Piano, riordinare, ridurre a ~80-100 righe. Rischio: tabelle con emoji, `sed` fallisce su pattern multibyte (già visto); usare `sed` per numero di riga. | — |
 
 **Dettagli (solo dove servono):**
 
