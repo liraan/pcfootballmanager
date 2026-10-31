@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `a94049d` — "docs(adr): amend ADR-023 (Outcome not ObservationEvent, drop explanation_template, deterministic order, 9 sites, engine.rs:160, test-first procedure)"
+**Last commit verified:** `cd31500` — "docs(session-state): bookmark after ADR-023 amendment"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -84,6 +84,7 @@ the rest of the bookmark in the same commit.
 | ⬜  | 10 | `L1-world/01-nation`    | —                            |
 | ⬜  | 13 | `cargo-audit`/`cargo-deny` pre-release | — |
 | 🟡  | 16 | **Censimento repo (igiene documentale, D3)**: verificare file orfani e cartelle vuote fuori da `docs/context/`. Sospetti: `docs/PLUGINS-WORLDS-READING-GUIDE.md` (mai citato?), `PROJECT-STATUS.md` root (README lo dice "planned"), `archive/` `data/` `mods/` `registry/` `docs/calibration/` `docs/legal/` (solo `.gitkeep`?). Nessun rischio sicurezza: urgenza 🟡, ma da fare prima che qualcuno ci costruisca sopra | — |
+| 🟡  | 17 | **Riformatto §F residuo**: `SESSION-STATE` ha 3 sezioni extra (`Stato lavoro`, `Dettagli`, `Prime azioni`) non previste da §F, e `Files`/`Done` invertiti. Consolidamento meccanico: spostare `Stato lavoro` dentro `Done`, fondere `Dettagli`+`Prime azioni` nel Piano, riordinare. Rischio: tabelle con emoji, `sed` fallisce su pattern multibyte (già visto in sessione); usare `sed` per numero di riga. | — |
 
 **Dettagli (solo dove servono):**
 
@@ -96,11 +97,7 @@ the rest of the bookmark in the same commit.
 **4. Audit 2026-10-29** — T1: sanitize `--html` in `pcfm-demo/src/render.rs:159`. T2: align `CHANGELOG-SIM.md` lines 19/41 (`pcfm-core` → `pcfm-match`). T3 (note, not a task): `pick_players` correlation in `state.rs:222-226`. Fourth finding (`pcfm-debug`) is item 2.
 
 
-**14. R-01 Critical — Plane A leak** (audit 2026-10-30-13-39, verificato sui file:line). Latenti `finishing`/`passing`/`injury_proneness`/`attacker_score` scritti in `Factor.value` (`pcfm-hidden/src/lib.rs:140-145,182,213,262`), `Factor` è `Serialize` (`pcfm-model/src/cause.rs:11-16`), propagato in `MatchEvent.cause_trace` (`pcfm-stats/src/event.rs:109`), emesso (`pcfm-match/src/state.rs:118-120,141-143`), serializzato nel save (`save.rs:131`). Viola `00-foundations` §3/§5, `05-match-events.md:21-24,117`, `10-ground-truth.md:96-111`. **Serve ADR-023** (politica delle cause senza disclosure) prima di qualsiasi fix. Test mancanti: nessun test serializza un save e verifica l assenza di latenti. **DoD:** ADR-023 accepted + fix implementata + **test anti-leak** (serializza un save, verifica che nessun valore di `PlayerLatents` compaia nel JSON) + baseline C2 verde.
-   - **Decisioni prese (2026-10-30), da riflettere nell'ADR:** rimuovere `CauseTrace` e `Factor` del tutto (opzione 1b, non `Option`), perché `narrative.rs` non li legge, `primary_cause` duplica `EventType`, `explanation_template` non ha consumatori; rimuovere `InjuryOutcome.risk_modifier` (funzione lineare esatta di `injury_proneness`, zero consumer); rimuovere `DuelOutcome.injury_risk_modifier` e `temperament_modifier` (costanti `1.0`, zero consumer). `SIM_VERSION` bump necessario (il payload evento entra in `chain_hash`, `chain.rs:48-58`); `SCHEMA_VERSION` no (serde ignora campi sconosciuti).
-   - **Prerequisito tecnico per il resolver (opzione C, preferita):** `Player` ha già i dati pubblici (`height_cm`, `preferred_foot`, `physical`, `psychological`); `Squad` espone `Vec<Player>`; `Match` espone `home`/`away`. I `Context` in `pcfm-hidden/src/context.rs` contengono solo `PlayerId`. L'opzione C = `CauseDescriptor` tipizzato (enum con solo dati pubblici), costruito dal resolver e convertito in `CauseTrace` (o sostituto) dal motore. Opzioni scartate: A (pubblici nel `Context`), B (resolver senza causa).
-   - **Forma corretta del test anti-leak:** non "cerca i valori di `PlayerLatents`" (tipo privato, irraggiungibile dal test). Deve essere strutturale: (1) nessun `value` in `contributing_factors`; (2) nessun latente in `MatchEvent.fields`; (3) nessun campo di `Outcome` è funzione esatta di un latente.
-   - **Fuori scope ADR-023:** tassonomia dei valori (diretto/inferito/costrutto), Plane C, livello di interpretazione. Sono rinviati per D3 (bee doctrine) finché manca contenuto concreto.
+**14. R-01 Critical — Plane A leak** (verificato in sessione, 2026-10-30/31). 7 siti (non 5): `attacker_score`/`defender_score`, `finishing`, `passing`, `injury_proneness`, `goalkeeping`, `set_pieces` in `Factor.value` → `MatchEvent.cause_trace` → `chain_hash` → save JSON. **La decisione è in `docs/adr/023-observed-cause-traces.md`** (`proposed`): causa osservata dal motore, non rimossa; 10 clausole; test-first. **DoD:** ADR-023 accepted → test anti-leak che fallisce pre-fix (OI-10) → fix → test verde → `SIM_VERSION` bump → C2 verde. La sezione "Dettagli" precedente (opzione 1b, `CauseDescriptor` dal resolver) è **superata da ADR-023**.
 
 **Altri finding audit 2026-10-30** (dopo R-01, da verificare e triagare): R-02 attempt/outcome assenti (già noto); R-03 save contract (già noto); R-04 doc drift (`STRUCTURE.md` 17 ADR vs 20 file, `CHANGELOG-SIM.md` dice `pcfm-core`) → confluisce in step 6; R-05 stream senza `match_id` (`state.rs:57-63`); R-06 `pick_players` (già T3 noto); R-07 panic handler non isolati (`event_bus.rs:81-85,126-140`); R-08 `expect` in simulazione (`state.rs:57-63`, `hidden/lib.rs:68-71`); R-09 `MatchContext` senza bus/modifiers (già noto); R-10 `GroundTruth` getter/Debug (`hidden/lib.rs:84-91,351-356`).
 **5. Review sketch 2026-10-29** — IDEA-TACT-001, IDEA-INFRA-007, IDEA-STAFF-001. Decide: ADR, task, or stays sketch. Depends on `L2-tactics`, runtime input channel, `L2-staff` (none exist).
@@ -145,3 +142,5 @@ the rest of the bookmark in the same commit.
 **Files touched this session (2026-10-31, IDEA-INFRA-008):** `docs/context/IDEAS.md` (added IDEA-INFRA-008, `2e89f88`); `docs/context/SESSION-STATE.md` (step 14 links IDEA-INFRA-008, `2e89f88`..).
 
 **Files touched this session (2026-10-31, ADR-023 amendment):** `docs/adr/023-observed-cause-traces.md` (amended: A-G points, `a94049d`); `docs/context/SESSION-STATE.md` (bookmark update, `a94049d`..).
+
+**Files touched this session (2026-10-31, closing):** `docs/context/SESSION-STATE.md` (Dettagli step 14 aligned to ADR-023, step 17 traced, bookmark updated, `cd31500`..).
