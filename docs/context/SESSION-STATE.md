@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `41506ae` — "docs: refresh Last updated after ritual rewrite; bookmark closing fixes (OI-12, step 17 length, Files touched)"
+**Last commit verified:** `889d812` — "docs(session-state): document decisions before code — choice B (xg in ADR-023), 6a/6b split, OI-14/15/16"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -121,7 +121,7 @@ the rest of the bookmark in the same commit.
 
 | #  | Prima azione |
 |----|--------------|
-| 14 | **Ratificare ADR-023** (OI-11, `proposed` → `accepted`), poi scrivere il test anti-leak che fallisce pre-fix (OI-10). Leggere ADR-023 §Implementation notes |
+| 14 | **Emendare ADR-023** (include `xg_value`, scelta B, OI-9) → **ratificare** (OI-11) → scrivere il test anti-leak che fallisce pre-fix (OI-10). Leggere ADR-023 §Implementation notes |
 | 2  | Leggere ADR-003 §Exception: `sed -n '204,235p' docs/adr/003-plane-a-enforcement.md` |
 | 3  | Leggere `PLUGIN_DEVELOPER_GUIDE.md` §1: `sed -n '13,40p'` |
 | 4  | Leggere `render.rs:150-170` e `CHANGELOG-SIM.md:19,41` |
