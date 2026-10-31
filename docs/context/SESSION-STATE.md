@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `f8c2e2d` — "docs(session-state): trace OI-12 (Gate A pattern too broad), step 17 includes bookmark length, bookmark after ritual test"
+**Last commit verified:** `41506ae` — "docs: refresh Last updated after ritual rewrite; bookmark closing fixes (OI-12, step 17 length, Files touched)"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -152,3 +152,5 @@ the rest of the bookmark in the same commit.
 **Files touched this session (2026-10-31, ritual optimisation):** `docs/context/NEW-SESSION-PROMPT.md` (B4 mutation protocol added; startup 8→5 steps; closing 6→5 steps with gates A+B under one step, `3bdc0d9`); `docs/context/SESSION-STATE.md` (bookmark updated, `3bdc0d9`..).
 
 **Files touched this session (2026-10-31, closing fixes and ritual test):** `docs/context/SESSION-STATE.md` (OI-12 traced, step 17 includes bookmark length, `Last commit verified` updated, `f8c2e2d`); `docs/context/NEW-SESSION-PROMPT.md` (`Last updated` refreshed after B4/startup/closing rewrite, `f8c2e2d`..).
+
+**Files touched this session (2026-10-31, closing ritual hardening):** `docs/context/NEW-SESSION-PROMPT.md` (closing: order enforcement, Gate A `Last updated` check, B5 reformulated for the closing commit, `41506ae`..); `docs/context/SESSION-STATE.md` (bookmark update, `41506ae`..).

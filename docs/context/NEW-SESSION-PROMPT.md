@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-31 (E4 bookmark update, E5 ideas-from-pause, F bookmark contract; B4 mutation protocol; startup 8->5 steps; closing 6->5 steps with Gate A+B under one step)
+**Last updated:** 2026-10-31 (E4 bookmark update, E5 ideas-from-pause, F bookmark contract; B4 mutation protocol; startup 8->5 steps; closing 6->5 steps with Gate A+B under one step; closing order enforcement, Gate A Last-updated check, B5 reformulated for the closing commit)
 
 ---
 
@@ -191,6 +191,8 @@ Say explicitly:
 
 After the maintainer approves the closing (E2), run these checks in order. If any is red, stop and fix before closing.
 
+Steps run **in order**. A step is "done" only when its output is pasted in chat and is green. Do not start step N+1 before step N's output is shown. If a step is skipped or run out of order, say so explicitly and re-run it before closing. The quality gate (step 1) and the pre-close gates (step 2) must be green **before** the bookmark update (step 3), not after.
+
 ### 1. Repo alignment and real verification
 
     git status --short
@@ -231,6 +233,8 @@ If you touched a file X (renamed it, changed its path, changed its content), ver
 
 (replace `N` with the number of commits in this session)
 
+If `docs/context/NEW-SESSION-PROMPT.md` changed this session, `Last updated` (line 5) must mention the change. `sed -n '5p' docs/context/NEW-SESSION-PROMPT.md` and compare against `git diff --name-only <last-verified>..HEAD`. If the file changed and `Last updated` does not say so, update it in the same session.
+
 **Gate B — fresh-session simulation (mechanical).**
 
 Do not answer this from memory. Simulate: the next session reads `NEW-SESSION-PROMPT.md`, runs the startup ritual, reads `SESSION-STATE.md`, the two latest reports in `analysis/`, and `IDEAS.md` (headers and status). Would it resume without asking a question the bookmark already answers?
@@ -241,7 +245,7 @@ Run these checks. A failed check is fixed before step 3, not noted for later.
 2. **No contradiction between Plan and Detail.** The Plan's first step and the same step's Detail/DoD must agree on the order (e.g. "ratify then test" vs "test then ratify"). Read both. If they disagree, fix the Plan (it is what the next session reads first).
 3. **Pending actions are Open items.** Any action that is not a Plan step (a ratification, a verification, a decision) must be an OI-NN. `grep -c "OI-" SESSION-STATE.md`. If a pending action is not listed, add it.
 4. **"Prime azioni" match reality.** For the first open step, the "Prime azioni" entry must not describe work already done. Read it; if it says "write X" and X exists, update it.
-5. **Every touched file is in `Files touched`.** `git diff --name-only <last-verified>..HEAD` against the list. If a file is missing, add it.
+5. **Every touched file is in `Files touched` (except the bookmark itself).** The closing commit is the one that contains `SESSION-STATE.md`, so it cannot be compared against itself. Run `git status --short` before the commit: every modified/added file that is **not** `SESSION-STATE.md` must appear in the `Files touched` list. Then, after the commit, run `git show --stat HEAD` and check that the only file not pre-listed is `SESSION-STATE.md`. If another file appears, the list was incomplete.
 6. **Proposed/deferred ADRs are surfaced.** `for f in docs/adr/*.md; do sed -n '3p' "$f"; done | grep -c proposed`. Each `proposed` ADR that blocks a step must appear in the Plan or Open items.
 7. **New reports are cited.** `ls -t docs/context/analysis/*.md | head -2`. Each must be cited in the bookmark (as a finding, an OI, or a step).
 
