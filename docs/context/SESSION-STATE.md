@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `946459f` — "docs(adr): ADR-023 observed cause traces (proposed)"
+**Last commit verified:** `2e89f88` — "docs(ideas): add IDEA-INFRA-008 (explanation/narration as a plugin, not in the engine)"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -70,7 +70,7 @@ the rest of the bookmark in the same commit.
 
 | Pr. | #  | Cosa                    | Dipende da                   |
 |-----|----|-------------------------|------------------------------|
-| 🔴  | 14 | **R-01 Critical**: latenti Plane A in `Factor.value` → eventi Plane B → save. **ADR-023 `proposed`** (causa osservata, non rimossa). Ordine: test anti-leak che fallisce pre-fix (OI-10) → fix → test verde → `SIM_VERSION` bump. Dettagli in ADR-023 §Implementation notes | — |
+| 🔴  | 14 | **R-01 Critical**: latenti Plane A in `Factor.value` → eventi Plane B → save. **ADR-023 `proposed`** (causa osservata, non rimossa; alternativa a lungo termine: IDEA-INFRA-008). Ordine: test anti-leak che fallisce pre-fix (OI-10) → fix → test verde → `SIM_VERSION` bump. Dettagli in ADR-023 §Implementation notes | — |
 | 🟡  | 12 | TUI demo (IDEA-INFRA-006): ADR breve + codice | — |
 | 🟡  | 2  | Fix ADR-003 (nota rename fatta `a391b85`; restano `demo.rs`, autorizzazione `pcfm-demo`) | —                            |
 | 🟡  | 3  | Terminologia (T1+T2, T3 done) | —                        |
@@ -141,3 +141,5 @@ the rest of the bookmark in the same commit.
 
 **Files touched this session (2026-10-30/31):** `docs/context/NEW-SESSION-PROMPT.md` (startup reads full files via `cat` not obsolete `sed` ranges, `f678b4b`; E4 bookmark update + E5 ideas-from-pause + §F bookmark contract, `3cfbd93`; startup step 4 reads `IDEAS.md`, `0ab92c6`); `CHANGELOG-SIM.md` (crate rename, migration status, `modules/`→`specs/`, `18232f9`); `README.md` (tests 107→103, ADR 012-020→012-022, `7b6a50e`); `STRUCTURE.md` (current-state snapshot, `4695828`); `specs/L0-match/*` (stale `MIGRATION-01-04` refs `6f85770`; false `crates/` claim `f8f9768`; `conforms_to` v2.0, 10 files `858ef08`); `docs/context/IDEAS.md` (IDEA-PM-005 D3 proposal `7b9c35d`; IDEA-DOC-002/003 `d9dbe38`); `docs/context/SESSION-STATE.md` (HERMES cleanup `09e6cf4`; step 15 complete `56805ae`; Open items `557e1d4`; archive log `03f3ea2`); `docs/context/README.md` (archived log ref, `03f3ea2`); **archived** `docs/context/PROJECT-IDEA-LOG.md` → `archive/PROJECT-IDEA-LOG.md` (`03f3ea2`).
 **Files touched this session (2026-10-31, chiusura OI-1):** `docs/adr/023-observed-cause-traces.md` (new, proposed, `946459f`); `STRUCTURE.md`, `specs/_index.md` (ADR-023 added to status tables, `946459f`); `docs/context/SESSION-STATE.md` (OI-1 closed, OI-9/OI-10 added, step 14 re-scoped, `946459f`..).
+
+**Files touched this session (2026-10-31, IDEA-INFRA-008):** `docs/context/IDEAS.md` (added IDEA-INFRA-008, `2e89f88`); `docs/context/SESSION-STATE.md` (step 14 links IDEA-INFRA-008, `2e89f88`..).
