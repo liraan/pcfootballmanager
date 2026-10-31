@@ -2,7 +2,7 @@
 
 **Purpose:** prompt to paste as the first message of a new chat, to resume work on the project without losing context. Update this file when the project state or the operating rules change.
 
-**Last updated:** 2026-10-30 (E3 after-closing default is track; startup ritual reads full files via cat, not obsolete sed ranges)
+**Last updated:** 2026-10-31 (E4 bookmark update, E5 ideas-from-pause, F bookmark contract; B4 mutation protocol; startup 8->5 steps; closing 6->5 steps with Gate A+B under one step)
 
 ---
 

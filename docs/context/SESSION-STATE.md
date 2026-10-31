@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `dd6a48c` — "docs(session-state): bookmark after B4 and ritual optimisation"
+**Last commit verified:** `f8c2e2d` — "docs(session-state): trace OI-12 (Gate A pattern too broad), step 17 includes bookmark length, bookmark after ritual test"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -150,3 +150,5 @@ the rest of the bookmark in the same commit.
 **Files touched this session (2026-10-31, closing fixes):** `docs/context/SESSION-STATE.md` (step 14 first action = ratify ADR-023, OI-11 added, Prime azioni 14 updated); `docs/context/NEW-SESSION-PROMPT.md` (closing step 3 rewritten as 7 mechanical checks before commit).
 
 **Files touched this session (2026-10-31, ritual optimisation):** `docs/context/NEW-SESSION-PROMPT.md` (B4 mutation protocol added; startup 8→5 steps; closing 6→5 steps with gates A+B under one step, `3bdc0d9`); `docs/context/SESSION-STATE.md` (bookmark updated, `3bdc0d9`..).
+
+**Files touched this session (2026-10-31, closing fixes and ritual test):** `docs/context/SESSION-STATE.md` (OI-12 traced, step 17 includes bookmark length, `Last commit verified` updated, `f8c2e2d`); `docs/context/NEW-SESSION-PROMPT.md` (`Last updated` refreshed after B4/startup/closing rewrite, `f8c2e2d`..).
