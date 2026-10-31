@@ -2,7 +2,7 @@
 
 **Purpose:** a short bookmark for resuming work across sessions. It records where we are, not what the project is. Update at the end of a session, not at the start.
 
-**Last commit verified:** `7378271` — "docs(session-state): checkpoint after ADR-023 amendment; align step 14 detail to ADR-023, trace step 17 (§F reformat)"
+**Last commit verified:** `3bdc0d9` — "docs(prompt): add B4 mutation protocol; startup 8->5 steps; closing 6->5 steps (gates A+B under one step)"
 
 **Note on the field above:** it points to the last commit *before* this
 bookmark update (semantics S1). It will look "stale" compared to HEAD; that
@@ -147,3 +147,5 @@ the rest of the bookmark in the same commit.
 **Files touched this session (2026-10-31, closing):** `docs/context/SESSION-STATE.md` (Dettagli step 14 aligned to ADR-023, step 17 traced, bookmark updated, `cd31500`..).
 
 **Files touched this session (2026-10-31, closing fixes):** `docs/context/SESSION-STATE.md` (step 14 first action = ratify ADR-023, OI-11 added, Prime azioni 14 updated); `docs/context/NEW-SESSION-PROMPT.md` (closing step 3 rewritten as 7 mechanical checks before commit).
+
+**Files touched this session (2026-10-31, ritual optimisation):** `docs/context/NEW-SESSION-PROMPT.md` (B4 mutation protocol added; startup 8→5 steps; closing 6→5 steps with gates A+B under one step, `3bdc0d9`); `docs/context/SESSION-STATE.md` (bookmark updated, `3bdc0d9`..).
