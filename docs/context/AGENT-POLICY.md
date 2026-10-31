@@ -82,8 +82,18 @@ The audit agent is a **separate role** from the chat agent (Warp, DeepSeek-TUI, 
 - **Asynchronous by design.** The audit agent is not a synchronous channel: for time-critical fixes, use the chat agent or the maintainer directly.
 - **Even when authorized**, the change follows the standard flow: verify (`NEW-SESSION-PROMPT.md` rule 8), atomic commit, and — in Phase 2 — branch + PR (rule 1).
 
+## 10. Rollback and post-push review
+
+The closing ritual may now proceed without a pre-push pause (E2, green-path derogation, 2026-10-31). This section defines the two safeguards that replace it.
+
+**Post-push review.** The maintainer reviews the closing report after the push, not before. The report opens with `SESSION CLOSED — no further work executed (E3)` and lists, per commit: subject, trailers (`DPs-Applied`, `Rules-Audit`, `Verified`), and any `Deferred:` entry. A `Deferred:` that the maintainer judges improper is a policy violation, not a stylistic choice.
+
+**Rollback.** A wrong auto-close is undone with `git revert <commit>` followed by a push. History is preserved; no rewriting. The revert commit message names the reverted SHA and the reason. Reopening the session after the revert follows the normal ritual.
+
+**Not a guarantee.** Auto-closing skips the human check on the *content* of the work (C2 and the gates check mechanics, not judgment). A green closing is not a correctness proof: it is a statement that the protocol was followed. When the work is uncertain, the maintainer can still pause before the closing (E2, first paragraph).
 ## 9. What this policy is not
 
 - It is not a substitute for `CONTRIBUTING.md` (process for humans).
 - It is not a specification of the agent's implementation.
 - It is not a guarantee: a misconfigured agent can still do damage. The policy is a contract, not a sandbox.
+
